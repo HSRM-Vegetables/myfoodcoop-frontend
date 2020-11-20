@@ -10,8 +10,8 @@
 * Öffne deine Browser und rufe: `http://localhost:3000` auf
 
 ## Hinweise
-* Du kannst zB. mal die Datei `src/routes/index.svelte` abändern und die Datei speichern
-* Anschließend solltest du sehen wie sich dein Browser gleich refresht.
+* Du kannst zB. mal die Datei `src/routes/index.svelte` abändern und die Datei speichern. Anschließend solltest du sehen wie sich dein Browser gleich refresht.
+* Ich habe in verschieden Ordnern `Readme.md`'s verteilt. Lest die euch bei Gelegenheit mal durch.
 
 ## Stack
 * Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
