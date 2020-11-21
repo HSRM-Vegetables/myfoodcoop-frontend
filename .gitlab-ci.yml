@@ -6,11 +6,17 @@ before_script:
     - gem install dpl
 
 stages:
-    - production
+    - build
+    - deploy
 
-production:
+deploy:
+    stage: deploy
+    script: npm i --only=prod
+    script: npm run build
+
+deploy:
     type: deploy
-    stage: production
+    stage: deploy
     image: ruby:latest
     script:
         - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
