@@ -1,8 +1,8 @@
 <script>
     import MassiveCalculator from '../scipts/MassiveCalculator';
-	import { titleWithSuffix } from '../stores/page';
+    import { titleWithSuffix } from '../stores/page';
 
-    let mc = new MassiveCalculator();
+    const mc = new MassiveCalculator();
     mc.print();
 </script>
 
