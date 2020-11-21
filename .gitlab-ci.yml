@@ -1,9 +1,8 @@
 image: node:latest
 
-before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
+cache:
+  paths:
+    - node_modules/
 
 stages:
     - build
@@ -11,14 +10,21 @@ stages:
 
 build:
     stage: build
+    tags:
+        - docker
     script: npm i --only=prod
     script: npm run build
 
 deploy:
     type: deploy
     stage: deploy
+    tags:
+        - docker
     image: ruby:latest
     script:
+        - apt-get update -qy
+        - apt-get install -y ruby-dev
+        - gem install dpl
         - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
     only:
         - master
