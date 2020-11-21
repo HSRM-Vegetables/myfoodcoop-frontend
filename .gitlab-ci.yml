@@ -12,8 +12,9 @@ build:
     stage: build
     tags:
         - docker
-    script: npm i
-    script: npm run build
+    script: 
+        - npm i
+        - npm run build
 
 deploy:
     type: deploy
