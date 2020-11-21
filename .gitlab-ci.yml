@@ -9,8 +9,8 @@ stages:
     - build
     - deploy
 
-deploy:
-    stage: deploy
+build:
+    stage: build
     script: npm i --only=prod
     script: npm run build
 
