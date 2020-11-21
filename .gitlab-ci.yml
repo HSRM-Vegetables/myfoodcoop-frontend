@@ -12,7 +12,7 @@ build:
     stage: build
     tags:
         - docker
-    script: npm i --only=prod
+    script: npm i
     script: npm run build
 
 deploy:
