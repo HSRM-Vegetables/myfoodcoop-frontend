@@ -1,0 +1,4 @@
+src/template.html
+src/service-worker.js
+src/main.scss
+*.md

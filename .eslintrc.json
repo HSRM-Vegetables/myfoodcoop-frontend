@@ -20,6 +20,13 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": ["error", "tab"]
+        "indent": ["error", "tab"],
+        "no-tabs": "off",
+        "import/no-extraneous-dependencies": "off",
+        "import/first": "off",
+        "import/no-mutable-exports": "off",
+        "import/prefer-default-export": "off",
+        "linebreak-style": "off",
+        "comma-dangle": "off"
     }
 }
