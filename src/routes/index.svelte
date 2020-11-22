@@ -15,7 +15,7 @@
 </style>
 
 <svelte:head>
-	<title>{$titleWithSuffix}Homepage asd</title>
+	<title>{$titleWithSuffix}Homepage</title>
 </svelte:head>
 
 
