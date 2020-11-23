@@ -6,15 +6,31 @@ cache:
 
 stages:
     - build
+    - lint
     - deploy
 
 build:
     stage: build
     tags:
         - docker
+    artifacts:
+        paths:
+            - __sapper__
+            - src/node_modules/@sapper
+        expire_in: 1 week
     script: 
         - npm i
         - npm run build
+
+lint:
+    stage: lint
+    tags:
+        - docker
+    dependencies: 
+        - build
+    script: 
+        - npm i
+        - npm run lint
 
 deploy:
     type: deploy
