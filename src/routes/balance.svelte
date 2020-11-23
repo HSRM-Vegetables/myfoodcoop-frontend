@@ -17,5 +17,5 @@
 	<title>Guthaben</title>
 </svelte:head>
 
-<h1><ShowBalance></ShowBalance></h1>
+<h1><ShowBalance/></h1>
 

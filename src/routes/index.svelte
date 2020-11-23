@@ -20,7 +20,7 @@
 </svelte:head>
 
 
-<ShowBalance></ShowBalance>
+<ShowBalance/>
 <figure>
 	<img alt="Stagemüse Logo" src="{logo}">
 </figure>
