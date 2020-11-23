@@ -3,6 +3,8 @@ image: node:latest
 cache:
   paths:
     - node_modules/
+    - __sapper__
+    - src/node_modules/@sapper
 
 stages:
     - build
