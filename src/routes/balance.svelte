@@ -16,15 +16,8 @@
 </style>
 
 <svelte:head>
-	<title>{$titleWithSuffix}Homepage</title>
+	<title>{$titleWithSuffix}Guthaben</title>
 </svelte:head>
 
-
-<ShowBalance></ShowBalance>
-<figure>
-	<img alt="Stagemüse Logo" src="{logo}">
-</figure>
-<h1>Willkommen!</h1>
-
-<input type="text" class="input is-round">
+<h1><ShowBalance></ShowBalance></h1>
 
