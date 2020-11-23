@@ -29,6 +29,7 @@ lint:
     dependencies: 
         - build
     script: 
+        - npm i
         - npm run lint
 
 deploy:
