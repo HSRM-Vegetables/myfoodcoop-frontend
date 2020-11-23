@@ -1,5 +1,5 @@
 <script>
-    import MassiveCalculator from '../scipts/MassiveCalculator';
+    import MassiveCalculator from '../scripts/MassiveCalculator';
     import { titleWithSuffix } from '../stores/page';
 
     const mc = new MassiveCalculator();
