@@ -6,9 +6,6 @@
 	h1{
 		text-align: center;
 		margin: 0 auto;
-	}
-
-	h1 {
 		font-size: 24px;
 	}
 </style>
