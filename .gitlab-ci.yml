@@ -3,8 +3,6 @@ image: node:latest
 cache:
   paths:
     - node_modules/
-    - __sapper__
-    - src/node_modules/@sapper
 
 stages:
     - build
@@ -15,6 +13,8 @@ build:
     stage: build
     tags:
         - docker
+    artifacts:
+        untracked: true
     script: 
         - npm i
         - npm run build
@@ -23,6 +23,8 @@ lint:
     stage: lint
     tags:
         - docker
+    dependencies: 
+        - build
     script: 
         - npm run lint
 
