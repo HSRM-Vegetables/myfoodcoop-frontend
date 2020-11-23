@@ -1,11 +1,9 @@
 <script>
-	import logo from 'images/logo.png';
 	import ShowBalance from '../components/balance/ShowBalance.svelte';
-	import { titleWithSuffix } from '../stores/page';
 </script>
 
 <style>
-	h1, figure {
+	h1{
 		text-align: center;
 		margin: 0 auto;
 	}
@@ -16,7 +14,7 @@
 </style>
 
 <svelte:head>
-	<title>{$titleWithSuffix}Guthaben</title>
+	<title>Guthaben</title>
 </svelte:head>
 
 <h1><ShowBalance></ShowBalance></h1>

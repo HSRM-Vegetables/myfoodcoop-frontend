@@ -5,7 +5,7 @@
     let currentBalance = NaN;
 
     onMount(() => {
-        const currentBalanceString = window.localStorage.getItem(LocalStorageKeys.BALANCE)
+        const currentBalanceString = window.localStorage.getItem(LocalStorageKeys.BALANCE);
         currentBalance = parseFloat(currentBalanceString);
         currentBalance = currentBalance.toFixed(2);
     });
