@@ -14,7 +14,10 @@ build:
     tags:
         - docker
     artifacts:
-        untracked: true
+        paths:
+            - __sapper__
+            - src/node_modules/@sapper
+        expire_in: 1 week
     script: 
         - npm i
         - npm run build
