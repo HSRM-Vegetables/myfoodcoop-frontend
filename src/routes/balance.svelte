@@ -1,5 +1,5 @@
 <script>
-	import ShowBalance from '../components/balance/ShowBalance.svelte';
+	import EditBalance from '../components/balance/EditBalance.svelte';
 </script>
 
 <style>
@@ -14,5 +14,5 @@
 	<title>Guthaben</title>
 </svelte:head>
 
-<h1><ShowBalance/></h1>
+<h1><EditBalance/></h1>
 
