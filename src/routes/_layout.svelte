@@ -1,8 +1,6 @@
 <script>
 	import BulmaGlobalStyles from '../components/BulmaGlobalStyles.svelte';
 	import Nav from '../components/Nav.svelte';
-
-	export let segment;
 </script>
 
 <style>

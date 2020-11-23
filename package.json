@@ -13,7 +13,7 @@
     "bulma": "^0.9.1",
     "bulmaswatch": "^0.8.1",
     "compression": "^1.7.1",
-    "polka": "next",
+    "polka": "^0.5.2",
     "sirv": "^1.0.0"
   },
   "devDependencies": {
