@@ -6,6 +6,7 @@ cache:
 
 stages:
     - build
+    - lint
     - deploy
 
 build:
@@ -15,6 +16,13 @@ build:
     script: 
         - npm i
         - npm run build
+
+lint:
+    stage: lint
+    tags:
+        - docker
+    script: 
+        - npm run lint
 
 deploy:
     type: deploy
