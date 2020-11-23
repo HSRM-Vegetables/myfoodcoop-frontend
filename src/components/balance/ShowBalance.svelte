@@ -1,42 +1,42 @@
 <script>
     import { onMount } from 'svelte';
     import LocalStorageKeys from '../../scipts/LocalStorageKeys';
-
-    let currentBalance = NaN;
     
+    let currentBalance = NaN;
     onMount(() => {
         const currentBalanceString = window.localStorage.getItem(LocalStorageKeys.BALANCE);
-        if(currentBalanceString == null || currentBalanceString == "NaN"){
-            currentBalance=0;
+        if (currentBalanceString === null || currentBalanceString === 'NaN') {
+            currentBalance = 0;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, 0);
         } else {
             currentBalance = parseFloat(currentBalanceString);
-            currentBalance = currentBalance.toFixed(2);               
+            currentBalance = currentBalance.toFixed(2);
         }
     });
+    
     function changeBalance() {
-        //get new Balance
-        let money = document.getElementById("changeMoney").value;
-        money= money.replace(",",".");
+        // create new Balance
+        let money = document.getElementById('changeMoney').value;
+        money = money.replace(',', '.');
         money = parseFloat(money);
         money = money.toFixed(2);
         window.localStorage.setItem(LocalStorageKeys.BALANCE, money);
         currentBalance = money;
     }
+    
     function addToBalance() {
-        //get new Balance
-        let money = document.getElementById("addMoney").value;
-        money= money.replace(",",".");
-        let addTo = window.localStorage.getItem(LocalStorageKeys.BALANCE);
+        // add money to balance
+        let money = document.getElementById('addMoney').value;
+        money = money.replace(',', '.');
+        const addTo = window.localStorage.getItem(LocalStorageKeys.BALANCE);
         money = parseFloat(money);
         money = money.toFixed(2);
-        let sum = +money+ +addTo;
+        let sum = +money + +addTo;
         sum = sum.toFixed(2);
-
-
+    
         window.localStorage.setItem(LocalStorageKeys.BALANCE, sum);
         currentBalance = sum;
-        document.getElementById("addMoney").value ="";
+        document.getElementById('addMoney').value = '';
     }
 </script>
 
