@@ -1,8 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import Balance from '../../scipts/Balance';
-    
-    let currentBalance = 0;
+
+    export let currentBalance = 0;
+
     onMount(() => {
         const balance = new Balance();
         currentBalance = balance.money;

@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import Balance from '../../scipts/Balance';
+    import ShowBalance from './ShowBalance.svelte';
     
     let currentBalance = 0;
     let changeMoneyInput;
@@ -25,8 +26,11 @@
         addMoneyInput.value = '';
     }
 </script>
-    <span> Guthaben: {currentBalance}€</span>
+
+
 <div>
+    <ShowBalance bind:currentBalance />
+    
     <div class="field has-addons">
         <div class="control is-expanded">
             <input type="number" class="input" bind:this={changeMoneyInput}/>
