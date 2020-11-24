@@ -27,11 +27,21 @@
 </script>
     <span> Guthaben: {currentBalance}€</span>
 <div>
-    <input type="number" class="input" bind:this={changeMoneyInput}/>
-    <button type="submit" class="button is-primary" on:click={changeBalance}>Guthaben anpassen</button><br>
+    <div class="field has-addons">
+        <div class="control is-expanded">
+            <input type="number" class="input" bind:this={changeMoneyInput}/>
+        </div>
+        <div class="control">
+            <button type="submit" class="button is-primary" on:click={changeBalance}>Guthaben anpassen</button><br>
+        </div>
+    </div>
     
-    <input type="number" class="input" bind:this={addMoneyInput}/>
-    <button type="submit" class="button is-primary" on:click={addToBalance}>Guthaben hinzufügen</button><br>
-    
-    
+    <div class="field has-addons">
+        <div class="control is-expanded">
+            <input type="number" class="input" bind:this={addMoneyInput}/>
+        </div>
+        <div class="control">
+            <button type="submit" class="button is-primary" on:click={addToBalance}>Guthaben hinzufügen</button><br>
+        </div>
+    </div>
 </div>
