@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import Balance from '../../scipts/Balance';
+    import Balance from '../../scripts/Balance';
 
     export let currentBalance = 0;
 

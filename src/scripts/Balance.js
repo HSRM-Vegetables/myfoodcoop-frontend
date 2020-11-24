@@ -1,4 +1,4 @@
-import LocalStorageKeys from './LocalStorageKeys';
+import LocalStorageKeys from '../scripts/LocalStorageKeys';
 
 export default class Balance {
     constructor() {
