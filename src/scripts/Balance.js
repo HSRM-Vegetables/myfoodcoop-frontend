@@ -31,7 +31,7 @@ export default class Balance {
             return (parseFloat(this.money) + parseFloat(money)).toFixed(2);
         case '-':
             // return dif of old money and new money
-            return parseFloat(this.money) - parseFloat(money).toFixed(2);
+            return (parseFloat(this.money) - parseFloat(money)).toFixed(2);
         default:
             return null;
         }
