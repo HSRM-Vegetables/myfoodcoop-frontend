@@ -2,12 +2,12 @@ import LocalStorageKeys from './LocalStorageKeys';
 
 export default class Balance {
     constructor() {
-        const temp = window.localStorage.getItem(LocalStorageKeys.BALANCE);
-        if (temp === null || temp === 'NaN') {
+        const balanceString = window.localStorage.getItem(LocalStorageKeys.BALANCE);
+        if (balanceString === null || balanceString === 'NaN') {
             this.currentBalance = 0.00;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, this.currentBalance);
         } else {
-            this.currentBalance = parseFloat(temp).toFixed(2);
+            this.currentBalance = parseFloat(balanceString).toFixed(2);
         }
     }
 
