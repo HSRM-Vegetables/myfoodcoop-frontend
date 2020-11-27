@@ -1,16 +1,48 @@
 @charset "utf-8";
-
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
-
-@import "node_modules/bulmaswatch/darkly/_variables";
-
+// general
 $body-overflow-y: auto;
-$input-background-color: #505050;
-$input-border-color: #707070;
-$input-focus-border-color: #909090;
-$input-focus-box-shadow-color: #404040;
-$input-color: white;
+$text: #000;
+
+// navbar colors
+$navbar-primary: #375a7f !default;
+$navbar-turquoise: #1abc9c;
+$navbar-text: #fff;
+$navbar-grey-lighter: #dbdee0;
+$navbar-link: $navbar-turquoise;
+
+// navbar assignments
+$navbar-background-color: $navbar-primary;
+$navbar-item-color: $navbar-text;
+$navbar-item-hover-color: $navbar-link;
+$navbar-item-hover-background-color: transparent;
+$navbar-item-active-color: $navbar-link;
+$navbar-dropdown-arrow: $navbar-text;
+$navbar-divider-background-color: rgba(0, 0, 0, 0.2);
+$navbar-dropdown-border-top: 1px solid $navbar-divider-background-color;
+$navbar-dropdown-background-color: $navbar-primary;
+$navbar-dropdown-item-hover-color: $navbar-grey-lighter;
+$navbar-dropdown-item-hover-background-color: transparent;
+$navbar-dropdown-item-active-background-color: transparent;
+$navbar-dropdown-item-active-color: $navbar-link;
 
 @import "node_modules/bulma/bulma";
-@import "node_modules/bulmaswatch/darkly/_overrides";
+
+// bulma breakpoints (https://bulma.io/documentation/overview/responsiveness/)
+// everything from desktop and bigger
+@include desktop {
+    main {
+        margin: 0 auto;
+        max-width: 50em;
+        padding: 2em;
+    }
+}
+
+// mobiles and tablets
+@include touch {
+    main {
+        margin: 0;
+        padding: 0.75em;
+    }
+}
