@@ -1,5 +1,6 @@
 <script>
 	import logo from 'images/logo.png';
+	import ShowBalance from '../components/balance/ShowBalance.svelte';
 	import { titleWithSuffix } from '../stores/page';
 </script>
 
@@ -19,6 +20,7 @@
 </svelte:head>
 
 
+<ShowBalance/>
 <figure>
 	<img alt="Stagemüse Logo" src="{logo}">
 </figure>
