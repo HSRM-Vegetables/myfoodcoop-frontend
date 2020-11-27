@@ -16,12 +16,18 @@ export default class Balance {
     }
 
     setBalance(money) {
-        let balance = money.replace(',', '.');
-        balance = parseFloat(balance);
-        balance = balance.toFixed(2);
+        if (money === null || money === 'NaN' || money === '') {
+            this.currentBalance = 0.00;
+            window.localStorage.setItem(LocalStorageKeys.BALANCE, 0.00);
+        } else {
 
-        this.currentBalance = balance;
-        window.localStorage.setItem(LocalStorageKeys.BALANCE, balance);
+            let balance = money.replace(',', '.');
+            balance = parseFloat(balance);
+            balance = balance.toFixed(2);
+
+            this.currentBalance = balance;
+            window.localStorage.setItem(LocalStorageKeys.BALANCE, balance);
+        }
     }
 
     calcBalance(money, operation = '+') {
