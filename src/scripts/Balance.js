@@ -20,7 +20,6 @@ export default class Balance {
             let balance = money.replace(',', '.');
             balance = parseFloat(balance);
             balance = balance.toFixed(2);
-    
             this.currentBalance = balance;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, balance);
         }
