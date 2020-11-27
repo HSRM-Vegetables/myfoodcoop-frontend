@@ -16,14 +16,11 @@ export default class Balance {
     }
 
     setBalance(money) {
-        if (money === null || money === 'NaN' || money === '') {
-
-        } else {
-
+        if (money !== null && money !== 'NaN' && money !== '') {
             let balance = money.replace(',', '.');
             balance = parseFloat(balance);
             balance = balance.toFixed(2);
-
+    
             this.currentBalance = balance;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, balance);
         }
