@@ -3,7 +3,7 @@ import LocalStorageKeys from './LocalStorageKeys';
 export default class Balance {
     constructor() {
         const balanceString = window.localStorage.getItem(LocalStorageKeys.BALANCE);
-        if (balanceString === null || balanceString === 'NaN') {
+        if (balanceString === null || balanceString === 'NaN' || balanceString === '' || balanceString === undefined) {
             this.currentBalance = 0.00;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, this.currentBalance);
         } else {
@@ -16,7 +16,7 @@ export default class Balance {
     }
 
     setBalance(money) {
-        if (money !== null && money !== 'NaN' && money !== '') {
+        if (money !== null && money !== 'NaN' && money !== '' && money !== undefined) {
             let balance = money.replace(',', '.');
             balance = parseFloat(balance);
             balance = balance.toFixed(2);
