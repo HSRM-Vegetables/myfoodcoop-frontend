@@ -17,8 +17,7 @@ export default class Balance {
 
     setBalance(money) {
         if (money === null || money === 'NaN' || money === '') {
-            this.currentBalance = 0.00;
-            window.localStorage.setItem(LocalStorageKeys.BALANCE, 0.00);
+
         } else {
 
             let balance = money.replace(',', '.');
