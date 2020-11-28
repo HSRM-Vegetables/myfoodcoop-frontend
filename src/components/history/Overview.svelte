@@ -5,7 +5,7 @@
 
     function calculatePrice(purchase) {
         let price = 0;
-        purchase.products.forEach(product => {
+        purchase.products.forEach((product) => {
             price += product.pricePerUnit * product.quantity;
         });
         return price;

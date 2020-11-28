@@ -12,7 +12,7 @@
 
     const purchaseApi = new PurchaseApi();
 
-    const purchase = purchaseApi.purchases.find(p => p.id === id);
+    const purchase = purchaseApi.purchases.find((p) => p.id === id);
 </script>
 
 <!-- We want to display the cart here, we will need to wait until its in master -->
