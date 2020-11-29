@@ -15,6 +15,7 @@
 		<div class="navbar-start">
 			<a class="navbar-item" href="blog/">Blog</a>
 			<a class="navbar-item" href="balance/">Guthaben</a>
+			<a class="navbar-item" href="price-calculator/">Preisrechner</a>
 
 			<div class="navbar-item has-dropdown is-hoverable">
 				<a class="navbar-link" href="/">Dropdown</a>
