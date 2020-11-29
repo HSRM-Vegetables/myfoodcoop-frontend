@@ -153,7 +153,12 @@
         <div class="form">
             <h1>Preisrechner</h1>
 
-            <br />
+            <div style="display: flex; justify-content: space-between">
+                <div>Guthaben:</div>
+                <div>42€</div>
+            </div>
+
+            <hr />
 
             <div class="floating">
                 <input
