@@ -1,5 +1,8 @@
 <script>
     import { onMount } from 'svelte';
+    import Switch from './Switch.svelte';
+
+    let acceptTerms = false;
 
     let goodsPriceInput;
     let amountInput;
@@ -185,17 +188,12 @@
             </div>
 
             <div class="field" style="margin-top: 2rem">
-                <div
-                    class="control"
-                    style="display: flex; justify-content: center">
-                    <label class="radio">
-                        <input type="radio" name="question" checked />
-                        Stückpreis
-                    </label>
-                    <label class="radio" style="margin-left: 20px">
-                        <input type="radio" name="question" />
-                        Kilopreis
-                    </label>
+                <div class="control" style="display: flex; justify-content: center">
+                    <div >Stückpreis</div>
+                    <div style="margin: 10px 10px"><Switch bind:checked={acceptTerms} /></div>
+                   <div>Kilopreis</div>
+                    
+                 
                 </div>
             </div>
 
@@ -254,23 +252,26 @@
             <hr style="margin-top: 20px" />
 
             <div>
-                <ul style="text-align:center"> 
+                <ul style="text-align:center">
                     <li style="margin: 10px 30px ">
                         <a href="/#" on:click={handleClick}>
-                            <button class="button is-medium is-success is-link is-rounded">
+                            <button
+                                class="button is-medium is-success is-link is-rounded">
                                 Warenkorb hinzufügen
                             </button>
                         </a>
                     </li>
                     <li style="margin: 10px 30px">
                         <a href="/#" on:click={handleClick}>
-                            <button class="button is-medium is-link is-danger is-rounded">
+                            <button
+                                class="button is-medium is-link is-danger is-rounded">
                                 Eingabe löschen
                             </button>
                         </a>
                     </li>
                 </ul>
             </div>
+            {acceptTerms}
         </div>
     </div>
 </div>
