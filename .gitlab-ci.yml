@@ -5,7 +5,7 @@ stages:
     - build
     - lint
     - deploy
-    - run_lighthouse
+    - test
 
 build:
     stage: build
