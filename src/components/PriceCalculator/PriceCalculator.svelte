@@ -262,6 +262,13 @@
                             </button>
                         </a>
                     </li>
+                    <li style="margin: 10px 30px">
+                        <a href="/#" on:click={handleClick}>
+                            <button class="button is-medium is-link is-danger is-rounded">
+                                Eingabe löschen
+                            </button>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
