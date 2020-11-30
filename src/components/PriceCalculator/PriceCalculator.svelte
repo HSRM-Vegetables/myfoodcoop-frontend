@@ -216,7 +216,13 @@
                         <span class="hidden--visually">Warenpreis</span>
                     </label>
                 </div>
-                <div style="margin-left: 20px">/ Stück</div>
+                <div style="margin-left: 20px">
+                    {#if !acceptTerms}
+                    / Stück
+                    {:else}
+                    / Kg
+                    {/if}
+                </div>
             </div>
 
             <div class="floating" style="margin-top: 2rem">
