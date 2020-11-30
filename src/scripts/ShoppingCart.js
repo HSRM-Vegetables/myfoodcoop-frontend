@@ -63,7 +63,7 @@ export default class ShoppingCart {
             this.items.push({'name':name, 'unitType':unitType, 'unitPrice':unitPrice, 'quantity':quantity})
         }
         
-        localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
 
     removeItem(name) {
@@ -73,7 +73,7 @@ export default class ShoppingCart {
                 break;
             }
         }
-        localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
 
 }
