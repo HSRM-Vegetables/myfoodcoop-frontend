@@ -81,7 +81,7 @@ export default class ShoppingCart {
 
     clear() {
         this.items = [];
-        localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
 
 

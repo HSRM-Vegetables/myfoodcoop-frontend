@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import ShoppingCart from '../../scripts/ShoppingCart';
+    import ShowBalance from '../balance/ShowBalance.svelte';
 
 
     let cart;
@@ -37,15 +38,49 @@
 
 <div>
     <h1>Warenkorb</h1>
+    <br>
+    <ShowBalance/>
+    <br>
 
     <button on:click={addSample}>Sample hinzufügen</button>
 
-    <p>Artikel | Typ | Preis / Typ | Anzahl | Preis</p>
-    {#each cartItems as item}
-        <p><button on:click={() => removeItem(item.name)}>Delete</button> {item.name} | {item.unitType} | {item.unitPrice} € | {item.quantity} | {item.unitPrice * item.quantity} € </p>
-    {/each}
+    <br>
 
-    Gesamtpreis: {totalPrice} €
+    {#if totalPrice > 0.0}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Artikel</th>
+                    <th>Menge</th>
+                    <th>Preis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each cartItems as item}
+                    <tr>
+                        <td><button on:click={() => removeItem(item.name)}>Delete</button></td>
+                        <td>
+                            {item.name}<br>
+                            <span class="is-size-7">{item.unitPrice} / {item.unitType}</span>
+                        </td>
+                        <td>{item.quantity}</td>
+                        <td>{item.unitPrice * item.quantity} €</td>
+                    </tr>
+            {/each}
+            </tbody>
+        </table>
+    {:else}
+        <p>Der Warenkorb ist leer.</p>
+    {/if}
+    
+    <br>
+    <button on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
+    <br>
+    <br>
+
+    <hr>
+    <p>Gesamtpreis: {totalPrice} €</p>
 
     {#if totalPrice > 0.0}
         <button type="submit" on:click={checkout}>Kaufen</button>
