@@ -174,6 +174,20 @@
                     <span class="hidden--visually">Artikel</span>
                 </label>
             </div>
+            <div class="field">
+                <div
+                    class="control"
+                    style="display: flex; justify-content: center">
+                    <label class="radio">
+                        <input type="radio" name="question" checked />
+                        Stückpreis
+                    </label>
+                    <label class="radio" style="margin-left: 20px">
+                        <input type="radio" name="question" />
+                        Kilopreis
+                    </label>
+                </div>
+            </div>
 
             <div class="floating">
                 <input
