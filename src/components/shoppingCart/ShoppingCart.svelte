@@ -4,10 +4,13 @@
     import ShoppingCart from '../../scripts/ShoppingCart';
     import ShowBalance from '../balance/ShowBalance.svelte';
 
+    import Icon from '../common/Icon.svelte';
+    import { mdiDelete } from '@mdi/js';
 
     let cart;
     let cartItems = [];
     let totalPrice = 0.0;
+    let currentBalance = 0.0;
 
     onMount(() => {
         cart = new ShoppingCart();
@@ -15,6 +18,7 @@
         totalPrice = cart.totalPrice();
     });
 
+    // to remove
     function addSample() {
         cart.addItem('kartoffeln', 'kg', '5', '15');
         cart.addItem('kürbis', 'piece', '5,12', '3');
@@ -35,19 +39,20 @@
     
 </script>
 
-
-<div>
+<div class="has-text-centered">
     <h1>Warenkorb</h1>
     <br>
-    <ShowBalance/>
+    <ShowBalance bind:currentBalance/>
     <br>
 
+    <!-- to remove:-->
     <button on:click={addSample}>Sample hinzufügen</button>
 
     <br>
+    <hr>
 
     {#if totalPrice > 0.0}
-        <table class="table">
+        <table class="table is-fullwidth">
             <thead>
                 <tr>
                     <th></th>
@@ -59,7 +64,7 @@
             <tbody>
                 {#each cartItems as item}
                     <tr>
-                        <td><button on:click={() => removeItem(item.name)}>Delete</button></td>
+                        <td><button class="button is-white" on:click={() => removeItem(item.name)}><span class="icon"><Icon icon={mdiDelete}/></span></button></td>
                         <td>
                             {item.name}<br>
                             <span class="is-size-7">{item.unitPrice} / {item.unitType}</span>
@@ -75,14 +80,16 @@
     {/if}
     
     <br>
-    <button on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
+    <button class="button is-link" on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
     <br>
     <br>
 
     <hr>
-    <p>Gesamtpreis: {totalPrice} €</p>
+    <p class="is-size-4">Gesamtpreis: {totalPrice} €</p>
+    <p class="is-size-7 mt-3">Guthaben nach Kauf: {currentBalance - totalPrice} €</p>
 
     {#if totalPrice > 0.0}
-        <button type="submit" on:click={checkout}>Kaufen</button>
+        <button class="button is-link mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
+
 </div>
