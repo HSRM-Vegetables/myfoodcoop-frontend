@@ -11,7 +11,11 @@
         const goodsPrice = parseInt(goodsPriceInput.value);
         const amount = parseInt(amountInput.value);
 
-        totalPriceOutput.textContent = (goodsPrice * amount) + '€';
+        totalPriceOutput.textContent = goodsPrice * amount + '€';
+    }
+
+    function handleClick() {
+        alert('click');
     }
 </script>
 
@@ -116,18 +120,6 @@
         color: var(--color__accent);
     }
 
-    body {
-        display: flex;
-        align-items: center;
-        padding: 1rem 3rem;
-        max-width: 40rem;
-        margin: 0 auto;
-        font-family: var(--font__family);
-        font-size: var(--font__size);
-        font-weight: 400;
-        min-height: 100vh;
-    }
-
     input {
         background: none;
         border-width: 0;
@@ -213,7 +205,7 @@
                         placeholder="Warenpreis"
                         value="0"
                         on:change={() => calcTotalPrice()}
-                        on:input={() => calcTotalPrice()}  />
+                        on:input={() => calcTotalPrice()} />
                     <label
                         for="input__goodsPrice"
                         class="floating__label"
@@ -253,6 +245,13 @@
                 style="text-align: center; font-size: 40px"
                 bind:this={totalPriceOutput}>
                 0€
+            </div>
+            <hr style="margin-top: 20px" />
+
+            <div>
+                <button class="btn" on:click={handleClick}>
+                    Warenkorb hinzufügen
+                </button>
             </div>
         </div>
     </div>
