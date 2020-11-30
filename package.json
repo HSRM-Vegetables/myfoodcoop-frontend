@@ -7,12 +7,15 @@
     "build": "sapper build --legacy",
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "lighthouse": "lighthouse-ci"  
   },
   "dependencies": {
     "@mdi/js": "^5.8.55",
     "bulma": "^0.9.1",
     "compression": "^1.7.1",
+    "lighthouse": "^6.4.1",
+    "lighthouse-ci": "^1.11.0",
     "polka": "^0.5.2",
     "sirv": "^1.0.0",
     "uuid": "^3.4.0"
