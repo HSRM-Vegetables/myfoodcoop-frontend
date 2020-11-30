@@ -8,7 +8,7 @@
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
     "lint": "eslint ./src",
-    "lighthouse": "lighthouse-ci"  
+    "lighthouse": "lighthouse-ci"
   },
   "dependencies": {
     "@mdi/js": "^5.8.55",
