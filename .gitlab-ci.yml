@@ -51,4 +51,4 @@ testing:
     stage: test
     script: 
         - npm i 
-        - npm run lighthouse-ci https://veg-web.herokuapp.com/
+        - npm run lighthouse https://veg-web.herokuapp.com/
