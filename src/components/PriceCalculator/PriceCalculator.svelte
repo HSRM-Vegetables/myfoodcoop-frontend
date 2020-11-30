@@ -3,7 +3,6 @@
     import Switch from './Switch.svelte';
 
     let acceptTerms = false;
-
     let goodsPriceInput;
     let amountInput;
     let totalPriceOutput;
@@ -11,10 +10,20 @@
     onMount(async () => {});
 
     function calcTotalPrice() {
-        const goodsPrice = parseInt(goodsPriceInput.value);
-        const amount = parseInt(amountInput.value);
-
-        totalPriceOutput.textContent = goodsPrice * amount + '€';
+        console.log(goodsPriceInput.value);
+        if (
+            Number.isInteger(parseInt(goodsPriceInput.value)) &&
+            Number.isInteger(parseInt(amountInput.value))
+        ) {
+            const goodsPrice = parseInt(goodsPriceInput.value);
+            const amount = parseInt(amountInput.value);
+            totalPriceOutput.textContent = goodsPrice * amount + '€';
+        } else if (goodsPriceInput.value == "") {
+            const goodsPrice = 0;
+        } else if(amountInput.value == "") {
+            const amount = 0;
+           
+        }
     }
 
     function handleClick() {
@@ -188,12 +197,14 @@
             </div>
 
             <div class="field" style="margin-top: 2rem">
-                <div class="control" style="display: flex; justify-content: center">
-                    <div >Stückpreis</div>
-                    <div style="margin: 10px 10px"><Switch bind:checked={acceptTerms} /></div>
-                   <div>Kilopreis</div>
-                    
-                 
+                <div
+                    class="control"
+                    style="display: flex; justify-content: center">
+                    <div>Stückpreis</div>
+                    <div style="margin: 10px 10px">
+                        <Switch bind:checked={acceptTerms} />
+                    </div>
+                    <div>Kilopreis</div>
                 </div>
             </div>
 
@@ -206,7 +217,7 @@
                         name="goodsPrice"
                         type="number"
                         placeholder="Warenpreis"
-                        value="0"
+                        value=""
                         on:change={() => calcTotalPrice()}
                         on:input={() => calcTotalPrice()} />
                     <label
@@ -217,11 +228,7 @@
                     </label>
                 </div>
                 <div style="margin-left: 20px">
-                    {#if !acceptTerms}
-                    / Stück
-                    {:else}
-                    / Kg
-                    {/if}
+                    {#if !acceptTerms}/ Stück{:else}/ Kg{/if}
                 </div>
             </div>
 
@@ -233,7 +240,7 @@
                     name="amount"
                     type="number"
                     placeholder="Menge"
-                    value="0"
+                    value=""
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
                 <label
