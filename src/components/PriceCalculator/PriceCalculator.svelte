@@ -1,5 +1,18 @@
 <script>
-    // Scoped JavaScript goes here.
+    import { onMount } from 'svelte';
+
+    let goodsPriceInput;
+    let amountInput;
+    let totalPriceOutput;
+
+    onMount(async () => {});
+
+    function calcTotalPrice() {
+        const goodsPrice = parseInt(goodsPriceInput.value);
+        const amount = parseInt(amountInput.value);
+
+        totalPriceOutput.textContent = (goodsPrice * amount) + '€';
+    }
 </script>
 
 <style>
@@ -190,14 +203,17 @@
             </div>
 
             <div style="display: flex; align-items: center; margin-top: 2rem">
-
                 <div class="floating" style="flex-grow: 1">
                     <input
+                        bind:this={goodsPriceInput}
                         id="input__goodsPrice"
                         class="floating__input"
                         name="goodsPrice"
                         type="number"
-                        placeholder="Warenpreis" />
+                        placeholder="Warenpreis"
+                        value="0"
+                        on:change={() => calcTotalPrice()}
+                        on:input={() => calcTotalPrice()}  />
                     <label
                         for="input__goodsPrice"
                         class="floating__label"
@@ -206,16 +222,19 @@
                     </label>
                 </div>
                 <div style="margin-left: 20px">/ Stück</div>
-
             </div>
 
             <div class="floating" style="margin-top: 2rem">
                 <input
+                    bind:this={amountInput}
                     id="input__amount"
                     class="floating__input"
                     name="amount"
                     type="number"
-                    placeholder="Menge" />
+                    placeholder="Menge"
+                    value="0"
+                    on:change={() => calcTotalPrice()}
+                    on:input={() => calcTotalPrice()} />
                 <label
                     for="input__amount"
                     class="floating__label"
@@ -224,10 +243,17 @@
                 </label>
             </div>
 
-            <hr style="margin-top: 40px"/>
+            <hr style="margin-top: 40px" />
 
-            <div style="margin-top: 20px; text-align: center; font-size: 24px">Gesamtpreis</div>
-            <div style="text-align: center; font-size: 40px">14€</div>
+            <div style="margin-top: 20px; text-align: center; font-size: 24px">
+                Gesamtpreis
+            </div>
+            <div
+                id="totalPrice"
+                style="text-align: center; font-size: 40px"
+                bind:this={totalPriceOutput}>
+                0€
+            </div>
         </div>
     </div>
 </div>
