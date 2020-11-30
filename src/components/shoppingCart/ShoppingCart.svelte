@@ -13,7 +13,11 @@
 
     function addSample() {
         cart.addSampleData();
-        
+        cartItems = cart.items;
+    }
+    
+    function removeItem(name) {
+        cart.removeItem(name);
         cartItems = cart.items;
     }    
     
@@ -27,6 +31,6 @@
 
     <p>Artikel | Typ | Preis / Typ | Anzahl | Gesamtpreis</p>
     {#each cartItems as item}
-        <p>{item.name} | {item.unitType} | {item.unitPrice} € | {item.quantity} | {item.unitPrice * item.quantity} € </p>
+        <p><button on:click={() => removeItem(item.name)}>Delete</button> {item.name} | {item.unitType} | {item.unitPrice} € | {item.quantity} | {item.unitPrice * item.quantity} € </p>
     {/each}
 </div>

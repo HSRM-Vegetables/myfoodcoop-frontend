@@ -66,7 +66,14 @@ export default class ShoppingCart {
         localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
     }
 
-    
-
+    removeItem(name) {
+        for(let i = 0; i < this.items.length; i++) {
+            if(this.items[i].name === name) {
+                this.items.splice(i, 1);
+                break;
+            }
+        }
+        localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
+    }
 
 }
