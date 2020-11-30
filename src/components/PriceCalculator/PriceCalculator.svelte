@@ -21,7 +21,6 @@
     }
 
     .floating {
-        margin-bottom: 2rem;
         background-color: var(--field__background);
         transition: background-color 0.2s ease;
         border-top-left-radius: 4px;
@@ -174,7 +173,8 @@
                     <span class="hidden--visually">Artikel</span>
                 </label>
             </div>
-            <div class="field">
+
+            <div class="field" style="margin-top: 2rem">
                 <div
                     class="control"
                     style="display: flex; justify-content: center">
@@ -189,22 +189,25 @@
                 </div>
             </div>
 
-            <div class="floating">
-                <input
-                    id="input__goodsPrice"
-                    class="floating__input"
-                    name="goodsPrice"
-                    type="number"
-                    placeholder="Warenpreis" />
-                <label
-                    for="input__goodsPrice"
-                    class="floating__label"
-                    data-content="Warenpreis">
-                    <span class="hidden--visually">Warenpreis</span>
-                </label>
+            <div style="display: flex; align-items: center; margin-top: 2rem">
+                <div class="floating" style="flex-grow: 1">
+                    <input
+                        id="input__goodsPrice"
+                        class="floating__input"
+                        name="goodsPrice"
+                        type="number"
+                        placeholder="Warenpreis" />
+                    <label
+                        for="input__goodsPrice"
+                        class="floating__label"
+                        data-content="Warenpreis">
+                        <span class="hidden--visually">Warenpreis</span>
+                    </label>
+                </div>
+                <div style="margin-left: 20px">/ Stück</div>
             </div>
 
-            <div class="floating">
+            <div class="floating" style="margin-top: 2rem">
                 <input
                     id="input__amount"
                     class="floating__input"
