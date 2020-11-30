@@ -190,6 +190,7 @@
             </div>
 
             <div style="display: flex; align-items: center; margin-top: 2rem">
+
                 <div class="floating" style="flex-grow: 1">
                     <input
                         id="input__goodsPrice"
@@ -205,6 +206,7 @@
                     </label>
                 </div>
                 <div style="margin-left: 20px">/ Stück</div>
+
             </div>
 
             <div class="floating" style="margin-top: 2rem">
@@ -221,6 +223,11 @@
                     <span class="hidden--visually">Menge</span>
                 </label>
             </div>
+
+            <hr style="margin-top: 40px"/>
+
+            <div style="margin-top: 20px; text-align: center; font-size: 24px">Gesamtpreis</div>
+            <div style="text-align: center; font-size: 40px">14€</div>
         </div>
     </div>
 </div>
