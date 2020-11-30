@@ -23,12 +23,6 @@ export default class ShoppingCart {
         }
     }
 
-    // to remove
-    addSampleData() {
-        this.addItem('kartoffeln', 'kg', '5', '15');
-        this.addItem('kürbis', 'piece', '5,12', '3');
-    }
-
     addItem(name, unitType, unitPrice, quantity) {
         if (unitType !== 'kg' && unitType !== 'piece') {
             return false;
@@ -75,5 +69,20 @@ export default class ShoppingCart {
         }
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
+
+    totalPrice() {
+        let totalPrice = 0.0;
+        this.items.forEach(item => {
+            totalPrice += (item.unitPrice * item.quantity);
+        });
+
+        return totalPrice.toFixed(2);
+    }
+
+    clear() {
+        this.items = [];
+        localStorage.setItem('sg_shoppingCart', JSON.stringify(this.items));
+    }
+
 
 }
