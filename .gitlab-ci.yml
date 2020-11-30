@@ -8,6 +8,7 @@ stages:
     - build
     - lint
     - deploy
+    - test
 
 build:
     stage: build
@@ -45,3 +46,9 @@ deploy:
         - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
     only:
         - master
+testing:
+    type: deploy
+    stage: test
+    script: 
+        - npm i 
+        - npm run lighthouse-ci https://veg-web.herokuapp.com/
