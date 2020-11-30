@@ -150,6 +150,11 @@
         padding: 2rem 3rem 4rem;
         box-shadow: 2px 2px 16px 3px rgba(0, 0, 0, 0.4);
     }
+
+    ul li {
+        display: inline-block;
+        text-align: center;
+    }
 </style>
 
 <div>
@@ -249,9 +254,15 @@
             <hr style="margin-top: 20px" />
 
             <div>
-                <button class="btn" on:click={handleClick}>
-                    Warenkorb hinzufügen
-                </button>
+                <ul style="text-align:center"> 
+                    <li style="margin: 10px 30px ">
+                        <a href="/#" on:click={handleClick}>
+                            <button class="button is-medium is-success is-link is-rounded">
+                                Warenkorb hinzufügen
+                            </button>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
