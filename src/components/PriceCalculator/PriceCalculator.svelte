@@ -18,16 +18,22 @@
             const goodsPrice = parseInt(goodsPriceInput.value);
             const amount = parseInt(amountInput.value);
             totalPriceOutput.textContent = goodsPrice * amount + '€';
-        } else if (goodsPriceInput.value == "") {
+        } else if (goodsPriceInput.value == '') {
             const goodsPrice = 0;
-        } else if(amountInput.value == "") {
+        } else if (amountInput.value == '') {
             const amount = 0;
-           
         }
     }
 
     function handleClick() {
         alert('click');
+    }
+
+    function clearInputs() {
+        document.getElementById('input__article').value = "";
+        document.getElementById('input__goodsPrice').value = "";
+        document.getElementById('input__amount').value = "";
+        document.getElementById('totalPrice').innerHTML = "0€";
     }
 </script>
 
@@ -275,16 +281,14 @@
                         </a>
                     </li>
                     <li style="margin: 10px 30px">
-                        <a href="/#" on:click={handleClick}>
-                            <button
-                                class="button is-medium is-link is-danger is-rounded">
-                                Eingabe löschen
-                            </button>
-                        </a>
+                        <button
+                            on:click={clearInputs}
+                            class="button is-medium is-link is-danger is-rounded">
+                            Eingabe löschen
+                        </button>
                     </li>
                 </ul>
             </div>
-            {acceptTerms}
         </div>
     </div>
 </div>
