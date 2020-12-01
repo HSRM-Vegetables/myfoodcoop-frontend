@@ -40,15 +40,13 @@
 </script>
 
 <div class="has-text-centered">
-    <h1>Warenkorb</h1>
-    <br>
-    <ShowBalance bind:currentBalance/>
-    <br>
+    <h1 class="mb-4">Warenkorb</h1>
+
+    <ShowBalance bind:currentBalance />
 
     <!-- to remove:-->
     <button on:click={addSample}>Sample hinzufügen</button>
 
-    <br>
     <hr>
 
     {#if totalPrice > 0.0}
@@ -64,10 +62,12 @@
             <tbody>
                 {#each cartItems as item}
                     <tr>
-                        <td><button class="button is-white" on:click={() => removeItem(item.name)}><span class="icon"><Icon icon={mdiDelete}/></span></button></td>
+                        <td>
+                            <button class="button is-white" on:click={() => removeItem(item.name)}><span class="icon"><Icon icon={mdiDelete}/></span></button>
+                        </td>
                         <td>
                             {item.name}<br>
-                            <span class="is-size-7">{item.unitPrice} / {item.unitType}</span>
+                            <span class="is-size-7">{item.unitPrice} € / {item.unitType}</span>
                         </td>
                         <td>{item.quantity}</td>
                         <td>{item.unitPrice * item.quantity} €</td>
@@ -79,17 +79,15 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
     
-    <br>
-    <button class="button is-link" on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
-    <br>
-    <br>
+    <button class="button is-primary mt-6" on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
 
     <hr>
+
     <p class="is-size-4">Gesamtpreis: {totalPrice} €</p>
     <p class="is-size-7 mt-3">Guthaben nach Kauf: {currentBalance - totalPrice} €</p>
 
     {#if totalPrice > 0.0}
-        <button class="button is-link mt-5" type="submit" on:click={checkout}>Kaufen</button>
+        <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
 
 </div>
