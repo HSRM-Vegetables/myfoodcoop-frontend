@@ -6,22 +6,18 @@
     let goodsPriceInput;
     let amountInput;
     let totalPriceOutput;
+    let goodsPrice;
+    let amount;
 
     onMount(async () => {});
 
     function calcTotalPrice() {
-        console.log(goodsPriceInput.value);
-        if (
-            Number.isInteger(parseInt(goodsPriceInput.value)) &&
-            Number.isInteger(parseInt(amountInput.value))
-        ) {
-            const goodsPrice = parseInt(goodsPriceInput.value);
-            const amount = parseInt(amountInput.value);
+
+        goodsPrice = parseFloat(document.getElementById('input__goodsPrice').value);
+        amount = parseFloat(document.getElementById('input__amount').value);
+
+        if (!isNaN(goodsPrice) && !isNaN(amount)) {
             totalPriceOutput.textContent = goodsPrice * amount + '€';
-        } else if (goodsPriceInput.value == '') {
-            const goodsPrice = 0;
-        } else if (amountInput.value == '') {
-            const amount = 0;
         }
     }
 
