@@ -49,7 +49,7 @@
 
     <hr>
 
-    {#if totalPrice > 0.0}
+    {#if cartItems.length > 0}
         <table class="table is-fullwidth">
             <thead>
                 <tr>
@@ -86,7 +86,7 @@
     <p class="is-size-4">Gesamtpreis: {totalPrice} €</p>
     <p class="is-size-7 mt-3">Guthaben nach Kauf: {currentBalance - totalPrice} €</p>
 
-    {#if totalPrice > 0.0}
+    {#if cartItems.length > 0}
         <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
 
