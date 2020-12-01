@@ -17,7 +17,8 @@
         amount = parseFloat(document.getElementById('input__amount').value);
 
         if (!isNaN(goodsPrice) && !isNaN(amount)) {
-            totalPriceOutput.textContent = goodsPrice * amount + '€';
+            totalPriceOutput = (goodsPrice * amount).toFixed(2);
+            document.getElementById('totalPrice').innerHTML = `${totalPriceOutput} €`;
         }
     }
 
