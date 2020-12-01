@@ -1,4 +1,5 @@
 image: node:latest
+image: markhobson/node-chrome
 
 cache:
   paths:
@@ -8,7 +9,7 @@ stages:
     - build
     - lint
     - deploy
-    - test
+    - run_lighthouse
 
 build:
     stage: build
@@ -46,9 +47,16 @@ deploy:
         - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
     only:
         - master
-testing:
-    type: deploy
-    stage: test
-    script: 
-        - npm i 
-        - npm run lighthouse https://veg-web.herokuapp.com/
+
+run_lighthouse:
+    variables:
+        LIGHTHOUSE_TEST_URL: https://veg-web.herokuapp.com/
+    stage: deploy
+    before_script:
+        - npm i -g lighthouse
+    script:
+        - lighthouse --chrome-flags="--headless --no-sandbox" $LIGHTHOUSE_TEST_URL --output html --output-path ./report.html
+    artifacts:
+        paths:
+            - ./report.html
+        expire_in: 1 week
