@@ -48,6 +48,8 @@ run_lighthouse:
     variables:
         LIGHTHOUSE_TEST_URL: https://veg-web.herokuapp.com/
     stage: deploy
+    only:
+        - master
     before_script:
         - npm i -g lighthouse
     script:
