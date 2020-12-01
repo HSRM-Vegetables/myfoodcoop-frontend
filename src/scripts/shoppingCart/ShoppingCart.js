@@ -1,12 +1,5 @@
-/*
-Local Storage Format:
-[
-    {"name":"kartoffeln", "unitType":"kg", "unitPrice":"5.00", "quantity":5}, 
-    {"name":"kürbis", "unitType":"piece", "unitPrice":"5.12", "quantity":3}
-]
-*/
-
-import LocalStorageKeys from './LocalStorageKeys';
+import LocalStorageKeys from '../LocalStorageKeys';
+import ShoppingCartItem from './ShoppingCartItem';
 
 export default class ShoppingCart {
 
@@ -36,7 +29,6 @@ export default class ShoppingCart {
         unitPrice = unitPrice.toFixed(2);
 
         quantity = parseInt(quantity);
-        
         if(isNaN(quantity)) {
             return false;
         } 
@@ -54,7 +46,7 @@ export default class ShoppingCart {
         }
 
         if(itemExists === false) {
-            this.items.push({'name':name, 'unitType':unitType, 'unitPrice':unitPrice, 'quantity':quantity})
+            this.items.push(new ShoppingCartItem(name, unitType, unitPrice, quantity));
         }
         
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
@@ -83,6 +75,5 @@ export default class ShoppingCart {
         this.items = [];
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
-
 
 }

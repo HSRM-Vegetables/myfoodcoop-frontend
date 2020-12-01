@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
-    import ShoppingCart from '../../scripts/ShoppingCart';
+    import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import ShowBalance from '../balance/ShowBalance.svelte';
 
     import Icon from '../common/Icon.svelte';
