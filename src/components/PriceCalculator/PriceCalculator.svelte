@@ -9,11 +9,15 @@
     let goodsPrice;
     let amount;
     let article;
+    let unitType;
+
+   
+
 
     onMount(async () => {});
 
     function calcTotalPrice() {
-
+        article = document.getElementById('input__article').value;
         goodsPrice = parseFloat(document.getElementById('input__goodsPrice').value);
         amount = parseFloat(document.getElementById('input__amount').value);
 
@@ -24,8 +28,18 @@
     }
 
     function getData() {
-        article = document.getElementById('input__article').value;
-        console.log(article);
+     
+        var obj = {
+            name: article,
+            unitType: acceptTerms,
+            unitPrice: goodsPrice,
+            quantity: amount,
+            totalPrice: totalPriceOutput
+        }
+
+        console.dir(obj);
+
+        return obj;
     }
 
     function clearInputs() {
@@ -207,7 +221,9 @@
                     style="display: flex; justify-content: center">
                     <div>Stückpreis</div>
                     <div style="margin: 10px 10px">
-                        <Switch bind:checked={acceptTerms} />
+                    <Switch bind:checked={acceptTerms} />
+                  
+
                     </div>
                     <div>Kilopreis</div>
                 </div>
@@ -233,7 +249,8 @@
                     </label>
                 </div>
                 <div style="margin-left: 20px">
-                    {#if !acceptTerms}/ Stück{:else}/ Kg{/if}
+                    {#if !acceptTerms }
+                    / Stück{:else} / Kg{/if}
                 </div>
             </div>
 
