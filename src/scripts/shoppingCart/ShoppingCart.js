@@ -3,69 +3,63 @@ import ShoppingCartItem from './ShoppingCartItem';
 import { UnitType } from '../UnitType';
 
 export default class ShoppingCart {
-
     constructor() {
         const cartString = window.localStorage.getItem(LocalStorageKeys.CART);
-        if (cartString !== null ) {
+        if (cartString !== null) {
             try {
-                this.items = JSON.parse(cartString);                
+                this.cartItems = JSON.parse(cartString);
             } catch (e) {
-                this.items = [];
+                this.cartItems = [];
             }
         } else {
-            this.items = [];
+            this.cartItems = [];
         }
     }
 
+    // TODO: Implement updates of cartitems
     addItem(name, unitType, unitPrice, quantity) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
         }
 
-        unitPrice = unitPrice.replace(',', '.');
-        unitPrice = parseFloat(unitPrice);
-        if(isNaN(unitPrice)) {
+        let unitPriceSanitized = unitPrice.replace(',', '.');
+        unitPriceSanitized = parseFloat(unitPriceSanitized);
+        if (Number.isNaN(unitPriceSanitized)) {
             return false;
-        }            
-        unitPrice = unitPrice.toFixed(2);
+        }
+        unitPriceSanitized = unitPriceSanitized.toFixed(2);
 
-        quantity = parseInt(quantity);
-        if(isNaN(quantity)) {
+        const quantityParsed = parseInt(quantity, 10);
+        if (Number.isNaN(quantityParsed)) {
             return false;
-        } 
+        }
 
         // check if item name already exists in item array. if true, update entry
-        let itemExists = false;
-        for(let item of this.items) {
-            if(item.name === name) {
-                itemExists = true;
-                item.unitType = unitType;
-                item.unitPrice = unitPrice;
-                item.quantity = quantity;
-                break;
-            }
+        if (this.cartItems.find((item) => item.name === name) !== undefined) {
+            return true;
         }
 
-        if(itemExists === false) {
-            this.items.push(new ShoppingCartItem(name, unitType, unitPrice, quantity));
-        }
-        
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
+        this.cartItems = [...this.cartItems,
+            new ShoppingCartItem(name, unitType, unitPriceSanitized, quantity)];
+
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
+
+        return true;
     }
 
     removeItem(name) {
-        for(let i = 0; i < this.items.length; i++) {
-            if(this.items[i].name === name) {
-                this.items.splice(i, 1);
+        for (let i = 0; i < this.cartItems.length; i += 1) {
+            if (this.cartItems[i].name === name) {
+                this.cartItems.splice(i, 1);
                 break;
             }
         }
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 
     totalPrice() {
         let totalPrice = 0.0;
-        this.items.forEach(item => {
+        this.cartItems.forEach((item) => {
             totalPrice += (item.unitPrice * item.quantity);
         });
 
@@ -73,7 +67,7 @@ export default class ShoppingCart {
     }
 
     clear() {
-        this.items = [];
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
+        this.cartItems = [];
+        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 }

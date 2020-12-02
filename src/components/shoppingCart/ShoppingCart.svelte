@@ -15,21 +15,21 @@
 
     onMount(() => {
         cart = new ShoppingCart();
-        cartItems = cart.items;
+        cartItems = cart.cartItems;
         totalPrice = cart.totalPrice();
     });
 
     // to remove
     function addSample() {
-        cart.addItem('kartoffeln', UnitType.KILO, '5', '15');
-        cart.addItem('kürbis', UnitType.PIECE, '5,12', '3');
-        cartItems = cart.items;
-        totalPrice = cart.totalPrice();        
+        cart.addItem('Kartoffeln', UnitType.KILO, '5', '15');
+        cart.addItem('Kürbis', UnitType.PIECE, '5,12', '3');
+        cartItems = cart.cartItems;
+        totalPrice = cart.totalPrice();
     }
     
     function removeItem(name) {
         cart.removeItem(name);
-        cartItems = cart.items;
+        cartItems = cart.cartItems;
         totalPrice = cart.totalPrice();
     }
     
@@ -39,8 +39,10 @@
     }
     
     function goToPriceCalculator(shoppingCartItem) {
+        // var will be used in another file
+        /* eslint-disable no-unused-vars */
         $currentShoppingCartItem = shoppingCartItem;
-        goto("/price-calculator");
+        goto('/price-calculator');
     }
 </script>
 
@@ -60,8 +62,8 @@
 
     <hr>
 
-    {#if cartItems.length > 0}
-        <table class="table is-fullwidth is-hoverable">
+    {#if cartItems !== undefined && cartItems.length > 0}
+        <table class="table is-fullwidth is-hoverable cart-list">
             <thead>
                 <tr>
                     <th></th>
@@ -81,7 +83,7 @@
                             </button>
                         </td>
                         <td class="clickable" on:click="{() => goToPriceCalculator(item)}">
-                            {item.name}<br>
+                            <span class="item-name">{item.name}</span><br>
                             {#if item.unitType === UnitType.PIECE }
                                 <span class="is-size-7">{item.unitPrice} € / Stück</span> 
                             {:else}
@@ -105,7 +107,7 @@
     <p class="is-size-4">Gesamtpreis: {totalPrice} €</p>
     <p class="is-size-7 mt-3">Guthaben nach Kauf: {currentBalance - totalPrice} €</p>
 
-    {#if cartItems.length > 0}
+    {#if cartItems !== undefined && cartItems.length > 0}
         <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
 </div>
