@@ -9,44 +9,40 @@
     let goodsPrice;
     let amount;
     let article;
-    let unitType;
-
-   
-
 
     onMount(async () => {});
 
     function calcTotalPrice() {
         article = document.getElementById('input__article').value;
-        goodsPrice = parseFloat(document.getElementById('input__goodsPrice').value);
+        goodsPrice = parseFloat(
+            document.getElementById('input__goodsPrice').value
+        );
         amount = parseFloat(document.getElementById('input__amount').value);
 
         if (!isNaN(goodsPrice) && !isNaN(amount)) {
             totalPriceOutput = (goodsPrice * amount).toFixed(2);
-            document.getElementById('totalPrice').innerHTML = `${totalPriceOutput} €`;
+            document.getElementById(
+                'totalPrice'
+            ).innerHTML = `${totalPriceOutput} €`;
         }
     }
 
     function getData() {
-     
         var obj = {
             name: article,
             unitType: acceptTerms,
             unitPrice: goodsPrice,
             quantity: amount,
-            totalPrice: totalPriceOutput
-        }
-
+        };
         console.dir(obj);
-
         return obj;
     }
 
     function clearInputs() {
-        document.getElementById('input__article').value = "";
-        document.getElementById('input__goodsPrice').value = "";
-        document.getElementById('input__amount').value = "";
-        document.getElementById('totalPrice').innerHTML = "0€";
+        document.getElementById('input__article').value = '';
+        document.getElementById('input__goodsPrice').value = '';
+        document.getElementById('input__amount').value = '';
+        document.getElementById('totalPrice').innerHTML = '0€';
     }
 </script>
 
@@ -186,18 +182,72 @@
         display: inline-block;
         text-align: center;
     }
+
+    ul {
+        text-align: center;
+    }
+
+    li {
+        margin: 10px 30px;
+    }
+
+    .balance {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .field2 {
+        margin-top: 2rem;
+    }
+
+    .control2 {
+        display: flex;
+        justify-content: center;
+    }
+    .control3 {
+        margin: 10px 10px;
+    }
+
+    .flexbox {
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+    }
+
+    .margin {
+        margin-left: 20px;
+    }
+
+    .margin40 {
+        margin-top: 40px;
+    }
+
+    .total {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .totalPrice {
+        text-align: center;
+        font-size: 40px;
+    }
+
+    .margin3 {
+        margin-top: 20px;
+    }
 </style>
+
 
 <div>
     <div class="content">
         <div class="form">
             <h1>Preisrechner</h1>
 
-            <div style="display: flex; justify-content: space-between">
+            <div class="balance">
                 <div>Guthaben:</div>
                 <div>42€</div>
             </div>
-
             <hr />
 
             <div class="floating">
@@ -215,22 +265,18 @@
                 </label>
             </div>
 
-            <div class="field" style="margin-top: 2rem">
-                <div
-                    class="control"
-                    style="display: flex; justify-content: center">
+            <div class="field field2">
+                <div class="control control2">
                     <div>Stückpreis</div>
-                    <div style="margin: 10px 10px">
-                    <Switch bind:checked={acceptTerms} />
-                  
-
+                    <div class="control3">
+                        <Switch bind:checked={acceptTerms} />
                     </div>
                     <div>Kilopreis</div>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; margin-top: 2rem">
-                <div class="floating" style="flex-grow: 1">
+            <div class="flexbox">
+                <div class="floating">
                     <input
                         bind:this={goodsPriceInput}
                         id="input__goodsPrice"
@@ -248,13 +294,12 @@
                         <span class="hidden--visually">Warenpreis</span>
                     </label>
                 </div>
-                <div style="margin-left: 20px">
-                    {#if !acceptTerms }
-                    / Stück{:else} / Kg{/if}
+                <div class="margin">
+                    {#if !acceptTerms}/ Stück{:else}/ Kg{/if}
                 </div>
             </div>
 
-            <div class="floating" style="margin-top: 2rem">
+            <div class="floating field2">
                 <input
                     bind:this={amountInput}
                     id="input__amount"
@@ -273,28 +318,27 @@
                 </label>
             </div>
 
-            <hr style="margin-top: 40px" />
+            <hr class="margin40" />
 
-            <div style="margin-top: 20px; text-align: center; font-size: 24px">
-                Gesamtpreis
-            </div>
+            <div class="total">Gesamtpreis</div>
             <div
+                class="totalPrice"
                 id="totalPrice"
-                style="text-align: center; font-size: 40px"
                 bind:this={totalPriceOutput}>
                 0€
             </div>
-            <hr style="margin-top: 20px" />
+            <hr class="margin3" />
 
             <div>
-                <ul style="text-align:center">
-                    <li style="margin: 10px 30px ">
-                            <button on:click={getData}
-                                class="button is-medium is-success is-link is-rounded">
-                                Warenkorb hinzufügen
-                            </button>
+                <ul>
+                    <li>
+                        <button
+                            on:click={getData}
+                            class="button is-medium is-success is-link is-rounded">
+                            Warenkorb hinzufügen
+                        </button>
                     </li>
-                    <li style="margin: 10px 30px">
+                    <li>
                         <button
                             on:click={clearInputs}
                             class="button is-medium is-link is-danger is-rounded">
