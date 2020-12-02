@@ -8,6 +8,7 @@
     let totalPriceOutput;
     let goodsPrice;
     let amount;
+    let article;
 
     onMount(async () => {});
 
@@ -22,8 +23,9 @@
         }
     }
 
-    function handleClick() {
-        alert('click');
+    function getData() {
+        article = document.getElementById('input__article').value;
+        console.log(article);
     }
 
     function clearInputs() {
@@ -270,12 +272,10 @@
             <div>
                 <ul style="text-align:center">
                     <li style="margin: 10px 30px ">
-                        <a href="/#" on:click={handleClick}>
-                            <button
+                            <button on:click={getData}
                                 class="button is-medium is-success is-link is-rounded">
                                 Warenkorb hinzufügen
                             </button>
-                        </a>
                     </li>
                     <li style="margin: 10px 30px">
                         <button
