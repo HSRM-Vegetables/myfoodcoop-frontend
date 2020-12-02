@@ -19,7 +19,7 @@ build:
             - src/node_modules/@sapper
         expire_in: 1 week
     script: 
-        - npm i
+        - npm ci
         - npm run build
 
 lint:
