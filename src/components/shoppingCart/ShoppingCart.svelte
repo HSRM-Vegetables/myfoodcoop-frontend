@@ -22,7 +22,7 @@
     // to remove
     function addSample() {
         cart.addItem('kartoffeln', UnitType.KILO, '5', '15');
-        cart.addItem('kürbis', UnitType.PIECE, '5,12', '3'); 
+        cart.addItem('kürbis', UnitType.PIECE, '5,12', '3');
         cart = cart; // tell svelte to update view
     }
     
