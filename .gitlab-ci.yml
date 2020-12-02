@@ -1,9 +1,5 @@
 image: node:latest
 
-cache:
-  paths:
-    - node_modules/
-
 stages:
     - build
     - lint
@@ -20,6 +16,7 @@ build:
         expire_in: 1 week
     script: 
         - npm ci
+        - npm i --save-dev sapper
         - npm run build
 
 lint:
