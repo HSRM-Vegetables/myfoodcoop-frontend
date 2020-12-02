@@ -48,12 +48,7 @@ export default class ShoppingCart {
     }
 
     removeItem(name) {
-        for (let i = 0; i < this.cartItems.length; i += 1) {
-            if (this.cartItems[i].name === name) {
-                this.cartItems.splice(i, 1);
-                break;
-            }
-        }
+        this.cartItems = this.cartItems.filter((item) => item.name !== name);
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 
