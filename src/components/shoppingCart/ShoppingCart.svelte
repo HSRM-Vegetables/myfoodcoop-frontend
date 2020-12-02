@@ -8,33 +8,32 @@
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import Icon from '../common/Icon.svelte';
 
-    let cart;
-    let cartItems = [];
-    let totalPrice = 0.0;
+    // Stub item because onMount is called after the first render
+    let cart = {
+        cartItems: [],
+        totalPrice: () => 0,
+    };
     let currentBalance = 0.0;
 
     onMount(() => {
         cart = new ShoppingCart();
-        cartItems = cart.cartItems;
-        totalPrice = cart.totalPrice();
     });
 
     // to remove
     function addSample() {
-        cart.addItem('Kartoffeln', UnitType.KILO, '5', '15');
-        cart.addItem('Kürbis', UnitType.PIECE, '5,12', '3');
-        cartItems = cart.cartItems;
-        totalPrice = cart.totalPrice();
+        cart.addItem('kartoffeln', UnitType.KILO, '5', '15');
+        cart.addItem('kürbis', UnitType.PIECE, '5,12', '3'); 
+        cart = cart; // tell svelte to update view
     }
     
     function removeItem(name) {
         cart.removeItem(name);
-        cartItems = cart.cartItems;
-        totalPrice = cart.totalPrice();
+        cart = cart; // tell svelte to update view
     }
     
     function checkout() {
         cart.clear();
+        cart = cart; // tell svelte to update view
         goto('/');
     }
     
@@ -62,8 +61,8 @@
 
     <hr>
 
-    {#if cartItems !== undefined && cartItems.length > 0}
-        <table class="table is-fullwidth is-hoverable cart-list">
+    {#if cart.cartItems.length > 0}
+        <table class="table is-fullwidth is-hoverable">
             <thead>
                 <tr>
                     <th></th>
@@ -73,7 +72,7 @@
                 </tr>
             </thead>
             <tbody>
-                {#each cartItems as item}
+                {#each cart.cartItems as item}
                     <tr>
                         <td>
                             <button class="button is-white" on:click={() => removeItem(item.name)}>
@@ -104,10 +103,10 @@
 
     <hr>
 
-    <p class="is-size-4">Gesamtpreis: {totalPrice} €</p>
-    <p class="is-size-7 mt-3">Guthaben nach Kauf: {currentBalance - totalPrice} €</p>
+    <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
+    <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart && cart.totalPrice() ? currentBalance - cart.totalPrice() : currentBalance} €</p>
 
-    {#if cartItems !== undefined && cartItems.length > 0}
+    {#if cart.cartItems.length > 0}
         <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
 </div>
