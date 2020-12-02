@@ -1,5 +1,6 @@
 import LocalStorageKeys from '../LocalStorageKeys';
 import ShoppingCartItem from './ShoppingCartItem';
+import { UnitType } from '../UnitType';
 
 export default class ShoppingCart {
 
@@ -17,7 +18,7 @@ export default class ShoppingCart {
     }
 
     addItem(name, unitType, unitPrice, quantity) {
-        if (unitType !== 'kg' && unitType !== 'piece') {
+        if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
         }
 
@@ -38,9 +39,9 @@ export default class ShoppingCart {
         for(let item of this.items) {
             if(item.name === name) {
                 itemExists = true;
-                item['unitType'] = unitType;
-                item['unitPrice'] = unitPrice;
-                item['quantity'] = quantity;
+                item.unitType = unitType;
+                item.unitPrice = unitPrice;
+                item.quantity = quantity;
                 break;
             }
         }
@@ -75,5 +76,4 @@ export default class ShoppingCart {
         this.items = [];
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.items));
     }
-
 }

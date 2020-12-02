@@ -1,11 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
+    import { mdiDelete } from '@mdi/js';
+    import { UnitType } from '../../scripts/UnitType';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import ShowBalance from '../balance/ShowBalance.svelte';
-
+    import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import Icon from '../common/Icon.svelte';
-    import { mdiDelete } from '@mdi/js';
 
     let cart;
     let cartItems = [];
@@ -20,8 +21,8 @@
 
     // to remove
     function addSample() {
-        cart.addItem('kartoffeln', 'kg', '5', '15');
-        cart.addItem('kürbis', 'piece', '5,12', '3');
+        cart.addItem('kartoffeln', UnitType.KILO, '5', '15');
+        cart.addItem('kürbis', UnitType.PIECE, '5,12', '3');
         cartItems = cart.items;
         totalPrice = cart.totalPrice();        
     }
@@ -37,7 +38,17 @@
         goto('/');
     }
     
+    function goToPriceCalculator(shoppingCartItem) {
+        $currentShoppingCartItem = shoppingCartItem;
+        goto("/price-calculator");
+    }
 </script>
+
+<style>
+    .clickable {
+        cursor: pointer;
+    }
+</style>
 
 <div class="has-text-centered">
     <h1 class="mb-4">Warenkorb</h1>
@@ -50,7 +61,7 @@
     <hr>
 
     {#if cartItems.length > 0}
-        <table class="table is-fullwidth">
+        <table class="table is-fullwidth is-hoverable">
             <thead>
                 <tr>
                     <th></th>
@@ -63,16 +74,24 @@
                 {#each cartItems as item}
                     <tr>
                         <td>
-                            <button class="button is-white" on:click={() => removeItem(item.name)}><span class="icon"><Icon icon={mdiDelete}/></span></button>
+                            <button class="button is-white" on:click={() => removeItem(item.name)}>
+                                <span class="icon">
+                                    <Icon icon={mdiDelete}/>
+                                </span>
+                            </button>
                         </td>
-                        <td>
+                        <td class="clickable" on:click="{() => goToPriceCalculator(item)}">
                             {item.name}<br>
-                            <span class="is-size-7">{item.unitPrice} € / {item.unitType}</span>
+                            {#if item.unitType === UnitType.PIECE }
+                                <span class="is-size-7">{item.unitPrice} € / Stück</span> 
+                            {:else}
+                                <span class="is-size-7">{item.unitPrice} € / kg</span>
+                            {/if}
                         </td>
-                        <td>{item.quantity}</td>
-                        <td>{item.unitPrice * item.quantity} €</td>
+                        <td class="clickable" on:click="{() => goToPriceCalculator(item)}">{item.quantity}</td>
+                        <td class="clickable" on:click="{() => goToPriceCalculator(item)}">{item.unitPrice * item.quantity} €</td>
                     </tr>
-            {/each}
+                {/each}
             </tbody>
         </table>
     {:else}
@@ -89,5 +108,4 @@
     {#if cartItems.length > 0}
         <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
     {/if}
-
 </div>
