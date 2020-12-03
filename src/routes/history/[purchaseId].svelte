@@ -9,7 +9,6 @@
 
 <script>
     import { onMount } from 'svelte';
-    import { goto } from '@sapper/app'
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
 
