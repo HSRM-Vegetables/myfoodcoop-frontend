@@ -1,14 +1,5 @@
-<<<<<<< HEAD
 image: node:lts-slim
 image: markhobson/node-chrome
-=======
-image: node:latest
-image: markhobson/node-chrome
-
-cache:
-  paths:
-    - node_modules/
->>>>>>> d192c6a580b7a96af2ee4c47889278c4bbe5df1f
 
 stages:
     - build
