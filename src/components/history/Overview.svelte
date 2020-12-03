@@ -1,5 +1,7 @@
 <script>
-    import PurchaseApi from '../../scripts/PurchaseApi';
+    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import { mdiMagnify } from '@mdi/js'
+    import Icon from '../common/Icon.svelte';
 
     const purchaseApi = new PurchaseApi();
 
@@ -28,7 +30,12 @@
                 <td>{purchase.products.length}</td>
                 <td>{calculatePrice(purchase).toFixed(2)}€</td>
                 <td>
-                    <a href="/history/{purchase.id}" class="button is-primary is-small">🔍</a>
+                    <a href="/history/{purchase.id}" class="button is-small is-primary">
+                        <span class="icon">
+                            <Icon icon={mdiMagnify}/>
+                        </span>
+                        <span>Details</span>
+                    </a>
                 </td>
             </tr>
         {/each}

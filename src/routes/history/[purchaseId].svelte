@@ -8,7 +8,7 @@
 </script>
 
 <script>
-    import PurchaseApi from '../../scripts/PurchaseApi';
+    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
 
     const purchaseApi = new PurchaseApi();
 

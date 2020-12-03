@@ -2,11 +2,15 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import { mdiDelete } from '@mdi/js';
+    import uuid from 'uuid';
     import { UnitType } from '../../scripts/UnitType';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import ShowBalance from '../balance/ShowBalance.svelte';
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import Icon from '../common/Icon.svelte';
+    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import Purchase from '../../scripts/purchase/Purchase';
+
 
     // Stub item because onMount is called after the first render
     let cart = {
@@ -32,8 +36,16 @@
     }
     
     function checkout() {
+        const purchasApi = new PurchaseApi();
+        purchasApi.addPurchase(new Purchase(
+            uuid(),
+            new Date(),
+            cart.cartItems
+        ));
+
         cart.clear();
         cart = cart; // tell svelte to update view
+
         goto('/');
     }
     
