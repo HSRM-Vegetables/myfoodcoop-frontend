@@ -4,4 +4,8 @@ export default class Purchase {
         this.createdOn = createdOn;
         this.cartItems = cartItems;
     }
+
+    totalPrice() {
+        return this.cartItems.reduce((sum, ci) => sum + ci.unitPrice * ci.quantity, 0);
+    }
 }

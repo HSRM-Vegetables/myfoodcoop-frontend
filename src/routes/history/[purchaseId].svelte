@@ -9,6 +9,7 @@
 
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '@sapper/app'
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
 
@@ -21,6 +22,10 @@
 
 {#if purchase !== undefined}
     <ShoppingCartItems cartItems={purchase.cartItems} allowRemoval={false} allowVisitPriceCalculator={false} />
+
+    <hr />
+
+    <span>Gesamtbetrag: {purchase.totalPrice()}€</span>
 
     <hr />
 

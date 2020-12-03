@@ -8,10 +8,6 @@
     onMount(() => {
         purchaseApi = new PurchaseApi();
     });
-
-    function calculatePrice(purchase) {
-        return purchase.cartItems.reduce((sum, ci) => sum + ci.unitPrice * ci.quantity, 0);
-    }
 </script>
 
 {#if purchaseApi !== undefined && purchaseApi.purchases.length > 0}
@@ -29,7 +25,7 @@
                 <tr>
                     <td>{purchase.createdOn.toLocaleString()}</td>
                     <td>{purchase.cartItems.length}</td>
-                    <td>{calculatePrice(purchase).toFixed(2)}€</td>
+                    <td>{purchase.totalPrice().toFixed(2)}€</td>
                     <td>
                         <a href="/history/{purchase.id}" class="button is-small is-primary">
                             <span class="icon">
