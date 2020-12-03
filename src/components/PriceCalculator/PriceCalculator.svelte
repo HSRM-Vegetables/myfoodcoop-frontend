@@ -8,21 +8,14 @@
 
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
 
-    const DOMstrings = {
-        name: 'input__item',
-        unitType: 'input__type',
-        unitPrice: 'input__unitPrice',
-        quantity: 'input__quantity',
-        totalPrice: 'output__totalPrice',
-    };
+    let unitPriceElement;
+    let quantityElement;
+    let articleElement;
+    let currentTotal = 0;
+    let unitTypeBoolean;
+    let unitType;
 
-    const state = {
-        name: undefined,
-        unitType: false, // TODO: Refactor to proper ENUM
-        unitPrice: undefined,
-        quantity: undefined,
-        totalPrice: undefined
-    };
+    $: untiTypeChanged(unitTypeBoolean);
 
     onMount(() => {
         calcTotalPrice();
@@ -32,222 +25,40 @@
         $currentShoppingCartItem = undefined;
     });
 
-    function getInputData() {
-        state.name = document.getElementById(DOMstrings.name).value;
-        state.unitPrice = parseFloat(
-            document.getElementById(DOMstrings.unitPrice).value
-        );
-        state.quantity = parseFloat(
-            document.getElementById(DOMstrings.quantity).value
-        );
-    }
-    function outputTotalPrice() {
-        document.getElementById(
-            DOMstrings.totalPrice
-        ).innerHTML = `${state.totalPrice} €`;
-    }
+    function untiTypeChanged(value) {
+        if (value === true) {
+            unitType = UnitType.KILO;
+        } else {
+            unitType = UnitType.PIECE;
+        }
+    }   
 
     function calcTotalPrice() {
-        getInputData();
-        if (!Number.isNaN(state.unitPrice) && !Number.isNaN(state.quantity)) {
-            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
-            outputTotalPrice();
+        if (!Number.isNaN(unitPriceElement.value) && !Number.isNaN(quantityElement.value)) {
+            currentTotal = (unitPriceElement.value * quantityElement.value).toFixed(2);
         }
     }
 
     function addItem() {
         const cart = new ShoppingCart();
         cart.addItem(
-            state.name,
-            state.unitType ? UnitType.KILO : UnitType.PIECE, // TODO: Change boolean
-            `${state.unitPrice}`, // TODO: Which pass as string or pass as number? Refactor?
-            `${state.quantity}`
+            articleElement.value,
+            unitType,
+            unitPriceElement.value,
+            quantityElement.value
         );
         goto('/shopping-cart');
     }
 
     function clearInputs() {
-        document.getElementById(DOMstrings.name).value = '';
-        document.getElementById(DOMstrings.unitPrice).value = '';
-        document.getElementById(DOMstrings.quantity).value = '';
-        document.getElementById(DOMstrings.totalPrice).innerHTML = '0€';
+        articleElement.value = '';
+        unitPriceElement.value = '';
+        quantityElement.value = '';
+        currentTotal = 0;
     }
 </script>
 
 <style>
-    h1 {
-        color: rgba(0, 0, 0);
-        text-align: center;
-    }
-    :root {
-        --color__accent: #6200ee;
-
-        --field__background: #f5f5f5;
-        --field__background--hover: #e9e9e9;
-        --input__border: rgba(0, 0, 0, 0.42);
-        --input__border--hover: rgba(0, 0, 0, 0.62);
-        --label__color: #222;
-
-        --font__size: 16px;
-        --font__family: Roboto, Arial, sans-serif;
-    }
-
-    .floating {
-        background-color: var(--field__background);
-        transition: background-color 0.2s ease;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        width: 100%;
-    }
-
-    .floating:hover,
-    .floating:focus-within {
-        background-color: var(--field__background--hover);
-    }
-
-    .floating__input {
-        padding: 1.8rem 1rem 0.6rem;
-        font-size: 1rem;
-        border-bottom: 0.1rem solid var(--input__border);
-        transition: border-color 0.2s ease;
-        caret-color: var(--color__accent);
-    }
-
-    .floating:hover .floating__input {
-        border-color: var(--input__border--hover);
-    }
-
-    .floating__input::placeholder {
-        color: rgba(0, 0, 0, 0);
-    }
-
-    .floating__label {
-        display: block;
-        position: relative;
-        max-height: 0;
-        font-weight: 500;
-        pointer-events: none;
-    }
-
-    .floating__label::before {
-        color: var(--label__color);
-        content: attr(data-content);
-        display: inline-block;
-        filter: blur(0);
-        backface-visibility: hidden;
-        transform-origin: left top;
-        transition: transform 0.2s ease;
-        left: 1rem;
-        position: relative;
-    }
-
-    .floating__label::after {
-        bottom: 1rem;
-        content: '';
-        height: 0.1rem;
-        position: absolute;
-        transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
-            opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
-            background-color 0.3s ease;
-        opacity: 0;
-        left: 0;
-        top: 100%;
-        margin-top: -0.1rem;
-        transform: scale3d(0, 1, 1);
-        width: 100%;
-        background-color: var(--color__accent);
-    }
-
-    .floating__input:focus + .floating__label::after {
-        transform: scale3d(1, 1, 1);
-        opacity: 1;
-    }
-
-    .floating__input:placeholder-shown + .floating__label::before {
-        transform: translate3d(0, -2.2rem, 0) scale3d(1, 1, 1);
-    }
-
-    .floating__label::before,
-    .floating__input:focus + .floating__label::before {
-        transform: translate3d(0, -3.12rem, 0) scale3d(0.82, 0.82, 1);
-    }
-
-    .floating__input:focus + .floating__label::before {
-        color: var(--color__accent);
-    }
-
-    input {
-        background: none;
-        border-width: 0;
-        display: block;
-        width: 100%;
-    }
-
-    *,
-    *:before,
-    *:after {
-        box-sizing: inherit;
-    }
-
-    .hidden--visually {
-        border: 0;
-        clip: rect(1px 1px 1px 1px);
-        clip: rect(1px, 1px, 1px, 1px);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-
-    .form {
-        background-color: #fff;
-        padding: 2rem 3rem 4rem;
-    }
-
-    .field2 {
-        margin-top: 2rem;
-    }
-
-    .control2 {
-        display: flex;
-        justify-content: center;
-    }
-    .control3 {
-        margin: 10px 10px;
-    }
-
-    .flexbox {
-        display: flex;
-        align-items: center;
-        margin-top: 2rem;
-    }
-
-    .margin {
-        margin-left: 20px;
-        white-space: nowrap;
-    }
-
-    .margin40 {
-        margin-top: 40px;
-    }
-
-    .total {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .totalPrice {
-        text-align: center;
-        font-size: 40px;
-    }
-
-    .margin3 {
-        margin-top: 20px;
-    }
-
     .button-box {
         display: flex;
         flex-flow: column nowrap;
@@ -256,114 +67,91 @@
     .auto-margin {
         margin: auto;
     }
-
 </style>
 
 <div>
-    <div class="content">
+    <div>
         <div class="form">
             <h1>Preisrechner</h1>
 
             <ShowBalance />
+            
             <hr />
 
-            <div class="floating">
+            <div>
+                <span>Artikel</span>
                 <input
-                    id="input__item"
-                    class="floating__input"
-                    name="article"
+                    class="input"
                     type="text"
                     placeholder="Artikel"
+                    bind:this={articleElement}
                     value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''} />
-                <label
-                    for="input__item"
-                    class="floating__label"
-                    data-content="Artikel">
-                    <span class="hidden--visually">Artikel</span>
-                </label>
             </div>
 
-            <div class="field field2">
-                <div class="control control2">
+            <div>
+                <div>
                     <div class="auto-margin" >Stückpreis</div>
-                    <div class="control3 auto-margin">
-                        <Switch bind:checked={state.unitType} />
+                    <div class="auto-margin">
+                        <Switch bind:checked={unitTypeBoolean} />
                     </div>
                     <div class="auto-margin">Kilopreis</div>
                 </div>
             </div>
 
-            <div class="flexbox">
-                <div class="floating">
-                    <input
-                        bind:this={state.unitPrice}
-                        id="input__unitPrice"
-                        class="floating__input"
-                        type="number"
-                        placeholder="Warenpreis"
-                        value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
-                        on:change={() => calcTotalPrice()}
-                        on:input={() => calcTotalPrice()} />
-                    <label
-                        for="input__unitPrice"
-                        class="floating__label"
-                        data-content="Warenpreis">
-                        <span class="hidden--visually">Warenpreis</span>
-                    </label>
-                </div>
-                <div class="margin">
-                    {#if !state.unitType}/ Stück{:else}/ Kg{/if}
-                </div>
-            </div>
-
-            <div class="floating field2">
+            <div>                
+                <span>Warenpreis</span>
                 <input
-                    bind:this={state.quantity}
-                    id="input__quantity"
-                    class="floating__input"
-                    name="amount"
+                    bind:this={unitPriceElement}
+                    class="input"
                     type="number"
-                    placeholder="Menge"
-                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
+                    placeholder="Warenpreis"
+                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
-                <label
-                    for="input__quantity"
-                    class="floating__label"
-                    data-content="Menge">
-                    <span class="hidden--visually">Menge</span>
-                </label>
             </div>
-
-            <hr />
-
-            <div class="total">Gesamtpreis</div>
-            <!-- TODO: Get totalPrice from ShoppingCard-->
-            <div
-                class="totalPrice"
-                id="output__totalPrice"
-                bind:this={state.totalPrice}>
+            <div>
+                {#if unitType === UnitType.KILO}
+                    <span>/ kg</span>
+                {:else}
+                    <span>/ Stück</span>
+                {/if}
             </div>
+        </div>
 
-            <hr />
+        <div>
+            <span >Menge</span>
+            <input
+                bind:this={quantityElement}
+                class="input"
+                type="number"
+                placeholder="Menge"
+                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
+                on:change={() => calcTotalPrice()}
+                on:input={() => calcTotalPrice()} />
+        </div>
 
-            <div class="button-box">
-                <button
-                    on:click={addItem}
-                    class="button is-medium is-primary mb-4">
-                    Warenkorb hinzufügen
-                </button>
-                <button
-                    on:click={clearInputs}
-                    class="button is-medium is-danger mb-4">
-                    Eingabe löschen
-                </button>
-                <button
-                    on:click={() => goto('/shopping-cart')}
-                    class="button is-link is-medium mb-4">
-                    Zurück zum Warenkorb
-                </button>
-            </div>
+        <hr />
+
+        <div class="total">Gesamtpreis {currentTotal}€</div>
+
+        <hr />
+
+        <div class="button-box">
+            <button
+                on:click={addItem}
+                class="button is-medium is-primary mb-4">
+                Warenkorb hinzufügen
+            </button>
+            <button
+                on:click={clearInputs}
+                class="button is-medium is-danger mb-4">
+                Eingabe löschen
+            </button>
+            <button
+                on:click={() => goto('/shopping-cart')}
+                class="button is-link is-medium mb-4">
+                Zurück zum Warenkorb
+            </button>
         </div>
     </div>
 </div>
