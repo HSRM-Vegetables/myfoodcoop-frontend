@@ -1,29 +1,83 @@
 <script>
-	import logo from 'images/logo_black.png';
-	import ShowBalance from '../components/balance/ShowBalance.svelte';
-	import { titleWithSuffix } from '../stores/page';
+    import { mdiBasket, mdiPiggyBank, mdiShoppingSearch } from '@mdi/js';
+    import ShowBalance from '../components/balance/ShowBalance.svelte';
+    import Icon from '../components/common/Icon.svelte';
+    import { titleWithSuffix } from '../stores/page';
+    import { goto } from '@sapper/app';
+
+    function onKeyPress(event, href) {
+        if (event.code === 'Space' || event.code === 'Enter') {
+            goto(href);
+        }
+    }
+
+    const buttons = [
+        {
+            label: 'Einkaufen',
+            icon: mdiBasket,
+            href: '/shopping-cart',
+        },
+        {
+            label: 'Vorherige Einkäufe',
+            icon: mdiShoppingSearch,
+            href: '/history',
+        },
+        {
+            label: 'Guthaben verwalten',
+            icon: mdiPiggyBank,
+            href: '/balance',
+        },
+    ];
 </script>
 
 <style>
-	h1, figure {
-		text-align: center;
-		margin: 0 auto;
-	}
+    .button-container {
+        padding-left: 2em;
+        padding-right: 2em;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+    }
 
-	h1 {
-		font-size: 24px;
-	}
+    .big-icon-button {
+        background: #375a7f;
+        color: white;
+        border: 3px solid black;
+        max-width: 10em;
+        border-radius: 20%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        margin-bottom: 3em;
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    .big-icon-button > span {
+        text-align: center;
+        font-weight: bold;
+    }
 </style>
 
 <svelte:head>
-	<title>{$titleWithSuffix}Homepage</title>
+    <title>{$titleWithSuffix}Homepage</title>
 </svelte:head>
 
+<ShowBalance />
 
-<ShowBalance/>
-<figure>
-	<img alt="Stadtgemüse Logo" src="{logo}">
-</figure>
-<h1>Willkommen!</h1>
+<hr />
 
-
+<div class="button-container">
+    {#each buttons as button}
+        <div
+            class="big-icon-button"
+            tabindex="0"
+            role="button"
+            aria-label={button.label}
+            on:keypress={(e) => onKeyPress(e, button.href)}
+            on:click={() => goto(button.href)}>
+            <Icon icon={button.icon} />
+            <span>{button.label}</span>
+        </div>
+    {/each}
+</div>
