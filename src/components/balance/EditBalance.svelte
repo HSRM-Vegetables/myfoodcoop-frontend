@@ -4,7 +4,7 @@
     import ShowBalance from './ShowBalance.svelte';
     
     let currentBalance = 0;
-    let inputValue= null;
+    let inputValue = null;
     let addMoneyInput;
     let balance;
     
@@ -19,7 +19,7 @@
         currentBalance = balance.money;
         addMoneyInput.value = '';
     }
-    function updateInput(){
+    function updateInput() {
         inputValue = this.value;
     }
 </script>
