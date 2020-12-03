@@ -1,36 +1,59 @@
 <script>
-   import { onMount } from 'svelte';
-   import Balance from '../../scripts/Balance';
-   import ShowBalance from './ShowBalance.svelte';
-   
-   let currentBalance = 0;
-   let inputValue;
-   let addMoneyInput;
-   let balance;
-   
-   onMount(() => {
-       balance = new Balance();
-       currentBalance = balance.money;
-   });
-   
-   function addToBalance() {
-       // add money to balance
-       balance.setBalance(balance.calcBalance(addMoneyInput.value));
-       currentBalance = balance.money;
-       addMoneyInput.value = '';
-   }
-   function updateInput() {
-       inputValue = this.value;
-   }
+    import { onMount } from 'svelte';
+    import Balance from '../../scripts/Balance';
+    import ShowBalance from './ShowBalance.svelte';
+    
+    let inputValue;
+    let addMoneyInput;
+    let error = '';
+    
+    let balance = {
+        money: 0,
+    };
+    
+    onMount(() => {
+        balance = new Balance();
+    });
+    
+    function addToBalance() {
+        if (addMoneyInput.value < 0) {
+            error = 'Bitte geben Sie ein positven Wert ein';
+        } else {
+            error = '';
+            balance.setBalance(balance.calcBalance(addMoneyInput.value));
+            balance = balance;
+            addMoneyInput.value = '';
+        }
+    }
+    
+    function updateInput() {
+        inputValue = this.value;
+    }
+    
+    function onEnterPress(event) {
+        if (event.key === 'Enter') {
+            addToBalance();
+        }
+    }
 </script>
 <style>
    .fix-button-width{
-   width: 230px;
-   }
+    width: 230px;
+    }
+  .balance-input-deco{
+        position: absolute;
+        font-size: 1rem;
+        color: #ccc6c6;
+        right: 30px;
+        top: 8px;
+  }
+  .help{
+    color: #f14668;
+  }
 </style>
 <section class="section">
    <div class="container has-text-centered">
-      <ShowBalance bind:currentBalance />
+      <ShowBalance bind:currentBalance="{balance.money}" />
       <div class="columns is-centered">
          <div class="column buttons pt-6">
             <button class="button is-rounded" value="20" on:click="{updateInput}">20 €</button>
@@ -38,8 +61,16 @@
             <button class="button is-rounded" value="100" on:click="{updateInput}">100 €</button>
          </div>
       </div>
-      <input type="number" class="input" bind:this={addMoneyInput} value="{inputValue}" min="0"/>
-      <button type="submit" class="button is-primary fix-button-width mt-3" on:click={addToBalance}>Guthaben hinzufügen</button><br>
+            <div class="mt-6">
+                  <div class="has-text-left pb-2">Guthaben</div>
+                  <div class=" is-relative">
+                      <input type="number" class="input balance-input" bind:this={addMoneyInput} value="{inputValue}" placeholder="0" min="0" on:keydown="{onEnterPress}" />  
+                      <span class="balance-input-deco">€</span>
+                      <span class="help has-text-left">{error}</span>
+                  </div>
+            </div>
+
+      <button type="submit" class="button is-primary fix-button-width mt-3" on:click="{addToBalance}">Guthaben hinzufügen</button><br>
       <a href="/adjust-balance" type="submit" class="button is-primary fix-button-width mt-3">Guthaben anpassen</a><br>
    </div>
 </section>
