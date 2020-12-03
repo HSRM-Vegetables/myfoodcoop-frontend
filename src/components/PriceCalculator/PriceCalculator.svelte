@@ -21,17 +21,15 @@
     onMount(async () => {});
 
     function calcTotalPrice() {
-        article = document.getElementById('input__item').value;
+        article = document.getElementById(DOMstrings.name).value;
         goodsPrice = parseFloat(
-            document.getElementById('input__unitPrice').value
+            document.getElementById(DOMstrings.unitPrice).value
         );
-        amount = parseFloat(document.getElementById('input__quantity').value);
+        amount = parseFloat(document.getElementById(DOMstrings.quantity).value);
 
         if (!isNaN(goodsPrice) && !isNaN(amount)) {
             totalPriceOutput = (goodsPrice * amount).toFixed(2);
-            document.getElementById(
-                'output__totalPrice'
-            ).innerHTML = `${totalPriceOutput} €`;
+            document.getElementById(DOMstrings.totalPrice).innerHTML = `${totalPriceOutput} €`;
         }
     }
 
@@ -47,10 +45,10 @@
     }
 
     function clearInputs() {
-        document.getElementById('input__item').value = '';
-        document.getElementById('input__unitPrice').value = '';
-        document.getElementById('input__quantity').value = '';
-        document.getElementById('output__totalPrice').innerHTML = '0€';
+        document.getElementById(DOMstrings.name).value = '';
+        document.getElementById(DOMstrings.unitPrice).value = '';
+        document.getElementById(DOMstrings.quantity).value = '';
+        document.getElementById(DOMstrings.totalPrice).innerHTML = '0€';
     }
 </script>
 
