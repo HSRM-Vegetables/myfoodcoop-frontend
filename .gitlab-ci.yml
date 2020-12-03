@@ -1,9 +1,11 @@
 image: node:lts-slim
+image: markhobson/node-chrome
 
 stages:
     - build
     - lint
     - deploy
+    - run_lighthouse
 
 build:
     stage: build
@@ -41,3 +43,18 @@ deploy:
         - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
     only:
         - master
+
+run_lighthouse:
+    variables:
+        LIGHTHOUSE_TEST_URL: https://veg-web.herokuapp.com/
+    stage: deploy
+    only:
+        - master
+    before_script:
+        - npm i -g lighthouse
+    script:
+        - lighthouse --chrome-flags="--headless --no-sandbox" $LIGHTHOUSE_TEST_URL --output html --output-path ./report.html
+    artifacts:
+        paths:
+            - ./report.html
+        expire_in: 1 week
