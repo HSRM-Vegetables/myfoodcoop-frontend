@@ -21,7 +21,7 @@
         unitType: false, // TODO: Refactor to proper ENUM
         unitPrice: undefined,
         quantity: undefined,
-        totalPrice: undefined, 
+        totalPrice: undefined
     };
 
     onMount(async () => {});
@@ -57,7 +57,7 @@
         const cart = new ShoppingCart();
         cart.addItem(
             state.name,
-            state.unitType ? UnitType.KILO : UnitType.PIECE, //TODO
+            state.unitType ? UnitType.KILO : UnitType.PIECE, // TODO: Change boolean
             `${state.unitPrice}`, // TODO: Which pass as string or pass as number? Refactor?
             `${state.quantity}`
         );
@@ -339,11 +339,11 @@
             <hr class="margin40" />
 
             <div class="total">Gesamtpreis</div>
-           <!-- TODO: Get totalPrice from ShoppingCard--> 
+            <!-- TODO: Get totalPrice from ShoppingCard-->
             <div
                 class="totalPrice"
                 id="output__totalPrice"
-                bind:this={state.totalPrice}> 
+                bind:this={state.totalPrice}>
                 0€
             </div>
             <hr class="margin3" />
