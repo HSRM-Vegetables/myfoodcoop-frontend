@@ -58,7 +58,7 @@
         cart.addItem(
             state.name,
             state.unitType ? UnitType.KILO : UnitType.PIECE, //TODO
-            `${state.unitPrice}` // TODO: Which pass as string or pass as number? Refactor?
+            `${state.unitPrice}`, // TODO: Which pass as string or pass as number? Refactor?
             `${state.quantity}`
         );
         goto('/shopping-cart');
