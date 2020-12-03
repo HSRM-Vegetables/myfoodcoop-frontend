@@ -20,8 +20,8 @@
         unitType: false,
         unitPrice: undefined,
         quantity: undefined,
-        totalPrice: undefined
-    }
+        totalPrice: undefined,
+    };
 
     onMount(async () => {});
 
@@ -29,7 +29,11 @@
         $currentShoppingCartItem = undefined;
     });
 
-    function calcTotalPrice() {
+    function valid(input) {
+        return !Number.isNaN(input);
+    }
+
+    function getInputData() {
         state.name = document.getElementById(DOMstrings.name).value;
         state.unitPrice = parseFloat(
             document.getElementById(DOMstrings.unitPrice).value
@@ -37,16 +41,29 @@
         state.quantity = parseFloat(
             document.getElementById(DOMstrings.quantity).value
         );
-
-        if (!Number.isNaN(state.unitPrice) && !Number.isNaN(state.quantity)) {
-            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
-            document.getElementById(DOMstrings.totalPrice).innerHTML = `${state.totalPrice} €`;
-        }
     }
 
-    function getData() {
+    function calcTotalPrice() {
+        getInputData();
+        if (valid(state.unitPrice) && valid(state.quantity)) {
+            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
+            output_totalPrice();
+        }
+    }
+    function output_totalPrice() {
+        document.getElementById(
+            DOMstrings.totalPrice
+        ).innerHTML = `${state.totalPrice} €`;
+    }
+
+    function addItem() {
         const cart = new ShoppingCart();
-        cart.addItem(state.name, state.unitType, state.unitPrice, state.quantity);
+        cart.addItem(
+            state.name,
+            state.unitType,
+            state.unitPrice,
+            state.quantity
+        );
         // goto('/shopping-cart');
     }
 
@@ -337,7 +354,7 @@
                 <ul>
                     <li>
                         <button
-                            on:click={getData}
+                            on:click={addItem}
                             class="button is-medium is-success is-link is-rounded">
                             Warenkorb hinzufügen
                         </button>
