@@ -90,7 +90,7 @@
                             {/if}
                         </td>
                         <td class="clickable" on:click="{() => goToPriceCalculator(item)}">{item.quantity}</td>
-                        <td class="clickable" on:click="{() => goToPriceCalculator(item)}">{item.unitPrice * item.quantity} €</td>
+                        <td class="clickable" on:click="{() => goToPriceCalculator(item)}">{(item.unitPrice * item.quantity).toFixed(2)} €</td>
                     </tr>
                 {/each}
             </tbody>
