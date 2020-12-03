@@ -3,52 +3,40 @@
     import Balance from '../../scripts/Balance';
     import ShowBalance from './ShowBalance.svelte';
     
+    let currentBalance = 0;
+    let inputValue= null;
     let changeMoneyInput;
-    let balance = {
-        money: 0,
-    };
+    let balance;
+    
     onMount(() => {
         balance = new Balance();
+        currentBalance = balance.money;
     });
     
     function changeBalance() {
         // create new value for Balance
         balance.setBalance(changeMoneyInput.value);
-    }
-    
-    function onEnterPress(event) {
-        if (event.key === 'Enter') {
-            changeBalance();
-            window.location.href = '/balance';
-        }
+        currentBalance = balance.money;
     }
 </script>
+
 <style>
     .fix-button-width{
-    width: 230px;
-    }
-    .balance-input-deco{
-    position: absolute;
-    font-size: 1rem;
-    color: #ccc6c6;
-    right: 30px;
-    top: 8px;
+        width: 230px;
     }
 </style>
-<section class="section">
-    <div class="has-text-centered">
-        <ShowBalance bind:currentBalance="{balance.money}" />
-        <div class="mt-6">
-            <div class="has-text-left pb-2">Neues Guthaben</div>
-            <div class=" is-relative">
-                <input type="number" class="input balance-input" bind:this={changeMoneyInput} placeholder="0" on:keydown="{onEnterPress}" />  
-                <span class="balance-input-deco">€</span>
-            </div>
-        </div>
+  <section class="section">
+    <div class="container has-text-centered">
+         <ShowBalance bind:currentBalance />
+         <!-- Add Mony buttons-->
+
+         <input type="number" class="input mt-6" bind:this={changeMoneyInput} value="{inputValue}"/>
+         
         <a href="/balance"  type="submit" class="button is-primary fix-button-width mt-3" on:click={changeBalance}>Guthaben anpassen</a><br>
         <a href="/balance" type="submit" class="button is-danger fix-button-width mt-3">Abbruch</a><br>
+
     </div>
-</section>
+  </section>  
 <div class="container has-text-centered mt-6">
     <a href="/" type="submit" class="button is-primary">Zur Hauptseite</a><br>
 </div>
