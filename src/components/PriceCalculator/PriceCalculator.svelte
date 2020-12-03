@@ -1,18 +1,19 @@
 <script>
+    import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
     import Switch from './Switch.svelte';
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
-    import ShowBalance from '../balance/ShowBalance.svelte'
-    import { goto } from '@sapper/app';
+    import ShowBalance from '../balance/ShowBalance.svelte';
+
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
 
-    var DOMstrings = {
-    name: 'input__item',
-    unitType: 'input__type',
-    unitPrice: 'input__unitPrice',
-    quantity: 'input__quantity',
-    totalPrice: 'output__totalPrice'
-};
+    const DOMstrings = {
+        name: 'input__item',
+        unitType: 'input__type',
+        unitPrice: 'input__unitPrice',
+        quantity: 'input__quantity',
+        totalPrice: 'output__totalPrice',
+    };
 
     let acceptTerms = false;
     let goodsPriceInput;
@@ -22,13 +23,11 @@
     let amount;
     let article;
 
-
-
-    onMount(async() => {});
+    onMount(async () => {});
 
     onDestroy(() => {
         $currentShoppingCartItem = undefined;
-    })
+    });
 
     function calcTotalPrice() {
         article = document.getElementById(DOMstrings.name).value;
@@ -37,21 +36,18 @@
         );
         amount = parseFloat(document.getElementById(DOMstrings.quantity).value);
 
-        if (!isNaN(goodsPrice) && !isNaN(amount)) {
+        if (!Number.isNaN(goodsPrice) && !Number.isNaN(amount)) {
             totalPriceOutput = (goodsPrice * amount).toFixed(2);
-            document.getElementById(DOMstrings.totalPrice).innerHTML = `${totalPriceOutput} €`;
+            document.getElementById(
+                DOMstrings.totalPrice
+            ).innerHTML = `${totalPriceOutput} €`;
         }
     }
 
     function getData() {
-        console.log(article);
-        console.log(acceptTerms);
-        console.log(goodsPrice);
-        console.log(amount);
         const cart = new ShoppingCart();
         cart.addItem(article, acceptTerms, goodsPrice, amount);
-        console.log(cart);
-        goto("/shopping-cart");
+        goto('/shopping-cart');
     }
 
     function clearInputs() {
@@ -207,11 +203,6 @@
         margin: 10px 30px;
     }
 
-    .balance {
-        display: flex;
-        justify-content: space-between;
-    }
-
     .field2 {
         margin-top: 2rem;
     }
@@ -254,7 +245,6 @@
     }
 </style>
 
-
 <div>
     <div class="content">
         <div class="form">
@@ -270,7 +260,7 @@
                     name="article"
                     type="text"
                     placeholder="Artikel"
-                    value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ""}" />
+                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''} />
                 <label
                     for="input__item"
                     class="floating__label"
@@ -298,7 +288,7 @@
                         name="goodsPrice"
                         type="number"
                         placeholder="Warenpreis"
-                        value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ""}" 
+                        value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
                         on:change={() => calcTotalPrice()}
                         on:input={() => calcTotalPrice()} />
                     <label
@@ -321,7 +311,7 @@
                     name="amount"
                     type="number"
                     placeholder="Menge"
-                    value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity: ""}" 
+                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
                 <label
@@ -361,7 +351,7 @@
                     </li>
                     <li>
                         <button
-                            on:click={() => goto("/shopping-cart")}
+                            on:click={() => goto('/shopping-cart')}
                             class="button is-medium is-link is-danger is-rounded">
                             Zurück zum Warenkorb
                         </button>
