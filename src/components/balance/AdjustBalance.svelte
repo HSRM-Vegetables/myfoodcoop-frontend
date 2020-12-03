@@ -4,7 +4,6 @@
     import ShowBalance from './ShowBalance.svelte';
     
     let currentBalance = 0;
-    let inputValue= null;
     let changeMoneyInput;
     let balance;
     
@@ -30,7 +29,7 @@
          <ShowBalance bind:currentBalance />
          <!-- Add Mony buttons-->
 
-         <input type="number" class="input mt-6" bind:this={changeMoneyInput} value="{inputValue}"/>
+         <input type="number" class="input mt-6" bind:this={changeMoneyInput}/>
          
         <a href="/balance"  type="submit" class="button is-primary fix-button-width mt-3" on:click={changeBalance}>Guthaben anpassen</a><br>
         <a href="/balance" type="submit" class="button is-danger fix-button-width mt-3">Abbruch</a><br>
