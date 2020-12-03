@@ -15,13 +15,11 @@
         totalPrice: 'output__totalPrice',
     };
 
-    let acceptTerms = false;
-    let goodsPriceInput;
-    let amountInput;
-    let totalPriceOutput;
-    let goodsPrice;
-    let amount;
-    let article;
+    let name;
+    let unitType = false;
+    let unitPrice;
+    let quantity;
+    let totalPrice;
 
     onMount(async () => {});
 
@@ -30,24 +28,27 @@
     });
 
     function calcTotalPrice() {
-        article = document.getElementById(DOMstrings.name).value;
-        goodsPrice = parseFloat(
+        name = document.getElementById(DOMstrings.name).value;
+        unitPrice = parseFloat(
             document.getElementById(DOMstrings.unitPrice).value
         );
-        amount = parseFloat(document.getElementById(DOMstrings.quantity).value);
+        quantity = parseFloat(
+            document.getElementById(DOMstrings.quantity).value
+        );
 
-        if (!Number.isNaN(goodsPrice) && !Number.isNaN(amount)) {
-            totalPriceOutput = (goodsPrice * amount).toFixed(2);
+        if (!Number.isNaN(unitPrice) && !Number.isNaN(quantity)) {
+            totalPrice = (unitPrice * quantity).toFixed(2);
             document.getElementById(
                 DOMstrings.totalPrice
-            ).innerHTML = `${totalPriceOutput} €`;
+            ).innerHTML = `${totalPrice} €`;
         }
     }
 
     function getData() {
+        console.log(unitType);
         const cart = new ShoppingCart();
-        cart.addItem(article, acceptTerms, goodsPrice, amount);
-        goto('/shopping-cart');
+        cart.addItem(name, unitType, unitPrice, quantity);
+        // goto('/shopping-cart');
     }
 
     function clearInputs() {
@@ -273,7 +274,7 @@
                 <div class="control control2">
                     <div>Stückpreis</div>
                     <div class="control3">
-                        <Switch bind:checked={acceptTerms} />
+                        <Switch bind:checked={unitType} />
                     </div>
                     <div>Kilopreis</div>
                 </div>
@@ -282,7 +283,7 @@
             <div class="flexbox">
                 <div class="floating">
                     <input
-                        bind:this={goodsPriceInput}
+                        bind:this={unitPrice}
                         id="input__unitPrice"
                         class="floating__input"
                         name="goodsPrice"
@@ -299,13 +300,13 @@
                     </label>
                 </div>
                 <div class="margin">
-                    {#if !acceptTerms}/ Stück{:else}/ Kg{/if}
+                    {#if !unitType}/ Stück{:else}/ Kg{/if}
                 </div>
             </div>
 
             <div class="floating field2">
                 <input
-                    bind:this={amountInput}
+                    bind:this={quantity}
                     id="input__quantity"
                     class="floating__input"
                     name="amount"
@@ -328,7 +329,7 @@
             <div
                 class="totalPrice"
                 id="output__totalPrice"
-                bind:this={totalPriceOutput}>
+                bind:this={totalPrice}>
                 0€
             </div>
             <hr class="margin3" />
@@ -352,7 +353,7 @@
                     <li>
                         <button
                             on:click={() => goto('/shopping-cart')}
-                            class="button is-medium is-link is-danger is-rounded">
+                            class="button is-medium is-link is-rounded">
                             Zurück zum Warenkorb
                         </button>
                     </li>
