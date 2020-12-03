@@ -21,7 +21,7 @@
 
 <div>
 
-   {#if type === "inline"}
+   {#if type === 'inline'}
       <div class="inline-container">
          <span>Guthaben:</span>
          <span>{currentBalance}€</span>
