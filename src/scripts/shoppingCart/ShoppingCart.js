@@ -34,9 +34,10 @@ export default class ShoppingCart {
             return false;
         }
 
-        // check if item name already exists in item array. if true, update entry
+        // check if item name already exists in item array. if true, remove the entry
         if (this.cartItems.find((item) => item.name === name) !== undefined) {
-            return true;
+            // remove item from list;
+            this.cartItems = this.cartItems.filter((ci) => ci.name !== name);
         }
 
         this.cartItems = [...this.cartItems,
