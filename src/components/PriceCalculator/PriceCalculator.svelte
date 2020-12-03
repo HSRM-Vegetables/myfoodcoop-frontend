@@ -3,6 +3,7 @@
     import { onMount, onDestroy } from 'svelte';
     import Switch from './Switch.svelte';
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
+    import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';
 
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
@@ -15,9 +16,9 @@
         totalPrice: 'output__totalPrice',
     };
 
-    let state = {
+    const state = {
         name: undefined,
-        unitType: false,
+        unitType: false, // TODO: Refactor to proper ENUM
         unitPrice: undefined,
         quantity: undefined,
         totalPrice: undefined,
@@ -29,10 +30,6 @@
         $currentShoppingCartItem = undefined;
     });
 
-    function valid(input) {
-        return !Number.isNaN(input);
-    }
-
     function getInputData() {
         state.name = document.getElementById(DOMstrings.name).value;
         state.unitPrice = parseFloat(
@@ -42,29 +39,29 @@
             document.getElementById(DOMstrings.quantity).value
         );
     }
-
-    function calcTotalPrice() {
-        getInputData();
-        if (valid(state.unitPrice) && valid(state.quantity)) {
-            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
-            output_totalPrice();
-        }
-    }
-    function output_totalPrice() {
+    function outputTotalPrice() {
         document.getElementById(
             DOMstrings.totalPrice
         ).innerHTML = `${state.totalPrice} €`;
+    }
+
+    function calcTotalPrice() {
+        getInputData();
+        if (!Number.isNaN(state.unitPrice) && !Number.isNaN(state.quantity)) {
+            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
+            outputTotalPrice();
+        }
     }
 
     function addItem() {
         const cart = new ShoppingCart();
         cart.addItem(
             state.name,
-            state.unitType,
-            state.unitPrice,
-            state.quantity
+            state.unitType ? UnitType.KILO : UnitType.PIECE, //TODO
+            `${state.unitPrice}` // TODO: Which pass as string or pass as number? Refactor?
+            `${state.quantity}`
         );
-        // goto('/shopping-cart');
+        goto('/shopping-cart');
     }
 
     function clearInputs() {
@@ -378,3 +375,4 @@
         </div>
     </div>
 </div>
+calcTotalPrice
