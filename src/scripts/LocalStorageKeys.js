@@ -1,3 +1,4 @@
 export default {
-    BALANCE: 'sg_balance'
+    BALANCE: 'sg_balance',
+    CART: 'sg_shoppingCart'
 };
