@@ -28,6 +28,7 @@
         "import/prefer-default-export": "off",
         "linebreak-style": "error",
         "comma-dangle": "off",
-        "no-console": "error"
+        "no-console": "error",
+        "no-use-before-define": "off"
     }
 }

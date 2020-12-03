@@ -35,8 +35,8 @@
 
     function calcTotalPrice() {
         if (
-            !Number.isNaN(unitPriceElement.value) &&
-            !Number.isNaN(quantityElement.value)
+            !Number.isNaN(unitPriceElement.value)
+            && !Number.isNaN(quantityElement.value)
         ) {
             currentTotal = (
                 unitPriceElement.value * quantityElement.value
