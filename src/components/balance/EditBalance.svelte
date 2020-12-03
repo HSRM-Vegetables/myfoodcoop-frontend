@@ -24,7 +24,6 @@
             balance.setBalance(balance.calcBalance(addMoneyInput.value));
             balance = balance;
             inputValue = null;
-    
         }
     }
     
