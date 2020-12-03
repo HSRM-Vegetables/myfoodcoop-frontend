@@ -1,7 +1,9 @@
 <script>
 	import logo from 'images/logo_black.png';
 	import ShowBalance from '../components/balance/ShowBalance.svelte';
-	import { titleWithSuffix } from '../stores/page';
+	import { title } from '../stores/page.js'
+
+    $title = 'Stadtgemüse e.V.'
 </script>
 
 <style>
@@ -14,11 +16,6 @@
 		font-size: 24px;
 	}
 </style>
-
-<svelte:head>
-	<title>{$titleWithSuffix}Homepage</title>
-</svelte:head>
-
 
 <ShowBalance/>
 <figure>

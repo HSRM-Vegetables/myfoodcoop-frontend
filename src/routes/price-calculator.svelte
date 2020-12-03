@@ -1,5 +1,8 @@
 <script>
 	import PriceCalculator from '../components/PriceCalculator/PriceCalculator.svelte';
+	import { title } from '../stores/page.js'
+
+    $title = 'Preisrechner'
 </script>
 
 <style>

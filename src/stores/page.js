@@ -1,7 +1,3 @@
-import { derived, readable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
-export const title = readable('Stadtgemüse e.V.');
-export const titleWithSuffix = derived(
-    title,
-    ($title) => `${$title} - `,
-);
+export const title = writable('Stadtgemüse e.V.');

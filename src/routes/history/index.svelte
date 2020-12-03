@@ -1,12 +1,10 @@
 <script>
     import ShowBalance from '../../components/balance/ShowBalance.svelte';
-    import { titleWithSuffix } from '../../stores/page';
     import HistoryOverview from '../../components/history/HistoryOverview.svelte';
-</script>
+    import { title } from '../../stores/page.js'
 
-<svelte:head>
-    <title>{$titleWithSuffix}Einkaufshistorie</title>
-</svelte:head>
+    $title = 'Vergangene Einkäufe'
+</script>
 
 <ShowBalance />
 
@@ -17,5 +15,5 @@
 <hr>
 
 <div class="has-text-centered">
-    <a href="/" class="button is-primary container">Zur Hauptseite</a>
+    <a href="/" class="button is-link container">Zur Hauptseite</a>
 </div>
