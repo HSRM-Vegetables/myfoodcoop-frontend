@@ -13,16 +13,16 @@
     onMount(async () => {});
 
     function calcTotalPrice() {
-        article = document.getElementById('input__article').value;
+        article = document.getElementById('input__item').value;
         goodsPrice = parseFloat(
-            document.getElementById('input__goodsPrice').value
+            document.getElementById('input__unitPrice').value
         );
-        amount = parseFloat(document.getElementById('input__amount').value);
+        amount = parseFloat(document.getElementById('input__quantity').value);
 
         if (!isNaN(goodsPrice) && !isNaN(amount)) {
             totalPriceOutput = (goodsPrice * amount).toFixed(2);
             document.getElementById(
-                'totalPrice'
+                'output__totalPrice'
             ).innerHTML = `${totalPriceOutput} €`;
         }
     }
@@ -39,10 +39,10 @@
     }
 
     function clearInputs() {
-        document.getElementById('input__article').value = '';
-        document.getElementById('input__goodsPrice').value = '';
-        document.getElementById('input__amount').value = '';
-        document.getElementById('totalPrice').innerHTML = '0€';
+        document.getElementById('input__item').value = '';
+        document.getElementById('input__unitPrice').value = '';
+        document.getElementById('input__quantity').value = '';
+        document.getElementById('output__totalPrice').innerHTML = '0€';
     }
 </script>
 
@@ -252,13 +252,13 @@
 
             <div class="floating">
                 <input
-                    id="input__article"
+                    id="input__item"
                     class="floating__input"
                     name="article"
                     type="text"
                     placeholder="Artikel" />
                 <label
-                    for="input__article"
+                    for="input__item"
                     class="floating__label"
                     data-content="Artikel">
                     <span class="hidden--visually">Artikel</span>
@@ -279,7 +279,7 @@
                 <div class="floating">
                     <input
                         bind:this={goodsPriceInput}
-                        id="input__goodsPrice"
+                        id="input__unitPrice"
                         class="floating__input"
                         name="goodsPrice"
                         type="number"
@@ -288,7 +288,7 @@
                         on:change={() => calcTotalPrice()}
                         on:input={() => calcTotalPrice()} />
                     <label
-                        for="input__goodsPrice"
+                        for="input__unitPrice"
                         class="floating__label"
                         data-content="Warenpreis">
                         <span class="hidden--visually">Warenpreis</span>
@@ -302,7 +302,7 @@
             <div class="floating field2">
                 <input
                     bind:this={amountInput}
-                    id="input__amount"
+                    id="input__quantity"
                     class="floating__input"
                     name="amount"
                     type="number"
@@ -311,7 +311,7 @@
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
                 <label
-                    for="input__amount"
+                    for="input__quantity"
                     class="floating__label"
                     data-content="Menge">
                     <span class="hidden--visually">Menge</span>
@@ -323,7 +323,7 @@
             <div class="total">Gesamtpreis</div>
             <div
                 class="totalPrice"
-                id="totalPrice"
+                id="output__totalPrice"
                 bind:this={totalPriceOutput}>
                 0€
             </div>
