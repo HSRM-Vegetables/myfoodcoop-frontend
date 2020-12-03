@@ -27,9 +27,8 @@
   <section class="section">
     <div class="container has-text-centered">
          <ShowBalance bind:currentBalance />
-         <!-- Add Mony buttons-->
 
-         <input type="number" class="input mt-6" bind:this={changeMoneyInput}/>
+         <input type="number" class="input mt-6" bind:this={changeMoneyInput} min="0"/>
          
         <a href="/balance"  type="submit" class="button is-primary fix-button-width mt-3" on:click={changeBalance}>Guthaben anpassen</a><br>
         <a href="/balance" type="submit" class="button is-danger fix-button-width mt-3">Abbruch</a><br>
