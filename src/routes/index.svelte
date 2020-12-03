@@ -1,9 +1,9 @@
 <script>
     import { mdiBasket, mdiPiggyBank, mdiShoppingSearch } from '@mdi/js';
+    import { goto } from '@sapper/app';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import Icon from '../components/common/Icon.svelte';
     import { titleWithSuffix } from '../stores/page';
-    import { goto } from '@sapper/app';
 
     function onKeyPress(event, href) {
         if (event.code === 'Space' || event.code === 'Enter') {
