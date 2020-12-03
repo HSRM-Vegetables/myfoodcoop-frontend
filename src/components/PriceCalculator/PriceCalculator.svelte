@@ -15,11 +15,13 @@
         totalPrice: 'output__totalPrice',
     };
 
-    let name;
-    let unitType = false;
-    let unitPrice;
-    let quantity;
-    let totalPrice;
+    let state = {
+        name: undefined,
+        unitType: false,
+        unitPrice: undefined,
+        quantity: undefined,
+        totalPrice: undefined
+    }
 
     onMount(async () => {});
 
@@ -28,26 +30,23 @@
     });
 
     function calcTotalPrice() {
-        name = document.getElementById(DOMstrings.name).value;
-        unitPrice = parseFloat(
+        state.name = document.getElementById(DOMstrings.name).value;
+        state.unitPrice = parseFloat(
             document.getElementById(DOMstrings.unitPrice).value
         );
-        quantity = parseFloat(
+        state.quantity = parseFloat(
             document.getElementById(DOMstrings.quantity).value
         );
 
-        if (!Number.isNaN(unitPrice) && !Number.isNaN(quantity)) {
-            totalPrice = (unitPrice * quantity).toFixed(2);
-            document.getElementById(
-                DOMstrings.totalPrice
-            ).innerHTML = `${totalPrice} €`;
+        if (!Number.isNaN(state.unitPrice) && !Number.isNaN(state.quantity)) {
+            state.totalPrice = (state.unitPrice * state.quantity).toFixed(2);
+            document.getElementById(DOMstrings.totalPrice).innerHTML = `${state.totalPrice} €`;
         }
     }
 
     function getData() {
-        console.log(unitType);
         const cart = new ShoppingCart();
-        cart.addItem(name, unitType, unitPrice, quantity);
+        cart.addItem(state.name, state.unitType, state.unitPrice, state.quantity);
         // goto('/shopping-cart');
     }
 
@@ -274,7 +273,7 @@
                 <div class="control control2">
                     <div>Stückpreis</div>
                     <div class="control3">
-                        <Switch bind:checked={unitType} />
+                        <Switch bind:checked={state.unitType} />
                     </div>
                     <div>Kilopreis</div>
                 </div>
@@ -283,7 +282,7 @@
             <div class="flexbox">
                 <div class="floating">
                     <input
-                        bind:this={unitPrice}
+                        bind:this={state.unitPrice}
                         id="input__unitPrice"
                         class="floating__input"
                         name="goodsPrice"
@@ -300,13 +299,13 @@
                     </label>
                 </div>
                 <div class="margin">
-                    {#if !unitType}/ Stück{:else}/ Kg{/if}
+                    {#if !state.unitType}/ Stück{:else}/ Kg{/if}
                 </div>
             </div>
 
             <div class="floating field2">
                 <input
-                    bind:this={quantity}
+                    bind:this={state.quantity}
                     id="input__quantity"
                     class="floating__input"
                     name="amount"
@@ -329,7 +328,7 @@
             <div
                 class="totalPrice"
                 id="output__totalPrice"
-                bind:this={totalPrice}>
+                bind:this={state.totalPrice}>
                 0€
             </div>
             <hr class="margin3" />
