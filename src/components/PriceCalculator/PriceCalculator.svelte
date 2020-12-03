@@ -4,6 +4,7 @@
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import ShowBalance from '../balance/ShowBalance.svelte'
     import { goto } from '@sapper/app';
+    import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
 
     var DOMstrings = {
     name: 'input__item',
@@ -21,7 +22,10 @@
     let amount;
     let article;
 
-    onMount(async () => {});
+
+
+    onMount(async() => {});
+
     onDestroy(() => {
         $currentShoppingCartItem = undefined;
     })
@@ -40,17 +44,14 @@
     }
 
     function getData() {
-        var obj = {
-            name: article,
-            unitType: acceptTerms,
-            unitPrice: goodsPrice,
-            quantity: amount,
-        };
-        console.dir(obj); 
-        // const shoppingCart = new ShoppingCart()
-        // ShoppingCart.addItem(name, unitType .-.-)
-        // goto("/warenkorb")
-        return obj;
+        console.log(article);
+        console.log(acceptTerms);
+        console.log(goodsPrice);
+        console.log(amount);
+        const cart = new ShoppingCart();
+        cart.addItem(article, acceptTerms, goodsPrice, amount);
+        console.log(cart);
+        goto("/shopping-cart");
     }
 
     function clearInputs() {
