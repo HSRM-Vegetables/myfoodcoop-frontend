@@ -16,4 +16,4 @@
 ## Stack
 * Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
 * Als CSS Framwork setzen wir momentan auf [Bulma](https://bulma.io/) (Wichtig: Bulma wird ohne JavaScript ausgeliefert)
-* Als Bulma Theme verwenden wir das Theme [Darkly](https://jenil.github.io/bulmaswatch/darkly/) von [Bulmaswatch](https://jenil.github.io/bulmaswatch/)
+* Als Icon Library benutzen wir [MaterialDesignIcons](https://materialdesignicons.com/). Dort kannst du auch nach neuen Icons suchen.
