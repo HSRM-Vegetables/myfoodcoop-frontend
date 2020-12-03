@@ -1,7 +1,7 @@
 <script>
     import ShowBalance from '../../components/balance/ShowBalance.svelte';
     import { titleWithSuffix } from '../../stores/page';
-    import Overview from '../../components/history/Overview.svelte';
+    import HistoryOverview from '../../components/history/HistoryOverview.svelte';
 </script>
 
 <svelte:head>
@@ -9,9 +9,13 @@
 </svelte:head>
 
 <ShowBalance />
+
 <hr>
-<Overview />
+
+<HistoryOverview />
+
 <hr>
+
 <div class="has-text-centered">
     <a href="/" class="button is-primary container">Zur Hauptseite</a>
 </div>

@@ -1,20 +1,32 @@
   
 <script context="module" >
-    let id = -1;
+    let purchasId = -1;
 
     export async function preload({ params }) {
-        id = params.purchaseId;
+        purchasId = params.purchaseId;
     }
 </script>
 
 <script>
+    import { onMount } from 'svelte';
+    import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
 
-    const purchaseApi = new PurchaseApi();
-
-    const purchase = purchaseApi.purchases.find((p) => p.id === id);
+    let purchase;
+    onMount(() => {
+        const purchaseApi = new PurchaseApi();
+        purchase = purchaseApi.purchases.find((p) => p.id === purchasId);
+    });
 </script>
 
-<!-- We want to display the cart here, we will need to wait until its in master -->
-<!-- Use this placeholder in the meantime -->
-{JSON.stringify(purchase)}
+{#if purchase !== undefined}
+    <ShoppingCartItems cartItems={purchase.cartItems} allowRemoval={false} allowVisitPriceCalculator={false} />
+
+    <hr />
+
+    <div class="has-text-centered">
+        <a href="/history" class="button is-primary">Zur Einkaufshistorie</a>
+    </div>
+{:else}
+    <span>Loading...</span>
+{/if}

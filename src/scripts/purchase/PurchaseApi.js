@@ -1,12 +1,19 @@
-import { stringify } from 'uuid';
 import LocalStorageKeys from '../LocalStorageKeys';
+import Purchase from './Purchase';
 
 export default class PurchaseApi {
     constructor() {
         this.purchases = [];
         const storedPurchases = window.localStorage.getItem(LocalStorageKeys.PURCHASES);
         if (storedPurchases !== undefined && storedPurchases !== '') {
-            
+            const purchasesObject = JSON.parse(storedPurchases);
+            if (purchasesObject !== undefined && purchasesObject !== null) {
+                this.purchases = purchasesObject.map((p) => new Purchase(
+                    p.id,
+                    new Date(p.createdOn),
+                    p.cartItems
+                ));
+            }
         }
     }
 
