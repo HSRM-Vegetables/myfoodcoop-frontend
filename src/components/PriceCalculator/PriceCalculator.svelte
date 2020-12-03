@@ -155,8 +155,8 @@
                     on:input={() => calcTotalPrice()} />
                 <div class="auto-margin min-width">
                     {#if unitType === UnitType.KILO}
-                        <span class="unit-text">/ kg</span>
-                    {:else}<span class="unit-text">/ Stück</span>{/if}
+                        <span class="unit-text">€ / kg</span>
+                    {:else}<span class="unit-text">€ / Stück</span>{/if}
                 </div>
             </div>
         </div>
