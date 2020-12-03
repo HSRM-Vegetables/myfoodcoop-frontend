@@ -2,6 +2,14 @@
     import { onMount } from 'svelte';
     import Switch from './Switch.svelte';
 
+    var DOMstrings = {
+    name: 'input__item',
+    unitType: 'input__type',
+    unitPrice: 'input__unitPrice',
+    quantity: 'input__quantity',
+    totalPrice: 'output__totalPrice'
+};
+
     let acceptTerms = false;
     let goodsPriceInput;
     let amountInput;
