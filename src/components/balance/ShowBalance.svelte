@@ -9,7 +9,11 @@
         currentBalance = balance.money;
     });
 </script>
-
+<style>
+    .balance{
+        font-size: 3em;
+    }
+</style>
 <div>
-    <span> Guthaben: {currentBalance}€</span>
+    <span class="balance">{currentBalance}€</span>
 </div>

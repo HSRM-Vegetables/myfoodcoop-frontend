@@ -4,7 +4,7 @@
     import ShowBalance from './ShowBalance.svelte';
     
     let currentBalance = 0;
-    let changeMoneyInput;
+    let inputValue= null;
     let addMoneyInput;
     let balance;
     
@@ -13,39 +13,39 @@
         currentBalance = balance.money;
     });
     
-    function changeBalance() {
-        // create new value for Balance
-        balance.setBalance(changeMoneyInput.value);
-        currentBalance = balance.money;
-    }
-    
     function addToBalance() {
         // add money to balance
         balance.setBalance(balance.calcBalance(addMoneyInput.value));
         currentBalance = balance.money;
         addMoneyInput.value = '';
     }
+    function updateInput(){
+        inputValue = this.value;
+    }
 </script>
 
-
-<div>
-    <ShowBalance bind:currentBalance />
-    
-    <div class="field has-addons">
-        <div class="control is-expanded">
-            <input type="number" class="input" bind:this={changeMoneyInput}/>
-        </div>
-        <div class="control">
-            <button type="submit" class="button is-primary" on:click={changeBalance}>Guthaben anpassen</button><br>
-        </div>
+<style>
+    .fix-button-width{
+        width: 230px;
+    }
+</style>
+  <section class="section">
+    <div class="container has-text-centered">
+         <ShowBalance bind:currentBalance />
+         <!-- Add Mony buttons-->
+         <div class="columns is-centered">
+                 <div class="column buttons pt-6">
+                      <button class="button is-rounded" value="20" on:click="{updateInput}">20 €</button>
+                      <button class="button is-rounded" value="50" on:click="{updateInput}">50 €</button>
+                      <button class="button is-rounded" value="100" on:click="{updateInput}">100 €</button>
+               </div>
+         </div>
+         <input type="number" class="input" bind:this={addMoneyInput} value="{inputValue}"/>
+         
+        <button type="submit" class="button is-primary fix-button-width mt-3" on:click={addToBalance}>Guthaben hinzufügen</button><br>
+        <a href="/adjust-balance" type="submit" class="button is-primary fix-button-width mt-3">Guthaben anpassen</a><br>
     </div>
-    
-    <div class="field has-addons">
-        <div class="control is-expanded">
-            <input type="number" class="input" bind:this={addMoneyInput}/>
-        </div>
-        <div class="control">
-            <button type="submit" class="button is-primary" on:click={addToBalance}>Guthaben hinzufügen</button><br>
-        </div>
-    </div>
+  </section>  
+<div class="container has-text-centered mt-6">
+    <a href="/" type="submit" class="button is-primary ">Zur Hauptseite</a><br>
 </div>
