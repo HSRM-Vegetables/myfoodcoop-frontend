@@ -1,6 +1,9 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import Switch from './Switch.svelte';
+    import { currentShoppingCartItem } from '../../stores/priceCalculator';
+    import ShowBalance from '../balance/ShowBalance.svelte'
+    import { goto } from '@sapper/app';
 
     var DOMstrings = {
     name: 'input__item',
@@ -19,6 +22,9 @@
     let article;
 
     onMount(async () => {});
+    onDestroy(() => {
+        $currentShoppingCartItem = undefined;
+    })
 
     function calcTotalPrice() {
         article = document.getElementById(DOMstrings.name).value;
@@ -40,7 +46,10 @@
             unitPrice: goodsPrice,
             quantity: amount,
         };
-        console.dir(obj);
+        console.dir(obj); 
+        // const shoppingCart = new ShoppingCart()
+        // ShoppingCart.addItem(name, unitType .-.-)
+        // goto("/warenkorb")
         return obj;
     }
 
@@ -250,10 +259,7 @@
         <div class="form">
             <h1>Preisrechner</h1>
 
-            <div class="balance">
-                <div>Guthaben:</div>
-                <div>42€</div>
-            </div>
+            <ShowBalance />
             <hr />
 
             <div class="floating">
@@ -262,7 +268,8 @@
                     class="floating__input"
                     name="article"
                     type="text"
-                    placeholder="Artikel" />
+                    placeholder="Artikel"
+                    value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ""}" />
                 <label
                     for="input__item"
                     class="floating__label"
@@ -290,7 +297,7 @@
                         name="goodsPrice"
                         type="number"
                         placeholder="Warenpreis"
-                        value=""
+                        value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ""}" 
                         on:change={() => calcTotalPrice()}
                         on:input={() => calcTotalPrice()} />
                     <label
@@ -313,7 +320,7 @@
                     name="amount"
                     type="number"
                     placeholder="Menge"
-                    value=""
+                    value="{$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity: ""}" 
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
                 <label
@@ -349,6 +356,13 @@
                             on:click={clearInputs}
                             class="button is-medium is-link is-danger is-rounded">
                             Eingabe löschen
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            on:click={() => goto("/shopping-cart")}
+                            class="button is-medium is-link is-danger is-rounded">
+                            Zurück zum Warenkorb
                         </button>
                     </li>
                 </ul>
