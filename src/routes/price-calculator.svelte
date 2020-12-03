@@ -10,5 +10,5 @@
 	<title>Preisrechner</title>
 </svelte:head>
 
-<h1><PriceCalculator/></h1>
+<PriceCalculator/>
 

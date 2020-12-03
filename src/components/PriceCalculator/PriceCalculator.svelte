@@ -24,7 +24,9 @@
         totalPrice: undefined
     };
 
-    onMount(async () => {});
+    onMount(() => {
+        calcTotalPrice();
+    });
 
     onDestroy(() => {
         $currentShoppingCartItem = undefined;
@@ -95,6 +97,7 @@
         transition: background-color 0.2s ease;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
+        width: 100%;
     }
 
     .floating:hover,
@@ -201,20 +204,6 @@
     .form {
         background-color: #fff;
         padding: 2rem 3rem 4rem;
-        box-shadow: 2px 2px 16px 3px rgba(0, 0, 0, 0.4);
-    }
-
-    ul li {
-        display: inline-block;
-        text-align: center;
-    }
-
-    ul {
-        text-align: center;
-    }
-
-    li {
-        margin: 10px 30px;
     }
 
     .field2 {
@@ -237,6 +226,7 @@
 
     .margin {
         margin-left: 20px;
+        white-space: nowrap;
     }
 
     .margin40 {
@@ -257,6 +247,16 @@
     .margin3 {
         margin-top: 20px;
     }
+
+    .button-box {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    .auto-margin {
+        margin: auto;
+    }
+
 </style>
 
 <div>
@@ -285,11 +285,11 @@
 
             <div class="field field2">
                 <div class="control control2">
-                    <div>Stückpreis</div>
-                    <div class="control3">
+                    <div class="auto-margin" >Stückpreis</div>
+                    <div class="control3 auto-margin">
                         <Switch bind:checked={state.unitType} />
                     </div>
-                    <div>Kilopreis</div>
+                    <div class="auto-margin">Kilopreis</div>
                 </div>
             </div>
 
@@ -299,7 +299,6 @@
                         bind:this={state.unitPrice}
                         id="input__unitPrice"
                         class="floating__input"
-                        name="goodsPrice"
                         type="number"
                         placeholder="Warenpreis"
                         value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
@@ -336,7 +335,7 @@
                 </label>
             </div>
 
-            <hr class="margin40" />
+            <hr />
 
             <div class="total">Gesamtpreis</div>
             <!-- TODO: Get totalPrice from ShoppingCard-->
@@ -344,36 +343,27 @@
                 class="totalPrice"
                 id="output__totalPrice"
                 bind:this={state.totalPrice}>
-                0€
             </div>
-            <hr class="margin3" />
 
-            <div>
-                <ul>
-                    <li>
-                        <button
-                            on:click={addItem}
-                            class="button is-medium is-success is-link is-rounded">
-                            Warenkorb hinzufügen
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            on:click={clearInputs}
-                            class="button is-medium is-link is-danger is-rounded">
-                            Eingabe löschen
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            on:click={() => goto('/shopping-cart')}
-                            class="button is-medium is-link is-rounded">
-                            Zurück zum Warenkorb
-                        </button>
-                    </li>
-                </ul>
+            <hr />
+
+            <div class="button-box">
+                <button
+                    on:click={addItem}
+                    class="button is-medium is-primary mb-4">
+                    Warenkorb hinzufügen
+                </button>
+                <button
+                    on:click={clearInputs}
+                    class="button is-medium is-danger mb-4">
+                    Eingabe löschen
+                </button>
+                <button
+                    on:click={() => goto('/shopping-cart')}
+                    class="button is-link is-medium mb-4">
+                    Zurück zum Warenkorb
+                </button>
             </div>
         </div>
     </div>
 </div>
-calcTotalPrice
