@@ -22,9 +22,8 @@
 
 <ShowBalance/>
 <figure>
-	<img alt="Stagemüse Logo" src="{logo}">
+	<img alt="Stadtgemüse Logo" src="{logo}">
 </figure>
 <h1>Willkommen!</h1>
 
-<input type="text" class="input is-round">
 
