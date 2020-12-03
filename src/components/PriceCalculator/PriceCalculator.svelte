@@ -31,11 +31,16 @@
         } else {
             unitType = UnitType.PIECE;
         }
-    }   
+    }
 
     function calcTotalPrice() {
-        if (!Number.isNaN(unitPriceElement.value) && !Number.isNaN(quantityElement.value)) {
-            currentTotal = (unitPriceElement.value * quantityElement.value).toFixed(2);
+        if (
+            !Number.isNaN(unitPriceElement.value) &&
+            !Number.isNaN(quantityElement.value)
+        ) {
+            currentTotal = (
+                unitPriceElement.value * quantityElement.value
+            ).toFixed(2);
         }
     }
 
@@ -59,6 +64,18 @@
 </script>
 
 <style>
+    h1 {
+        font-weight: bold;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    h2 {
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.5em;
+    }
+
     .button-box {
         display: flex;
         flex-flow: column nowrap;
@@ -67,39 +84,67 @@
     .auto-margin {
         margin: auto;
     }
+
+    .form-row {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .form > div {
+        margin-bottom: 3em;
+    }
+
+    .unit-text {
+        white-space: nowrap;
+        padding-left: 1em;
+    }
+
+    .total-container {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+    }
+
+    .total {
+        font-weight: bold;
+        font-size: 4em;
+    }
+
+    .min-width {
+        min-width: 5em;
+    }
+
 </style>
 
 <div>
-    <div>
-        <div class="form">
-            <h1>Preisrechner</h1>
+    <div class="form">
+        <h1>Preisrechner</h1>
 
-            <ShowBalance />
-            
-            <hr />
+        <ShowBalance />
 
-            <div>
-                <span>Artikel</span>
-                <input
-                    class="input"
-                    type="text"
-                    placeholder="Artikel"
-                    bind:this={articleElement}
-                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''} />
+        <hr />
+
+        <div>
+            <span>Artikel</span>
+            <input
+                class="input"
+                type="text"
+                placeholder="Artikel"
+                bind:this={articleElement}
+                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''} />
+        </div>
+
+        <div class="form-row">
+            <div class="auto-margin">Stückpreis</div>
+            <div class="auto-margin">
+                <Switch bind:checked={unitTypeBoolean} />
             </div>
+            <div class="auto-margin">Kilopreis</div>
+        </div>
 
-            <div>
-                <div>
-                    <div class="auto-margin" >Stückpreis</div>
-                    <div class="auto-margin">
-                        <Switch bind:checked={unitTypeBoolean} />
-                    </div>
-                    <div class="auto-margin">Kilopreis</div>
-                </div>
-            </div>
-
-            <div>                
-                <span>Warenpreis</span>
+        <div>
+            <span>Warenpreis</span>
+            <div class="form-row">
                 <input
                     bind:this={unitPriceElement}
                     class="input"
@@ -108,38 +153,44 @@
                     value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
                     on:change={() => calcTotalPrice()}
                     on:input={() => calcTotalPrice()} />
-            </div>
-            <div>
-                {#if unitType === UnitType.KILO}
-                    <span>/ kg</span>
-                {:else}
-                    <span>/ Stück</span>
-                {/if}
+                <div class="auto-margin min-width">
+                    {#if unitType === UnitType.KILO}
+                        <span class="unit-text">/ kg</span>
+                    {:else}<span class="unit-text">/ Stück</span>{/if}
+                </div>
             </div>
         </div>
 
         <div>
-            <span >Menge</span>
-            <input
-                bind:this={quantityElement}
-                class="input"
-                type="number"
-                placeholder="Menge"
-                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
-                on:change={() => calcTotalPrice()}
-                on:input={() => calcTotalPrice()} />
+            <span>Menge</span>
+            <div class="form-row">
+                <input
+                    bind:this={quantityElement}
+                    class="input"
+                    type="number"
+                    placeholder="Menge"
+                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
+                    on:change={() => calcTotalPrice()}
+                    on:input={() => calcTotalPrice()} />
+                <div class="auto-margin min-width">
+                    {#if unitType === UnitType.KILO}
+                        <span class="unit-text">kg</span>
+                    {:else}<span class="unit-text">Stück</span>{/if}
+                </div>
+            </div>
         </div>
 
         <hr />
 
-        <div class="total">Gesamtpreis {currentTotal}€</div>
+        <div class="total-container">
+            <h2>Gesamtpreis</h2>
+            <div class="total">{currentTotal}€</div>
+        </div>
 
         <hr />
 
         <div class="button-box">
-            <button
-                on:click={addItem}
-                class="button is-medium is-primary mb-4">
+            <button on:click={addItem} class="button is-medium is-primary mb-4">
                 Warenkorb hinzufügen
             </button>
             <button
