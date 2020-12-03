@@ -75,5 +75,5 @@
     </div>
 </section>
 <div class="container has-text-centered mt-6">
-    <a href="/" type="submit" class="button is-primary ">Zur Hauptseite</a><br>
+    <a href="/" type="submit" class="button is-primary is-link">Zur Hauptseite</a><br>
 </div>
