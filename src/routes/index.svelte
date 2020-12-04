@@ -1,9 +1,11 @@
 <script>
 	import logo from 'images/logo_black.png';
 	import ShowBalance from '../components/balance/ShowBalance.svelte';
-	import { title } from '../stores/page.js'
-
-    $title = 'Stadtgemüse e.V.'
+	import { title } from '../stores/page';
+	
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Stadtgemüse e.V.';
 </script>
 
 <style>

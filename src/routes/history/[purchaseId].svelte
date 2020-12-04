@@ -11,9 +11,11 @@
     import { onMount } from 'svelte';
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
-    import { title } from '../../stores/page.js'
+    import { title } from '../../stores/page';
 
-    $title = 'Einkaufshistorie'
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Einkaufshistorie';
 
     let purchase;
     onMount(() => {

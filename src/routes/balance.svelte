@@ -1,8 +1,10 @@
 <script>
 	import EditBalance from '../components/balance/EditBalance.svelte';
-	import { title } from '../stores/page.js'
+	import { title } from '../stores/page';
 
-    $title = 'Guthaben bearbeiten'
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Guthaben bearbeiten';
 </script>
 
 <svelte:head>

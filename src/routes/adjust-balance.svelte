@@ -1,8 +1,10 @@
 <script>
 	import AdjustBalance from '../components/balance/AdjustBalance.svelte';
-	import { title } from '../stores/page.js'
+	import { title } from '../stores/page';
 
-    $title = 'Guthaben anpassen'
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Guthaben anpassen';
 </script>
 
 <svelte:head>

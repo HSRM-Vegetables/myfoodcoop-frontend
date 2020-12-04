@@ -1,8 +1,10 @@
 <script>
 	import PriceCalculator from '../components/PriceCalculator/PriceCalculator.svelte';
-	import { title } from '../stores/page.js'
+	import { title } from '../stores/page';
 
-    $title = 'Preisrechner'
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Preisrechner';
 </script>
 
 <style>

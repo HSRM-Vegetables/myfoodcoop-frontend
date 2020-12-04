@@ -1,9 +1,11 @@
 <script>
     import ShowBalance from '../../components/balance/ShowBalance.svelte';
     import HistoryOverview from '../../components/history/HistoryOverview.svelte';
-    import { title } from '../../stores/page.js'
+    import { title } from '../../stores/page';
 
-    $title = 'Vergangene Einkäufe'
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+$title = 'Vergangene Einkäufe';
 </script>
 
 <ShowBalance />

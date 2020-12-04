@@ -1,6 +1,6 @@
 <script>
     import logo from 'images/logo_white.png';
-    import { title } from '../stores/page.js'
+    import { title } from '../stores/page';
 </script>
 
 <style>
