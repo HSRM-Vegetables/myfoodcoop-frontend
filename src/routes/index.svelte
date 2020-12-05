@@ -1,9 +1,13 @@
 <script>
-    import { mdiBasket, mdiPiggyBank, mdiShoppingSearch } from '@mdi/js';
     import { goto } from '@sapper/app';
+    import { mdiBasket, mdiPiggyBank, mdiShoppingSearch } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
+    import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
-    import { titleWithSuffix } from '../stores/page';
+
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Stadtgemüse e.V.';
 
     function onKeyPress(event, href) {
         if (event.code === 'Space' || event.code === 'Enter') {
@@ -60,7 +64,7 @@
 </style>
 
 <svelte:head>
-    <title>{$titleWithSuffix}Homepage</title>
+    <title>{$title}</title>
 </svelte:head>
 
 <ShowBalance />
