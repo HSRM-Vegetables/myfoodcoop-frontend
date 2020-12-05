@@ -77,7 +77,13 @@
                         <span class="is-size-7">{item.unitPrice} € / kg</span>
                     {/if}
                 </td>
-                <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">{item.quantity}</td>
+                <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">
+                    {#if item.unitType === UnitType.PIECE }
+                        <span>{item.quantity} Stück</span> 
+                    {:else}
+                        <span>{item.quantity} kg</span>
+                    {/if}
+                </td>
                 <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">{(item.unitPrice * item.quantity).toFixed(2)} €</td>
             </tr>
         {/each}
