@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each purchaseApi.purchases as purchase}
+            {#each purchaseApi.purchases.sort((a, b) => b.createdOn - a.createdOn) as purchase}
                 <tr>
                     <td>{purchase.createdOn.toLocaleString()}</td>
                     <td>{purchase.cartItems.length}</td>
