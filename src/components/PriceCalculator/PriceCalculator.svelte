@@ -120,7 +120,7 @@
     <div class="form">
         <h1>Preisrechner</h1>
 
-        <ShowBalance />
+        <ShowBalance type="inline" />
 
         <hr />
 

@@ -67,7 +67,7 @@
     <title>{$title}</title>
 </svelte:head>
 
-<ShowBalance />
+<ShowBalance type="inline" />
 
 <hr />
 
