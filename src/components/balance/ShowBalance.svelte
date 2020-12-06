@@ -4,18 +4,17 @@
    
    export let currentBalance = 0;
    export let type = 'big'; // inline or big
-   let textCssClasses = "";
-   let bigTextCssClasses = "is-size-1";
+   let textCssClasses = '';
+   let bigTextCssClasses = 'is-size-1';
 
    onMount(() => {
        const balance = new Balance();
        currentBalance = balance.money;
        if (currentBalance < 0) {
-         textCssClasses += " has-text-danger";
-         bigTextCssClasses += " has-text-danger";
+           textCssClasses += ' has-text-danger';
+           bigTextCssClasses += ' has-text-danger';
        }
    });
-
 </script>
 
 <style>
