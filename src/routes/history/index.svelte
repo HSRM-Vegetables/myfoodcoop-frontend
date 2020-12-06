@@ -8,7 +8,7 @@
 $title = 'Vergangene Einkäufe';
 </script>
 
-<ShowBalance />
+<ShowBalance type="inline" />
 
 <hr>
 

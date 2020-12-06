@@ -120,7 +120,7 @@
     <div class="form">
         <h1>Preisrechner</h1>
 
-        <ShowBalance />
+        <ShowBalance type="inline" />
 
         <hr />
 
@@ -155,8 +155,8 @@
                     on:input={() => calcTotalPrice()} />
                 <div class="auto-margin min-width">
                     {#if unitType === UnitType.KILO}
-                        <span class="unit-text">/ kg</span>
-                    {:else}<span class="unit-text">/ Stück</span>{/if}
+                        <span class="unit-text">€ / kg</span>
+                    {:else}<span class="unit-text">€ / Stück</span>{/if}
                 </div>
             </div>
         </div>
