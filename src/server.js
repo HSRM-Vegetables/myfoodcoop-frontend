@@ -8,6 +8,16 @@ const dev = NODE_ENV === 'development';
 
 polka() // You can also use Express
 	.use(
+		(req, res, next) => {
+			if (!dev) {
+				// redirect requests to https if not in dev mode
+				req.headers["x-forwarded-proto"] !== "https"
+					? res.redirect(status, "https://" + req.hostname + req.originalUrl)
+					: next();
+			} else next();
+		}
+	)
+	.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
 		sapper.middleware(),
