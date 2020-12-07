@@ -12,7 +12,7 @@ polka() // You can also use Express
 			if (!dev) {
 				// redirect requests to https if not in dev mode
 				req.headers["x-forwarded-proto"] !== "https"
-					? res.redirect(status, "https://" + req.hostname + req.originalUrl)
+					? res.redirect(301, "https://" + req.hostname + req.originalUrl)
 					: next();
 			} else next();
 		}
