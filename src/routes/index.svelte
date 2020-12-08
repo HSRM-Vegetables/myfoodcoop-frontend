@@ -4,6 +4,7 @@
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
+    import { name } from '../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -67,21 +68,29 @@
     <title>{$title}</title>
 </svelte:head>
 
-<ShowBalance type="inline" />
+{#if $name !== ''}
+    <span class="is-size-4">Hallo {$name}!</span>
 
-<hr />
+    <hr />
 
-<div class="button-container">
-    {#each buttons as button}
-        <div
-            class="big-icon-button"
-            tabindex="0"
-            role="button"
-            aria-label={button.label}
-            on:keypress={(e) => onKeyPress(e, button.href)}
-            on:click={() => goto(button.href)}>
-            <Icon icon={button.icon} />
-            <span>{button.label}</span>
-        </div>
-    {/each}
-</div>
+    <ShowBalance type="inline" />
+
+    <hr />
+
+    <div class="button-container">
+        {#each buttons as button}
+            <div
+                class="big-icon-button"
+                tabindex="0"
+                role="button"
+                aria-label={button.label}
+                on:keypress={(e) => onKeyPress(e, button.href)}
+                on:click={() => goto(button.href)}>
+                <Icon icon={button.icon} />
+                <span>{button.label}</span>
+            </div>
+        {/each}
+    </div>
+{:else}
+    <a href="/profile" class="button is-primary">Namen eingeben</a>
+{/if}
