@@ -2,52 +2,33 @@
     import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
     import { UnitType } from '../../scripts/UnitType';
-
-    import StockItem from '../../scripts/stock/StockItem';
+    import Stock from '../../scripts/stock/Stock';
 
     let unitPriceElement;
     let quantityElement;
     let articleElement;
-    let currentTotal = 0;
     let unitTypeBoolean;
-    let unitType;
-
-    $: untiTypeChanged(unitTypeBoolean);
+    let unitType = UnitType.PIECE;
 
     onMount(() => {
-        calcTotalPrice();
     });
 
-    onDestroy(() => {
-        
-    });
-
-    function untiTypeChanged(value) {
-        if (value === true) {
-            unitType = UnitType.KILO;
-        } else {
-            unitType = UnitType.PIECE;
-        }
-    }
     function addItem() {
-        const item = new StockItem();
-     
-        goto('/shopping-cart');
+        const item = new Stock();
+        item.addItem(articleElement.value,unitType,unitPriceElement.value,quantityElement.value);
+        //goto('/stock');
     }
 
     function clearInputs() {
         articleElement.value = '';
         unitPriceElement.value = '';
-        quantityElement.value = '';
-        currentTotal = 0;
+        inElement.value = '';
     }
 </script>
-
 <div>
     <div class="form">
-
         <div>
-            <span>Artikel</span>
+            <div class="has-text-left pt-4">Artikel</div>
             <input
                 class="input"
                 type="text"
@@ -55,14 +36,13 @@
                 bind:this={articleElement} />
         </div> 
 
-        <div class="form-row">
-            <div class="auto-margin">Stückpreis</div>
-           
-            <div class="auto-margin">Kilopreis</div>
+        <div class="form-row pt-4">
+                 <input id="unitprice" checked type="radio"name="unit" on:change="{() => unitType = UnitType.PIECE}"/><label for="unitprice"> Stückpreis</label>  
+                 <input id="unittype" type="radio" name="unit" on:change="{() => unitType = UnitType.KILO}"/><label for="unittype"> Kilopreis</label>
         </div>
 
         <div>
-            <span>Warenpreis</span>
+            <div class="has-text-left pt-4">Warenpreis</div>
             <div class="form-row">
                 <input
                     bind:this={unitPriceElement}
@@ -78,7 +58,7 @@
         </div>
 
         <div>
-            <span>Menge</span>
+            <div class="has-text-left pt-4">Bestands Menge</div>
             <div class="form-row">
                 <input
                     bind:this={quantityElement}

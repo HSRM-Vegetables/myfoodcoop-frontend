@@ -5,8 +5,4 @@ export default class StockItem {
         this.unitPrice = unitPrice;
         this.inStock = inStock;
     }
-    
-    addItem(){
-        
-    }
 }

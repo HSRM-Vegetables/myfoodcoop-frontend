@@ -12,12 +12,8 @@
     let stock = {
         stockItems: [],
     };
-    let balance = {
-        money: 0,
-    };
     onMount(() => {
         stock = new Stock();
-        balance = new Balance();
     });
 
     // create a purchase and go to the main page
@@ -28,7 +24,7 @@
             new Date(),
             stock.stockItems
         ));
-
+        stock = stock
         goto('/');
     }
 </script>

@@ -1,6 +1,6 @@
-import LocalStorageKeys from '../LocalStorageKeys';
-import ShoppingCartItem from './StockItem';
 import { UnitType } from '../UnitType';
+import StockItem from '../stock/StockItem';
+import LocalStorageKeys from '../LocalStorageKeys';
 
 export default class Stock {
     constructor() {
@@ -16,7 +16,6 @@ export default class Stock {
         }
     }
 
-    // TODO: Implement updates of cartitems
     addItem(name, unitType, unitPrice, quantity) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
@@ -33,37 +32,12 @@ export default class Stock {
         if (Number.isNaN(quantityParsed)) {
             return false;
         }
+        
+        this.stockItems = [...this.stockItems,
+            new StockItem(name, unitType, unitPriceSanitized, quantity)];
 
-        // check if item name already exists in item array. if true, remove the entry
-        if (this.cartItems.find((item) => item.name === name) !== undefined) {
-            // remove item from list;
-            this.cartItems = this.cartItems.filter((ci) => ci.name !== name);
-        }
-
-        this.cartItems = [...this.cartItems,
-            new ShoppingCartItem(name, unitType, unitPriceSanitized, quantity)];
-
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
+        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
 
         return true;
-    }
-
-    removeItem(name) {
-        this.cartItems = this.cartItems.filter((item) => item.name !== name);
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
-    }
-
-    totalPrice() {
-        let totalPrice = 0.0;
-        this.cartItems.forEach((item) => {
-            totalPrice += (item.unitPrice * item.quantity);
-        });
-
-        return totalPrice.toFixed(2);
-    }
-
-    clear() {
-        this.cartItems = [];
-        localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 }
