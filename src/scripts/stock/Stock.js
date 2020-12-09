@@ -1,5 +1,7 @@
-import { UnitType } from '../UnitType';
-import StockItem from '../stock/StockItem';
+import {
+    UnitType
+} from '../UnitType';
+import StockItem from './StockItem';
 import LocalStorageKeys from '../LocalStorageKeys';
 
 export default class Stock {
@@ -32,9 +34,10 @@ export default class Stock {
         if (Number.isNaN(quantityParsed)) {
             return false;
         }
-        
+
         this.stockItems = [...this.stockItems,
-            new StockItem(name, unitType, unitPriceSanitized, quantity)];
+            new StockItem(name, unitType, unitPriceSanitized, quantity)
+        ];
 
         localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
 
