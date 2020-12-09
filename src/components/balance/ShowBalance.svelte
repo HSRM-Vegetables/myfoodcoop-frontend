@@ -4,16 +4,10 @@
    
    export let currentBalance = 0;
    export let type = 'big'; // inline or big
-   let textCssClasses = '';
-   let bigTextCssClasses = 'is-size-1';
 
    onMount(() => {
        const balance = new Balance();
        currentBalance = balance.money;
-       if (currentBalance < 0) {
-           textCssClasses += ' has-text-danger';
-           bigTextCssClasses += ' has-text-danger';
-       }
    });
 </script>
 
@@ -30,10 +24,10 @@
    {#if type === 'inline'}
       <div class="inline-container">
          <span>Guthaben:</span>
-         <span class={textCssClasses}>{currentBalance}€</span>
+         <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
       </div>
    {:else}
-      <span class={bigTextCssClasses}>{currentBalance}€</span>
+      <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
    {/if}
 
 </div>
