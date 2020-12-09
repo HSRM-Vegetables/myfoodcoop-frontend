@@ -16,5 +16,5 @@
     {:else}
     <p>Der Bestand ist leer.</p>
     {/if}
-    <a href="/stock-filler" class="button is-primary mt-6">Bestand hinzufügen</a>
+    <a href="stock/fill" class="button is-primary mt-6">Bestand hinzufügen</a>
 </div>

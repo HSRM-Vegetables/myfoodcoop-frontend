@@ -35,7 +35,7 @@
                         quantityElement.value,
                         descriptionElement.value
                     );
-            goto('/stock');    
+            goto('/stock/');    
         }
         
     }
@@ -108,7 +108,7 @@
             Eingabe löschen
             </button><br>
             <div class="container has-text-centered mt-6">
-                <a href="/stock" type="submit" class="is-medium button is-primary is-link fix-button-width">Zurück</a><br>
+                <a href="/stock/" type="submit" class="is-medium button is-primary is-link fix-button-width">Zurück</a><br>
             </div>
         </div>
     </div>

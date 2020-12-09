@@ -34,7 +34,7 @@
         {
             label: 'Bestand',
             icon: mdiFormatListText,
-            href: '/stock',
+            href: '/stock/',
         }
 
     ];
