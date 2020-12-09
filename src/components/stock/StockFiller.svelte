@@ -9,7 +9,8 @@
     let quantityElement;
     let articleElement;
     let descriptionElement;
-    let unitType;
+    let unitType = UnitType.KILO;
+   
     let unitTypeBoolean;
     
     $: untiTypeChanged(unitTypeBoolean);
@@ -24,18 +25,34 @@
 
     function addItem() {
         const item = new Stock();
-        item.addItem(
-            articleElement.value,
-            unitType,
-            unitPriceElement.value,
-            quantityElement.value,
-            descriptionElement.value
-        );
-        goto('/stock');
+        let error = errorHandler(articleElement, unitPriceElement, quantityElement);
+ 
+        if( error ){
+            item.addItem(
+                        articleElement.value,
+                        unitType,
+                        unitPriceElement.value,
+                        quantityElement.value,
+                        descriptionElement.value
+                    );
+            goto('/stock');    
+        }
+        
     }
     
     function setUnitType(value) {
         unitType = value;
+    }
+    function errorHandler(...elements){
+         let result = true;
+         elements.forEach(element =>{
+             if( element.value === "" ){
+                 result = false;
+                 element.classList.add("error");
+             }else 
+                 element.classList.remove("error");  
+         });
+         return result;
     }
     
     function clearInputs() {
@@ -49,6 +66,7 @@
     .fix-button-width{
         width: 230px;
     }
+
 </style>
 <div>
     <div class="form">
@@ -66,20 +84,12 @@
         </div>
         <div class="pt-4">
 
-        {#if unitType === UnitType.KILO}
-            <TextField bind:value="{unitPriceElement}" type="number" placeholder="Warenpreis" title="Warenpreis" deco="€ / kg"/>
-        {:else}
-            <TextField bind:value="{unitPriceElement}" type="number" placeholder="Warenpreis" title="Warenpreis" deco="€ / Stück"/>
-        {/if}
+        <TextField bind:value="{unitPriceElement}" type="number" placeholder="Warenpreis" title="Warenpreis" deco={unitType === UnitType.KILO ?'€ / kg': '€ / Stück'}/>
+        
             
         </div>
         <div class="pt-4">
-        {#if unitType === UnitType.KILO}
-            <TextField bind:value="{quantityElement}" type="number" placeholder="Bestands Menge" title="Bestands Menge" deco="kg"/>
-        {:else}
-            <TextField bind:value="{quantityElement}" type="number" placeholder="Bestands Menge" title="Bestands Menge" deco="Stück"/>
-        {/if}
-        
+            <TextField bind:value="{quantityElement}" type="number" placeholder="Bestands Menge" title="Bestands Menge" deco={unitType === UnitType.KILO ?'kg': 'Stück'} />
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
