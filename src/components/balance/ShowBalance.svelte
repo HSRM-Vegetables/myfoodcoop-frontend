@@ -1,33 +1,35 @@
 <script>
-   import { onMount } from 'svelte';
-   import Balance from '../../scripts/Balance';
-   
-   export let currentBalance = 0;
-   export let type = 'big'; // inline or big
+    import { onMount } from 'svelte';
+    import Balance from '../../scripts/Balance';
 
-   onMount(() => {
-       const balance = new Balance();
-       currentBalance = balance.money;
-   });
+    export let currentBalance = 0;
+    export let type = 'big'; // inline or big
+
+    async function loadBalance() {
+        const balance = new Balance();
+        currentBalance = await balance.getBalance();
+    }
+
+    onMount(() => {
+        loadBalance();
+    });
 </script>
 
 <style>
-   .inline-container {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-   }
+    .inline-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
 </style>
 
 <div>
-
-   {#if type === 'inline'}
-      <div class="inline-container">
-         <span>Guthaben:</span>
-         <span>{currentBalance}€</span>
-      </div>
-   {:else}
-      <span class="is-size-1">{currentBalance}€</span>
-   {/if}
-
+    {#if type === 'inline'}
+        <div class="inline-container">
+            <span>Guthaben:</span>
+            <span>{currentBalance}€</span>
+        </div>
+    {:else}
+        <span class="is-size-1">{currentBalance}€</span>
+    {/if}
 </div>
