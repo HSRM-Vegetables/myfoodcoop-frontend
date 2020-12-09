@@ -24,10 +24,10 @@
    {#if type === 'inline'}
       <div class="inline-container">
          <span>Guthaben:</span>
-         <span>{currentBalance}€</span>
+         <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
       </div>
    {:else}
-      <span class="is-size-1">{currentBalance}€</span>
+      <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
    {/if}
 
 </div>
