@@ -6,6 +6,7 @@
     let unitPriceElement;
     let quantityElement;
     let articleElement;
+    let descriptionElement;
     let unitType = UnitType.PIECE;
 
     function addItem() {
@@ -14,7 +15,8 @@
             articleElement.value,
             unitType,
             unitPriceElement.value,
-            quantityElement.value
+            quantityElement.value,
+            descriptionElement.value
         );
         goto('/stock');
     }
@@ -27,6 +29,7 @@
         articleElement.value = '';
         unitPriceElement.value = '';
         quantityElement.value = '';
+        descriptionElement.value = '';
     }
 </script>
 <style>
@@ -87,6 +90,12 @@
                     <span class="balance-input-deco">kg</span>
                     {:else}<span class="balance-input-deco">Stück</span>{/if}
                 </div>
+            </div>
+        </div>
+        <div class="pt-4">
+            <div class="has-text-left pb-2">Beschreibung</div>
+            <div class="form-row is-relative">
+               <textarea class="textarea" placeholder="Beschreibung" bind:this="{descriptionElement}"></textarea>
             </div>
         </div>
         <hr />

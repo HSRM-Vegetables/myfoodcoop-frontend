@@ -18,7 +18,7 @@ export default class Stock {
         }
     }
 
-    addItem(name, unitType, unitPrice, quantity) {
+    addItem(name, unitType, unitPrice, quantity, description) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
         }
@@ -36,7 +36,7 @@ export default class Stock {
         }
 
         this.stockItems = [...this.stockItems,
-            new StockItem(name, unitType, unitPriceSanitized, quantity)
+            new StockItem(name, unitType, unitPriceSanitized, quantity, description)
         ];
 
         localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));

@@ -9,6 +9,7 @@
             <th>Artikel</th>
             <th>Menge</th>
             <th>Preis</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +32,8 @@
                 <span>{item.unitPrice} € / kg</span>
                 {/if}
             </td>
-        </tr>
+        </tr> 
         {/each}
     </tbody>
 </table>
+
