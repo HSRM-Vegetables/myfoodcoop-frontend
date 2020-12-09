@@ -11,9 +11,6 @@ $title = 'Bestand hinzufügen';
 
 </style>
 
-<svelte:head>
-	<title>Bestand hinzufügen</title>
-</svelte:head>
 
 <StockFiller/>
 

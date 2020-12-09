@@ -2,12 +2,25 @@
     import { goto } from '@sapper/app';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
+    import TextField from '../elements/TextField.svelte'
+    import Switch from '../elements/Switch.svelte';
     
     let unitPriceElement;
     let quantityElement;
     let articleElement;
     let descriptionElement;
-    let unitType = UnitType.PIECE;
+    let unitType;
+    let unitTypeBoolean;
+    
+    $: untiTypeChanged(unitTypeBoolean);
+    
+     function untiTypeChanged(value) {
+            if (value === true) {
+                unitType = UnitType.KILO;
+            } else {
+                unitType = UnitType.PIECE;
+            }
+        }
 
     function addItem() {
         const item = new Stock();
@@ -36,61 +49,37 @@
     .fix-button-width{
         width: 230px;
     }
-    .balance-input-deco{
-        position: absolute;
-        font-size: 1rem;
-        color: #ccc6c6;
-        right: 30px;
-        top: 8px;
-    }
-    input[type="radio"] {
-        margin-right: 8px;
-        margin-left: 20px;
-    }
 </style>
 <div>
     <div class="form">
         <div class="pt-4">
-            <div class="has-text-left pb-2 ">Artikel</div>
-            <input
-                class="input"
-                type="text"
-                placeholder="Artikel"
-                bind:this={articleElement} />
+            <TextField bind:value="{articleElement}" placeholder="Artikel" title="Artikel" />
         </div>
         <div class="form-row pt-4 has-text-centered">
-            <input id="unitprice" checked type="radio"name="unit" on:change="{() => setUnitType(UnitType.PIECE)}"/><label for="unitprice"> Stückpreis</label>  
-            <input id="unittype" type="radio" name="unit" on:change="{() => setUnitType(UnitType.KILO)}"/><label for="unittype"> Kilopreis</label>
+             <div class="form-row">
+                        <div class="auto-margin">Stückpreis</div>
+                        <div class="auto-margin">
+                            <Switch bind:checked={unitTypeBoolean} />
+                        </div>
+                        <div class="auto-margin">Kilopreis</div>
+                    </div>
         </div>
         <div class="pt-4">
-            <div class="has-text-left pb-2">Warenpreis</div>
-            <div class="form-row is-relative">
-                <input
-                    bind:this={unitPriceElement}
-                    class="input"
-                    type="number"
-                    placeholder="Warenpreis" />
-                <div class="auto-margin min-width">
-                    {#if unitType === UnitType.KILO}
-                    <span class="balance-input-deco">€ / kg</span>
-                    {:else}<span class="balance-input-deco">€ / Stück</span>{/if}
-                </div>
-            </div>
+
+        {#if unitType === UnitType.KILO}
+            <TextField bind:value="{unitPriceElement}" type="number" placeholder="Warenpreis" title="Warenpreis" deco="€ / kg"/>
+        {:else}
+            <TextField bind:value="{unitPriceElement}" type="number" placeholder="Warenpreis" title="Warenpreis" deco="€ / Stück"/>
+        {/if}
+            
         </div>
         <div class="pt-4">
-            <div class="has-text-left pb-2">Bestands Menge</div>
-            <div class="form-row is-relative">
-                <input
-                    bind:this={quantityElement}
-                    class="input"
-                    type="number"
-                    placeholder="Bestands Menge" />
-                <div class="auto-margin min-width">
-                    {#if unitType === UnitType.KILO}
-                    <span class="balance-input-deco">kg</span>
-                    {:else}<span class="balance-input-deco">Stück</span>{/if}
-                </div>
-            </div>
+        {#if unitType === UnitType.KILO}
+            <TextField bind:value="{quantityElement}" type="number" placeholder="Bestands Menge" title="Bestands Menge" deco="kg"/>
+        {:else}
+            <TextField bind:value="{quantityElement}" type="number" placeholder="Bestands Menge" title="Bestands Menge" deco="Stück"/>
+        {/if}
+        
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>

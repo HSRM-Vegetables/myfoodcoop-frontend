@@ -7,8 +7,4 @@
 $title = 'Bestand';
 </script>
 
-<svelte:head>
-	<title>Bestand</title>
-</svelte:head>
-
 <ShowStock/>

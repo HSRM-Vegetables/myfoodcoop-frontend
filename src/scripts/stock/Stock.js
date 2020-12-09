@@ -1,6 +1,4 @@
-import {
-    UnitType
-} from '../UnitType';
+import { UnitType } from '../UnitType';
 import StockItem from './StockItem';
 import LocalStorageKeys from '../LocalStorageKeys';
 

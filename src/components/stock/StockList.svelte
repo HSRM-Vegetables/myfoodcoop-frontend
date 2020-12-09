@@ -20,9 +20,9 @@
             </td>
             <td>
                 {#if item.unitType === UnitType.PIECE }
-                <span>{item.inStock} Stück</span> 
+                <span>{item.quantity} Stück</span> 
                 {:else}
-                <span>{item.inStock} kg</span>
+                <span>{item.quantity} kg</span>
                 {/if}
             </td>
             <td>
