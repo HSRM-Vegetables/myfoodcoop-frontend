@@ -20,6 +20,23 @@ export default class Balance {
         }
     }
 
+    async adjustBalance(money) {
+        if (money !== null && money !== 'NaN' && money !== '' && money !== undefined) {
+            let balance = money;
+            if (typeof money === 'string') {
+                balance = money.replace(',', '.');
+                balance = parseFloat(balance);
+            }
+
+            balance = balance.toFixed(2);
+            this.currentBalance = parseFloat(this.currentBalance) + parseFloat(balance);
+
+            await Api.post('balance', JSON.stringify({
+                balanceDifference: balance
+            }));
+        }
+    }
+
     calcBalance(money, operation = '+') {
         switch (operation) {
         case '+':

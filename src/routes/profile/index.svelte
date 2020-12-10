@@ -7,7 +7,10 @@
     $title = 'Profil';
 </script>
 
-<span>Name:</span>
-<input type="text" class="input" bind:value="{$name}">
+<h1 class="title">Hallo {$name}!</h1>
 
-<a class="button is-primary mt-1" href="/">Save</a>
+<span>Hier werden später Benutzerdaten wie zum Beispiel deine Rollen oder ähnliches zu sehen sein.</span>
+
+<div class="container has-text-centered mt-3">
+    <a href="/" class="button is-primary is-link">Zur Hauptseite</a><br>
+</div>

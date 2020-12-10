@@ -38,7 +38,7 @@
             cart.cartItems
         ));
 
-        balance.setBalance(balance.calcBalance(cart.totalPrice(), '-'));
+        balance.adjustBalance(-cart.totalPrice());
         balance = balance;
         cart.clear();
         cart = cart; // tell svelte to update view

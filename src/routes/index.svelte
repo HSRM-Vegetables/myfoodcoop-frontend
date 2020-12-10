@@ -1,6 +1,11 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiBasket, mdiPiggyBank, mdiShoppingSearch } from '@mdi/js';
+    import {
+        mdiAccount,
+        mdiBasket,
+        mdiPiggyBank,
+        mdiShoppingSearch
+    } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
@@ -31,6 +36,11 @@
             label: 'Guthaben verwalten',
             icon: mdiPiggyBank,
             href: '/balance',
+        },
+        {
+            label: 'Benutzerdaten',
+            icon: mdiAccount,
+            href: '/profile',
         },
     ];
 </script>
@@ -64,33 +74,25 @@
     }
 </style>
 
-<svelte:head>
-    <title>{$title}</title>
-</svelte:head>
+<span class="is-size-4">Hallo {$name}!</span>
 
-{#if $name !== ''}
-    <span class="is-size-4">Hallo {$name}!</span>
+<hr />
 
-    <hr />
+<ShowBalance type="inline" />
 
-    <ShowBalance type="inline" />
+<hr />
 
-    <hr />
-
-    <div class="button-container">
-        {#each buttons as button}
-            <div
-                class="big-icon-button"
-                tabindex="0"
-                role="button"
-                aria-label={button.label}
-                on:keypress={(e) => onKeyPress(e, button.href)}
-                on:click={() => goto(button.href)}>
-                <Icon icon={button.icon} />
-                <span>{button.label}</span>
-            </div>
-        {/each}
-    </div>
-{:else}
-    <a href="/profile" class="button is-primary">Namen eingeben</a>
-{/if}
+<div class="button-container">
+    {#each buttons as button}
+        <div
+            class="big-icon-button"
+            tabindex="0"
+            role="button"
+            aria-label={button.label}
+            on:keypress={(e) => onKeyPress(e, button.href)}
+            on:click={() => goto(button.href)}>
+            <Icon icon={button.icon} />
+            <span>{button.label}</span>
+        </div>
+    {/each}
+</div>

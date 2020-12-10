@@ -20,7 +20,7 @@
             error = 'Bitte geben Sie ein positven Wert ein';
         } else {
             error = '';
-            await balance.setBalance(balance.calcBalance(addMoneyInput.value));
+            await balance.adjustBalance(addMoneyInput.value);
             balance = balance;
             addMoneyInput.value = null;
         }
