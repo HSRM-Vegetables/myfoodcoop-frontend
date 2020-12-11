@@ -19,14 +19,16 @@ export default class Stock {
 
     /**
      * Adds an item to the current stock
-     * 
      * @param {String} name The name of the item
      * @param {UnitType} unitType kg / piece. See src/scripts/UnitType.js
-     * @param {String} unitPrice The price of the item as a string. Decimals can be denoted by a comma or a point.
+     * @param {String} unitPrice The price of the item as a string.
+     * Decimals can be denoted by a comma or a point.
      * Will be cast to a float
-     * @param {String} quantity How many pieces of this item are available. Will be parsed to an integer
+     * @param {String} quantity How many pieces of this item are available.
+     * Will be parsed to an integer
      * @param {String} description Additional information for this item
-     * @returns {Boolean} true if item was added, false if it wasn't added (due to errors while parsing etc)
+     * @returns {Boolean} true if item was added, false if it wasn't added
+     * (due to errors while parsing etc)
      */
     addItem(name, unitType, unitPrice, quantity, description) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
