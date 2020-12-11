@@ -60,8 +60,8 @@
    }
 </script>
 <style>
-   .fix-button-width{
-   width: 230px;
+    .fix-button-width{
+        width: 230px;
    }
 </style>
 <div>

@@ -1,6 +1,7 @@
 import LocalStorageKeys from '../LocalStorageKeys';
 import ShoppingCartItem from './ShoppingCartItem';
 import { UnitType } from '../UnitType';
+import { moneyStyler } from '../Helper';
 
 export default class ShoppingCart {
     constructor() {
@@ -22,12 +23,10 @@ export default class ShoppingCart {
             return false;
         }
 
-        let unitPriceSanitized = unitPrice.replace(',', '.');
-        unitPriceSanitized = parseFloat(unitPriceSanitized);
+        const unitPriceSanitized = moneyStyler(unitPrice);
         if (Number.isNaN(unitPriceSanitized)) {
             return false;
         }
-        unitPriceSanitized = unitPriceSanitized.toFixed(2);
 
         const quantityParsed = parseInt(quantity, 10);
         if (Number.isNaN(quantityParsed)) {
