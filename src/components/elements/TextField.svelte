@@ -1,11 +1,11 @@
 <script>
-        export let value;
-        export let placeholder;
-        export let deco;
-        export let title;
-        export let type;
-        export let isError;
-    
+
+    export let value; // Get Value
+    export let placeholder; // Set placeholder
+    export let deco; // Set Deco for input field
+    export let title; // Set Lable
+    export let type; // Set input Type
+    export let isError; // Set Error class
 </script>
 <style>
     .balance-input-deco{
@@ -21,7 +21,9 @@
     }
 </style>
 
-<div class="has-text-left pb-2">{title}</div>
+<div class="has-text-left pb-2">
+    {title}
+</div>
 <div class="form-row is-relative">
     <input bind:this={value} class="input" type="{type}" placeholder="{placeholder}" class:error={isError}/>
     {#if deco}

@@ -1,6 +1,8 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
+    import {
+        mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText
+    } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
@@ -10,7 +12,10 @@
     $title = 'Stadtgemüse e.V.';
 
     function onKeyPress(event, href) {
-        if (event.code === 'Space' || event.code === 'Enter') {
+        if (
+            event.code === 'Space'
+            || event.code === 'Enter'
+        ) {
             goto(href);
         }
     }
