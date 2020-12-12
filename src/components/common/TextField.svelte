@@ -6,6 +6,7 @@
     export let type = ''; // Set input Type
     export let isError = ''; // Set Error class
 </script>
+
 <style>
     .balance-input-deco{
         position: absolute;

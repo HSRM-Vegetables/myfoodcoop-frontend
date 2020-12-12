@@ -2,8 +2,8 @@
    import { goto } from '@sapper/app';
    import { UnitType } from '../../scripts/UnitType';
    import Stock from '../../scripts/stock/Stock';
-   import TextField from '../elements/TextField.svelte';
-   import Switch from '../elements/Switch.svelte';
+   import TextField from '../common/TextField.svelte';
+   import Switch from '../common/Switch.svelte';
    
    let unitPriceElement;
    let quantityElement;
