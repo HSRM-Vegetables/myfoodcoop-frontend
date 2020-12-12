@@ -5,9 +5,9 @@
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
 
-    let unitPriceElement;
-    let quantityElement;
-    let articleElement;
+    let unitPriceTextField;
+    let quantityTextField;
+    let articleTextField;
     let descriptionElement;
     let unitType = UnitType.KILO;
 
@@ -24,42 +24,24 @@
     }
 
     function addItem() {
-        const item = new Stock();
-        const error = errorHandler(
-            articleElement,
-            unitPriceElement,
-            quantityElement
-        );
-
-        if (error) {
+        if (articleTextField.isValid() && unitPriceTextField.isValid() && quantityTextField.isValid()) {
+            const item = new Stock();
+        
             item.addItem(
-                articleElement.value,
+                articleTextField.getValue(),
                 unitType,
-                unitPriceElement.value,
-                quantityElement.value,
+                unitPriceTextField.getValue(),
+                quantityTextField.getValue(),
                 descriptionElement.value
             );
             goto('/stock/');
         }
     }
 
-    function errorHandler(...elements) {
-        let result = true;
-        elements.forEach((element) => {
-            if (element.value === '' || (!Number.isNaN(element.value) && element.value < 0)) {
-                result = false;
-                element.classList.add('error');
-            } else {
-                element.classList.remove('error');
-            }
-        });
-        return result;
-    }
-
     function clearInputs() {
-        articleElement.value = '';
-        unitPriceElement.value = '';
-        quantityElement.value = '';
+        articleTextField.clear();
+        unitPriceTextField.clear();
+        quantityTextField.clear();
         descriptionElement.value = '';
     }
 </script>
@@ -73,7 +55,7 @@
 <div>
     <div class="form">
         <div class="pt-4">
-            <TextField bind:value={articleElement} placeholder="Artikel" title="Artikel" />
+            <TextField bind:this={articleTextField} type="text" placeholder="Artikel" label="Artikel" />
         </div>
         <div class="form-row pt-4 has-text-centered">
             <div class="form-row">
@@ -85,10 +67,10 @@
             </div>
         </div>
         <div class="pt-4">
-            <TextField bind:value={unitPriceElement} type="number" placeholder="Warenpreis" title="Warenpreis" deco={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'} />
+            <TextField bind:this={unitPriceTextField} type="number" placeholder="Warenpreis" label="Warenpreis" decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'} minimum=0 />
         </div>
         <div class="pt-4">
-            <TextField bind:value={quantityElement} type="number" placeholder="Bestands Menge" title="Bestands Menge" deco={unitType === UnitType.KILO ? 'kg' : 'Stück'} />
+            <TextField bind:this={quantityTextField} type="number" placeholder="Bestands Menge" label="Bestands Menge" decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'} minimum=0 />
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
