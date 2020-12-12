@@ -25,12 +25,14 @@
 </style>
 
 <div>
-    {#if type === 'inline'}
-        <div class="inline-container">
-            <span>Guthaben:</span>
-            <span>{currentBalance}€</span>
-        </div>
-    {:else}
-        <span class="is-size-1">{currentBalance}€</span>
-    {/if}
+
+   {#if type === 'inline'}
+      <div class="inline-container">
+         <span>Guthaben:</span>
+         <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
+      </div>
+   {:else}
+      <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
+   {/if}
+
 </div>
