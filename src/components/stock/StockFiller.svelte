@@ -26,7 +26,7 @@
     function addItem() {
         if (articleTextField.isValid() && unitPriceTextField.isValid() && quantityTextField.isValid()) {
             const item = new Stock();
-        
+
             item.addItem(
                 articleTextField.getValue(),
                 unitType,

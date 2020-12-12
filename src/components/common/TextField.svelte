@@ -25,7 +25,7 @@
     export let minimum = '';
 
     let inputElement; // References the input field
-    let isInErrorState = false; // true, if the current input is not valid. 
+    let isInErrorState = false; // true, if the current input is not valid.
 
     export function clear() {
         inputElement.value = '';
@@ -35,10 +35,10 @@
         if (inputElement.value === '' || (!Number.isNaN(inputElement.value) && inputElement.value < 0)) {
             isInErrorState = true;
             return false;
-        } else {
-            isInErrorState = false;
-            return true;
         }
+
+        isInErrorState = false;
+        return true;
     }
 
     export function getValue() {
