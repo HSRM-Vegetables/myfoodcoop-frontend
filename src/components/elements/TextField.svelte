@@ -1,11 +1,10 @@
 <script>
-
-    export let value; // Get Value
+    export let value = ''; // Get Value
     export let placeholder; // Set placeholder
-    export let deco; // Set Deco for input field
+    export let deco = ''; // Set Deco for input field
     export let title; // Set Lable
-    export let type; // Set input Type
-    export let isError; // Set Error class
+    export let type = ''; // Set input Type
+    export let isError = ''; // Set Error class
 </script>
 <style>
     .balance-input-deco{
