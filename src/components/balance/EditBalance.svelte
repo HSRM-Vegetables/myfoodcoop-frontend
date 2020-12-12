@@ -1,27 +1,19 @@
 <script>
-    import { onMount } from 'svelte';
     import Balance from '../../scripts/Balance';
     import ShowBalance from './ShowBalance.svelte';
     
     let addMoneyInput;
     let error = '';
-    
-    let balance = {
-        currentBalance: 0,
-    };
-    
-    onMount(() => {
-        balance = new Balance();
-    });
-    
+
+    const balance = new Balance();
+
     async function addToBalance() {
         if (addMoneyInput.value < 0) {
             addMoneyInput.value = null;
             error = 'Bitte geben Sie ein positven Wert ein';
         } else {
             error = '';
-            await balance.adjustBalance(addMoneyInput.value);
-            balance = balance;
+            balance.currentBalance = await balance.topupBalance(addMoneyInput.value);
             addMoneyInput.value = null;
         }
     }
@@ -53,7 +45,7 @@
 </style>
 <section class="section">
     <div class="container has-text-centered">
-        <ShowBalance bind:currentBalance="{balance.currentBalance}" />
+        <ShowBalance bind:currentBalance={balance.currentBalance} />
         <div class="columns is-centered">
             <div class="column buttons pt-6">
                 <button class="button is-rounded" value="20" on:click="{updateInput}">20 €</button>

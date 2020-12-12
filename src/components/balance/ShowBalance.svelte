@@ -5,8 +5,9 @@
     export let currentBalance = 0;
     export let type = 'big'; // inline or big
 
+    const balance = new Balance();
+
     async function loadBalance() {
-        const balance = new Balance();
         currentBalance = await balance.getBalance();
     }
 

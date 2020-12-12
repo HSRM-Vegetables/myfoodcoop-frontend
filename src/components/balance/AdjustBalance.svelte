@@ -1,43 +1,39 @@
 <script>
-    import { onMount } from 'svelte';
+    import { goto } from '@sapper/app';
     import Balance from '../../scripts/Balance';
     import ShowBalance from './ShowBalance.svelte';
     
     let changeMoneyInput;
-    let balance = {
-        money: 0,
-    };
-    onMount(() => {
-        balance = new Balance();
-    });
+    const balance = new Balance();
     
-    function changeBalance() {
-        // create new value for Balance
-        balance.setBalance(changeMoneyInput.value);
+    async function changeBalance() {
+        balance.currentBalance = await balance.setBalance(changeMoneyInput.value);
     }
     
     function onEnterPress(event) {
         if (event.key === 'Enter') {
             changeBalance();
-            window.location.href = '/balance';
+            goto('/balance');
         }
     }
 </script>
+
 <style>
     .fix-button-width{
-    width: 230px;
+        width: 230px;
     }
     .balance-input-deco{
-    position: absolute;
-    font-size: 1rem;
-    color: #ccc6c6;
-    right: 30px;
-    top: 8px;
+        position: absolute;
+        font-size: 1rem;
+        color: #ccc6c6;
+        right: 30px;
+        top: 8px;
     }
 </style>
+
 <section class="section">
     <div class="has-text-centered">
-        <ShowBalance bind:currentBalance="{balance.money}" />
+        <ShowBalance bind:currentBalance="{balance.currentBalance}" />
         <div class="mt-6">
             <div class="has-text-left pb-2">Neues Guthaben</div>
             <div class=" is-relative">

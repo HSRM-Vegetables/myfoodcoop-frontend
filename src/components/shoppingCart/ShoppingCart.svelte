@@ -30,7 +30,7 @@
     }
 
     // create a purchase and go to the main page
-    function checkout() {
+    async function checkout() {
         const purchasApi = new PurchaseApi();
         purchasApi.addPurchase(new Purchase(
             uuid(),
@@ -38,7 +38,7 @@
             cart.cartItems
         ));
 
-        balance.adjustBalance(-cart.totalPrice());
+        await balance.withdrawBalance(cart.totalPrice());
         balance = balance;
         cart.clear();
         cart = cart; // tell svelte to update view
