@@ -8,3 +8,9 @@ $title = 'Bestand';
 </script>
 
 <ShowStock/>
+
+<hr>
+
+<div class="has-text-centered">
+    <a href="/" class="button is-link container">Zur Hauptseite</a>
+</div>
