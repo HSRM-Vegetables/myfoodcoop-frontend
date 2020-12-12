@@ -98,12 +98,12 @@
         </div>
         <hr />
         <div class="button-box has-text-centered">
-            <button on:click={addItem} class="button is-medium is-primary mb-4 fix-button-width"> Bestand hinzufügen
+            <button on:click={addItem} class="button is-primary mb-4 fix-button-width"> Bestand hinzufügen
             </button><br />
-            <button on:click={clearInputs} class="button is-medium is-danger mb-4 fix-button-width"> Eingabe löschen
+            <button on:click={clearInputs} class="button is-danger mb-4 fix-button-width"> Eingabe löschen
             </button><br />
             <div class="container has-text-centered mt-6">
-                <a href="/stock/" type="submit" class="is-medium button is-primary is-link fix-button-width">Zurück</a><br />
+                <a href="/stock/" type="submit" class="button is-primary is-link fix-button-width">Zurück</a><br />
             </div>
         </div>
     </div>
