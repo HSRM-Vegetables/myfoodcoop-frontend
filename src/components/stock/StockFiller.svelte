@@ -46,7 +46,7 @@
     function errorHandler(...elements) {
         let result = true;
         elements.forEach((element) => {
-            if (element.value === '') {
+            if (element.value === '' || (!Number.isNaN(element.value) && element.value < 0)) {
                 result = false;
                 element.classList.add('error');
             } else {
@@ -98,10 +98,8 @@
         </div>
         <hr />
         <div class="button-box has-text-centered">
-            <button on:click={addItem} class="button is-primary mb-4 fix-button-width"> Bestand hinzufügen
-            </button><br />
-            <button on:click={clearInputs} class="button is-danger mb-4 fix-button-width"> Eingabe löschen
-            </button><br />
+            <button on:click={addItem} class="button is-primary mb-4 fix-button-width">Bestand hinzufügen</button><br />
+            <button on:click={clearInputs} class="button is-danger mb-4 fix-button-width">Eingabe löschen</button><br />
             <div class="container has-text-centered mt-6">
                 <a href="/stock/" type="submit" class="button is-primary is-link fix-button-width">Zurück</a><br />
             </div>
