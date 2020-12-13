@@ -50,6 +50,15 @@
     .fix-button-width {
         width: 230px;
     }
+
+    .form-row {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .auto-margin {
+        margin: auto;
+    }
 </style>
 
 <div>
@@ -57,14 +66,12 @@
         <div class="pt-4">
             <TextField bind:this={articleTextField} type="text" placeholder="Artikel" label="Artikel" />
         </div>
-        <div class="form-row pt-4 has-text-centered">
-            <div class="form-row">
-                <div class="auto-margin">Stückpreis</div>
-                <div class="auto-margin">
-                    <Switch bind:checked={unitTypeBoolean} />
-                </div>
-                <div class="auto-margin">Kilopreis</div>
+        <div class="form-row pt-4">
+            <div class="auto-margin">Stückpreis</div>
+            <div class="auto-margin">
+                <Switch bind:checked={unitTypeBoolean} />
             </div>
+            <div class="auto-margin">Kilopreis</div>
         </div>
         <div class="pt-4">
             <TextField bind:this={unitPriceTextField} type="number" placeholder="Warenpreis" label="Warenpreis" decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'} minimum=0 />
