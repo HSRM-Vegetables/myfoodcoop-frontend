@@ -1,4 +1,5 @@
 import LocalStorageKeys from './LocalStorageKeys';
+import { moneyStyler } from './Helper';
 
 export default class Balance {
     constructor() {
@@ -17,9 +18,7 @@ export default class Balance {
 
     setBalance(money) {
         if (money !== null && money !== 'NaN' && money !== '' && money !== undefined) {
-            let balance = money.replace(',', '.');
-            balance = parseFloat(balance);
-            balance = balance.toFixed(2);
+            const balance = moneyStyler(money);
             this.currentBalance = balance;
             window.localStorage.setItem(LocalStorageKeys.BALANCE, balance);
         }
