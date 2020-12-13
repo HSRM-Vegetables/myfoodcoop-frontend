@@ -1,7 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
-    import Switch from './Switch.svelte';
+    import Switch from '../common/Switch.svelte';
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';

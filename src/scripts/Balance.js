@@ -1,7 +1,6 @@
 import { get } from 'svelte/store';
 import Api from './api/Api';
 import { name } from '../stores/user';
-
 export default class Balance {
     /**
      * Requests the current balance from the API

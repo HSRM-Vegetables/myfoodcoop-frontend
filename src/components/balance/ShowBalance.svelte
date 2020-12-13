@@ -1,18 +1,31 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, beforeUpdate } from 'svelte';
+    import { moneyStyler } from '../../scripts/Helper';
     import Balance from '../../scripts/Balance';
 
     export let currentBalance = 0;
     export let type = 'big'; // inline or big
 
     const balance = new Balance();
+    let mounted = false;
 
     async function loadBalance() {
         currentBalance = await balance.getBalance();
     }
 
     onMount(() => {
+        mounted = true;
+        
         loadBalance();
+    });
+    
+    beforeUpdate(() => {
+        if (!mounted) {
+            return;
+        }
+
+        // Style the currentBalance when this component updates
+        currentBalance = moneyStyler(currentBalance);
     });
 </script>
 
