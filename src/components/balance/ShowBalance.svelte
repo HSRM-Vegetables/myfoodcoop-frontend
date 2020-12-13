@@ -15,7 +15,7 @@
 
     onMount(() => {
         mounted = true;
-        
+
         loadBalance();
     });
     
