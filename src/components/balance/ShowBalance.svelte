@@ -1,14 +1,32 @@
 <script>
-   import { onMount } from 'svelte';
+   import { onMount, beforeUpdate } from 'svelte';
    import Balance from '../../scripts/Balance';
+   import { moneyStyler } from '../../scripts/Helper';
    
-   export let currentBalance = 0;
+   export let currentBalance; // if not externally bound, component uses localStorage value
    export let type = 'big'; // inline or big
 
+   let mounted = false;
+
    onMount(() => {
-       const balance = new Balance();
-       currentBalance = balance.money;
+      mounted = true;
+
+      // don't override externally bound value
+      if (currentBalance === null || currentBalance === undefined) {
+         const balance = new Balance();
+         currentBalance = balance.money;
+      }
    });
+   
+   beforeUpdate(() => {
+      if (!mounted) {
+         return;
+      }
+
+      // Style the currentBalance when this component updates
+      currentBalance = moneyStyler(currentBalance);
+   });
+   
 </script>
 
 <style>
