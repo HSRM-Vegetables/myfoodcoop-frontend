@@ -22,7 +22,6 @@ function printDevelopmentError(error) {
  */
 export function moneyStyler(money) {
     let result = money;
-    console.log(money);
     // Make sure we got a proper value
     if (money === null || money === undefined) {
         result = 0.0;

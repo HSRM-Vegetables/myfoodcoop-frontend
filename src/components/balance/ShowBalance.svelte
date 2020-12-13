@@ -9,24 +9,23 @@
    let mounted = false;
 
    onMount(() => {
-      mounted = true;
+       mounted = true;
 
-      // don't override externally bound value
-      if (currentBalance === null || currentBalance === undefined) {
-         const balance = new Balance();
-         currentBalance = balance.money;
-      }
+       // don't override externally bound value
+       if (currentBalance === null || currentBalance === undefined) {
+           const balance = new Balance();
+           currentBalance = balance.money;
+       }
    });
    
    beforeUpdate(() => {
-      if (!mounted) {
-         return;
-      }
+       if (!mounted) {
+           return;
+       }
 
-      // Style the currentBalance when this component updates
-      currentBalance = moneyStyler(currentBalance);
+       // Style the currentBalance when this component updates
+       currentBalance = moneyStyler(currentBalance);
    });
-   
 </script>
 
 <style>
