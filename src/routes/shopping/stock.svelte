@@ -21,8 +21,16 @@ $title = 'Bestand';
     <title>Bestand</title>
 </svelte:head>
 
-<StockList bind:stockItems={stock.stockItems} allowVisitPriceCalculator={true}/>
+<div class="has-text-centered mb-6">
+    {#if stock.stockItems.length > 0}
+        <StockList bind:stockItems={stock.stockItems} allowVisitPriceCalculator={true}/>
+    {:else}
+        <p>Der Bestand ist leer.</p>
+    {/if}
+</div>
+
+<hr />
 
 <div class="has-text-centered">
-    <a href="/shopping/cart" class="button is-primary">Zum Warenkorb</a>
+    <a href="/shopping/cart" class="button is-link">Zum Warenkorb</a>
 </div>
