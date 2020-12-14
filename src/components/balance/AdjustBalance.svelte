@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import TextField from '../../components/common/TextField.svelte'
     import Balance from '../../scripts/Balance';
     import ShowBalance from './ShowBalance.svelte';
     
@@ -7,13 +8,14 @@
     let balance = {
         money: 0,
     };
+
     onMount(() => {
         balance = new Balance();
     });
     
     function changeBalance() {
         // create new value for Balance
-        balance.setBalance(changeMoneyInput.value);
+        balance.setBalance(changeMoneyInput.getValue());
     }
     
     function onEnterPress(event) {
@@ -25,26 +27,13 @@
 </script>
 <style>
     .fix-button-width{
-    width: 230px;
-    }
-    .balance-input-deco{
-    position: absolute;
-    font-size: 1rem;
-    color: #ccc6c6;
-    right: 30px;
-    top: 8px;
+        width: 230px;
     }
 </style>
 <section class="section">
     <div class="has-text-centered">
         <ShowBalance bind:currentBalance="{balance.money}" />
-        <div class="mt-6">
-            <div class="has-text-left pb-2">Neues Guthaben</div>
-            <div class=" is-relative">
-                <input type="number" class="input balance-input" bind:this={changeMoneyInput} placeholder="0" on:keydown="{onEnterPress}" />  
-                <span class="balance-input-deco">€</span>
-            </div>
-        </div>
+        <TextField bind:this={changeMoneyInput} type="number" placeholder="0" decoration="€" label="Neues Guthaben" onKeyDown={onEnterPress}/>
         <a href="/balance"  type="submit" class="button is-primary fix-button-width mt-3" on:click={changeBalance}>Guthaben anpassen</a><br>
         <a href="/balance" type="submit" class="button is-danger fix-button-width mt-3">Abbruch</a><br>
     </div>
