@@ -52,7 +52,7 @@
             unitPriceElement.value,
             quantityElement.value
         );
-        goto('/shopping-cart');
+        goto('/shopping/cart');
     }
 
     function clearInputs() {
@@ -199,7 +199,7 @@
                 Eingabe löschen
             </button>
             <button
-                on:click={() => goto('/shopping-cart')}
+                on:click={() => goto('/shopping/cart')}
                 class="button is-link is-medium mb-4">
                 Zurück zum Warenkorb
             </button>

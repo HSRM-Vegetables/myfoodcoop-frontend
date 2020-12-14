@@ -35,7 +35,7 @@
             // var will be used in another file
             /* eslint-disable no-unused-vars */
             $currentShoppingCartItem = shoppingCartItem;
-            goto('/price-calculator');
+            goto('/shopping/price-calculator');
         }
     }
 </script>

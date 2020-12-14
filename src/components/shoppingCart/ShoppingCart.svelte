@@ -60,7 +60,7 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
     
-    <button class="button is-primary mt-6" on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
+    <button class="button is-primary mt-6" on:click={() => goto('/shopping/price-calculator')}>Artikel hinzufügen</button>
 
     <hr>
 
