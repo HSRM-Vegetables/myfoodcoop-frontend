@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import Balance from '../../scripts/Balance';
+    import TextField from '../common/TextField.svelte';
     import ShowBalance from './ShowBalance.svelte';
     
     let inputValue;
@@ -16,15 +17,18 @@
     });
     
     function addToBalance() {
-        if (addMoneyInput.value < 0) {
-            inputValue = null;
+        let additionalAmount = addMoneyInput.getValue();
+
+        if (additionalAmount <= 0) {
+            inputValue = 0;
             error = 'Bitte geben Sie ein positven Wert ein';
         } else {
             error = '';
-            balance.setBalance(balance.calcBalance(addMoneyInput.value));
+            balance.setBalance(balance.calcBalance(additionalAmount));
             balance = balance;
-            inputValue = null;
+            inputValue = 0;
         }
+        addMoneyInput.clear();
     }
     
     function updateInput() {
@@ -39,17 +43,11 @@
 </script>
 <style>
     .fix-button-width{
-    width: 230px;
+        width: 230px;
     }
-    .balance-input-deco{
-    position: absolute;
-    font-size: 1rem;
-    color: #ccc6c6;
-    right: 30px;
-    top: 8px;
-    }
+
     .help{
-    color: #f14668;
+        color: #f14668;
     }
 </style>
 <section class="section">
@@ -63,10 +61,8 @@
             </div>
         </div>
         <div class="mt-6">
-            <div class="has-text-left pb-2">Guthaben</div>
             <div class=" is-relative">
-                <input type="number" class="input balance-input" bind:this={addMoneyInput} value="{inputValue}" placeholder="0" min="0" on:keydown="{onEnterPress}" />  
-                <span class="balance-input-deco">€</span>
+                <TextField label="Guthaben" decoration="€" bind:this={addMoneyInput} type="number" placeholder="0" minimum="0" onKeyDown={onEnterPress} value={inputValue} />
                 <span class="help has-text-left">{error}</span>
             </div>
         </div>
