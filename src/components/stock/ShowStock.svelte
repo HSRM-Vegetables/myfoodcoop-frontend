@@ -14,7 +14,7 @@
 
 <div class="has-text-centered">
     {#if stock.stockItems.length > 0}
-        <StockList bind:cartItems={stock.stockItems}/>
+        <StockList bind:stockItems={stock.stockItems}/>
     {:else}
         <p>Der Bestand ist leer.</p>
     {/if}
