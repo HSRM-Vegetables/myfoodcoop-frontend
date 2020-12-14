@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import TextField from '../../components/common/TextField.svelte'
+    import TextField from '../common/TextField.svelte';
     import Balance from '../../scripts/Balance';
     import ShowBalance from './ShowBalance.svelte';
     

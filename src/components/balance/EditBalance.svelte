@@ -17,7 +17,7 @@
     });
     
     function addToBalance() {
-        let additionalAmount = addMoneyInput.getValue();
+        const additionalAmount = addMoneyInput.getValue();
 
         if (additionalAmount <= 0) {
             inputValue = 0;
