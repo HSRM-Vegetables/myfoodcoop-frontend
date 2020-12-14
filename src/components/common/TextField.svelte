@@ -17,7 +17,7 @@
     /**
      * Default html type of an input field
      */
-    export let type;
+    export let type = '';
 
     /**
      * Default input element minimum value
@@ -28,6 +28,16 @@
      * Event handler for keydown event
      */
     export let onKeyDown = () => {};
+
+    /**
+    * Event handler for change event
+    */
+    export let onChange = () => {};
+
+    /**
+    * Event handler for input event
+    */
+    export let onInput = () => {};
 
     /**
      * Value to display
@@ -42,9 +52,11 @@
     }
 
     export function isValid() {
+        onChange();
+
         if (
-            inputElement.value === '' ||
-            (!Number.isNaN(inputElement.value) && inputElement.value < 0)
+            inputElement.value === ''
+            || (!Number.isNaN(inputElement.value) && inputElement.value < 0)
         ) {
             isInErrorState = true;
             return false;
@@ -86,6 +98,7 @@
         {placeholder}
         min={minimum}
         on:change={isValid}
+        on:input={onInput}
         on:keydown={onKeyDown}
         {value}
     />
