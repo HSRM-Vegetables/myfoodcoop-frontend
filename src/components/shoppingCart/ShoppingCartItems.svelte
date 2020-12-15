@@ -34,7 +34,7 @@
         if (allowVisitPriceCalculator) {
             // var will be used in another file
             /* eslint-disable no-unused-vars */
-            $currentShoppingItem = shoppingCartItem;
+            $currentShoppingItem = shoppingCartItem.name;
             goto('/shopping/price-calculator');
         }
     }
