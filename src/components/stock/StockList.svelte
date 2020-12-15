@@ -3,9 +3,11 @@
 
     export let cartItems;
     let del = false;
+    let id = undefined;
 
     function dell() {
         console.log("delete");
+        console.log(id);
     }
 </script>
 
@@ -26,7 +28,7 @@
 
 {#each cartItems as item}
     <hr />
-    <div on:click= {() => del=true} class="columns">
+    <div on:click= {() => {del=true; id = cartItems.indexOf(item) }} class="columns">
         <div class="column is-half has-text-left">{item.name}</div>
         <div class="column is-one-quarter has-text-right">
             {#if item.unitType === UnitType.PIECE}
