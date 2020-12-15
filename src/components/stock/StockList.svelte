@@ -2,6 +2,11 @@
     import { UnitType } from '../../scripts/UnitType';
 
     export let cartItems;
+
+
+    function dell() {
+        console.log("delete");
+    }
 </script>
 
 <style>
@@ -21,7 +26,7 @@
 
 {#each cartItems as item}
     <hr />
-    <div on:click= {() => console.log("Click")} class="columns">
+    <div on:click= {() => console.log("click")} class="columns">
         <div class="column is-half has-text-left">{item.name}</div>
         <div class="column is-one-quarter has-text-right">
             {#if item.unitType === UnitType.PIECE}
@@ -37,5 +42,9 @@
                 <span>{item.unitPrice} € / kg</span>
             {/if}
         </div>
+        <div>
+            <button on:click ={() => dell()} class="button is-danger">Delete</button>
+        </div>
+     
     </div>
 {/each}
