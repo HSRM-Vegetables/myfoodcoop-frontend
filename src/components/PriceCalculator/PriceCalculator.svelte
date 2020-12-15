@@ -24,7 +24,7 @@
     onMount(() => {
         // get the current values by article name
         stockItem = new Stock().getItem($currentShoppingItem);
-        
+
         // changes the link back if coming from cart
         if ($currentShoppingItemQuantity !== undefined) {
             linkBack = '/shopping/cart';
@@ -103,9 +103,11 @@
             {stockItem.name}
         </div>
 
-        <div class="box">
-            {stockItem.description}
-        </div>
+        {#if stockItem.description.length > 0}
+            <div class="box">
+                {stockItem.description}
+            </div>
+        {/if}
 
         <div>
             Warenpreis<br />
