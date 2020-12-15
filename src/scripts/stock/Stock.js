@@ -53,4 +53,13 @@ export default class Stock {
 
         return true;
     }
+
+    /**
+     * Returns an StockItem Object from the current stock, identified by the name
+     * @param {String} name The name of the item
+     * @returns {(StockItem|undefined)} StockItem Object or undefined if no item found
+     */
+    getItem(name) {
+        return this.stockItems.find((element) => element.name === name);
+    }
 }

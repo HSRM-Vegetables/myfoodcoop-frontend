@@ -1,7 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { UnitType } from '../../scripts/UnitType';
-    import { currentShoppingCartItem } from '../../stores/priceCalculator';
+    import { currentShoppingItem } from '../../stores/priceCalculator';
 
     /**
      * An Array of StockItems to be displayed
@@ -17,7 +17,7 @@
         if (allowVisitPriceCalculator) {
             // var will be used in another file
             /* eslint-disable no-unused-vars */
-            $currentShoppingCartItem = item;
+            $currentShoppingItem = item.name;
             goto('/shopping/price-calculator');
         }
     }

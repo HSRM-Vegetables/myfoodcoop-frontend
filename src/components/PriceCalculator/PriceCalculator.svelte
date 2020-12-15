@@ -1,41 +1,38 @@
 <script>
     import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
-    import Switch from '../common/Switch.svelte';
-    import { currentShoppingCartItem } from '../../stores/priceCalculator';
+    import { currentShoppingItem } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
+    import Stock from '../../scripts/stock/Stock';
 
-    let unitPriceElement;
     let quantityElement;
-    let articleElement;
     let currentTotal = 0;
-    let unitTypeBoolean;
-    let unitType;
 
-    $: untiTypeChanged(unitTypeBoolean);
+    // Stub item because onMount is called after the first render
+    let stockItem = {
+        name: '',
+        unitType: UnitType.KILO,
+        unitPrice: 0,
+        quantity: 0,
+        description: ''
+    };
 
     onMount(() => {
+        // get the current values by article name
+        stockItem = new Stock().getItem($currentShoppingItem);
+
         calcTotalPrice();
     });
 
     onDestroy(() => {
-        $currentShoppingCartItem = undefined;
+        $currentShoppingItem = undefined;
     });
 
-    function untiTypeChanged(value) {
-        if (value === true) {
-            unitType = UnitType.KILO;
-        } else {
-            unitType = UnitType.PIECE;
-        }
-    }
-
     function calcTotalPrice() {
-        const unitPrice = moneyStyler(unitPriceElement.getValue());
+        const unitPrice = stockItem.unitPrice;
         const quantity = quantityElement.getValue();
 
         if (
@@ -51,28 +48,16 @@
     function addItem() {
         const cart = new ShoppingCart();
         cart.addItem(
-            articleElement.getValue(),
-            unitType,
-            unitPriceElement.getValue(),
+            stockItem.name,
+            stockItem.unitType,
+            stockItem.unitPrice,
             quantityElement.getValue(),
         );
         goto('/shopping/cart');
     }
-
-    function clearInputs() {
-        articleElement.clear();
-        unitPriceElement.clear();
-        quantityElement.clear();
-        currentTotal = 0;
-    }
 </script>
 
 <style>
-    h1 {
-        font-weight: bold;
-        text-align: center;
-        font-size: 2em;
-    }
 
     h2 {
         font-weight: bold;
@@ -83,15 +68,6 @@
     .button-box {
         display: flex;
         flex-flow: column nowrap;
-    }
-
-    .auto-margin {
-        margin: auto;
-    }
-
-    .form-row {
-        display: flex;
-        flex-flow: row nowrap;
     }
 
     .form > div {
@@ -112,53 +88,40 @@
 
 <div>
     <div class="form">
-        <h1>Preisrechner</h1>
 
         <ShowBalance type="inline" />
 
         <hr />
 
-        <div>
-            <TextField
-                label="Artikel"
-                placeholder="Artikel"
-                bind:this={articleElement}
-                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''}
-            />
+        <div class="is-size-3 mb-4">
+            {stockItem.name}
         </div>
 
-        <div class="form-row">
-            <div class="auto-margin">Stückpreis</div>
-            <div class="auto-margin">
-                <Switch bind:checked={unitTypeBoolean} />
-            </div>
-            <div class="auto-margin">Kilopreis</div>
+        <div class="box">
+            {stockItem.description}
         </div>
 
         <div>
-            <TextField 
-                label='Warenpreis'
-                placeholder='0'
-                decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
-                bind:this={unitPriceElement}
-                type='number'
-                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
-                onChange={() => calcTotalPrice()}
-                onInput={() => calcTotalPrice()} 
-            />
+            Warenpreis<br />
+            <span class="is-size-4">
+                {stockItem.unitPrice} {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+            </span>
         </div>
 
         <div>
             <TextField 
                 label="Menge"
                 placeholder="0"
-                decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 type="number"
                 bind:this={quantityElement}
-                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
+                value={stockItem !== undefined && stockItem.quantity < 1 ? stockItem.quantity : 1}
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
             />
+            <span class="is-size-7">
+                Menge im Bestand: {stockItem.quantity} {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
+            </span>
         </div>
 
         <hr />
@@ -175,14 +138,9 @@
                 Warenkorb hinzufügen
             </button>
             <button
-                on:click={clearInputs}
-                class="button is-medium is-danger mb-4">
-                Eingabe löschen
-            </button>
-            <button
-                on:click={() => goto('/shopping/cart')}
+                on:click={() => goto('/shopping/stock')}
                 class="button is-link is-medium mb-4">
-                Zurück zum Warenkorb
+                Zurück
             </button>
         </div>
     </div>
