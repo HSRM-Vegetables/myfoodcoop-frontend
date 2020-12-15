@@ -23,7 +23,6 @@
     onMount(() => {
         // get the current values by article name
         stockItem = new Stock().getItem($currentShoppingItem);
-
         calcTotalPrice();
     });
 
@@ -115,7 +114,7 @@
                 decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 type="number"
                 bind:this={quantityElement}
-                value={stockItem !== undefined && stockItem.quantity < 1 ? stockItem.quantity : 1}
+                value={''}
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
             />
