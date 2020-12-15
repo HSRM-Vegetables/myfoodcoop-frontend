@@ -21,7 +21,7 @@
 
 {#each cartItems as item}
     <hr />
-    <div class="columns">
+    <div on:click= {() => console.log("Click")} class="columns">
         <div class="column is-half has-text-left">{item.name}</div>
         <div class="column is-one-quarter has-text-right">
             {#if item.unitType === UnitType.PIECE}
