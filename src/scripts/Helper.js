@@ -10,7 +10,7 @@ function printDevelopmentError(error) {
     }
 
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.info(error);
 }
 
 /**

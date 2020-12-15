@@ -5,8 +5,9 @@
     import { currentShoppingCartItem } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';
-
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
+    import TextField from '../common/TextField.svelte';
+    import { moneyStyler } from '../../scripts/Helper';
 
     let unitPriceElement;
     let quantityElement;
@@ -34,12 +35,15 @@
     }
 
     function calcTotalPrice() {
+        const unitPrice = moneyStyler(unitPriceElement.getValue());
+        const quantity = quantityElement.getValue();
+
         if (
-            !Number.isNaN(unitPriceElement.value)
-            && !Number.isNaN(quantityElement.value)
+            !Number.isNaN(unitPrice)
+            && !Number.isNaN(quantity)
         ) {
             currentTotal = (
-                unitPriceElement.value * quantityElement.value
+                unitPrice * quantity
             ).toFixed(2);
         }
     }
@@ -47,18 +51,18 @@
     function addItem() {
         const cart = new ShoppingCart();
         cart.addItem(
-            articleElement.value,
+            articleElement.getValue(),
             unitType,
-            unitPriceElement.value,
-            quantityElement.value
+            unitPriceElement.getValue(),
+            quantityElement.getValue(),
         );
         goto('/shopping/cart');
     }
 
     function clearInputs() {
-        articleElement.value = '';
-        unitPriceElement.value = '';
-        quantityElement.value = '';
+        articleElement.clear();
+        unitPriceElement.clear();
+        quantityElement.clear();
         currentTotal = 0;
     }
 </script>
@@ -94,11 +98,6 @@
         margin-bottom: 3em;
     }
 
-    .unit-text {
-        white-space: nowrap;
-        padding-left: 1em;
-    }
-
     .total-container {
         display: flex;
         flex-flow: column nowrap;
@@ -109,11 +108,6 @@
         font-weight: bold;
         font-size: 4em;
     }
-
-    .min-width {
-        min-width: 5em;
-    }
-
 </style>
 
 <div>
@@ -125,13 +119,12 @@
         <hr />
 
         <div>
-            <span>Artikel</span>
-            <input
-                class="input"
-                type="text"
+            <TextField
+                label="Artikel"
                 placeholder="Artikel"
                 bind:this={articleElement}
-                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''} />
+                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.name : ''}
+            />
         </div>
 
         <div class="form-row">
@@ -143,41 +136,29 @@
         </div>
 
         <div>
-            <span>Warenpreis</span>
-            <div class="form-row">
-                <input
-                    bind:this={unitPriceElement}
-                    class="input"
-                    type="number"
-                    placeholder="Warenpreis"
-                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
-                    on:change={() => calcTotalPrice()}
-                    on:input={() => calcTotalPrice()} />
-                <div class="auto-margin min-width">
-                    {#if unitType === UnitType.KILO}
-                        <span class="unit-text">€ / kg</span>
-                    {:else}<span class="unit-text">€ / Stück</span>{/if}
-                </div>
-            </div>
+            <TextField 
+                label='Warenpreis'
+                placeholder='0'
+                decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+                bind:this={unitPriceElement}
+                type='number'
+                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.unitPrice : ''}
+                onChange={() => calcTotalPrice()}
+                onInput={() => calcTotalPrice()} 
+            />
         </div>
 
         <div>
-            <span>Menge</span>
-            <div class="form-row">
-                <input
-                    bind:this={quantityElement}
-                    class="input"
-                    type="number"
-                    placeholder="Menge"
-                    value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
-                    on:change={() => calcTotalPrice()}
-                    on:input={() => calcTotalPrice()} />
-                <div class="auto-margin min-width">
-                    {#if unitType === UnitType.KILO}
-                        <span class="unit-text">kg</span>
-                    {:else}<span class="unit-text">Stück</span>{/if}
-                </div>
-            </div>
+            <TextField 
+                label="Menge"
+                placeholder="0"
+                decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                type="number"
+                bind:this={quantityElement}
+                value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
+                onChange={() => calcTotalPrice()}
+                onInput={() => calcTotalPrice()}
+            />
         </div>
 
         <hr />
