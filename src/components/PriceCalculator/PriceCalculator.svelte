@@ -1,7 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
-    import { currentShoppingItem } from '../../stores/priceCalculator';
+    import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
@@ -10,6 +10,7 @@
 
     let quantityElement;
     let currentTotal = 0;
+    let linkBack = '/shopping/stock';
 
     // Stub item because onMount is called after the first render
     let stockItem = {
@@ -23,11 +24,17 @@
     onMount(() => {
         // get the current values by article name
         stockItem = new Stock().getItem($currentShoppingItem);
+        
+        // changes the link back if coming from cart
+        if ($currentShoppingItemQuantity !== undefined) {
+            linkBack = '/shopping/cart';
+        }
         calcTotalPrice();
     });
 
     onDestroy(() => {
         $currentShoppingItem = undefined;
+        $currentShoppingItemQuantity = undefined;
     });
 
     function calcTotalPrice() {
@@ -114,7 +121,7 @@
                 decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 type="number"
                 bind:this={quantityElement}
-                value={''}
+                value={$currentShoppingItemQuantity === undefined ? '' : $currentShoppingItemQuantity}
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
             />
@@ -137,7 +144,7 @@
                 Warenkorb hinzufügen
             </button>
             <button
-                on:click={() => goto('/shopping/stock')}
+                on:click={() => goto(linkBack)}
                 class="button is-link is-medium mb-4">
                 Zurück
             </button>
