@@ -38,15 +38,14 @@
     });
 
     function calcTotalPrice() {
-        const unitPrice = stockItem.unitPrice;
         const quantity = quantityElement.getValue();
 
         if (
-            !Number.isNaN(unitPrice)
+            !Number.isNaN(stockItem.unitPrice)
             && !Number.isNaN(quantity)
         ) {
             currentTotal = (
-                unitPrice * quantity
+                stockItem.unitPrice * quantity
             ).toFixed(2);
         }
     }
