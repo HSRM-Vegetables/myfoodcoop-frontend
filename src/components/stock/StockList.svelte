@@ -1,13 +1,18 @@
 <script>
     import { UnitType } from '../../scripts/UnitType';
+    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
 
     export let cartItems;
  
-    function RemoveListElement {
-        index = 2;
-        cartItems = cartItems.filter(element.id => element.id != index);
-        console.log(cartItems);  
+    function RemoveListElement(id) {
+        const cart = window.localStorage.getItem(LocalStorageKeys.STOCK);
+        console.log(cart);
+        cartItems = cartItems.filter((item) => item.id !== id);
+        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
+        console.log(cart);
     }
+
+    
 </script>
 
 <style>
@@ -44,7 +49,7 @@
             {/if}
         </div>
         <div>
-            <button on:click ={() => RemoveListElement()} class="button is-danger">Delete</button>
+            <button on:click ={() => RemoveListElement(item.id)} class="button is-danger">Delete</button>
         </div>
      
     </div>
