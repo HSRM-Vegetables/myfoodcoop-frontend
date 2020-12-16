@@ -62,4 +62,26 @@ export default class Stock {
     getItem(name) {
         return this.stockItems.find((element) => element.name === name);
     }
+
+    /**
+     * Remove the specified quantity from stock
+     * @param {string} name The name of the item
+     * @param {number} quantity quantity to be remove from the item
+     */
+    removeQuantityFromItem(name, quantity) {
+        // get the specified item
+        const stockItem = this.getItem(name);
+
+        // reduce its quantity
+        stockItem.quantity -= quantity;
+
+        // remove the item from the list
+        this.stockItems = this.stockItems.filter((item) => item.name !== name);
+
+        // re-add the item to the list
+        this.stockItems = [...this.stockItems, stockItem];
+
+        // save the items
+        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
+    }
 }

@@ -10,6 +10,7 @@
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
+    import Stock from '../../scripts/stock/Stock';
     
     // Stub item because onMount is called after the first render
     let cart = {
@@ -21,10 +22,12 @@
     };
     let balanceUpdateInProgress = false;
     let requestError;
-
+    let stock;
+    
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
+        stock = new Stock();
     });
 
     // removes an item from the cart
@@ -46,6 +49,11 @@
                 new Date(),
                 cart.cartItems
             ));
+
+            // update stock
+            cart.cartItems.forEach((item) => {
+                stock.removeQuantityFromItem(item.name, item.quantity);
+            });
 
             cart.clear();
             goto('/');
