@@ -51,14 +51,16 @@
     }
 
     function addItem() {
-        const cart = new ShoppingCart();
-        cart.addItem(
-            stockItem.name,
-            stockItem.unitType,
-            stockItem.unitPrice,
-            quantityElement.getValue(),
-        );
-        goto('/shopping/cart');
+        if (quantityElement.isValid()) {
+            const cart = new ShoppingCart();
+            cart.addItem(
+                stockItem.name,
+                stockItem.unitType,
+                stockItem.unitPrice,
+                quantityElement.getValue(),
+            );
+            goto('/shopping/cart');
+        }
     }
 </script>
 
@@ -125,6 +127,7 @@
                 value={$currentShoppingItemQuantity || ''}
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
+                minimum="0"
             />
             <span class="is-size-7">
                 Menge im Bestand: {stockItem.quantity} {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
