@@ -56,10 +56,7 @@
         </div>
         <div class="column is-one-quarter has-text-left">
         {#if allowRemoval}
-            <button class="button is-white" on:click={() => removeListElement(item.id)}>
-                <span class="icon">
-                    <Icon icon={mdiDelete}/>
-                </span>
+            <button class="delete" on:click={() => removeListElement(item.id)}>
             </button>
         {/if}
         </div>
