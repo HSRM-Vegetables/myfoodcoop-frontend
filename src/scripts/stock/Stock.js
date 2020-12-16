@@ -19,7 +19,7 @@ export default class Stock {
 
     /**
      * Adds an item to the current stock
-     * @param {Number} id The id of the item
+     * @param {String} id The id of the item
      * @param {String} name The name of the item
      * @param {UnitType} unitType kg / piece. See src/scripts/UnitType.js
      * @param {String} unitPrice The price of the item as a string.
@@ -53,5 +53,10 @@ export default class Stock {
         localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
 
         return true;
+    }
+
+    removeItem(id) {
+        this.stockItems = this.stockItems.filter((item) => item.id !== id);
+        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
     }
 }
