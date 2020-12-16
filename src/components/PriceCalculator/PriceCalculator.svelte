@@ -51,7 +51,7 @@
     }
 
     function addItem() {
-        if (quantityElement.isValid() && unitPriceElement.isValid()) {
+        if (quantityElement.isValid()) {
             const cart = new ShoppingCart();
             cart.addItem(
                 stockItem.name,
