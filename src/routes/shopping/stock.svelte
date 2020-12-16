@@ -14,9 +14,9 @@
         stock = new Stock();
     });
 
-/* eslint-disable prefer-const */
-/* eslint-disable no-unused-vars */
-$title = 'Bestand';
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Bestand';
 </script>
 
 <svelte:head>
