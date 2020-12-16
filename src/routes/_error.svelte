@@ -1,5 +1,5 @@
 <script>
-    import robo from 'images/robo.gif';
+    import robby from 'images/robby.gif';
 
     export let status;
     export let error;
@@ -21,14 +21,15 @@
 </style>
 
 <div class="container has-text-centered">
-    <img src={robo} alt="Robo der Error Roboter" />
+    <img src={robby} alt="Robby der Error Roboter" />
     <h1>{status}: Uups, du hast das Internt kaputt gemacht</h1>
     <p class="mt-4 mb-2">
-        War nur ein Spaß. Aber es scheint, dass Robo, Ihr persönlicher Roboter,
-        die Seite, nach der Sie suchen, nicht finden kann. Bitte stellen Sie
-        sicher, dass Sie die richtige Adresse eingegeben haben, oder gehen Sie
-        mit Hilfe des Button zurück.
+        War nur ein Spaß. Aber es scheint, dass Robby dein persönlicher Roboter, 
+        die Seite nach der du suchst, nicht finden kann. 
+        Bitte stelle sicher, dass du die richtige Adresse eingegeben hast, 
+        oder gehe mit Hilfe des Buttons zurück zur Hauptseite.
     </p>
+
     <a href="/" class="button is-primary mb-4">Zurück zur Hauptseite</a><br />
 </div>
 
