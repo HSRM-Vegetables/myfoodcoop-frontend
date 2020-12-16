@@ -32,6 +32,8 @@
 
     {#each stockItems as item}
         <hr />
+        <!-- If the component is initalized without onClick, onClick is "undefined". 
+            The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
         <div class="columns" class:is-clickable="{!!onClick}" on:click="{() => !!onClick && onClick(item)}">
             <div class="column is-half has-text-left">{item.name}</div>
             <div class="column is-one-quarter has-text-right">
