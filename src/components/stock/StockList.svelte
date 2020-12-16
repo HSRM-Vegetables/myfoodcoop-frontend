@@ -1,6 +1,8 @@
 <script>
     import { UnitType } from '../../scripts/UnitType';
     import LocalStorageKeys from '../../scripts/LocalStorageKeys';
+    import Swal from 'sweetalert2';
+
     import Icon from '../common/Icon.svelte';
     import { mdiDelete } from '@mdi/js';
 
@@ -8,9 +10,22 @@
     export let allowRemoval = false;
  
     function removeListElement(id) {
-        cartItems = cartItems.filter((item) => item.id !== id);
-        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
-        console.log(cart);
+        Swal.fire({
+        title: 'Artikel löschen?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            console.log("Ok");
+ 
+        }
+})
+        // cartItems = cartItems.filter((item) => item.id !== id);
+        // localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
+        // console.log(cart);
     }
 
     
