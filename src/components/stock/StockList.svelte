@@ -2,12 +2,16 @@
     import { UnitType } from '../../scripts/UnitType';
 
     export let cartItems;
-    let del = false;
-    let id = undefined;
+    let id;
+    let test = [];
+    let value = 2;
+    let i = -1;
+    
 
-    function dell() {
-        console.log("delete");
-        console.log(id);
+    function dell(index) {
+        console.log(index);
+        cartItems = cartItems.filter(element => cartItems.indexOf(element) != index);
+        console.log(cartItems);  
     }
 </script>
 
@@ -28,7 +32,7 @@
 
 {#each cartItems as item}
     <hr />
-    <div on:click= {() => {del=true; id = cartItems.indexOf(item) }} class="columns">
+    <div class="columns">
         <div class="column is-half has-text-left">{item.name}</div>
         <div class="column is-one-quarter has-text-right">
             {#if item.unitType === UnitType.PIECE}
@@ -45,9 +49,7 @@
             {/if}
         </div>
         <div>
-        {#if del}
-            <button on:click ={() => dell()} class="button is-danger">Delete</button>
-        {/if}
+            <button on:click ={() => dell(cartItems.indexOf(item))} class="button is-danger">Delete</button>
         </div>
      
     </div>
