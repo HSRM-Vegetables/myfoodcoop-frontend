@@ -4,6 +4,7 @@
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
+    import uuid from 'uuid';
 
     let unitPriceTextField;
     let quantityTextField;
@@ -26,10 +27,9 @@
     function addItem() {
         if (articleTextField.isValid() && unitPriceTextField.isValid() && quantityTextField.isValid()) {
             const item = new Stock();
-            let id = Math.floor(Math.random() * 10000);
 
             item.addItem(
-                id,
+                uuid(),
                 articleTextField.getValue(),
                 unitType,
                 unitPriceTextField.getValue(),
