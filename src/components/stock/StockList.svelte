@@ -22,29 +22,36 @@
     }
 </style>
 
-<div class="columns is-hidden-mobile has-text-weight-bold">
-    <div class="column is-half has-text-left">Artikel</div>
-    <div class="column is-one-quarter has-text-right">Menge</div>
-    <div class="column is-one-quarter has-text-right">Preis</div>
-</div>
+{#if stockItems && stockItems.length > 0}
 
-{#each stockItems as item}
-    <hr />
-    <div class="columns" class:is-clickable="{!!onClick}" on:click="{() => !!onClick && onClick(item)}">
-        <div class="column is-half has-text-left">{item.name}</div>
-        <div class="column is-one-quarter has-text-right">
-            {#if item.unitType === UnitType.PIECE}
-                <span>{item.quantity} Stück</span>
-            {:else}
-                <span>{item.quantity} kg</span>
-            {/if}
-        </div>
-        <div class="column is-one-quarter has-text-right">
-            {#if item.unitType === UnitType.PIECE}
-                <span>{item.unitPrice} € / Stück</span>
-            {:else}
-                <span>{item.unitPrice} € / kg</span>
-            {/if}
-        </div>
+    <div class="columns is-hidden-mobile has-text-weight-bold">
+        <div class="column is-half has-text-left">Artikel</div>
+        <div class="column is-one-quarter has-text-right">Menge</div>
+        <div class="column is-one-quarter has-text-right">Preis</div>
     </div>
-{/each}
+
+    {#each stockItems as item}
+        <hr />
+        <div class="columns" class:is-clickable="{!!onClick}" on:click="{() => !!onClick && onClick(item)}">
+            <div class="column is-half has-text-left">{item.name}</div>
+            <div class="column is-one-quarter has-text-right">
+                {#if item.unitType === UnitType.PIECE}
+                    <span>{item.quantity} Stück</span>
+                {:else}
+                    <span>{item.quantity} kg</span>
+                {/if}
+            </div>
+            <div class="column is-one-quarter has-text-right">
+                {#if item.unitType === UnitType.PIECE}
+                    <span>{item.unitPrice} € / Stück</span>
+                {:else}
+                    <span>{item.unitPrice} € / kg</span>
+                {/if}
+            </div>
+        </div>
+    {/each}
+
+{:else}
+    <p>Der Bestand ist leer.</p>
+{/if}
+

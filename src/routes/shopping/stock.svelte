@@ -24,19 +24,15 @@ $title = 'Bestand';
 </svelte:head>
 
 <div class="has-text-centered mb-6">
-    {#if stock.stockItems.length > 0}
-        <StockList 
-            bind:stockItems={stock.stockItems}
-            onClick={(item) => {
-                // var will be used in another file
-                /* eslint-disable no-unused-vars */
-                $currentShoppingItem = item.name;
-                goto('/shopping/price-calculator');
-            }}
-        />
-    {:else}
-        <p>Der Bestand ist leer.</p>
-    {/if}
+    <StockList 
+        bind:stockItems={stock.stockItems}
+        onClick={(item) => {
+            // var will be used in another file
+            /* eslint-disable no-unused-vars */
+            $currentShoppingItem = item.name;
+            goto('/shopping/price-calculator');
+        }}
+    />
 </div>
 
 <hr />
