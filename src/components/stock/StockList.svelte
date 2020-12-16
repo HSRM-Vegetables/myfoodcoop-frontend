@@ -10,8 +10,7 @@
      * Event Handler, triggerd by click on an item
      * The item is passed as paramter
      */
-    export let onClick = undefined;
-
+    export let onClick;
 </script>
 
 <style>
