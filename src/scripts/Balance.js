@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import Api from './api/Api';
+import Fetch from './api/Fetch';
 import { name } from '../stores/user';
 
 export default class Balance {
@@ -8,7 +8,7 @@ export default class Balance {
      * @returns {number} current balance
      */
     async getBalance() {
-        const response = await Api.get(`balance/${get(name)}`);
+        const response = await Fetch.get(`balance/${get(name)}`);
         this.currentBalance = response.balance;
         return this.currentBalance;
     }
@@ -20,7 +20,7 @@ export default class Balance {
      */
     async setBalance(newBalance) {
         if (newBalance !== null && newBalance !== 'NaN' && newBalance !== '' && newBalance !== undefined) {
-            const response = await Api.patch(`balance/${get(name)}`, JSON.stringify({
+            const response = await Fetch.patch(`balance/${get(name)}`, JSON.stringify({
                 balance: newBalance
             }));
             this.currentBalance = response.balance;
@@ -35,7 +35,7 @@ export default class Balance {
      */
     async topupBalance(topupAmount) {
         if (topupAmount !== null && topupAmount !== 'NaN' && topupAmount !== '' && topupAmount !== undefined) {
-            const response = await Api.post(`balance/${get(name)}/topup`, JSON.stringify({
+            const response = await Fetch.post(`balance/${get(name)}/topup`, JSON.stringify({
                 amount: topupAmount
             }));
             this.currentBalance = response.balance;
@@ -50,7 +50,7 @@ export default class Balance {
      */
     async withdrawBalance(withDrawAmount) {
         if (withDrawAmount !== null && withDrawAmount !== 'NaN' && withDrawAmount !== '' && withDrawAmount !== undefined) {
-            const response = await Api.post(`balance/${get(name)}/withdraw`, JSON.stringify({
+            const response = await Fetch.post(`balance/${get(name)}/withdraw`, JSON.stringify({
                 amount: withDrawAmount
             }));
             this.currentBalance = response.balance;

@@ -1,13 +1,26 @@
 <script>
     import { goto } from '@sapper/app';
     import Balance from '../../scripts/Balance';
+    import Button from '../common/Button.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import ShowBalance from './ShowBalance.svelte';
     
     let changeMoneyInput;
+    let blanceUpdateInProgress = false;
+    let requestError;
     const balance = new Balance();
     
     async function changeBalance() {
-        balance.currentBalance = await balance.setBalance(changeMoneyInput.value);
+        blanceUpdateInProgress = true;
+
+        try {
+            balance.currentBalance = await balance.setBalance(changeMoneyInput.value);
+            goto('/balance');
+        } catch (error) {
+            requestError = error;
+        } finally {
+            blanceUpdateInProgress = false;
+        }
     }
     
     function onEnterPress(event) {
@@ -41,10 +54,15 @@
                 <span class="balance-input-deco">€</span>
             </div>
         </div>
-        <a href="/balance"  type="submit" class="button is-primary fix-button-width mt-3" on:click={changeBalance}>Guthaben anpassen</a><br>
+
+        <Button text="Guthaben anpassen" class="is-primary mt-3" size="medium" on:click={changeBalance} isLoading={blanceUpdateInProgress} />
+        <br />
         <a href="/balance" type="submit" class="button is-danger fix-button-width mt-3">Abbruch</a><br>
+        <br />
+
+        <ErrorModal error={requestError} />
     </div>
 </section>
 <div class="container has-text-centered mt-6">
-    <a href="/" type="submit" class="button is-primary">Zur Hauptseite</a><br>
+    <Button href="/" text="Zur Hauptseite" class="is-link" size="medium" />
 </div>

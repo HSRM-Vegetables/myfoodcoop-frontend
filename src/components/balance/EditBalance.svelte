@@ -1,20 +1,33 @@
 <script>
     import Balance from '../../scripts/Balance';
+    import Button from '../common/Button.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import ShowBalance from './ShowBalance.svelte';
     
     let addMoneyInput;
-    let error = '';
+    let valueHint = '';
+    let requestError;
 
     const balance = new Balance();
+    let blanceUpdateInProgress = false;
 
     async function addToBalance() {
         if (addMoneyInput.value < 0) {
             addMoneyInput.value = null;
-            error = 'Bitte geben Sie ein positven Wert ein';
+            valueHint = 'Bitte geben Sie ein positven Wert ein';
         } else {
-            error = '';
-            balance.currentBalance = await balance.topupBalance(addMoneyInput.value);
-            addMoneyInput.value = null;
+            valueHint = '';
+
+            blanceUpdateInProgress = true;
+            try {
+                balance.currentBalance = await balance.topupBalance(addMoneyInput.value);
+
+                addMoneyInput.value = null;
+            } catch (error) {
+                requestError = error;
+            } finally {
+                blanceUpdateInProgress = false;
+            }
         }
     }
     
@@ -28,10 +41,8 @@
         }
     }
 </script>
+
 <style>
-    .fix-button-width{
-        width: 230px;
-    }
     .balance-input-deco{
         position: absolute;
         font-size: 1rem;
@@ -43,6 +54,7 @@
         color: #f14668;
     }
 </style>
+
 <section class="section">
     <div class="container has-text-centered">
         <ShowBalance bind:currentBalance={balance.currentBalance} />
@@ -58,13 +70,19 @@
             <div class=" is-relative">
                 <input type="number" class="input balance-input" bind:this={addMoneyInput} placeholder="0" min="0" on:keydown="{onEnterPress}" />  
                 <span class="balance-input-deco">€</span>
-                <span class="help has-text-left">{error}</span>
+                <span class="help has-text-left">{valueHint}</span>
             </div>
         </div>
-        <button type="submit" class="button is-primary fix-button-width mt-3" on:click="{addToBalance}">Guthaben hinzufügen</button><br>
-        <a href="/adjust-balance" type="submit" class="button is-primary fix-button-width mt-3">Guthaben anpassen</a><br>
+
+        <Button text="Guthaben hinzufügen" class="is-primary mt-3" size="medium" on:click={addToBalance} isLoading={blanceUpdateInProgress} />
+        <br />
+        <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="medium" />
+        <br />
     </div>
+
+    <ErrorModal error={requestError} />
 </section>
+
 <div class="container has-text-centered mt-6">
-    <a href="/" type="submit" class="button is-primary is-link">Zur Hauptseite</a><br>
+    <Button href="/" text="Zur Hauptseite" class="is-link" size="medium" />
 </div>

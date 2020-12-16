@@ -1,14 +1,13 @@
 import { url, version } from './ApiConfig';
 
-export default class Api {
+export default class Fetch {
     /**
      * Sends a GET request to the api
      * @param {string} subpath Path relativ to the version number of the api
      * @returns The JSON response of the request
      */
     static async get(subpath) {
-        const response = await fetch(`${url}/${version}/${subpath}`);
-        return response.json();
+        return Fetch.request('GET', subpath, undefined);
     }
 
     /**
@@ -18,7 +17,7 @@ export default class Api {
      * @returns The JSON response of the request
      */
     static async post(subpath, content) {
-        return Api.request('POST', subpath, content);
+        return Fetch.request('POST', subpath, content);
     }
 
     /**
@@ -28,7 +27,7 @@ export default class Api {
      * @returns The JSON response of the request
      */
     static async patch(subpath, content) {
-        return Api.request('PATCH', subpath, content);
+        return Fetch.request('PATCH', subpath, content);
     }
 
     /**
@@ -42,10 +41,14 @@ export default class Api {
         const response = await fetch(`${url}/${version}/${subpath}`, {
             method: type,
             headers: {
-                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
             },
             body: content
         });
+        if (response.status >= 400) {
+            throw await response.json();
+        }
         return response.json();
     }
 }

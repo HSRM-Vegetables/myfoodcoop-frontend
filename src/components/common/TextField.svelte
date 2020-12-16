@@ -64,7 +64,7 @@
     <span>{label}</span>
 </div>
 <div class="form-row is-relative">
-    <input bind:this={inputElement} class:error={isInErrorState} class="input" type="{type}" placeholder="{placeholder}" min={minimum}  on:change={isValid} />
+    <input bind:this={inputElement} class:error={isInErrorState} class="input" type="{type}" placeholder="{placeholder}" min={minimum} on:change={isValid} />
     {#if decoration}
         <span class="balance-input-deco">{decoration}</span>
     {/if}
