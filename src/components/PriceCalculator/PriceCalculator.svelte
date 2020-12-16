@@ -102,7 +102,7 @@
             {stockItem.name}
         </div>
 
-        {#if stockItem.description.length > 0}
+        {#if stockItem.description}
             <div class="box">
                 {stockItem.description}
             </div>
