@@ -24,7 +24,7 @@
         {
             label: 'Einkaufen',
             icon: mdiBasket,
-            href: '/shopping-cart',
+            href: '/shopping/cart',
         },
         {
             label: 'Vorherige Einkäufe',
