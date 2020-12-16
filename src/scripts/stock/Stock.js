@@ -19,6 +19,7 @@ export default class Stock {
 
     /**
      * Adds an item to the current stock
+     * @param {Number} id The id of the item
      * @param {String} name The name of the item
      * @param {UnitType} unitType kg / piece. See src/scripts/UnitType.js
      * @param {String} unitPrice The price of the item as a string.
@@ -30,7 +31,7 @@ export default class Stock {
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    addItem(name, unitType, unitPrice, quantity, description) {
+    addItem(id, name, unitType, unitPrice, quantity, description) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
         }
@@ -46,7 +47,7 @@ export default class Stock {
         }
 
         this.stockItems = [...this.stockItems,
-            new StockItem(name, unitType, unitPriceSanitized, quantity, description)
+            new StockItem(id, name, unitType, unitPriceSanitized, quantity, description)
         ];
 
         localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));

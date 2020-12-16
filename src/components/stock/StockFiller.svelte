@@ -26,8 +26,10 @@
     function addItem() {
         if (articleTextField.isValid() && unitPriceTextField.isValid() && quantityTextField.isValid()) {
             const item = new Stock();
+            let id = Math.floor(Math.random() * 10000);
 
             item.addItem(
+                id,
                 articleTextField.getValue(),
                 unitType,
                 unitPriceTextField.getValue(),
