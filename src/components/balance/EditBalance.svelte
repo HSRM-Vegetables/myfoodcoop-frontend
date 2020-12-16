@@ -15,7 +15,7 @@
 
     async function addToBalance() {
         const additionalAmount = addMoneyInput.getValue();
-        
+
         if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
         } else {
