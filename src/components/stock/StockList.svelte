@@ -1,7 +1,5 @@
 <script>
-    import { goto } from '@sapper/app';
     import { UnitType } from '../../scripts/UnitType';
-    import { currentShoppingItem } from '../../stores/priceCalculator';
 
     /**
      * An Array of StockItems to be displayed
@@ -9,18 +7,11 @@
     export let stockItems;
 
     /**
-     * Allows the user to click on an article to open it in the price calculator
+     * Event Handler, triggerd by click on an item
+     * The item is passed as paramter
      */
-    export let allowVisitPriceCalculator = false;
+    export let onClick = undefined;
 
-    function goToPriceCalculator(item) {
-        if (allowVisitPriceCalculator) {
-            // var will be used in another file
-            /* eslint-disable no-unused-vars */
-            $currentShoppingItem = item.name;
-            goto('/shopping/price-calculator');
-        }
-    }
 </script>
 
 <style>
@@ -40,7 +31,7 @@
 
 {#each stockItems as item}
     <hr />
-    <div class="columns" class:is-clickable="{allowVisitPriceCalculator}" on:click="{() => goToPriceCalculator(item)}">
+    <div class="columns" class:is-clickable="{!!onClick}" on:click="{() => !!onClick && onClick(item)}">
         <div class="column is-half has-text-left">{item.name}</div>
         <div class="column is-one-quarter has-text-right">
             {#if item.unitType === UnitType.PIECE}
