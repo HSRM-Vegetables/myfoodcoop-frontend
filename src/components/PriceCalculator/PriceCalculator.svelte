@@ -49,14 +49,16 @@
     }
 
     function addItem() {
-        const cart = new ShoppingCart();
-        cart.addItem(
-            articleElement.getValue(),
-            unitType,
-            unitPriceElement.getValue(),
-            quantityElement.getValue(),
-        );
-        goto('/shopping-cart');
+        if (quantityElement.isValid() && unitPriceElement.isValid()) {
+            const cart = new ShoppingCart();
+            cart.addItem(
+                articleElement.getValue(),
+                unitType,
+                unitPriceElement.getValue(),
+                quantityElement.getValue(),
+            );
+            goto('/shopping-cart');
+        }
     }
 
     function clearInputs() {
@@ -139,6 +141,7 @@
             <TextField 
                 label='Warenpreis'
                 placeholder='0'
+                minimum="0"
                 decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                 bind:this={unitPriceElement}
                 type='number'
@@ -157,7 +160,8 @@
                 bind:this={quantityElement}
                 value={$currentShoppingCartItem !== undefined ? $currentShoppingCartItem.quantity : ''}
                 onChange={() => calcTotalPrice()}
-                onInput={() => calcTotalPrice()}
+                onInput={() => calcTotalPrice()}  
+                minimum="0"
             />
         </div>
 
