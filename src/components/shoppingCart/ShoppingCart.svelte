@@ -43,11 +43,11 @@
 
         balance.setBalance(balance.calcBalance(cart.totalPrice(), '-'));
         balance = balance;
-        
+
         // update stock
         cart.cartItems.forEach((item) => {
-            stock.removeQuantityFromItem(item.name, item.quantity)
-        })
+            stock.removeQuantityFromItem(item.name, item.quantity);
+        });
 
         cart.clear();
         cart = cart; // tell svelte to update view
