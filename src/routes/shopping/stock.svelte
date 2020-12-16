@@ -19,10 +19,6 @@
     $title = 'Bestand';
 </script>
 
-<svelte:head>
-    <title>Bestand</title>
-</svelte:head>
-
 <div class="has-text-centered mb-6">
     <StockList 
         bind:stockItems={stock.stockItems}
