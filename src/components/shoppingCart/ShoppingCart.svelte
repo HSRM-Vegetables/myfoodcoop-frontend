@@ -70,7 +70,7 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
     
-    <Button href="/price-calculator" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
+    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
 
     <hr>
 

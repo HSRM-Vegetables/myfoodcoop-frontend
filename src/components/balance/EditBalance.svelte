@@ -2,27 +2,30 @@
     import Balance from '../../scripts/Balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
+    import TextField from '../common/TextField.svelte';
     import ShowBalance from './ShowBalance.svelte';
     
     let addMoneyInput;
     let valueHint = '';
+    let inputValue;
     let requestError;
 
     const balance = new Balance();
     let blanceUpdateInProgress = false;
 
     async function addToBalance() {
-        if (addMoneyInput.value < 0) {
-            addMoneyInput.value = null;
+        const additionalAmount = addMoneyInput.getValue();
+        
+        if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
         } else {
             valueHint = '';
 
             blanceUpdateInProgress = true;
             try {
-                balance.currentBalance = await balance.topupBalance(addMoneyInput.value);
+                balance.currentBalance = await balance.topupBalance(additionalAmount);
 
-                addMoneyInput.value = null;
+                inputValue = undefined;
             } catch (error) {
                 requestError = error;
             } finally {
@@ -32,7 +35,7 @@
     }
     
     function updateInput() {
-        addMoneyInput.value = this.value;
+        inputValue = this.value;
     }
     
     function onEnterPress(event) {
@@ -43,14 +46,7 @@
 </script>
 
 <style>
-    .balance-input-deco{
-        position: absolute;
-        font-size: 1rem;
-        color: #ccc6c6;
-        right: 30px;
-        top: 8px;
-    }
-    .help{
+    .help {
         color: #f14668;
     }
 </style>
@@ -66,10 +62,8 @@
             </div>
         </div>
         <div class="mt-6">
-            <div class="has-text-left pb-2">Guthaben</div>
             <div class=" is-relative">
-                <input type="number" class="input balance-input" bind:this={addMoneyInput} placeholder="0" min="0" on:keydown="{onEnterPress}" />  
-                <span class="balance-input-deco">€</span>
+                <TextField label="Guthaben" decoration="€" bind:this={addMoneyInput} type="number" placeholder="0" minimum="0" onKeyDown={onEnterPress} value={inputValue} />
                 <span class="help has-text-left">{valueHint}</span>
             </div>
         </div>

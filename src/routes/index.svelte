@@ -25,7 +25,7 @@
         {
             label: 'Einkaufen',
             icon: mdiBasket,
-            href: '/shopping-cart',
+            href: '/shopping/cart',
         },
         {
             label: 'Vorherige Einkäufe',
@@ -64,6 +64,7 @@
         background: #375a7f;
         color: white;
         border: 3px solid black;
+        cursor: pointer;
         max-width: 10em;
         border-radius: 20%;
         display: flex;

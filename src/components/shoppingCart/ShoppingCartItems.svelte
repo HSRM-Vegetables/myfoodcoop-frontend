@@ -3,7 +3,7 @@
     import { goto } from '@sapper/app';
     import { createEventDispatcher } from 'svelte';
     import Icon from '../common/Icon.svelte';
-    import { currentShoppingCartItem } from '../../stores/priceCalculator';
+    import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     
     /**
@@ -34,8 +34,9 @@
         if (allowVisitPriceCalculator) {
             // var will be used in another file
             /* eslint-disable no-unused-vars */
-            $currentShoppingCartItem = shoppingCartItem;
-            goto('/price-calculator');
+            $currentShoppingItem = shoppingCartItem.name;
+            $currentShoppingItemQuantity = shoppingCartItem.quantity;
+            goto('/shopping/price-calculator');
         }
     }
 </script>
