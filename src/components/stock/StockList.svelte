@@ -1,12 +1,13 @@
 <script>
     import { UnitType } from '../../scripts/UnitType';
     import LocalStorageKeys from '../../scripts/LocalStorageKeys';
+    import Icon from '../common/Icon.svelte';
+    import { mdiDelete } from '@mdi/js';
 
     export let cartItems;
+    export let allowRemoval = false;
  
-    function RemoveListElement(id) {
-        const cart = window.localStorage.getItem(LocalStorageKeys.STOCK);
-        console.log(cart);
+    function removeListElement(id) {
         cartItems = cartItems.filter((item) => item.id !== id);
         localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
         console.log(cart);
@@ -28,6 +29,11 @@
     <div class="column is-half has-text-left">Artikel</div>
     <div class="column is-one-quarter has-text-right">Menge</div>
     <div class="column is-one-quarter has-text-right">Preis</div>
+    <div class="column is-one-quarter has-text-right"><button class="button" on:click={() => allowRemoval = !allowRemoval}>
+        <span class="icon">
+            <Icon icon={mdiDelete}/>
+        </span>
+    </button></div>
 </div>
 
 {#each cartItems as item}
@@ -48,8 +54,14 @@
                 <span>{item.unitPrice} € / kg</span>
             {/if}
         </div>
-        <div>
-            <button on:click ={() => RemoveListElement(item.id)} class="button is-danger">Delete</button>
+        <div class="column is-one-quarter has-text-left">
+        {#if allowRemoval}
+            <button class="button is-white" on:click={() => removeListElement(item.id)}>
+                <span class="icon">
+                    <Icon icon={mdiDelete}/>
+                </span>
+            </button>
+        {/if}
         </div>
      
     </div>
