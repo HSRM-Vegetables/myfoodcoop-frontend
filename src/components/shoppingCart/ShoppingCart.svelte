@@ -8,6 +8,7 @@
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
+    import Stock from '../../scripts/stock/Stock';
     
     // Stub item because onMount is called after the first render
     let cart = {
@@ -17,9 +18,11 @@
     let balance = {
         money: 0,
     };
+    let stock;
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
+        stock = new Stock();
     });
 
     // removes an item from the cart
@@ -40,6 +43,12 @@
 
         balance.setBalance(balance.calcBalance(cart.totalPrice(), '-'));
         balance = balance;
+
+        // update stock
+        cart.cartItems.forEach((item) => {
+            stock.removeQuantityFromItem(item.name, item.quantity);
+        });
+
         cart.clear();
         cart = cart; // tell svelte to update view
 
