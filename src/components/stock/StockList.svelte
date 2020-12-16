@@ -16,16 +16,15 @@
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Löschen',
+        cancelButtonText: 'Abbruch'
         }).then((result) => {
         if (result.isConfirmed) {
-            console.log("Ok");
+            cartItems = cartItems.filter((item) => item.id !== id);
+            localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
  
         }
 })
-        // cartItems = cartItems.filter((item) => item.id !== id);
-        // localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
-        // console.log(cart);
     }
 
     
