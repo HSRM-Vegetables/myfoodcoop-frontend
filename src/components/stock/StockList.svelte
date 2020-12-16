@@ -2,15 +2,10 @@
     import { UnitType } from '../../scripts/UnitType';
 
     export let cartItems;
-    let id;
-    let test = [];
-    let value = 2;
-    let i = -1;
-    
-
-    function dell(index) {
-        console.log(index);
-        cartItems = cartItems.filter(element => cartItems.indexOf(element) != index);
+ 
+    function RemoveListElement {
+        index = 2;
+        cartItems = cartItems.filter(element.id => element.id != index);
         console.log(cartItems);  
     }
 </script>
@@ -49,7 +44,7 @@
             {/if}
         </div>
         <div>
-            <button on:click ={() => dell(cartItems.indexOf(item))} class="button is-danger">Delete</button>
+            <button on:click ={() => RemoveListElement()} class="button is-danger">Delete</button>
         </div>
      
     </div>
