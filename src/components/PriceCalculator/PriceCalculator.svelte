@@ -122,7 +122,7 @@
                 decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 type="number"
                 bind:this={quantityElement}
-                value={$currentShoppingItemQuantity === undefined ? '' : $currentShoppingItemQuantity}
+                value={$currentShoppingItemQuantity ? $currentShoppingItemQuantity : ''}
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
             />
