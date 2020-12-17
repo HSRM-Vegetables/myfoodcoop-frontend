@@ -9,6 +9,7 @@
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Stock from '../../scripts/stock/Stock';
+    import { moneyStyler } from '../../scripts/Helper';
     
     // Stub item because onMount is called after the first render
     let cart = {
@@ -74,7 +75,7 @@
     <hr>
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
-    <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart && cart.totalPrice() ? balance.money - cart.totalPrice() : balance.money} €</p>
+    <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart ? moneyStyler(balance.money - cart.totalPrice()) : moneyStyler(balance.money)} €</p>
 
     {#if cart.cartItems.length > 0}
         <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
