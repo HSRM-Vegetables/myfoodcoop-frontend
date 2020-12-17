@@ -1,11 +1,12 @@
 <script>
     import { goto } from '@sapper/app';
     import {
-        mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText
+        mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText
     } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
+    import { name } from '../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -35,6 +36,11 @@
             label: 'Guthaben verwalten',
             icon: mdiPiggyBank,
             href: '/balance',
+        },
+        {
+            label: 'Benutzerdaten',
+            icon: mdiAccount,
+            href: '/profile',
         },
         {
             label: 'Bestand',
@@ -75,9 +81,9 @@
     }
 </style>
 
-<svelte:head>
-    <title>{$title}</title>
-</svelte:head>
+<span class="is-size-4">Hallo {$name}!</span>
+
+<hr />
 
 <ShowBalance type="inline" />
 

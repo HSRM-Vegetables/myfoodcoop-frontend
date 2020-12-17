@@ -8,6 +8,8 @@
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
+    import Button from '../common/Button.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import Stock from '../../scripts/stock/Stock';
     
     // Stub item because onMount is called after the first render
@@ -18,7 +20,10 @@
     let balance = {
         money: 0,
     };
+    let balanceUpdateInProgress = false;
+    let requestError;
     let stock;
+    
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
@@ -33,26 +38,30 @@
     }
 
     // create a purchase and go to the main page
-    function checkout() {
-        const purchasApi = new PurchaseApi();
-        purchasApi.addPurchase(new Purchase(
-            uuid(),
-            new Date(),
-            cart.cartItems
-        ));
+    async function checkout() {
+        try {
+            balanceUpdateInProgress = true;
+            balance.currentBalance = await balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
-        balance.setBalance(balance.calcBalance(cart.totalPrice(), '-'));
-        balance = balance;
+            const purchaseApi = new PurchaseApi();
+            purchaseApi.addPurchase(new Purchase(
+                uuid(),
+                new Date(),
+                cart.cartItems
+            ));
 
-        // update stock
-        cart.cartItems.forEach((item) => {
-            stock.removeQuantityFromItem(item.name, item.quantity);
-        });
+            // update stock
+            cart.cartItems.forEach((item) => {
+                stock.removeQuantityFromItem(item.name, item.quantity);
+            });
 
-        cart.clear();
-        cart = cart; // tell svelte to update view
-
-        goto('/');
+            cart.clear();
+            goto('/');
+        } catch (error) {
+            requestError = error;
+        } finally {
+            balanceUpdateInProgress = false;
+        }
     }
 </script>
 
@@ -69,7 +78,7 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
     
-    <button class="button is-primary mt-6" on:click={() => goto('/shopping/stock')}>Artikel hinzufügen</button>
+    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
 
     <hr>
 
@@ -77,6 +86,8 @@
     <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart && cart.totalPrice() ? balance.money - cart.totalPrice() : balance.money} €</p>
 
     {#if cart.cartItems.length > 0}
-        <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
+        <Button text="Kaufen" class="is-primary mt-5" size="medium" on:click={checkout} isLoading={balanceUpdateInProgress} />
     {/if}
+
+    <ErrorModal error={requestError} />
 </div>

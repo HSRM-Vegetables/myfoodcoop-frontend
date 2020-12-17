@@ -44,6 +44,11 @@
      */
     export let value = '';
 
+    /**
+     * Disables the input field
+     */
+    export let disabled = false;
+
     let inputElement; // References the input field
     let isInErrorState = false; // true, if the current input is not valid.
 
@@ -100,6 +105,7 @@
         on:change={isValid}
         on:input={onInput}
         on:keydown={onKeyDown}
+        disabled={disabled}
         {value}
     />
     {#if decoration}

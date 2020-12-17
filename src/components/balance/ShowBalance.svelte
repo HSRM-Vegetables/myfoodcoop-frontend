@@ -1,50 +1,64 @@
 <script>
-   import { onMount, beforeUpdate } from 'svelte';
-   import Balance from '../../scripts/Balance';
-   import { moneyStyler } from '../../scripts/Helper';
-   
-   export let currentBalance; // if not externally bound, component uses localStorage value
-   export let type = 'big'; // inline or big
+    import { onMount, beforeUpdate } from 'svelte';
+    import { moneyStyler } from '../../scripts/Helper';
+    import Balance from '../../scripts/Balance';
+    import ErrorModal from '../common/ErrorModal.svelte';
 
-   let mounted = false;
+    export let currentBalance = 0;
+    export let type = 'big'; // inline or big
 
-   onMount(() => {
-       mounted = true;
+    const balance = new Balance();
+    let mounted = false;
+    let balanceIsLoading = false;
+    let requestError;
 
-       // don't override externally bound value
-       if (currentBalance === null || currentBalance === undefined) {
-           const balance = new Balance();
-           currentBalance = balance.money;
-       }
-   });
-   
-   beforeUpdate(() => {
-       if (!mounted) {
-           return;
-       }
+    async function loadBalance() {
+        balanceIsLoading = true;
+        try {
+            currentBalance = await balance.getBalance();
+        } catch (error) {
+            requestError = error;
+        } finally {
+            balanceIsLoading = false;
+        }
+    }
 
-       // Style the currentBalance when this component updates
-       currentBalance = moneyStyler(currentBalance);
-   });
+    onMount(() => {
+        mounted = true;
+
+        loadBalance();
+    });
+    
+    beforeUpdate(() => {
+        if (!mounted) {
+            return;
+        }
+
+        // Style the currentBalance when this component updates
+        currentBalance = moneyStyler(currentBalance);
+    });
 </script>
 
 <style>
-   .inline-container {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-   }
+    .inline-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
 </style>
 
 <div>
-
-   {#if type === 'inline'}
-      <div class="inline-container">
-         <span>Guthaben:</span>
-         <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
-      </div>
-   {:else}
-      <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
-   {/if}
-
+    {#if balanceIsLoading === true}
+        <span>Guthaben wird geladen...</span>
+    {:else}
+        {#if type === 'inline'}
+            <div class="inline-container">
+                <span>Guthaben:</span>
+                <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
+            </div>
+        {:else}
+            <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
+        {/if}
+    {/if}
+    <ErrorModal error={requestError} />
 </div>
