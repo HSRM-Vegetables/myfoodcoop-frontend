@@ -8,6 +8,10 @@
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
+    import Button from '../common/Button.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
+    import Stock from '../../scripts/stock/Stock';
+    import { moneyStyler } from '../../scripts/Helper';
     
     // Stub item because onMount is called after the first render
     let cart = {
@@ -17,33 +21,61 @@
     let balance = {
         money: 0,
     };
+    let balanceUpdateInProgress = false;
+    let requestError;
+    let stock;
+    let balanceAfterPurchase;
+
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
+        stock = new Stock();
+        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     });
+
+    async function updateBalanceAfterPurchase() {
+        try {
+            const currentBalance = await balance.getBalance();
+            balanceAfterPurchase = moneyStyler(currentBalance - cart.totalPrice());
+        } catch (error) {
+            balanceAfterPurchase = 0.0;
+        }
+    }
 
     // removes an item from the cart
     function removeItem(event) {
         const itemName = event.detail.name;
         cart.removeItem(itemName);
         cart = cart; // tell svelte to update view
+
+        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     }
 
     // create a purchase and go to the main page
-    function checkout() {
-        const purchasApi = new PurchaseApi();
-        purchasApi.addPurchase(new Purchase(
-            uuid(),
-            new Date(),
-            cart.cartItems
-        ));
+    async function checkout() {
+        try {
+            balanceUpdateInProgress = true;
+            balance.currentBalance = await balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
-        balance.setBalance(balance.calcBalance(cart.totalPrice(), '-'));
-        balance = balance;
-        cart.clear();
-        cart = cart; // tell svelte to update view
+            const purchaseApi = new PurchaseApi();
+            purchaseApi.addPurchase(new Purchase(
+                uuid(),
+                new Date(),
+                cart.cartItems
+            ));
 
-        goto('/');
+            // update stock
+            cart.cartItems.forEach((item) => {
+                stock.removeQuantityFromItem(item.name, item.quantity);
+            });
+
+            cart.clear();
+            goto('/');
+        } catch (error) {
+            requestError = error;
+        } finally {
+            balanceUpdateInProgress = false;
+        }
     }
 </script>
 
@@ -60,14 +92,20 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
     
-    <button class="button is-primary mt-6" on:click={() => goto('price-calculator')}>Artikel hinzufügen</button>
+    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
 
     <hr>
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
-    <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart && cart.totalPrice() ? balance.money - cart.totalPrice() : balance.money} €</p>
+
+    {#if balanceAfterPurchase}
+        <p class="is-size-7 mt-3">Guthaben nach Kauf: {balanceAfterPurchase} €</p>
+    {/if}
+
 
     {#if cart.cartItems.length > 0}
-        <button class="button is-primary mt-5" type="submit" on:click={checkout}>Kaufen</button>
+        <Button text="Kaufen" class="is-primary mt-5" size="medium" on:click={checkout} isLoading={balanceUpdateInProgress} />
     {/if}
+
+    <ErrorModal error={requestError} />
 </div>

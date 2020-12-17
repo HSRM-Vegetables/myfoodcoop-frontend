@@ -1,3 +1,4 @@
 import { writable } from 'svelte/store';
 
-export const currentShoppingCartItem = writable(undefined);
+export const currentShoppingItem = writable(undefined);
+export const currentShoppingItemQuantity = writable(undefined);
