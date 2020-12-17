@@ -24,18 +24,31 @@
     let balanceUpdateInProgress = false;
     let requestError;
     let stock;
-    
+    let balanceAfterPurchase;
+
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
         stock = new Stock();
+        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     });
+
+    async function updateBalanceAfterPurchase() {
+        try {
+            const currentBalance = await balance.getBalance();
+            balanceAfterPurchase = moneyStyler(currentBalance - cart.totalPrice());
+        } catch (error) {
+            balanceAfterPurchase = 0.0;
+        }
+    }
 
     // removes an item from the cart
     function removeItem(event) {
         const itemName = event.detail.name;
         cart.removeItem(itemName);
         cart = cart; // tell svelte to update view
+
+        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     }
 
     // create a purchase and go to the main page
@@ -84,7 +97,11 @@
     <hr>
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
-    <p class="is-size-7 mt-3">Guthaben nach Kauf: {cart ? moneyStyler(balance.money - cart.totalPrice()) : moneyStyler(balance.money)} €</p>
+
+    {#if balanceAfterPurchase}
+        <p class="is-size-7 mt-3">Guthaben nach Kauf: {balanceAfterPurchase} €</p>
+    {/if}
+
 
     {#if cart.cartItems.length > 0}
         <Button text="Kaufen" class="is-primary mt-5" size="medium" on:click={checkout} isLoading={balanceUpdateInProgress} />
