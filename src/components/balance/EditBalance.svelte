@@ -4,7 +4,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
     import ShowBalance from './ShowBalance.svelte';
-    
+
     let addMoneyInput;
     let valueHint = '';
     let inputValue;
@@ -33,11 +33,11 @@
             balanceUpdateInProgress = false;
         }
     }
-    
+
     function updateInput() {
         inputValue = this.value;
     }
-    
+
     function onEnterPress(event) {
         if (event.key === 'Enter') {
             addToBalance();
@@ -56,19 +56,35 @@
         <ShowBalance bind:currentBalance={balance.currentBalance} />
         <div class="columns is-centered">
             <div class="column buttons pt-6">
-                <button class="button is-rounded" value="20" on:click="{updateInput}">20 €</button>
-                <button class="button is-rounded" value="50" on:click="{updateInput}">50 €</button>
-                <button class="button is-rounded" value="100" on:click="{updateInput}">100 €</button>
+                <button class="button is-rounded" value="20" on:click={updateInput}>20 €</button>
+                <button class="button is-rounded" value="50" on:click={updateInput}>50 €</button>
+                <button class="button is-rounded" value="100" on:click={updateInput}>100 €</button>
             </div>
         </div>
         <div class="mt-6">
             <div class=" is-relative">
-                <TextField label="Guthaben" decoration="€" bind:this={addMoneyInput} type="number" placeholder="0" minimum="0" onKeyDown={onEnterPress} value={inputValue} disabled={balanceUpdateInProgress} />
+                <TextField
+                    label="Guthaben"
+                    decoration="€"
+                    bind:this={addMoneyInput}
+                    type="number"
+                    placeholder="0"
+                    minimum="0"
+                    onKeyDown={onEnterPress}
+                    value={inputValue}
+                    disabled={balanceUpdateInProgress}
+                />
                 <span class="help has-text-left">{valueHint}</span>
             </div>
         </div>
 
-        <Button text="Guthaben hinzufügen" class="is-primary mt-3" size="medium" on:click={addToBalance} isLoading={balanceUpdateInProgress} />
+        <Button
+            text="Guthaben hinzufügen"
+            class="is-primary mt-3"
+            size="medium"
+            on:click={addToBalance}
+            isLoading={balanceUpdateInProgress}
+        />
         <br />
         <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="medium" />
         <br />

@@ -24,10 +24,9 @@
     <img src={robby} alt="Robby der Error Roboter" />
     <h1>{status}: Uups, du hast das Internt kaputt gemacht</h1>
     <p class="mt-4 mb-2">
-        War nur ein Spaß. Aber es scheint, dass Robby dein persönlicher Roboter, 
-        die Seite nach der du suchst, nicht finden kann. 
-        Bitte stelle sicher, dass du die richtige Adresse eingegeben hast, 
-        oder gehe mit Hilfe des Buttons zurück zur Hauptseite.
+        War nur ein Spaß. Aber es scheint, dass Robby dein persönlicher Roboter, die Seite nach der du suchst, nicht
+        finden kann. Bitte stelle sicher, dass du die richtige Adresse eingegeben hast, oder gehe mit Hilfe des Buttons
+        zurück zur Hauptseite.
     </p>
 
     <a href="/" class="button is-primary mb-4">Zurück zur Hauptseite</a><br />

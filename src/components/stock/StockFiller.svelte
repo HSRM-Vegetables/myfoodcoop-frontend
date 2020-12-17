@@ -76,10 +76,24 @@
             <div class="auto-margin">Kilopreis</div>
         </div>
         <div class="pt-4">
-            <TextField bind:this={unitPriceTextField} type="number" placeholder="Warenpreis" label="Warenpreis" decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'} minimum=0 />
+            <TextField
+                bind:this={unitPriceTextField}
+                type="number"
+                placeholder="Warenpreis"
+                label="Warenpreis"
+                decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+                minimum="0"
+            />
         </div>
         <div class="pt-4">
-            <TextField bind:this={quantityTextField} type="number" placeholder="Bestands Menge" label="Bestands Menge" decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'} minimum=0 />
+            <TextField
+                bind:this={quantityTextField}
+                type="number"
+                placeholder="Bestands Menge"
+                label="Bestands Menge"
+                decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                minimum="0"
+            />
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>

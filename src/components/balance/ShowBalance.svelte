@@ -28,7 +28,7 @@
 
         loadBalance();
     });
-    
+
     beforeUpdate(() => {
         if (!mounted) {
             return;
@@ -50,15 +50,11 @@
 <div>
     {#if balanceIsLoading === true}
         <span>Guthaben wird geladen...</span>
-    {:else}
-        {#if type === 'inline'}
-            <div class="inline-container">
-                <span>Guthaben:</span>
-                <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
-            </div>
-        {:else}
-            <span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>
-        {/if}
-    {/if}
+    {:else if type === 'inline'}
+        <div class="inline-container">
+            <span>Guthaben:</span>
+            <span class:has-text-danger={currentBalance < 0}>{currentBalance}€</span>
+        </div>
+    {:else}<span class:has-text-danger={currentBalance < 0} class="is-size-1">{currentBalance}€</span>{/if}
     <ErrorModal error={requestError} />
 </div>

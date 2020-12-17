@@ -30,13 +30,13 @@
     export let onKeyDown = () => {};
 
     /**
-    * Event handler for change event
-    */
+     * Event handler for change event
+     */
     export let onChange = () => {};
 
     /**
-    * Event handler for input event
-    */
+     * Event handler for input event
+     */
     export let onInput = () => {};
 
     /**
@@ -59,10 +59,7 @@
     export function isValid() {
         onChange();
 
-        if (
-            inputElement.value === ''
-            || (!Number.isNaN(inputElement.value) && inputElement.value < 0)
-        ) {
+        if (inputElement.value === '' || (!Number.isNaN(inputElement.value) && inputElement.value < 0)) {
             isInErrorState = true;
             return false;
         }
@@ -91,24 +88,20 @@
     }
 </style>
 
-<div class="has-text-left pb-2">
-    <span>{label}</span>
-</div>
+<div class="has-text-left pb-2"><span>{label}</span></div>
 <div class="is-relative">
     <input
         bind:this={inputElement}
         class:error={isInErrorState}
         class="input"
-        {type}
-        {placeholder}
+        type={type}
+        placeholder={placeholder}
         min={minimum}
         on:change={isValid}
         on:input={onInput}
         on:keydown={onKeyDown}
         disabled={disabled}
-        {value}
+        value={value}
     />
-    {#if decoration}
-        <span class="balance-input-deco">{decoration}</span>
-    {/if}
+    {#if decoration}<span class="balance-input-deco">{decoration}</span>{/if}
 </div>

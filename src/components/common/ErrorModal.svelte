@@ -33,11 +33,10 @@
 
         <!-- Main Component, display the error here -->
         <section class="modal-card-body">
-            {#if error !== undefined && error.errorCode !== undefined
-                && error.message !== undefined && error.details !== undefined}
+            {#if error && error.errorCode && error.message && error.details}
                 <!-- Show the error code for everyone -->
                 <p>Fehlercode: {error.errorCode}</p>
-                
+
                 {#if isInDevMode}
                     <!-- If we are in dev mode, display more details for the developer -->
                     <p>Details für Entwickler:</p>
@@ -59,8 +58,6 @@
         </section>
 
         <!-- Footer with a close button -->
-        <footer class="modal-card-foot">
-            <button class="button" on:click={closeModal}>Schließen</button>
-        </footer>
+        <footer class="modal-card-foot"><button class="button" on:click={closeModal}>Schließen</button></footer>
     </div>
 </div>

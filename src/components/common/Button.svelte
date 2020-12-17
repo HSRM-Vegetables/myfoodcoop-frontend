@@ -43,20 +43,24 @@
 </style>
 
 {#if href}
-    <a 
-        href={href} 
+    <a
+        href={href}
         class="button {$$props.class}"
-        class:is-loading={isLoading} 
+        class:is-loading={isLoading}
         class:medium={size === 'medium'}
         class:full-width={size === 'full-width'}
-        on:click>{text}</a> <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
+        on:click
+    >{text}</a>
+    <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {:else}
-    <button 
-        type="submit" 
+    <button
+        type="submit"
         class="button {$$props.class}"
-        class:is-loading={isLoading} 
+        class:is-loading={isLoading}
         class:medium={size === 'medium'}
         class:full-width={size === 'full-width'}
-        disabled={isLoading && disableOnLoad} 
-        on:click>{text}</button> <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
+        disabled={isLoading && disableOnLoad}
+        on:click
+    >{text}</button>
+    <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {/if}
