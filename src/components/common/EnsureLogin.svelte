@@ -6,7 +6,6 @@
     const { page } = stores();
 
     onMount(() => {
-        console.log($page)
         if (!$name && !$page.error && !$page.path.includes('/login')) {
             goto(`/profile/login?returnUrl=${$page.path}`);
         }

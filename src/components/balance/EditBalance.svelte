@@ -19,7 +19,7 @@
         if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
             return;
-        } 
+        }
 
         valueHint = '';
         balanceUpdateInProgress = true;
