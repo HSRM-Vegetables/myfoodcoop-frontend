@@ -1,6 +1,6 @@
 <script>
     import { mdiDelete } from '@mdi/js';
-    import { onMount, createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
 
