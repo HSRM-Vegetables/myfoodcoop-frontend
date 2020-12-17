@@ -18,7 +18,15 @@ export default class Stock {
     }
 
     /**
+     * Saves the current stock list to the localStorage
+     */
+    writeToLocalStorage() {
+        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
+    }
+
+    /**
      * Adds an item to the current stock
+     * @param {String} id The id of the item
      * @param {String} name The name of the item
      * @param {UnitType} unitType kg / piece. See src/scripts/UnitType.js
      * @param {String} unitPrice The price of the item as a string.
@@ -30,7 +38,7 @@ export default class Stock {
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    addItem(name, unitType, unitPrice, quantity, description) {
+    addItem(id, name, unitType, unitPrice, quantity, description) {
         if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
             return false;
         }
@@ -46,12 +54,21 @@ export default class Stock {
         }
 
         this.stockItems = [...this.stockItems,
-            new StockItem(name, unitType, unitPriceSanitized, quantity, description)
+            new StockItem(id, name, unitType, unitPriceSanitized, quantity, description)
         ];
 
-        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
+        this.writeToLocalStorage();
 
         return true;
+    }
+
+    /**
+     * Removes an item by item from the stock list
+     * @param {string} id uuid of the item
+     */
+    removeItem(id) {
+        this.stockItems = this.stockItems.filter((item) => item.id !== id);
+        this.writeToLocalStorage();
     }
 
     /**
@@ -82,6 +99,6 @@ export default class Stock {
         this.stockItems = [...this.stockItems, stockItem];
 
         // save the items
-        localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(this.stockItems));
+        this.writeToLocalStorage();
     }
 }

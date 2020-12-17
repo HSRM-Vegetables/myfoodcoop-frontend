@@ -1,5 +1,6 @@
 export default class StockItem {
-    constructor(name, unitType, unitPrice, quantity, description) {
+    constructor(id, name, unitType, unitPrice, quantity, description) {
+        this.id = id;
         this.name = name;
         this.unitType = unitType;
         this.unitPrice = unitPrice;
