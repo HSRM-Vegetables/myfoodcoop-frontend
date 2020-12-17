@@ -16,7 +16,6 @@
         color: white;
         margin: auto;
     }
-
 </style>
 
 <svelte:head>
@@ -25,7 +24,7 @@
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/">
+        <a class="navbar-item" href="/" tabindex="-1">
             <img src={logo} alt="logo">
         </a>
 
