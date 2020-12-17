@@ -1,38 +1,45 @@
 <script>
     import { onMount } from 'svelte';
-    import Swal from 'sweetalert2';
     import Stock from '../../scripts/stock/Stock';
+    import Modal from '../common/Modal.svelte';
     import StockList from './StockList.svelte';
     
     let stock = {
         stockItems: [],
     };
 
+    let modalIsOpen = false;
+    let stockItemIdToRemove;
+
     onMount(() => {
         stock = new Stock();
     });
     
     function confirmRemoveItem(event) {
-        Swal.fire({
-            title: 'Artikel löschen?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Löschen',
-            cancelButtonText: 'Abbruch'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                removeItem(event.detail.id);
-            }
-        });
+        modalIsOpen = true;
+        stockItemIdToRemove = event.detail.id;
     }
 
-    function removeItem(id) {
-        stock.removeItem(id);
+    function removeItem() {
+        stock.removeItem(stockItemIdToRemove);
         stock = stock; // tell svelte to update the view
+        modalIsOpen = false;
+    }
+
+    function closeModal() {
+        modalIsOpen = false;
     }
 </script>
+
+<Modal title="Artikel löschen?" bind:open={modalIsOpen}>
+    <div slot="body">
+        <span>Willst Du den Artikel wirklich unwiederrulich löschen?</span>
+    </div>
+    <div slot="footer">
+        <button class="button is-danger" on:click={removeItem}>Löschen</button>
+        <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
+    </div>
+</Modal>
 
 <div class="has-text-centered">
     {#if stock.stockItems.length > 0}
