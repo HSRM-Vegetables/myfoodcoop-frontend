@@ -5,18 +5,21 @@
 
     const { page } = stores();
     const { returnUrl } = $page.query;
-    
+
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Login';
 </script>
 
 <h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
-<p>Damit wir dich während des Einkaufen identifizieren können, und dir das beste Einkaufserlebnis bieten können, brauchen wir deinen Namen:</p>
+<p>
+    Damit wir dich während des Einkaufen identifizieren können, und dir das beste Einkaufserlebnis bieten können,
+    brauchen wir deinen Namen:
+</p>
 
-<input type="text" class="input mt-3" placeholder='Name' bind:value="{$name}">
+<input type="text" class="input mt-3" placeholder="Name" bind:value={$name} />
 
 <div class="has-text-centered">
     <!-- I don't use an a-tag here, because its harder to disable an a-tag -->
-    <button class="button is-primary mt-3" disabled={$name === ''} on:click="{() => goto(returnUrl)}">Einloggen</button>
+    <button class="button is-primary mt-3" disabled={$name === ''} on:click={() => goto(returnUrl)}>Einloggen</button>
 </div>

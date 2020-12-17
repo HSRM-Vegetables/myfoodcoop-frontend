@@ -29,7 +29,7 @@
                     <td>
                         <a href="/history/{purchase.id}" class="button is-small is-primary">
                             <span class="icon">
-                                <Icon icon={mdiMagnify}/>
+                                <Icon icon={mdiMagnify} />
                             </span>
                             <span>Details</span>
                         </a>
@@ -38,6 +38,4 @@
             {/each}
         </tbody>
     </table>
-{:else}
-    <span>Es wurden noch keine Einkäufe getätigt.</span>
-{/if}
+{:else}<span>Es wurden noch keine Einkäufe getätigt.</span>{/if}

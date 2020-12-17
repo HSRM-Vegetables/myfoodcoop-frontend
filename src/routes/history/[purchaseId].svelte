@@ -1,5 +1,4 @@
-  
-<script context="module" >
+<script context="module">
     let purchasId = -1;
 
     export async function preload({ params }) {
@@ -13,9 +12,9 @@
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import { title } from '../../stores/page';
 
-/* eslint-disable prefer-const */
-/* eslint-disable no-unused-vars */
-$title = 'Einkaufshistorie';
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Einkaufshistorie';
 
     let purchase;
     onMount(() => {
@@ -33,9 +32,5 @@ $title = 'Einkaufshistorie';
 
     <hr />
 
-    <div class="has-text-centered">
-        <a href="/history" class="button is-primary">Zur Einkaufshistorie</a>
-    </div>
-{:else}
-    <span>Loading...</span>
-{/if}
+    <div class="has-text-centered"><a href="/history" class="button is-primary">Zur Einkaufshistorie</a></div>
+{:else}<span>Loading...</span>{/if}

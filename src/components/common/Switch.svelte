@@ -31,7 +31,7 @@
 
     .slider:before {
         position: absolute;
-        content: "";
+        content: '';
         height: 26px;
         width: 26px;
         left: 4px;
@@ -57,7 +57,4 @@
     }
 </style>
 
-<label class="switch">
-    <input type="checkbox" bind:checked />
-    <span class="slider" />
-</label>
+<label class="switch"> <input type="checkbox" bind:checked /> <span class="slider" /> </label>

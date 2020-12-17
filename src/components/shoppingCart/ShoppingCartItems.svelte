@@ -5,7 +5,7 @@
     import Icon from '../common/Icon.svelte';
     import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
-    
+
     /**
      * An Array of ShoppingCartItems to be displayed
      */
@@ -26,7 +26,7 @@
     function removeItem(itemName) {
         // Dispatch the remove event to the parent component to remove the item from cart
         removeItemEvent('remove', {
-            name: itemName
+            name: itemName,
         });
     }
 
@@ -51,7 +51,7 @@
     <thead>
         <tr>
             {#if allowRemoval}
-                <th></th>
+                <th />
             {/if}
             <th>Artikel</th>
             <th>Menge</th>
@@ -65,27 +65,26 @@
                     <td>
                         <button class="button is-white" on:click={() => removeItem(item.name)}>
                             <span class="icon">
-                                <Icon icon={mdiDelete}/>
+                                <Icon icon={mdiDelete} />
                             </span>
                         </button>
                     </td>
                 {/if}
-                <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">
-                    <span class="item-name">{item.name}</span><br>
-                    {#if item.unitType === UnitType.PIECE }
-                        <span class="is-size-7">{item.unitPrice} € / Stück</span> 
-                    {:else}
-                        <span class="is-size-7">{item.unitPrice} € / kg</span>
-                    {/if}
+                <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
+                    <span class="item-name">{item.name}</span><br />
+                    {#if item.unitType === UnitType.PIECE}
+                        <span class="is-size-7">{item.unitPrice} € / Stück</span>
+                    {:else}<span class="is-size-7">{item.unitPrice} € / kg</span>{/if}
                 </td>
-                <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">
-                    {#if item.unitType === UnitType.PIECE }
-                        <span>{item.quantity} Stück</span> 
-                    {:else}
-                        <span>{item.quantity} kg</span>
-                    {/if}
+                <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
+                    {#if item.unitType === UnitType.PIECE}
+                        <span>{item.quantity} Stück</span>
+                    {:else}<span>{item.quantity} kg</span>{/if}
                 </td>
-                <td class:clickable={allowVisitPriceCalculator} on:click="{() => goToPriceCalculator(item)}">{(item.unitPrice * item.quantity).toFixed(2)} €</td>
+                <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
+                    {(item.unitPrice * item.quantity).toFixed(2)}
+                    €
+                </td>
             </tr>
         {/each}
     </tbody>

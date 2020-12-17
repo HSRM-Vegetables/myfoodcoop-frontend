@@ -20,7 +20,7 @@
 </script>
 
 <div class="has-text-centered mb-6">
-    <StockList 
+    <StockList
         bind:stockItems={stock.stockItems}
         onClick={(item) => {
             // var will be used in another file
@@ -33,6 +33,4 @@
 
 <hr />
 
-<div class="has-text-centered">
-    <a href="/shopping/cart" class="button is-link">Zum Warenkorb</a>
-</div>
+<div class="has-text-centered"><a href="/shopping/cart" class="button is-link">Zum Warenkorb</a></div>

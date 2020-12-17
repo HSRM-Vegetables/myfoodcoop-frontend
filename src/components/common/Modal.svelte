@@ -27,12 +27,12 @@
 
         <!-- Main Component, insert content as slot -->
         <section class="modal-card-body">
-            <slot name="body"></slot>
+            <slot name="body" />
         </section>
 
         <!-- Footer, insert content as slot -->
         <footer class="modal-card-foot">
-            <slot name="footer"></slot>
+            <slot name="footer" />
         </footer>
     </div>
 </div>

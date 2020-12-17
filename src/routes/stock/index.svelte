@@ -36,11 +36,8 @@
     }
 </script>
 
-
 <Modal title="Artikel löschen?" bind:open={modalIsOpen}>
-    <div slot="body">
-        <span>Willst Du den Artikel wirklich unwiderruflich löschen?</span>
-    </div>
+    <div slot="body"><span>Willst Du den Artikel wirklich unwiderruflich löschen?</span></div>
     <div slot="footer">
         <button class="button is-danger" on:click={removeItem}>Löschen</button>
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
@@ -54,6 +51,4 @@
 
 <hr />
 
-<div class="has-text-centered">
-    <a href="/" class="button is-link container">Zur Hauptseite</a>
-</div>
+<div class="has-text-centered"><a href="/" class="button is-link container">Zur Hauptseite</a></div>

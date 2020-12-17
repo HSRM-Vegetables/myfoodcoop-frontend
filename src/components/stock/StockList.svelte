@@ -5,8 +5,8 @@
     import Icon from '../common/Icon.svelte';
 
     /**
-    * An Array of StockItems to be displayed
-    */
+     * An Array of StockItems to be displayed
+     */
     export let stockItems;
 
     /**
@@ -21,7 +21,7 @@
 
     function removeItem(itemId) {
         removeEvent('remove', {
-            id: itemId
+            id: itemId,
         });
     }
 </script>
@@ -36,7 +36,6 @@
 </style>
 
 {#if stockItems && stockItems.length > 0}
-
     <div class="columns is-hidden-mobile has-text-weight-bold">
         {#if allowRemoval}
             <div class="column has-text-left" />
@@ -50,12 +49,10 @@
         <hr />
         <!-- If the component is initalized without onClick, onClick is "undefined". 
             The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
-        <div class="columns" class:is-clickable="{!!onClick}" on:click="{() => !!onClick && onClick(item)}">
+        <div class="columns" class:is-clickable={!!onClick} on:click={() => !!onClick && onClick(item)}>
             {#if allowRemoval}
                 <div class="column has-text-left">
-                    <button
-                        class="button is-white"
-                        on:click={() => removeItem(item.id)}>
+                    <button class="button is-white" on:click={() => removeItem(item.id)}>
                         <span class="icon">
                             <Icon icon={mdiDelete} />
                         </span>
@@ -66,21 +63,15 @@
             <div class="column has-text-right">
                 {#if item.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
-                {:else}
-                    <span>{item.quantity} kg</span>
-                {/if}
+                {:else}<span>{item.quantity} kg</span>{/if}
             </div>
             <div class="column has-text-right">
                 {#if item.unitType === UnitType.PIECE}
                     <span>{item.unitPrice} € / Stück</span>
-                {:else}
-                    <span>{item.unitPrice} € / kg</span>
-                {/if}
+                {:else}<span>{item.unitPrice} € / kg</span>{/if}
             </div>
         </div>
     {/each}
-
 {:else}
     <p>Der Bestand ist leer.</p>
 {/if}
-

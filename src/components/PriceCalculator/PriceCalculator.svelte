@@ -18,7 +18,7 @@
         unitType: UnitType.KILO,
         unitPrice: 0,
         quantity: 0,
-        description: ''
+        description: '',
     };
 
     onMount(() => {
@@ -40,32 +40,21 @@
     function calcTotalPrice() {
         const quantity = quantityElement.getValue();
 
-        if (
-            !Number.isNaN(stockItem.unitPrice)
-            && !Number.isNaN(quantity)
-        ) {
-            currentTotal = (
-                stockItem.unitPrice * quantity
-            ).toFixed(2);
+        if (!Number.isNaN(stockItem.unitPrice) && !Number.isNaN(quantity)) {
+            currentTotal = (stockItem.unitPrice * quantity).toFixed(2);
         }
     }
 
     function addItem() {
         if (quantityElement.isValid()) {
             const cart = new ShoppingCart();
-            cart.addItem(
-                stockItem.name,
-                stockItem.unitType,
-                stockItem.unitPrice,
-                quantityElement.getValue(),
-            );
+            cart.addItem(stockItem.name, stockItem.unitType, stockItem.unitPrice, quantityElement.getValue());
             goto('/shopping/cart');
         }
     }
 </script>
 
 <style>
-
     h2 {
         font-weight: bold;
         text-align: center;
@@ -95,30 +84,26 @@
 
 <div>
     <div class="form">
-
         <ShowBalance type="inline" />
 
         <hr />
 
-        <div class="is-size-3 mb-4">
-            {stockItem.name}
-        </div>
+        <div class="is-size-3 mb-4">{stockItem.name}</div>
 
         {#if stockItem.description}
-            <div class="box">
-                {stockItem.description}
-            </div>
+            <div class="box">{stockItem.description}</div>
         {/if}
 
         <div>
             Warenpreis<br />
             <span class="is-size-4">
-                {stockItem.unitPrice} {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+                {stockItem.unitPrice}
+                {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
             </span>
         </div>
 
         <div>
-            <TextField 
+            <TextField
                 label="Menge"
                 placeholder="0"
                 decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
@@ -130,7 +115,9 @@
                 minimum="0"
             />
             <span class="is-size-7">
-                Menge im Bestand: {stockItem.quantity} {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                Menge im Bestand:
+                {stockItem.quantity}
+                {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
             </span>
         </div>
 
@@ -144,14 +131,8 @@
         <hr />
 
         <div class="button-box">
-            <button on:click={addItem} class="button is-medium is-primary mb-4">
-                Warenkorb hinzufügen
-            </button>
-            <button
-                on:click={() => goto(linkBack)}
-                class="button is-link is-medium mb-4">
-                Zurück
-            </button>
+            <button on:click={addItem} class="button is-medium is-primary mb-4"> Warenkorb hinzufügen </button>
+            <button on:click={() => goto(linkBack)} class="button is-link is-medium mb-4"> Zurück </button>
         </div>
     </div>
 </div>

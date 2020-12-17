@@ -19,14 +19,12 @@
 </style>
 
 <svelte:head>
-	<title>{$title}</title>
+    <title>{$title}</title>
 </svelte:head>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/" tabindex="-1">
-            <img src={logo} alt="logo">
-        </a>
+        <a class="navbar-item" href="/" tabindex="-1"> <img src={logo} alt="logo" /> </a>
 
         <div class="title-box">{$title}</div>
     </div>

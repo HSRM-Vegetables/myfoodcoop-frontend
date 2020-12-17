@@ -12,7 +12,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Stock from '../../scripts/stock/Stock';
     import { moneyStyler } from '../../scripts/Helper';
-    
+
     // Stub item because onMount is called after the first render
     let cart = {
         cartItems: [],
@@ -58,11 +58,7 @@
             balance.currentBalance = await balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
             const purchaseApi = new PurchaseApi();
-            purchaseApi.addPurchase(new Purchase(
-                uuid(),
-                new Date(),
-                cart.cartItems
-            ));
+            purchaseApi.addPurchase(new Purchase(uuid(), new Date(), cart.cartItems));
 
             // update stock
             cart.cartItems.forEach((item) => {
@@ -82,19 +78,19 @@
 <div class="has-text-centered">
     <h1 class="mb-4">Warenkorb</h1>
 
-    <ShowBalance bind:currentBalance="{balance.money}" type="inline" />
+    <ShowBalance bind:currentBalance={balance.money} type="inline" />
 
-    <hr>
+    <hr />
 
     {#if cart.cartItems.length > 0}
         <ShoppingCartItems bind:cartItems={cart.cartItems} on:remove={removeItem} />
     {:else}
         <p>Der Warenkorb ist leer.</p>
     {/if}
-    
+
     <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
 
-    <hr>
+    <hr />
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
 
@@ -102,9 +98,14 @@
         <p class="is-size-7 mt-3">Guthaben nach Kauf: {balanceAfterPurchase} €</p>
     {/if}
 
-
     {#if cart.cartItems.length > 0}
-        <Button text="Kaufen" class="is-primary mt-5" size="medium" on:click={checkout} isLoading={balanceUpdateInProgress} />
+        <Button
+            text="Kaufen"
+            class="is-primary mt-5"
+            size="medium"
+            on:click={checkout}
+            isLoading={balanceUpdateInProgress}
+        />
     {/if}
 
     <ErrorModal error={requestError} />

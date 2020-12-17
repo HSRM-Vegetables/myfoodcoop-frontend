@@ -1,8 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import {
-        mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText
-    } from '@mdi/js';
+    import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
@@ -13,10 +11,7 @@
     $title = 'Stadtgemüse e.V.';
 
     function onKeyPress(event, href) {
-        if (
-            event.code === 'Space'
-            || event.code === 'Enter'
-        ) {
+        if (event.code === 'Space' || event.code === 'Enter') {
             goto(href);
         }
     }
@@ -46,8 +41,7 @@
             label: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
-        }
-
+        },
     ];
 </script>
 
@@ -97,7 +91,8 @@
             role="button"
             aria-label={button.label}
             on:keypress={(e) => onKeyPress(e, button.href)}
-            on:click={() => goto(button.href)}>
+            on:click={() => goto(button.href)}
+        >
             <Icon icon={button.icon} />
             <span>{button.label}</span>
         </div>
