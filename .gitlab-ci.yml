@@ -3,6 +3,7 @@ image: markhobson/node-chrome
 
 stages:
     - build
+    - format
     - lint
     - deploy
     - run_lighthouse
@@ -19,6 +20,16 @@ build:
     script: 
         - npm ci
         - npm run build
+
+format:
+    stage: format
+    tags:
+        - docker
+    dependencies: 
+        - build
+    script: 
+        - npm i
+        - npm run format-check
 
 lint:
     stage: lint

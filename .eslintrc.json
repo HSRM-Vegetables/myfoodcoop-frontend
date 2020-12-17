@@ -29,6 +29,7 @@
         "linebreak-style": "error",
         "comma-dangle": "off",
         "no-console": "error",
-        "no-use-before-define": "off"
+        "no-use-before-define": "off",
+        "operator-linebreak": "off"
     }
 }
