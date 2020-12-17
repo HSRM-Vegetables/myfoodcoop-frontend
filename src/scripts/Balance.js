@@ -1,6 +1,7 @@
 import { get } from 'svelte/store';
 import Fetch from './api/Fetch';
 import { name } from '../stores/user';
+import CustomError, { ErrorCodes } from './api/CustomError';
 
 export default class Balance {
     /**
@@ -19,27 +20,33 @@ export default class Balance {
      * @returns {number} current balance
      */
     async setBalance(newBalance) {
-        if (newBalance !== null && newBalance !== 'NaN' && newBalance !== '' && newBalance !== undefined) {
-            const response = await Fetch.patch(`balance/${get(name)}`, JSON.stringify({
-                balance: newBalance
-            }));
-            this.currentBalance = response.balance;
+        if (!newBalance || Number.isNaN(newBalance) || typeof newBalance !== 'number') {
+            throw new CustomError(ErrorCodes.BALANCE_NOT_A_NUMBER, 'Value needs to be a number');
         }
+
+        const response = await Fetch.patch(`balance/${get(name)}`, JSON.stringify({
+            balance: newBalance
+        }));
+        this.currentBalance = response.balance;
+
         return this.currentBalance;
     }
 
     /**
      * Request to the API to topup the balance with the specified value
-     * @param {*} topupAmount value to add on top of balance
+     * @param {number} topupAmount value to add on top of balance
      * @returns {number} current balance
      */
     async topupBalance(topupAmount) {
-        if (topupAmount !== null && topupAmount !== 'NaN' && topupAmount !== '' && topupAmount !== undefined) {
-            const response = await Fetch.post(`balance/${get(name)}/topup`, JSON.stringify({
-                amount: topupAmount
-            }));
-            this.currentBalance = response.balance;
+        if (!topupAmount || Number.isNaN(topupAmount) || typeof topupAmount !== 'number') {
+            throw new CustomError(ErrorCodes.TOPUP_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
+
+        const response = await Fetch.post(`balance/${get(name)}/topup`, JSON.stringify({
+            amount: topupAmount
+        }));
+        this.currentBalance = response.balance;
+
         return this.currentBalance;
     }
 
@@ -49,12 +56,15 @@ export default class Balance {
      * @returns {number} current balance
      */
     async withdrawBalance(withDrawAmount) {
-        if (withDrawAmount !== null && withDrawAmount !== 'NaN' && withDrawAmount !== '' && withDrawAmount !== undefined) {
-            const response = await Fetch.post(`balance/${get(name)}/withdraw`, JSON.stringify({
-                amount: withDrawAmount
-            }));
-            this.currentBalance = response.balance;
+        if (!withDrawAmount || Number.isNaN(withDrawAmount) || typeof withDrawAmount !== 'number') {
+            throw new CustomError(ErrorCodes.WITHDRAW_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
+
+        const response = await Fetch.post(`balance/${get(name)}/withdraw`, JSON.stringify({
+            amount: withDrawAmount
+        }));
+        this.currentBalance = response.balance;
+
         return this.currentBalance;
     }
 

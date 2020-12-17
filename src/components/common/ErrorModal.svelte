@@ -6,7 +6,7 @@
 
     let isActive = false;
 
-    // Necessary in order to displayed a more detailed error in dev mode
+    // Necessary in order to display a more detailed error in dev mode
     const isInDevMode = process.env.NODE_ENV === 'development';
 
     $: {

@@ -11,26 +11,26 @@
     let requestError;
 
     const balance = new Balance();
-    let blanceUpdateInProgress = false;
+    let balanceUpdateInProgress = false;
 
     async function addToBalance() {
         const additionalAmount = addMoneyInput.getValue();
 
         if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
-        } else {
-            valueHint = '';
+            return;
+        } 
 
-            blanceUpdateInProgress = true;
-            try {
-                balance.currentBalance = await balance.topupBalance(additionalAmount);
+        valueHint = '';
+        balanceUpdateInProgress = true;
+        try {
+            balance.currentBalance = await balance.topupBalance(parseFloat(additionalAmount));
 
-                inputValue = undefined;
-            } catch (error) {
-                requestError = error;
-            } finally {
-                blanceUpdateInProgress = false;
-            }
+            inputValue = undefined;
+        } catch (error) {
+            requestError = error;
+        } finally {
+            balanceUpdateInProgress = false;
         }
     }
     
@@ -63,12 +63,12 @@
         </div>
         <div class="mt-6">
             <div class=" is-relative">
-                <TextField label="Guthaben" decoration="€" bind:this={addMoneyInput} type="number" placeholder="0" minimum="0" onKeyDown={onEnterPress} value={inputValue} />
+                <TextField label="Guthaben" decoration="€" bind:this={addMoneyInput} type="number" placeholder="0" minimum="0" onKeyDown={onEnterPress} value={inputValue} disabled={balanceUpdateInProgress} />
                 <span class="help has-text-left">{valueHint}</span>
             </div>
         </div>
 
-        <Button text="Guthaben hinzufügen" class="is-primary mt-3" size="medium" on:click={addToBalance} isLoading={blanceUpdateInProgress} />
+        <Button text="Guthaben hinzufügen" class="is-primary mt-3" size="medium" on:click={addToBalance} isLoading={balanceUpdateInProgress} />
         <br />
         <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="medium" />
         <br />

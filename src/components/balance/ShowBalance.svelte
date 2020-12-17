@@ -2,7 +2,7 @@
     import { onMount, beforeUpdate } from 'svelte';
     import { moneyStyler } from '../../scripts/Helper';
     import Balance from '../../scripts/Balance';
-import ErrorModal from '../common/ErrorModal.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
 
     export let currentBalance = 0;
     export let type = 'big'; // inline or big

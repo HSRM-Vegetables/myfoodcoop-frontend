@@ -41,10 +41,10 @@
     async function checkout() {
         try {
             balanceUpdateInProgress = true;
-            balance.currentBalance = await balance.withdrawBalance(cart.totalPrice());
+            balance.currentBalance = await balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
-            const purchasApi = new PurchaseApi();
-            purchasApi.addPurchase(new Purchase(
+            const purchaseApi = new PurchaseApi();
+            purchaseApi.addPurchase(new Purchase(
                 uuid(),
                 new Date(),
                 cart.cartItems
