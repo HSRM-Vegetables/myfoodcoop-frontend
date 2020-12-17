@@ -1,10 +1,10 @@
 <script>
     import { goto } from '@sapper/app';
+    import uuid from 'uuid';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
-    import uuid from 'uuid';
 
     let unitPriceTextField;
     let quantityTextField;

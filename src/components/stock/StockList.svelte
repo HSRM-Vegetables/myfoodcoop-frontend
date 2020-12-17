@@ -1,33 +1,21 @@
 <script>
-    import { UnitType } from '../../scripts/UnitType';
-    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
-    import Swal from 'sweetalert2';
-
-    import Icon from '../common/Icon.svelte';
     import { mdiDelete } from '@mdi/js';
+    import { onMount, createEventDispatcher } from 'svelte';
+    import { UnitType } from '../../scripts/UnitType';
+    import Icon from '../common/Icon.svelte';
 
-    export let cartItems;
+    export let stockItems;
     export let allowRemoval = false;
- 
-    function removeListElement(id) {
-        Swal.fire({
-        title: 'Artikel löschen?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Löschen',
-        cancelButtonText: 'Abbruch'
-        }).then((result) => {
-        if (result.isConfirmed) {
-            cartItems = cartItems.filter((item) => item.id !== id);
-            localStorage.setItem(LocalStorageKeys.STOCK, JSON.stringify(cartItems));
- 
-        }
-})
-    }
 
-    
+    const removeEvent = createEventDispatcher();
+
+    onMount(() => {});
+
+    function removeItem(itemId) {
+        removeEvent('remove', {
+            id: itemId
+        });
+    }
 </script>
 
 <style>
@@ -40,40 +28,38 @@
 </style>
 
 <div class="columns is-hidden-mobile has-text-weight-bold">
+    {#if allowRemoval}
+        <div class="column has-text-left" />
+    {/if}
     <div class="column is-half has-text-left">Artikel</div>
-    <div class="column is-one-quarter has-text-right">Menge</div>
-    <div class="column is-one-quarter has-text-right">Preis</div>
-    <div class="column is-one-quarter has-text-right"><button class="button" on:click={() => allowRemoval = !allowRemoval}>
-        <span class="icon">
-            <Icon icon={mdiDelete}/>
-        </span>
-    </button></div>
+    <div class="column has-text-right">Menge</div>
+    <div class="column has-text-right">Preis</div>
 </div>
 
-{#each cartItems as item}
+{#each stockItems as item}
     <hr />
     <div class="columns">
+        {#if allowRemoval}
+            <div class="column has-text-center">
+                <button
+                    class="button is-white"
+                    on:click={() => removeItem(item.id)}>
+                    <span class="icon">
+                        <Icon icon={mdiDelete} />
+                    </span>
+                </button>
+            </div>
+        {/if}
         <div class="column is-half has-text-left">{item.name}</div>
-        <div class="column is-one-quarter has-text-right">
+        <div class="column has-text-right">
             {#if item.unitType === UnitType.PIECE}
                 <span>{item.quantity} Stück</span>
-            {:else}
-                <span>{item.quantity} kg</span>
-            {/if}
+            {:else}<span>{item.quantity} kg</span>{/if}
         </div>
-        <div class="column is-one-quarter has-text-right">
+        <div class="column has-text-right">
             {#if item.unitType === UnitType.PIECE}
                 <span>{item.unitPrice} € / Stück</span>
-            {:else}
-                <span>{item.unitPrice} € / kg</span>
-            {/if}
+            {:else}<span>{item.unitPrice} € / kg</span>{/if}
         </div>
-        <div class="column is-one-quarter has-text-left">
-        {#if allowRemoval}
-            <button class="delete" on:click={() => removeListElement(item.id)}>
-            </button>
-        {/if}
-        </div>
-     
     </div>
 {/each}
