@@ -21,8 +21,6 @@
     "bulma": "^0.9.1",
     "compression": "^1.7.1",
     "express": "^4.17.1",
-    "lighthouse": "^6.4.1",
-    "lighthouse-ci": "^1.11.0",
     "sirv": "^1.0.0",
     "uuid": "^3.4.0"
   },
@@ -42,6 +40,8 @@
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-svelte3": "^2.7.3",
+    "lighthouse": "^6.5.0",
+    "lighthouse-ci": "^1.11.0",
     "node-sass": "^5.0.0",
     "postcss": "^8.1.8",
     "pre-commit": "^1.2.2",
