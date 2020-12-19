@@ -12,15 +12,11 @@
     let descriptionElement;
     let unitType = UnitType.KILO;
 
-    let articleTextFieldError = false;
-    let unitPriceTextFieldError = false;
-    let quantityTextFieldError = false;
-
     let unitTypeBoolean;
 
-    $: unitTypeChanged(unitTypeBoolean);
+    $: untiTypeChanged(unitTypeBoolean);
 
-    function unitTypeChanged(value) {
+    function untiTypeChanged(value) {
         if (value === true) {
             unitType = UnitType.KILO;
         } else {
@@ -28,45 +24,20 @@
         }
     }
 
-    function areInputsValid() {
-        articleTextFieldError = false;
-        unitPriceTextFieldError = false;
-        quantityTextFieldError = false;
-
-        if (!articleTextField || !articleTextField.getValue()) {
-            articleTextFieldError = true;
-        }
-
-        if (!unitPriceTextField || !unitPriceTextField.getValue() || unitPriceTextField.getValue() < 0) {
-            unitPriceTextFieldError = true;
-        }
-
-        if (!quantityTextField || !quantityTextField.getValue() || quantityTextField.getValue() < 0) {
-            quantityTextFieldError = true;
-        }
-
-        if (articleTextFieldError || unitPriceTextFieldError || quantityTextFieldError) {
-            return false;
-        }
-
-        return true;
-    }
-
     function addItem() {
-        if (!areInputsValid()) {
-            return;
-        }
+        if (articleTextField.isValid() && unitPriceTextField.isValid() && quantityTextField.isValid()) {
+            const item = new Stock();
 
-        const stock = new Stock();
-        stock.addItem(
-            uuid(),
-            articleTextField.getValue(),
-            unitType,
-            unitPriceTextField.getValue(),
-            quantityTextField.getValue(),
-            descriptionElement.value
-        );
-        goto('/stock/');
+            item.addItem(
+                uuid(),
+                articleTextField.getValue(),
+                unitType,
+                unitPriceTextField.getValue(),
+                quantityTextField.getValue(),
+                descriptionElement.value
+            );
+            goto('/stock/');
+        }
     }
 
     function clearInputs() {
@@ -95,13 +66,7 @@
 <div>
     <div class="form">
         <div class="pt-4">
-            <TextField
-                bind:this={articleTextField}
-                type="text"
-                placeholder="Artikel"
-                label="Artikel"
-                isInErrorState={articleTextFieldError}
-            />
+            <TextField bind:this={articleTextField} type="text" placeholder="Artikel" label="Artikel" />
         </div>
         <div class="form-row pt-4">
             <div class="auto-margin">Stückpreis</div>
@@ -118,7 +83,6 @@
                 label="Warenpreis"
                 decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                 minimum="0"
-                isInErrorState={unitPriceTextFieldError}
             />
         </div>
         <div class="pt-4">
@@ -129,7 +93,6 @@
                 label="Bestands Menge"
                 decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 minimum="0"
-                isInErrorState={quantityTextFieldError}
             />
         </div>
         <div class="pt-4">

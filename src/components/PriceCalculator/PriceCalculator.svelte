@@ -9,7 +9,6 @@
     import Stock from '../../scripts/stock/Stock';
 
     let quantityElement;
-    let quantityError = false;
     let currentTotal = 0;
     let linkBack = '/shopping/stock';
 
@@ -46,25 +45,12 @@
         }
     }
 
-    function isQuantityValid() {
-        const quantity = quantityElement.getValue();
-        if (!quantity || Number.isNaN(quantity) || quantity <= 0) {
-            quantityError = true;
-            return false;
-        }
-
-        quantityError = false;
-        return true;
-    }
-
     function addItem() {
-        if (!isQuantityValid()) {
-            return;
+        if (quantityElement.isValid()) {
+            const cart = new ShoppingCart();
+            cart.addItem(stockItem.name, stockItem.unitType, stockItem.unitPrice, quantityElement.getValue());
+            goto('/shopping/cart');
         }
-
-        const cart = new ShoppingCart();
-        cart.addItem(stockItem.name, stockItem.unitType, stockItem.unitPrice, quantityElement.getValue());
-        goto('/shopping/cart');
     }
 </script>
 
@@ -127,7 +113,6 @@
                 onChange={() => calcTotalPrice()}
                 onInput={() => calcTotalPrice()}
                 minimum="0"
-                isInErrorState={quantityError}
             />
             <span class="is-size-7">
                 Menge im Bestand:
