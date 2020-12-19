@@ -13,6 +13,10 @@
 * Du kannst zB. mal die Datei `src/routes/index.svelte` abändern und die Datei speichern. Anschließend solltest du sehen wie sich dein Browser gleich refresht.
 * Ich habe in verschieden Ordnern `Readme.md`'s verteilt. Lest die euch bei Gelegenheit mal durch.
 
+## Code linting
+* Eslint: `npm run lint`. Linted alle Javascript-Dateien sowie den Javascript Part in den Svelte Dateien
+* Prettier: `npm run format`. Formatiert die Svelte-Dateien, vorallem das HTML darin.
+
 ## Stack
 * Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
 * Als CSS Framwork setzen wir momentan auf [Bulma](https://bulma.io/) (Wichtig: Bulma wird ohne JavaScript ausgeliefert)
