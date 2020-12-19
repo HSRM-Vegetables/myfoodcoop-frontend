@@ -70,7 +70,7 @@
                     type="number"
                     placeholder="0"
                     minimum="0"
-                    on:keydown={onEnterPress}
+                    onKeyDown={onEnterPress}
                     value={inputValue}
                     disabled={balanceUpdateInProgress}
                 />
