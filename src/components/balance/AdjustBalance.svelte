@@ -42,7 +42,7 @@
             placeholder="0"
             decoration="€"
             label="Neues Guthaben"
-            onKeyDown={onEnterPress}
+            on:keydown={onEnterPress}
             disabled={balanceUpdateInProgress}
         />
 
