@@ -25,21 +25,6 @@
     export let minimum = '';
 
     /**
-     * Event handler for keydown event
-     */
-    export let onKeyDown = () => {};
-
-    /**
-     * Event handler for change event
-     */
-    export let onChange = () => {};
-
-    /**
-     * Event handler for input event
-     */
-    export let onInput = () => {};
-
-    /**
      * Value to display
      */
     export let value = '';
@@ -89,9 +74,9 @@
         type={type}
         placeholder={placeholder}
         min={minimum}
-        on:change={onChange}
-        on:input={onInput}
-        on:keydown={onKeyDown}
+        on:change
+        on:input
+        on:keydown
         disabled={disabled}
         value={value}
     />

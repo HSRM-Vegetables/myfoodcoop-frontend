@@ -124,8 +124,8 @@
                 type="number"
                 bind:this={quantityElement}
                 value={$currentShoppingItemQuantity || ''}
-                onChange={() => calcTotalPrice()}
-                onInput={() => calcTotalPrice()}
+                on:change={calcTotalPrice}
+                on:input={calcTotalPrice}
                 minimum="0"
                 isInErrorState={quantityError}
             />
