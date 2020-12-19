@@ -49,23 +49,15 @@
      */
     export let disabled = false;
 
+    /**
+     * Displays red border around the input field if true
+     */
+    export let isInErrorState = false;
+
     let inputElement; // References the input field
-    let isInErrorState = false; // true, if the current input is not valid.
 
     export function clear() {
         inputElement.value = '';
-    }
-
-    export function isValid() {
-        onChange();
-
-        if (inputElement.value === '' || (!Number.isNaN(inputElement.value) && inputElement.value < 0)) {
-            isInErrorState = true;
-            return false;
-        }
-
-        isInErrorState = false;
-        return true;
     }
 
     export function getValue() {
@@ -97,7 +89,7 @@
         type={type}
         placeholder={placeholder}
         min={minimum}
-        on:change={isValid}
+        on:change={onChange}
         on:input={onInput}
         on:keydown={onKeyDown}
         disabled={disabled}
