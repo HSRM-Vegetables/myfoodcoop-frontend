@@ -6,6 +6,6 @@ export default class Purchase {
     }
 
     totalPrice() {
-        return this.cartItems.reduce((sum, ci) => sum + ci.unitPrice * ci.quantity, 0);
+        return this.cartItems.reduce((sum, ci) => sum + ci.stockItem.unitPrice * ci.quantity, 0);
     }
 }

@@ -3,7 +3,7 @@
     import { goto } from '@sapper/app';
     import { createEventDispatcher } from 'svelte';
     import Icon from '../common/Icon.svelte';
-    import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
+    import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
 
     /**
@@ -23,10 +23,10 @@
 
     const removeItemEvent = createEventDispatcher();
 
-    function removeItem(itemName) {
+    function removeItem(itemId) {
         // Dispatch the remove event to the parent component to remove the item from cart
         removeItemEvent('remove', {
-            name: itemName,
+            id: itemId,
         });
     }
 
@@ -34,9 +34,8 @@
         if (allowVisitPriceCalculator) {
             // var will be used in another file
             /* eslint-disable no-unused-vars */
-            $currentShoppingItem = shoppingCartItem.name;
             $currentShoppingItemQuantity = shoppingCartItem.quantity;
-            goto('/shopping/price-calculator');
+            goto(`/shopping/stock/${shoppingCartItem.stockItem.id}`);
         }
     }
 </script>
@@ -63,7 +62,7 @@
             <tr>
                 {#if allowRemoval}
                     <td>
-                        <button class="button is-white" on:click={() => removeItem(item.name)}>
+                        <button class="button is-white" on:click={() => removeItem(item.stockItem.id)}>
                             <span class="icon">
                                 <Icon icon={mdiDelete} />
                             </span>
@@ -71,18 +70,18 @@
                     </td>
                 {/if}
                 <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
-                    <span class="item-name">{item.name}</span><br />
-                    {#if item.unitType === UnitType.PIECE}
-                        <span class="is-size-7">{item.unitPrice} € / Stück</span>
-                    {:else}<span class="is-size-7">{item.unitPrice} € / kg</span>{/if}
+                    <span class="item-name">{item.stockItem.name}</span><br />
+                    {#if item.stockItem.unitType === UnitType.PIECE}
+                        <span class="is-size-7">{item.stockItem.unitPrice} € / Stück</span>
+                    {:else}<span class="is-size-7">{item.stockItem.unitPrice} € / kg</span>{/if}
                 </td>
                 <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
-                    {#if item.unitType === UnitType.PIECE}
+                    {#if item.stockItem.unitType === UnitType.PIECE}
                         <span>{item.quantity} Stück</span>
                     {:else}<span>{item.quantity} kg</span>{/if}
                 </td>
                 <td class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
-                    {(item.unitPrice * item.quantity).toFixed(2)}
+                    {(item.stockItem.unitPrice * item.quantity).toFixed(2)}
                     €
                 </td>
             </tr>

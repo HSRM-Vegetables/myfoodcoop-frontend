@@ -10,17 +10,24 @@
     export let stockItems;
 
     /**
-     * Event Handler, triggerd by click on an item
-     * The item is passed as paramter
+     * Defines if the cursor should switch to pointer
+     * Default: false
      */
-    export let onClick;
+    export let isClickable = false;
 
     export let allowRemoval = false;
 
     const removeEvent = createEventDispatcher();
+    const selectEvent = createEventDispatcher();
 
     function removeItem(itemId) {
         removeEvent('remove', {
+            id: itemId,
+        });
+    }
+
+    function selectItem(itemId) {
+        selectEvent('select', {
             id: itemId,
         });
     }
@@ -47,9 +54,7 @@
 
     {#each stockItems as item}
         <hr />
-        <!-- If the component is initalized without onClick, onClick is "undefined". 
-            The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
-        <div class="columns" class:is-clickable={!!onClick} on:click={() => !!onClick && onClick(item)}>
+        <div class="columns">
             {#if allowRemoval}
                 <div class="column has-text-left">
                     <button class="button is-white" on:click={() => removeItem(item.id)}>
@@ -59,13 +64,19 @@
                     </button>
                 </div>
             {/if}
-            <div class="column is-half has-text-left">{item.name}</div>
-            <div class="column has-text-right">
+            <div
+                class="column is-half has-text-left"
+                class:is-clickable={isClickable}
+                on:click={() => selectItem(item.id)}
+            >
+                {item.name}
+            </div>
+            <div class="column has-text-right" class:is-clickable={isClickable} on:click={() => selectItem(item.id)}>
                 {#if item.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
-            <div class="column has-text-right">
+            <div class="column has-text-right" class:is-clickable={isClickable} on:click={() => selectItem(item.id)}>
                 {#if item.unitType === UnitType.PIECE}
                     <span>{item.unitPrice} € / Stück</span>
                 {:else}<span>{item.unitPrice} € / kg</span>{/if}
