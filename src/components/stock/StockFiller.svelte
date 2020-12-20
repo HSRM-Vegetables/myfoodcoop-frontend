@@ -88,9 +88,9 @@
         if (!areInputsValid()) {
             return;
         }
-       
+
         const stock = new Stock();
-        
+
         if (!item) {
             stock.addItem(
                 uuid(),
