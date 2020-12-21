@@ -86,7 +86,7 @@
             </div>
             <div class="columns" on:click={() => !!onClick && onClick(item)}>
                 <div class="column has-text-justified">
-                    {item.description.substring(0, 200)} + '...'}
+                    {item.description.substring(0, 200)}...
                 </div>
             </div>
         </div>
