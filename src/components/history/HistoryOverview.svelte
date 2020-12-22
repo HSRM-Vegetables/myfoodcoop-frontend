@@ -9,33 +9,34 @@
         purchaseApi = new PurchaseApi();
     });
 </script>
+<style>
+    .columns {
+        border-bottom: solid 1px whitesmoke;
+    }
+</style>
 
 {#if purchaseApi !== undefined && purchaseApi.purchases.length > 0}
-    <table class="table is-fullwidth is-hoverable">
-        <thead>
-            <tr>
-                <td>Datum</td>
-                <td>Anzahl Artikel</td>
-                <td>Preis</td>
-                <td>Details</td>
-            </tr>
-        </thead>
-        <tbody>
-            {#each purchaseApi.purchases.sort((a, b) => b.createdOn - a.createdOn) as purchase}
-                <tr>
-                    <td>{purchase.createdOn.toLocaleString()}</td>
-                    <td>{purchase.cartItems.length}</td>
-                    <td>{purchase.totalPrice().toFixed(2)}€</td>
-                    <td>
-                        <a href="/history/{purchase.id}" class="button is-small is-primary">
-                            <span class="icon">
-                                <Icon icon={mdiMagnify} />
-                            </span>
-                            <span>Details</span>
-                        </a>
-                    </td>
-                </tr>
-            {/each}
-        </tbody>
-    </table>
-{:else}<span>Es wurden noch keine Einkäufe getätigt.</span>{/if}
+    <div class="columns has-text-weight-bold is-mobile is-vcentered">
+        <div class="column">Datum</div>
+        <div class="column has-text-centered">Anzahl Artikel</div>
+        <div class="column">Preis</div>
+        <div class="column">Details</div>
+    </div>
+    {#each purchaseApi.purchases.sort((a, b) => b.createdOn - a.createdOn) as purchase}
+        <div class="columns is-mobile">
+            <div class="column">{purchase.createdOn.toLocaleString()}</div>
+            <div class="column has-text-centered">{purchase.cartItems.length}</div>
+            <div class="column">{purchase.totalPrice().toFixed(2)}€</div>
+            <div class="column">
+                <a href="/history/{purchase.id}" class="button is-small is-primary">
+                    <span class="icon">
+                        <Icon icon={mdiMagnify} />
+                    </span>
+                    <span>Details</span>
+                </a>
+            </div>
+        </div>
+    {/each}
+{:else}
+    <span>Es wurden noch keine Einkäufe getätigt.</span>
+{/if}

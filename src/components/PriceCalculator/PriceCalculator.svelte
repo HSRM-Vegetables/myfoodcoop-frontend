@@ -80,6 +80,9 @@
         font-weight: bold;
         font-size: 4em;
     }
+    .breakwords {
+        word-break: break-all;
+    }
 </style>
 
 <div>
@@ -88,7 +91,7 @@
 
         <hr />
 
-        <div class="is-size-3 mb-4">{stockItem.name}</div>
+        <div class="is-size-3 mb-4 breakwords">{stockItem.name}</div>
 
         {#if stockItem.description}
             <div class="box">{stockItem.description}</div>

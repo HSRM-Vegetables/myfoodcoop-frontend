@@ -27,9 +27,6 @@
 </script>
 
 <style>
-    .column.is-half.has-text-left {
-        overflow-y: auto;
-    }
     .shoppingElement {
         background-color: white;
         border-radius: 6px;
@@ -39,6 +36,9 @@
         padding: 1.25rem;
         margin-top: 20px;
         cursor: pointer;
+    }
+    .breakwords {
+        word-break: break-all;
     }
 </style>
 
@@ -67,7 +67,7 @@
                     </div>
                 {/if}
                 <div class="column is-half has-text-left ">
-                    <span class="has-text-weight-bold">{item.name}</span><br />
+                    <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
                         <span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / Stück</span>
                     {:else}<span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / kg</span>{/if}
@@ -86,7 +86,7 @@
             </div>
             <div class="columns" on:click={() => !!onClick && onClick(item)}>
                 <div class="column has-text-justified">
-                    {item.description.substring(0, 200)}...
+                    {#if item.description}{item.description.substring(0, 200)}...{/if}
                 </div>
             </div>
         </div>

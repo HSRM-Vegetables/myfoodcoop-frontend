@@ -46,7 +46,7 @@
         cursor: pointer;
     }
     .columns {
-        border-bottom: solid 1px;
+        border-bottom: solid 1px whitesmoke;
         padding: 15px 0px;
     }
 </style>
