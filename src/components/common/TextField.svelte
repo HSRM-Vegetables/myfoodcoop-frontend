@@ -25,21 +25,6 @@
     export let minimum = '';
 
     /**
-     * Event handler for keydown event
-     */
-    export let onKeyDown = () => {};
-
-    /**
-     * Event handler for change event
-     */
-    export let onChange = () => {};
-
-    /**
-     * Event handler for input event
-     */
-    export let onInput = () => {};
-
-    /**
      * Value to display
      */
     export let value = '';
@@ -49,23 +34,15 @@
      */
     export let disabled = false;
 
+    /**
+     * Displays red border around the input field if true
+     */
+    export let isInErrorState = false;
+
     let inputElement; // References the input field
-    let isInErrorState = false; // true, if the current input is not valid.
 
     export function clear() {
         inputElement.value = '';
-    }
-
-    export function isValid() {
-        onChange();
-
-        if (inputElement.value === '' || (!Number.isNaN(inputElement.value) && inputElement.value < 0)) {
-            isInErrorState = true;
-            return false;
-        }
-
-        isInErrorState = false;
-        return true;
     }
 
     export function getValue() {
@@ -97,9 +74,9 @@
         type={type}
         placeholder={placeholder}
         min={minimum}
-        on:change={isValid}
-        on:input={onInput}
-        on:keydown={onKeyDown}
+        on:change
+        on:input
+        on:keydown
         disabled={disabled}
         value={value}
     />
