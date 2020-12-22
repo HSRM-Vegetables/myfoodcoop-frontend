@@ -48,7 +48,8 @@
 
     function isQuantityValid() {
         const quantity = quantityElement.getValue();
-        if (!quantity || Number.isNaN(quantity) || quantity <= 0) {
+        if (!quantity || Number.isNaN(quantity) || quantity <= 0 
+            || (stockItem.unitType === UnitType.PIECE && quantity % 1 !== 0 )) {
             quantityError = true;
             return false;
         }
