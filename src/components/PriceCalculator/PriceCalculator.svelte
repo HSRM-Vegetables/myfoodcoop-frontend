@@ -131,7 +131,7 @@
         <hr />
 
         <div class="button-box">
-            <button on:click={addItem} class="button is-medium is-primary mb-4"> Warenkorb hinzufügen </button>
+            <button on:click={addItem} class="button is-medium is-primary mb-4"> zum Warenkorb hinzufügen </button>
             <button on:click={() => goto(linkBack)} class="button is-link is-medium mb-4"> Zurück </button>
         </div>
     </div>
