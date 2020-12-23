@@ -1,14 +1,10 @@
 <script>
     import { goto } from '@sapper/app';
     import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
-    import ShowBalance from '../components/balance/ShowBalance.svelte';
-    import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
-    import { name } from '../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Stadtgemüse e.V.';
 
     function onKeyPress(event, href) {
         if (event.code === 'Space' || event.code === 'Enter') {
@@ -74,14 +70,6 @@
         font-weight: bold;
     }
 </style>
-
-<span class="is-size-4">Hallo {$name}!</span>
-
-<hr />
-
-<ShowBalance type="inline" />
-
-<hr />
 
 <div class="button-container">
     {#each buttons as button}
