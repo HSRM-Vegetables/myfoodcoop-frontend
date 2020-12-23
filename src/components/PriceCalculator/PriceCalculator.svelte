@@ -57,7 +57,7 @@
         }
 
         const cart = new ShoppingCart();
-        cart.addItem(stockItem.name, stockItem.unitType, stockItem.unitPrice, quantityElement.getValue());
+        cart.addItem(stockItem, quantityElement.getValue());
         goto('/shopping/cart');
     }
 </script>
