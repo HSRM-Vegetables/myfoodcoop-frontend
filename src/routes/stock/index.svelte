@@ -1,4 +1,5 @@
 <script>
+    import { goto } from '@sapper/app';
     import { onMount } from 'svelte';
     import StockList from '../../components/stock/StockList.svelte';
     import { title } from '../../stores/page';
@@ -34,6 +35,10 @@
     function closeModal() {
         modalIsOpen = false;
     }
+
+    function onEditItem(event) {
+        goto(`/stock/item/${event.detail.id}`);
+    }
 </script>
 
 <Modal title="Artikel löschen?" bind:open={modalIsOpen}>
@@ -45,8 +50,14 @@
 </Modal>
 
 <div class="has-text-centered">
-    <StockList bind:stockItems={stock.stockItems} on:remove={confirmRemoveItem} allowRemoval={true} />
-    <a href="stock/fill" class="button is-primary mt-6">Bestand hinzufügen</a>
+    <StockList
+        bind:stockItems={stock.stockItems}
+        on:remove={confirmRemoveItem}
+        allowRemoval={true}
+        on:select={onEditItem}
+        isClickable={true}
+    />
+    <a href="stock/item/new" class="button is-primary mt-6">Bestand hinzufügen</a>
 </div>
 
 <hr />

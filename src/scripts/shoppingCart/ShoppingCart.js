@@ -1,7 +1,5 @@
 import LocalStorageKeys from '../LocalStorageKeys';
 import ShoppingCartItem from './ShoppingCartItem';
-import { UnitType } from '../UnitType';
-import { moneyStyler } from '../Helper';
 
 export default class ShoppingCart {
     constructor() {
@@ -18,44 +16,35 @@ export default class ShoppingCart {
     }
 
     // TODO: Implement updates of cartitems
-    addItem(name, unitType, unitPrice, quantity) {
-        if (unitType !== UnitType.KILO && unitType !== UnitType.PIECE) {
-            return false;
-        }
-
-        const unitPriceSanitized = moneyStyler(unitPrice);
-        if (Number.isNaN(unitPriceSanitized)) {
-            return false;
-        }
-
+    addItem(stockItem, quantity) {
         const quantityParsed = parseInt(quantity, 10);
         if (Number.isNaN(quantityParsed)) {
             return false;
         }
 
         // check if item name already exists in item array. if true, remove the entry
-        if (this.cartItems.find((item) => item.name === name) !== undefined) {
+        if (this.cartItems.find((item) => item.stockItem.id === stockItem.id) !== undefined) {
             // remove item from list;
-            this.cartItems = this.cartItems.filter((ci) => ci.name !== name);
+            this.cartItems = this.cartItems.filter((ci) => ci.stockItem.id !== stockItem.id);
         }
 
         this.cartItems = [...this.cartItems,
-            new ShoppingCartItem(name, unitType, unitPriceSanitized, quantity)];
+            new ShoppingCartItem(stockItem, quantity)];
 
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
 
         return true;
     }
 
-    removeItem(name) {
-        this.cartItems = this.cartItems.filter((item) => item.name !== name);
+    removeItem(id) {
+        this.cartItems = this.cartItems.filter((item) => item.stockItem.id !== id);
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 
     totalPrice() {
         let totalPrice = 0.0;
         this.cartItems.forEach((item) => {
-            totalPrice += (item.unitPrice * item.quantity);
+            totalPrice += (item.stockItem.unitPrice * item.quantity);
         });
 
         return totalPrice.toFixed(2);

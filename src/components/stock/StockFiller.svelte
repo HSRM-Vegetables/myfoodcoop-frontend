@@ -6,21 +6,33 @@
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
 
+    /**
+     * Stock item the form should be prefilled with, if undefined no values are prefilled
+     */
+    export let item;
+
     let unitPriceTextField;
     let quantityTextField;
     let articleTextField;
     let descriptionElement;
     let unitType = UnitType.KILO;
+    let unitTypeBoolean = false;
 
     let articleTextFieldError = false;
     let unitPriceTextFieldError = false;
     let quantityTextFieldError = false;
 
-    let unitTypeBoolean;
+    // call the method as soon as the value of unitTypeBoolean changes
+    $: untiTypeChanged(unitTypeBoolean);
 
-    $: unitTypeChanged(unitTypeBoolean);
+    // call the method as soon as the value of item changes
+    $: itemChanged(item);
 
-    function unitTypeChanged(value) {
+    /**
+     * Update the unit type which should be displayed
+     * @param {boolean} value current state of unit type
+     */
+    function untiTypeChanged(value) {
         if (value === true) {
             unitType = UnitType.KILO;
         } else {
@@ -52,23 +64,59 @@
         return true;
     }
 
-    function addItem() {
-        if (!areInputsValid()) {
+    /**
+     * called if the value of item changes
+     * @param stockItem stock item
+     */
+    function itemChanged(stockItem) {
+        if (!stockItem) {
             return;
         }
 
+        if (stockItem.unitType === UnitType.KILO) {
+            unitTypeBoolean = true;
+
+            // force update of unit type
+            untiTypeChanged(unitTypeBoolean);
+        }
+    }
+
+    /**
+     * Add or Update an existing stock item
+     */
+    function addOrUpadteItem() {
+        if (!areInputsValid()) {
+            return;
+        }
+       
         const stock = new Stock();
-        stock.addItem(
-            uuid(),
-            articleTextField.getValue(),
-            unitType,
-            unitPriceTextField.getValue(),
-            quantityTextField.getValue(),
-            descriptionElement.value
-        );
+        
+        if (!item) {
+            stock.addItem(
+                uuid(),
+                articleTextField.getValue(),
+                unitType,
+                unitPriceTextField.getValue(),
+                quantityTextField.getValue(),
+                descriptionElement.value
+            );
+        } else {
+            stock.updateItem(
+                item.id,
+                articleTextField.getValue(),
+                unitType,
+                unitPriceTextField.getValue(),
+                quantityTextField.getValue(),
+                descriptionElement.value
+            );
+        }
+
         goto('/stock/');
     }
 
+    /**
+     * clear the inputs of all fields
+     */
     function clearInputs() {
         articleTextField.clear();
         unitPriceTextField.clear();
@@ -101,6 +149,7 @@
                 placeholder="Artikel"
                 label="Artikel"
                 isInErrorState={articleTextFieldError}
+                value={item ? item.name : ''}
             />
         </div>
         <div class="form-row pt-4">
@@ -119,6 +168,7 @@
                 decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                 minimum="0"
                 isInErrorState={unitPriceTextFieldError}
+                value={item ? item.unitPrice : ''}
             />
         </div>
         <div class="pt-4">
@@ -130,17 +180,24 @@
                 decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
                 minimum="0"
                 isInErrorState={quantityTextFieldError}
+                value={item ? item.quantity : ''}
             />
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
             <div class="form-row is-relative">
-                <textarea class="textarea" placeholder="Beschreibung" bind:this={descriptionElement} />
+                <textarea
+                    class="textarea"
+                    placeholder="Beschreibung"
+                    bind:this={descriptionElement}
+                >{item ? item.description : ''}</textarea>
             </div>
         </div>
         <hr />
         <div class="button-box has-text-centered">
-            <button on:click={addItem} class="button is-primary mb-4 fix-button-width">Bestand hinzufügen</button><br />
+            <button on:click={addOrUpadteItem} class="button is-primary mb-4 fix-button-width">Bestand
+                {item ? 'aktualisieren' : 'hinzufügen'}
+            </button><br />
             <button on:click={clearInputs} class="button is-danger mb-4 fix-button-width">Eingabe löschen</button><br />
             <div class="container has-text-centered mt-6">
                 <a href="/stock/" type="submit" class="button is-primary is-link fix-button-width">Zurück</a><br />
