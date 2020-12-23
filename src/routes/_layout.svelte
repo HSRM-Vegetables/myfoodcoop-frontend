@@ -4,11 +4,19 @@
     import Nav from '../components/Nav.svelte';
 </script>
 
+<style>
+    @media (max-width: 920px) {
+        main {
+            border-radius: 26px !important;
+            margin-top: -24px;
+            background: white;
+        }
+    }
+</style>
+
 <BulmaGlobalStyles />
 <EnsureLogin />
-
 <Nav />
-
 <main>
     <slot />
 </main>
