@@ -9,9 +9,18 @@
     let isLoggedIn;
 </script>
 
+<style>
+    @media (max-width: 920px) {
+        main {
+            border-radius: 26px !important;
+            margin-top: -24px;
+            background: white;
+        }
+    }
+</style>
+
 <BulmaGlobalStyles />
 <EnsureLogin bind:isLoggedIn />
-
 <Nav />
 
 <main>
