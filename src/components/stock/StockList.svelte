@@ -59,15 +59,6 @@
 </style>
 
 {#if stockItems && stockItems.length > 0}
-    <div class="columns is-hidden-mobile has-text-weight-bold">
-        {#if allowRemoval}
-            <div class="column has-text-left" />
-        {/if}
-        <div class="column is-half has-text-left">Artikel</div>
-        <div class="column has-text-right">Menge</div>
-        <div class="column has-text-right">Preis</div>
-    </div>
-
     {#each stockItems as item}
         <!-- If the component is initalized without onClick, onClick is "undefined". 
         The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
@@ -93,8 +84,8 @@
                 </div>
                 <div class="column has-text-right">
                     {#if item.unitType === UnitType.PIECE}
-                        <span>{item.quantity} Stück</span>
-                    {:else}<span>{item.quantity} kg</span>{/if}
+                        <span>{item.quantity} Stück vorhanden</span>
+                    {:else}<span>{item.quantity} kg vorhanden</span>{/if}
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}
