@@ -13,7 +13,7 @@
      * Event Handler, triggerd by click on an item
      * The item is passed as paramter
      */
-    export let onClick;
+    export let onClick = null;
 
     export let allowRemoval = false;
 
@@ -47,10 +47,14 @@
         display: block;
         padding: 1.25rem;
         margin-top: 20px;
-        cursor: pointer;
     }
+
     .breakwords {
         word-break: break-all;
+    }
+
+    .is-clickable {
+        cursor: pointer;
     }
 </style>
 
@@ -65,10 +69,12 @@
     </div>
 
     {#each stockItems as item}
-        <div class="shoppingElement">
-            <!-- If the component is initalized without onClick, onClick is "undefined". 
-                The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
-            <div class="columns is-mobile" class:is-clickable={!!onClick} on:click={() => !!onClick && onClick(item)}>
+        <!-- If the component is initalized without onClick, onClick is "undefined". 
+        The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
+        <div class="shoppingElement" class:is-clickable={!!onClick} on:click={() => !!onClick && onClick(item)} >
+        
+            <!--First column with item name, buttons, stock quantity and price -->
+            <div class="columns is-mobile">
                 {#if allowRemoval}
                     <div class="column has-text-left">
                         <button class="button is-white" on:click={() => removeItem(item.id)}>
@@ -96,13 +102,16 @@
                     {:else}<span>{item.unitPrice} € / kg</span>{/if}
                 </div>
             </div>
+            
+            <!-- Second column with item description -->
             {#if item.description}
-            <div class="columns" on:click={() => !!onClick && onClick(item)}>
+            <div>
                 <div class="column has-text-justified">
                     {displayDescription(item)}
                 </div>
             </div>
             {/if}
+
         </div>
     {/each}
 {:else}
