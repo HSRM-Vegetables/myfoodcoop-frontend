@@ -5,6 +5,7 @@
     import Icon from '../common/Icon.svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
+    import { stopPropagation } from '../../scripts/Helper';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -23,7 +24,9 @@
 
     const removeItemEvent = createEventDispatcher();
 
-    function removeItem(itemId) {
+    function removeItem(event, itemId) {
+        stopPropagation(event);
+
         // Dispatch the remove event to the parent component to remove the item from cart
         removeItemEvent('remove', {
             id: itemId,
@@ -68,7 +71,7 @@
             </div>
             {#if allowRemoval}
                 <div class="column has-text-right">
-                    <button class="button is-white" on:click={() => removeItem(item.id)}>
+                    <button class="button is-white" on:click={(event) => removeItem(event, item.stockItem.id)}>
                         <span class="icon">
                             <Icon icon={mdiDelete} />
                         </span>

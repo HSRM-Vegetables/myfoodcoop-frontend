@@ -1,6 +1,7 @@
 <script>
     import { mdiDelete } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
+    import { stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
 
@@ -20,13 +21,17 @@
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
 
-    function removeItem(itemId) {
+    function removeItem(event, itemId) {
+        stopPropagation(event);
+
         removeEvent('remove', {
             id: itemId,
         });
     }
 
-    function selectItem(itemId) {
+    function selectItem(event, itemId) {
+        stopPropagation(event);
+
         selectEvent('select', {
             id: itemId,
         });
@@ -67,12 +72,15 @@
 
 {#if stockItems && stockItems.length > 0}
     {#each stockItems as item}
-        <div class="shoppingElement" class:is-clickable={isClickable} on:click={() => selectItem(item.id)}>
+        <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
                 {#if allowRemoval}
                     <div class="column has-text-left">
-                        <button class="button is-white" on:click={() => removeItem(item.id)}>
+                        <button
+                            class="button is-white important-button"
+                            on:click={(event) => removeItem(event, item.id)}
+                        >
                             <span class="icon">
                                 <Icon icon={mdiDelete} />
                             </span>
