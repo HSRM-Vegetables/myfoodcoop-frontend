@@ -53,6 +53,12 @@
             return false;
         }
 
+        // Make sure one cannot purchase half of an item
+        if (stockItem.unitType === UnitType.PIECE && quantity % 1 !== 0 ) {
+            quantityError = true;
+            return false;
+        }
+
         quantityError = false;
         return true;
     }
