@@ -11,7 +11,7 @@
     export let stockItem;
 
     $: {
-        if (stockItem) {
+        if (stockItem && $currentShoppingItemQuantity !== undefined) {
             // update total price a soon as the item is set
             calcTotalPrice();
         }
