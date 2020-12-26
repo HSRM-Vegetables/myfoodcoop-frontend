@@ -9,6 +9,7 @@
         purchaseApi = new PurchaseApi();
     });
 </script>
+
 <style>
     .columns {
         border-bottom: solid 1px whitesmoke;
@@ -37,6 +38,4 @@
             </div>
         </div>
     {/each}
-{:else}
-    <span>Es wurden noch keine Einkäufe getätigt.</span>
-{/if}
+{:else}<span>Es wurden noch keine Einkäufe getätigt.</span>{/if}

@@ -9,6 +9,7 @@
 <script>
     import { onMount } from 'svelte';
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
+    import { moneyStyler } from '../../scripts/Helper';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import { title } from '../../stores/page';
 
@@ -28,7 +29,7 @@
 
     <hr />
 
-    <span>Gesamtbetrag: {purchase.totalPrice()}€</span>
+    <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice())}€</span>
 
     <hr />
 

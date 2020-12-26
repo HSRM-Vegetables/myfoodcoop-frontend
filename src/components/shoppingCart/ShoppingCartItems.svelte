@@ -1,10 +1,11 @@
 <script>
-    import { mdiDelete, mdiPencil} from '@mdi/js';
+    import { mdiDelete, mdiPencil } from '@mdi/js';
     import { goto } from '@sapper/app';
     import { createEventDispatcher } from 'svelte';
     import Icon from '../common/Icon.svelte';
-    import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
+    import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
+    import { stopPropagation } from '../../scripts/Helper';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -23,10 +24,12 @@
 
     const removeItemEvent = createEventDispatcher();
 
-    function removeItem(itemName) {
+    function removeItem(event, itemId) {
+        stopPropagation(event);
+
         // Dispatch the remove event to the parent component to remove the item from cart
         removeItemEvent('remove', {
-            name: itemName,
+            id: itemId,
         });
     }
 
@@ -34,9 +37,8 @@
         if (allowVisitPriceCalculator) {
             // var will be used in another file
             /* eslint-disable no-unused-vars */
-            $currentShoppingItem = shoppingCartItem.name;
             $currentShoppingItemQuantity = shoppingCartItem.quantity;
-            goto('/shopping/price-calculator');
+            goto(`/shopping/stock/${shoppingCartItem.stockItem.id}`);
         }
     }
 </script>
@@ -56,49 +58,47 @@
         margin-top: 20px;
     }
 
-    .breakwords{
+    .breakwords {
         word-break: break-all;
     }
 </style>
 
 {#each cartItems as item}
-    <div class="shoppingElement clickable" on:click={() => goToPriceCalculator(item)} >
+    <div class="shoppingElement" class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
-                <span class="breakwords">{item.name}</span>
+                <span class="breakwords">{item.stockItem.name}</span>
             </div>
             {#if allowRemoval}
                 <div class="column has-text-right">
-                    <button class="button is-white" on:click={() => removeItem(item.name)}>
+                    <button class="button is-white" on:click={(event) => removeItem(event, item.stockItem.id)}>
                         <span class="icon">
                             <Icon icon={mdiDelete} />
                         </span>
                     </button>
-                     <button class="button is-white" on:click={() => goToPriceCalculator(item)}>
+                    <button class="button is-white" on:click={() => goToPriceCalculator(item)}>
                         <span class="icon">
                             <Icon icon={mdiPencil} />
                         </span>
                     </button>
                 </div>
             {/if}
-        </div> 
+        </div>
 
         <div class="columns is-mobile is-vcentered">
             <div class="column has-text-left">
-                 {#if item.unitType === UnitType.PIECE}
-                    <span>{item.unitPrice} € / Stück</span>
-                {:else}<span>{item.unitPrice} € / kg</span>{/if}
+                {#if item.stockItem.unitType === UnitType.PIECE}
+                    <span>{item.stockItem.unitPrice} € / Stück</span>
+                {:else}<span>{item.stockItem.unitPrice} € / kg</span>{/if}
             </div>
 
-            <div class="column has-text-right" >
-                {#if item.unitType === UnitType.PIECE}
+            <div class="column has-text-right">
+                {#if item.stockItem.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
 
-            <div class="column has-text-right pr-5">
-             {(item.unitPrice * item.quantity).toFixed(2)} €
-            </div>
+            <div class="column has-text-right pr-5">{(item.stockItem.unitPrice * item.quantity).toFixed(2)} €</div>
         </div>
     </div>
 {/each}

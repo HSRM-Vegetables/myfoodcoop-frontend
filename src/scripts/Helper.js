@@ -51,3 +51,12 @@ export function moneyStyler(money) {
 
     return result.toFixed(2);
 }
+
+/**
+ * Stop the propagation of the event, so that the on:click action of the parent element is not executed.
+ * BrowserSupport: https://caniuse.com/?search=stopPropagation
+ * @param {MouseEvent | TouchEvent | PointerEvent} event Event produced by i.e. on:click
+ */
+export function stopPropagation(event) {
+    event.stopPropagation();
+}

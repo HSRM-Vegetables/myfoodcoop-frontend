@@ -44,8 +44,8 @@
 
     // removes an item from the cart
     function removeItem(event) {
-        const itemName = event.detail.name;
-        cart.removeItem(itemName);
+        const itemId = event.detail.id;
+        cart.removeItem(itemId);
         cart = cart; // tell svelte to update view
 
         updateBalanceAfterPurchase(); // no need to await, update when you feel like it
@@ -62,7 +62,7 @@
 
             // update stock
             cart.cartItems.forEach((item) => {
-                stock.removeQuantityFromItem(item.name, item.quantity);
+                stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
             });
 
             cart.clear();
@@ -76,7 +76,6 @@
 </script>
 
 <div class="has-text-centered">
- 
     <ShowBalance bind:currentBalance={balance.money} type="inline" />
 
     <hr />

@@ -1,45 +1,40 @@
 <script>
     import { goto } from '@sapper/app';
     import { onMount, onDestroy } from 'svelte';
-    import { currentShoppingItem, currentShoppingItemQuantity } from '../../stores/priceCalculator';
+    import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
-    import Stock from '../../scripts/stock/Stock';
+
+    // if undefined we asume, we are creating a new cart item
+    export let stockItem;
+
+    $: {
+        if (stockItem && $currentShoppingItemQuantity !== undefined) {
+            // update total price a soon as the item is set
+            calcTotalPrice();
+        }
+    }
 
     let quantityElement;
     let quantityError = false;
     let currentTotal = 0;
     let linkBack = '/shopping/stock';
 
-    // Stub item because onMount is called after the first render
-    let stockItem = {
-        name: '',
-        unitType: UnitType.KILO,
-        unitPrice: 0,
-        quantity: 0,
-        description: '',
-    };
-
     onMount(() => {
-        // get the current values by article name
-        stockItem = new Stock().getItem($currentShoppingItem);
-
         // changes the link back if coming from cart
         if ($currentShoppingItemQuantity !== undefined) {
             linkBack = '/shopping/cart';
         }
-        calcTotalPrice();
     });
 
     onDestroy(() => {
-        $currentShoppingItem = undefined;
         $currentShoppingItemQuantity = undefined;
     });
 
     function calcTotalPrice() {
-        const quantity = quantityElement.getValue();
+        const quantity = quantityElement ? quantityElement.getValue() : $currentShoppingItemQuantity;
 
         if (!Number.isNaN(stockItem.unitPrice) && !Number.isNaN(quantity)) {
             currentTotal = (stockItem.unitPrice * quantity).toFixed(2);
@@ -54,7 +49,7 @@
         }
 
         // Make sure one cannot purchase half of an item
-        if (stockItem.unitType === UnitType.PIECE && quantity % 1 !== 0 ) {
+        if (stockItem.unitType === UnitType.PIECE && quantity % 1 !== 0) {
             quantityError = true;
             return false;
         }
@@ -69,7 +64,7 @@
         }
 
         const cart = new ShoppingCart();
-        cart.addItem(stockItem.name, stockItem.unitType, stockItem.unitPrice, quantityElement.getValue());
+        cart.addItem(stockItem, quantityElement.getValue());
         goto('/shopping/cart');
     }
 </script>
@@ -105,7 +100,7 @@
     }
 </style>
 
-<div>
+{#if stockItem}
     <div class="form">
         <ShowBalance type="inline" />
 
@@ -159,4 +154,4 @@
             <button on:click={() => goto(linkBack)} class="button is-link is-medium mb-4"> Zurück </button>
         </div>
     </div>
-</div>
+{/if}

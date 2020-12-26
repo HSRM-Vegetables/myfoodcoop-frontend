@@ -1,6 +1,7 @@
 <script>
-    import { mdiDelete } from '@mdi/js';
+    import { mdiDelete, mdiPencil } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
+    import { stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
 
@@ -10,30 +11,49 @@
     export let stockItems;
 
     /**
-     * Event Handler, triggerd by click on an item
-     * The item is passed as paramter
+     * Defines if the cursor should switch to pointer
+     * Default: false
      */
-    export let onClick = null;
+    export let isClickable = false;
 
+    /**
+     * Displays a button, which allows to delete items
+     */
     export let allowRemoval = false;
 
-    const removeEvent = createEventDispatcher();
+    /**
+     * Displays a button, which allows to edit items
+     */
+    export let allowEdit = false;
 
-    function removeItem(itemId) {
+    const removeEvent = createEventDispatcher();
+    const selectEvent = createEventDispatcher();
+
+    function removeItem(event, itemId) {
+        stopPropagation(event);
+
         removeEvent('remove', {
+            id: itemId,
+        });
+    }
+
+    function selectItem(event, itemId) {
+        stopPropagation(event);
+
+        selectEvent('select', {
             id: itemId,
         });
     }
 
     function displayDescription(item) {
         if (!item || !item.description) {
-            return "";
+            return '';
         }
 
         if (item.description.length > 200) {
-            return `${item.description.substring(0,200)}...`;
+            return `${item.description.substring(0, 200)}...`;
         }
-        
+
         return item.description;
     }
 </script>
@@ -60,19 +80,26 @@
 
 {#if stockItems && stockItems.length > 0}
     {#each stockItems as item}
-        <!-- If the component is initalized without onClick, onClick is "undefined". 
-        The expression !!undefined evaluates to false, thats why the class "is-clickable" is not applied. -->
-        <div class="shoppingElement" class:is-clickable={!!onClick} on:click={() => !!onClick && onClick(item)} >
-        
+        <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
-                {#if allowRemoval}
+                {#if allowRemoval || allowEdit}
                     <div class="column has-text-left">
-                        <button class="button is-white" on:click={() => removeItem(item.id)}>
-                            <span class="icon">
-                                <Icon icon={mdiDelete} />
-                            </span>
-                        </button>
+                        {#if allowRemoval}
+                            <button class="button is-white" on:click={(event) => removeItem(event, item.id)}>
+                                <span class="icon">
+                                    <Icon icon={mdiDelete} />
+                                </span>
+                            </button>
+                        {/if}
+
+                        {#if allowEdit}
+                            <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
+                                <span class="icon">
+                                    <Icon icon={mdiPencil} />
+                                </span>
+                            </button>
+                        {/if}
                     </div>
                 {/if}
                 <div class="column is-half has-text-left ">
@@ -80,7 +107,6 @@
                     {#if item.unitType === UnitType.PIECE}
                         <span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / Stück</span>
                     {:else}<span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / kg</span>{/if}
-                    
                 </div>
                 <div class="column has-text-right">
                     {#if item.unitType === UnitType.PIECE}
@@ -93,16 +119,13 @@
                     {:else}<span>{item.unitPrice} € / kg</span>{/if}
                 </div>
             </div>
-            
+
             <!-- Second column with item description -->
             {#if item.description}
-            <div>
-                <div class="column has-text-justified">
-                    {displayDescription(item)}
+                <div>
+                    <div class="column has-text-justified">{displayDescription(item)}</div>
                 </div>
-            </div>
             {/if}
-
         </div>
     {/each}
 {:else}
