@@ -82,18 +82,21 @@
                 </div>
             {/if}
         </div> 
+
         <div class="columns is-mobile is-vcentered">
             <div class="column has-text-left">
                  {#if item.unitType === UnitType.PIECE}
                     <span>{item.unitPrice} € / Stück</span>
                 {:else}<span>{item.unitPrice} € / kg</span>{/if}
             </div>
-            <div class="column has-text-right clickable" on:click={() => goToPriceCalculator(item)}>
+
+            <div class="column has-text-right" >
                 {#if item.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
-            <div class="column has-text-right clickable pr-5" on:click={() => goToPriceCalculator(item)}>
+
+            <div class="column has-text-right pr-5">
              {(item.unitPrice * item.quantity).toFixed(2)} €
             </div>
         </div>
