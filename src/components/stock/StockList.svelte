@@ -24,6 +24,18 @@
             id: itemId,
         });
     }
+
+    function displayDescription(item) {
+        if (!item || !item.description) {
+            return "";
+        }
+
+        if (item.description.length > 200) {
+            return `${item.description.substring(0,200)}...`;
+        }
+        
+        return item.description;
+    }
 </script>
 
 <style>
@@ -84,11 +96,13 @@
                     {:else}<span>{item.unitPrice} € / kg</span>{/if}
                 </div>
             </div>
+            {#if item.description}
             <div class="columns" on:click={() => !!onClick && onClick(item)}>
                 <div class="column has-text-justified">
-                    {#if item.description}{item.description.substring(0, 200)}...{/if}
+                    {displayDescription(item)}
                 </div>
             </div>
+            {/if}
         </div>
     {/each}
 {:else}
