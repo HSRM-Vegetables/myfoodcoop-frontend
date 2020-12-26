@@ -45,18 +45,26 @@
     .clickable {
         cursor: pointer;
     }
+
     .shoppingElement {
-        border-bottom: solid 1px whitesmoke;
-        padding: 15px 0px;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+        color: #000;
+        display: block;
+        padding: 1.25rem;
+        margin-top: 20px;
     }
+
     .breakwords{
         word-break: break-all;
     }
 </style>
+
 {#each cartItems as item}
-    <div class="shoppingElement">
+    <div class="shoppingElement clickable" on:click={() => goToPriceCalculator(item)} >
         <div class="columns is-mobile">
-            <div class="column clickable has-text-left has-text-weight-bold" on:click={() => goToPriceCalculator(item)}>
+            <div class="column has-text-left has-text-weight-bold">
                 <span class="breakwords">{item.name}</span>
             </div>
             {#if allowRemoval}
@@ -85,11 +93,9 @@
                     <span>{item.quantity} Stück</span>
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
-            <div class="column has-text-right clickable" on:click={() => goToPriceCalculator(item)}>
+            <div class="column has-text-right clickable pr-5" on:click={() => goToPriceCalculator(item)}>
              {(item.unitPrice * item.quantity).toFixed(2)} €
             </div>
-       
         </div>
     </div>
 {/each}
-
