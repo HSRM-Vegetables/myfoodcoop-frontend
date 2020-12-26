@@ -7,6 +7,7 @@
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
 
+    // if undefined we asume, we are creating a new cart item
     export let stockItem;
 
     $: {
