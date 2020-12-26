@@ -54,6 +54,7 @@
         bind:stockItems={stock.stockItems}
         on:remove={confirmRemoveItem}
         allowRemoval={true}
+        allowEdit={true}
         on:select={onEditItem}
         isClickable={true}
     />

@@ -1,5 +1,5 @@
 <script>
-    import { mdiDelete } from '@mdi/js';
+    import { mdiDelete, mdiPencil } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
     import { stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
@@ -16,7 +16,15 @@
      */
     export let isClickable = false;
 
+    /**
+     * Displays a button, which allows to delete items
+     */
     export let allowRemoval = false;
+
+    /**
+     * Displays a button, which allows to edit items
+     */
+    export let allowEdit = false;
 
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
@@ -75,16 +83,23 @@
         <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
-                {#if allowRemoval}
+                {#if allowRemoval || allowEdit}
                     <div class="column has-text-left">
-                        <button
-                            class="button is-white important-button"
-                            on:click={(event) => removeItem(event, item.id)}
-                        >
-                            <span class="icon">
-                                <Icon icon={mdiDelete} />
-                            </span>
-                        </button>
+                        {#if allowRemoval}
+                            <button class="button is-white" on:click={(event) => removeItem(event, item.id)}>
+                                <span class="icon">
+                                    <Icon icon={mdiDelete} />
+                                </span>
+                            </button>
+                        {/if}
+
+                        {#if allowEdit}
+                            <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
+                                <span class="icon">
+                                    <Icon icon={mdiPencil} />
+                                </span>
+                            </button>
+                        {/if}
                     </div>
                 {/if}
                 <div class="column is-half has-text-left ">
