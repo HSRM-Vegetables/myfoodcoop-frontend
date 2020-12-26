@@ -22,7 +22,7 @@
 
 <div class="container has-text-centered">
     <img src={robby} alt="Robby der Error Roboter" />
-    <h1>{status}: Uups, du hast das Internt kaputt gemacht</h1>
+    <h1>{status}: Uups, du hast das Internet kaputt gemacht</h1>
     <p class="mt-4 mb-2">
         War nur ein Spaß. Aber es scheint, dass Robby dein persönlicher Roboter, die Seite nach der du suchst, nicht
         finden kann. Bitte stelle sicher, dass du die richtige Adresse eingegeben hast, oder gehe mit Hilfe des Buttons
