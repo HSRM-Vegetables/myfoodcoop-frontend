@@ -29,7 +29,9 @@
      * The Link a click on the button should redirect to.
      * Important: Does not work with `disableOnLoad`
      */
-    export let href;
+    // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
+    // eslint-disable-next-line no-undef-init
+    export let href = undefined;
 </script>
 
 <style>
