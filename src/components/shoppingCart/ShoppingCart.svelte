@@ -76,8 +76,6 @@
 </script>
 
 <div class="has-text-centered">
-    <h1 class="mb-4">Warenkorb</h1>
-
     <ShowBalance bind:currentBalance={balance.money} type="inline" />
 
     <hr />

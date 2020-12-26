@@ -48,6 +48,12 @@
             return false;
         }
 
+        // Make sure one cannot purchase half of an item
+        if (stockItem.unitType === UnitType.PIECE && quantity % 1 !== 0) {
+            quantityError = true;
+            return false;
+        }
+
         quantityError = false;
         return true;
     }
@@ -89,6 +95,9 @@
         font-weight: bold;
         font-size: 4em;
     }
+    .breakwords {
+        word-break: break-all;
+    }
 </style>
 
 {#if stockItem}
@@ -97,7 +106,7 @@
 
         <hr />
 
-        <div class="is-size-3 mb-4">{stockItem.name}</div>
+        <div class="is-size-3 mb-4 breakwords">{stockItem.name}</div>
 
         {#if stockItem.description}
             <div class="box">{stockItem.description}</div>
@@ -141,7 +150,7 @@
         <hr />
 
         <div class="button-box">
-            <button on:click={addItem} class="button is-medium is-primary mb-4"> Warenkorb hinzufügen </button>
+            <button on:click={addItem} class="button is-medium is-primary mb-4"> zum Warenkorb hinzufügen </button>
             <button on:click={() => goto(linkBack)} class="button is-link is-medium mb-4"> Zurück </button>
         </div>
     </div>
