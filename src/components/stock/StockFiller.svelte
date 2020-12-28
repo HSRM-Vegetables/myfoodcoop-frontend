@@ -88,10 +88,8 @@
             return;
         }
 
-        const stock = new Stock();
-
         if (!item) {
-            await stock.addItem(
+            await Stock.addItem(
                 articleTextField.getValue(),
                 unitType,
                 pricePerUnitTextField.getValue(),
@@ -99,7 +97,7 @@
                 descriptionElement.value
             );
         } else {
-            stock.updateItem(
+            Stock.updateItem(
                 item.id,
                 articleTextField.getValue(),
                 unitType,

@@ -6,7 +6,6 @@
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
 
-    let stock;
     let stockList= {
         items : [],
     }
@@ -19,8 +18,7 @@
     let stockItemIdToRemove;
 
     onMount(async () => {
-        stock = new Stock();
-        stockList = await stock.getStockList();
+        stockList = await Stock.getStockList();
     });
     
     function confirmRemoveItem(event) {
@@ -29,7 +27,7 @@
     }
 
     function removeItem() {
-        stock.removeItem(stockItemIdToRemove);
+        Stock.removeItem(stockItemIdToRemove);
         stockList = stockList; // tell svelte to update the view
         modalIsOpen = false;
     }

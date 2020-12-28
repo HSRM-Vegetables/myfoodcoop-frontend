@@ -30,7 +30,6 @@
 
     function removeItem(event, itemId) {
         stopPropagation(event);
-
         removeEvent('remove', {
             id: itemId,
         });
@@ -38,7 +37,6 @@
 
     function selectItem(event, itemId) {
         stopPropagation(event);
-
         selectEvent('select', {
             id: itemId,
         });
