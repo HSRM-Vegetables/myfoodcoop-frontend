@@ -25,7 +25,6 @@
      * Displays a button, which allows to edit items
      */
     export let allowEdit = false;
-
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
 
@@ -105,8 +104,8 @@
                 <div class="column is-half has-text-left ">
                     <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
-                        <span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / Stück</span>
-                    {:else}<span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / kg</span>{/if}
+                        <span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / Stück</span>
+                    {:else}<span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / kg</span>{/if}
                 </div>
                 <div class="column has-text-right">
                     {#if item.unitType === UnitType.PIECE}
@@ -115,8 +114,8 @@
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}
-                        <span>{item.unitPrice} € / Stück</span>
-                    {:else}<span>{item.unitPrice} € / kg</span>{/if}
+                        <span>{item.pricePerUnit} € / Stück</span>
+                    {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
                 </div>
             </div>
 

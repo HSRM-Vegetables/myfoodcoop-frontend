@@ -23,13 +23,11 @@
     };
     let balanceUpdateInProgress = false;
     let requestError;
-    let stock;
     let balanceAfterPurchase;
 
     onMount(() => {
         cart = new ShoppingCart();
         balance = new Balance();
-        stock = new Stock();
         updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     });
 
@@ -62,7 +60,7 @@
 
             // update stock
             cart.cartItems.forEach((item) => {
-                stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
+                Stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
             });
 
             cart.clear();

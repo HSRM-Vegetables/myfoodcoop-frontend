@@ -88,8 +88,8 @@
         <div class="columns is-mobile is-vcentered">
             <div class="column has-text-left">
                 {#if item.stockItem.unitType === UnitType.PIECE}
-                    <span>{item.stockItem.unitPrice} € / Stück</span>
-                {:else}<span>{item.stockItem.unitPrice} € / kg</span>{/if}
+                    <span>{item.stockItem.pricePerUnit} € / Stück</span>
+                {:else}<span>{item.stockItem.pricePerUnit} € / kg</span>{/if}
             </div>
 
             <div class="column has-text-right">
@@ -98,7 +98,7 @@
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
 
-            <div class="column has-text-right pr-5">{(item.stockItem.unitPrice * item.quantity).toFixed(2)} €</div>
+            <div class="column has-text-right pr-5">{(item.stockItem.pricePerUnit * item.quantity).toFixed(2)} €</div>
         </div>
     </div>
 {/each}

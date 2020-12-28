@@ -29,6 +29,15 @@ export default class Fetch {
     static async patch(subpath, content) {
         return Fetch.request('PATCH', subpath, content);
     }
+    
+    /**
+     * Sends a DELETE request to the api
+     * @param {string} subpath Path relativ to the version number of the api
+     * @returns The JSON response of the request
+     */
+    static async delete(subpath) {
+        return Fetch.request('DELETE', subpath, undefined);
+    }
 
     /**
      * Sends a request to the api
@@ -51,4 +60,5 @@ export default class Fetch {
         }
         return response.json();
     }
+    
 }

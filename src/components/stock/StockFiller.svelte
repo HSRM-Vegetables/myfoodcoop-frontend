@@ -1,6 +1,5 @@
 <script>
     import { goto } from '@sapper/app';
-    import uuid from 'uuid';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
@@ -11,7 +10,7 @@
      */
     export let item;
 
-    let unitPriceTextField;
+    let pricePerUnitTextField;
     let quantityTextField;
     let articleTextField;
     let descriptionElement;
@@ -19,7 +18,7 @@
     let unitTypeBoolean = false;
 
     let articleTextFieldError = false;
-    let unitPriceTextFieldError = false;
+    let pricePerUnitTextFieldError = false;
     let quantityTextFieldError = false;
 
     // call the method as soon as the value of unitTypeBoolean changes
@@ -42,22 +41,22 @@
 
     function areInputsValid() {
         articleTextFieldError = false;
-        unitPriceTextFieldError = false;
+        pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
 
         if (!articleTextField || !articleTextField.getValue()) {
             articleTextFieldError = true;
         }
 
-        if (!unitPriceTextField || !unitPriceTextField.getValue() || unitPriceTextField.getValue() < 0) {
-            unitPriceTextFieldError = true;
+        if (!pricePerUnitTextField || !pricePerUnitTextField.getValue() || pricePerUnitTextField.getValue() < 0) {
+            pricePerUnitTextFieldError = true;
         }
 
         if (!quantityTextField || !quantityTextField.getValue() || quantityTextField.getValue() < 0) {
             quantityTextFieldError = true;
         }
 
-        if (articleTextFieldError || unitPriceTextFieldError || quantityTextFieldError) {
+        if (articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError) {
             return false;
         }
 
@@ -84,7 +83,7 @@
     /**
      * Add or Update an existing stock item
      */
-    function addOrUpadteItem() {
+    async function addOrUpadteItem() {
         if (!areInputsValid()) {
             return;
         }
@@ -92,11 +91,10 @@
         const stock = new Stock();
 
         if (!item) {
-            stock.addItem(
-                uuid(),
+            await stock.addItem(
                 articleTextField.getValue(),
                 unitType,
-                unitPriceTextField.getValue(),
+                pricePerUnitTextField.getValue(),
                 quantityTextField.getValue(),
                 descriptionElement.value
             );
@@ -105,7 +103,7 @@
                 item.id,
                 articleTextField.getValue(),
                 unitType,
-                unitPriceTextField.getValue(),
+                pricePerUnitTextField.getValue(),
                 quantityTextField.getValue(),
                 descriptionElement.value
             );
@@ -119,7 +117,7 @@
      */
     function clearInputs() {
         articleTextField.clear();
-        unitPriceTextField.clear();
+        pricePerUnitTextField.clear();
         quantityTextField.clear();
         descriptionElement.value = '';
     }
@@ -161,14 +159,14 @@
         </div>
         <div class="pt-4">
             <TextField
-                bind:this={unitPriceTextField}
+                bind:this={pricePerUnitTextField}
                 type="number"
                 placeholder="Warenpreis"
                 label="Warenpreis"
                 decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                 minimum="0"
-                isInErrorState={unitPriceTextFieldError}
-                value={item ? item.unitPrice : ''}
+                isInErrorState={pricePerUnitTextFieldError}
+                value={item ? item.pricePerUnit : ''}
             />
         </div>
         <div class="pt-4">

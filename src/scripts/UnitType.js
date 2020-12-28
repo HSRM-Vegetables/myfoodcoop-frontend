@@ -1,4 +1,4 @@
 export const UnitType = {
-    KILO: 'kg',
-    PIECE: 'piece'
+    KILO: 'KG',
+    PIECE: 'PIECE'
 };

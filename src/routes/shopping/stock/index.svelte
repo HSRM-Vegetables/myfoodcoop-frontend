@@ -5,12 +5,12 @@
     import { title } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
 
-    let stock = {
-        stockItems: [],
-    };
+    let stockList= {
+        items : [],
+    }
 
-    onMount(() => {
-        stock = new Stock();
+    onMount(async () => {
+        stockList = await Stock.getStockList();
     });
 
     /* eslint-disable prefer-const */
@@ -23,7 +23,7 @@
 </script>
 
 <div class="has-text-centered mb-6">
-    <StockList bind:stockItems={stock.stockItems} isClickable={true} on:select={itemSelected} />
+    <StockList bind:stockItems={stockList.items} isClickable={true} on:select={itemSelected} />
 </div>
 
 <hr />

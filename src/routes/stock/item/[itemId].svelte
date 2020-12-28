@@ -6,13 +6,11 @@
 
     const { page } = stores();
     const { itemId } = $page.params;
-
-    let stockItem;
-
-    onMount(() => {
-        const stock = new Stock();
-        stockItem = stock.getItem(itemId);
+    let item;
+    
+    onMount(async () => {
+        item = await Stock.getItem(itemId);
     });
 </script>
 
-<StockFiller item={stockItem} />
+<StockFiller item={item} />
