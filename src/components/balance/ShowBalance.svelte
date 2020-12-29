@@ -37,6 +37,7 @@
         // Style the currentBalance when this component updates
         currentBalance = moneyStyler(currentBalance);
     });
+    
 </script>
 
 <style>

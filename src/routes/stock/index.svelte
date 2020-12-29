@@ -2,7 +2,7 @@
     import { goto } from '@sapper/app';
     import { onMount } from 'svelte';
     import StockList from '../../components/stock/StockList.svelte';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
 
@@ -13,6 +13,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
+    $navBalance = 'hidden';
 
     let modalIsOpen = false;
     let stockItemIdToRemove;

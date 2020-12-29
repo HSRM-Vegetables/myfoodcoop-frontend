@@ -1,16 +1,13 @@
 <script>
-    import ShowBalance from '../../components/balance/ShowBalance.svelte';
     import HistoryOverview from '../../components/history/HistoryOverview.svelte';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Vergangene Einkäufe';
+    $navBalance= 'hidden';
+
 </script>
-
-<ShowBalance type="inline" />
-
-<hr />
 
 <HistoryOverview />
 
