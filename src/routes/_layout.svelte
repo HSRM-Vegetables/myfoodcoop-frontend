@@ -15,6 +15,7 @@
             border-radius: 26px !important;
             margin-top: -24px;
             background: white;
+            min-height: 60px;
         }
     }
 </style>
