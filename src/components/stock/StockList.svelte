@@ -5,6 +5,7 @@
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
     import Loader from '../common/Loader.svelte';
+    import NoData from '../common/NoData.svelte';
 
     /**
      * An Array of StockItems to be displayed
@@ -135,5 +136,5 @@
         </div>
     {/each}
 {:else}
-    <p>Der Bestand ist leer.</p>
+    <NoData text="Der Bestand ist leer" />
 {/if}
