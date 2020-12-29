@@ -10,11 +10,12 @@
     import { onMount } from 'svelte';
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Einkaufshistorie';
+    $navBalance = "hidden";
 
     let purchase;
     onMount(() => {

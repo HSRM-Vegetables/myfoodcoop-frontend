@@ -1,10 +1,12 @@
 <script>
     import ShoppingCart from '../../components/shoppingCart/ShoppingCart.svelte';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Warenkorb';
+    $navBalance= 'show';
+
 </script>
 
 <svelte:head>

@@ -1,10 +1,11 @@
 <script>
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
     import { name } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Profil';
+    $navBalance= 'show';
 </script>
 
 <h1 class="title">Hallo {$name}!</h1>

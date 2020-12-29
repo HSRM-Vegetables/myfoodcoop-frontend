@@ -1,7 +1,7 @@
 <script>
     import Cookie from 'js-cookie';
     import { stores, goto } from '@sapper/app';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
     import { name } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
@@ -11,7 +11,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Login';
-
+    $navBalance = 'hidden';
     function saveName() {
         // create cookie that expires after 7 days
         Cookie.set(CookieDefaults.NAME, $name, { expires: 7 });
