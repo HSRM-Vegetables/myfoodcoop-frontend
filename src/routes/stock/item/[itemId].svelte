@@ -7,7 +7,7 @@
     const { page } = stores();
     const { itemId } = $page.params;
     let item;
-    
+
     onMount(async () => {
         item = await Stock.getItem(itemId);
     });

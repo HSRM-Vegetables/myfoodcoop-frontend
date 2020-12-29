@@ -4,6 +4,7 @@
     import { stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
+    import Loader from '../common/Loader.svelte';
 
     /**
      * An Array of StockItems to be displayed
@@ -25,6 +26,12 @@
      * Displays a button, which allows to edit items
      */
     export let allowEdit = false;
+
+    /**
+     * Display a loading spinner instead of the list
+     */
+    export let isLoading = false;
+
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
 
@@ -75,7 +82,9 @@
     }
 </style>
 
-{#if stockItems && stockItems.length > 0}
+{#if isLoading}
+    <Loader bind:isLoading />
+{:else if stockItems && stockItems.length > 0}
     {#each stockItems as item}
         <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->

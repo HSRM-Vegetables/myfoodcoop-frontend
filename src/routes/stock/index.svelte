@@ -6,9 +6,9 @@
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
 
-    let stockList= {
-        items : [],
-    }
+    let stockList = {
+        items: [],
+    };
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -16,11 +16,13 @@
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
+    let isLoading = true;
 
     onMount(async () => {
         stockList = await Stock.getStockList();
+        isLoading = false;
     });
-    
+
     function confirmRemoveItem(event) {
         modalIsOpen = true;
         stockItemIdToRemove = event.detail.id;
@@ -52,6 +54,7 @@
 <div class="has-text-centered">
     <StockList
         bind:stockItems={stockList.items}
+        bind:isLoading
         on:remove={confirmRemoveItem}
         allowRemoval={true}
         allowEdit={true}
