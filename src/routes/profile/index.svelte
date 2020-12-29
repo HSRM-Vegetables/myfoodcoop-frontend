@@ -11,6 +11,7 @@
     function clearLocalData() {
         localStorage.clear();
     }
+
 </script>
 
 <h1 class="title">Hallo {$name}!</h1>
