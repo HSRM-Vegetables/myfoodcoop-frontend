@@ -1,11 +1,12 @@
 <script>
+    import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { title } from '../../stores/page';
     import { name } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Profil';
+    $navBalance= 'show';
 
     function clearLocalData() {
         localStorage.clear();

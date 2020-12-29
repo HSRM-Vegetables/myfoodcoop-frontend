@@ -1,6 +1,12 @@
 <script>
     import robby from 'images/robby.gif';
+    import { title, navBalance } from '../stores/page';
     import Button from '../components/common/Button.svelte';
+
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Uups, du hast das Internt kaputt gemacht';
+    $navBalance = 'hidden';
 
     export let status;
     export let error;
