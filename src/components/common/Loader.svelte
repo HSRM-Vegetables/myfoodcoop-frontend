@@ -3,64 +3,68 @@
 </script>
 
 <style>
-    .container {
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
-        padding: 3em 3em;
-    }
-
-    .lds-ring {
-        display: inline-block;
+ .loader-spinner {
         position: relative;
-        width: 80px;
-        height: 80px;
-    }
-
-    .lds-ring div {
-        box-sizing: border-box;
-        display: block;
-        position: absolute;
+        margin: 0 auto;
         width: 64px;
         height: 64px;
-        margin: 8px;
-        border: 8px solid #375a7f;
-        border-radius: 50%;
-        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        border-color: #375a7f transparent transparent transparent;
+    }
+    
+    .loader-spinner::before {
+        content: '';
+        display: block;
+        padding-top: 100%;
     }
 
-    .lds-ring div:nth-child(1) {
-        animation-delay: -0.45s;
+    .circular {
+        animation: rotate 2s linear infinite;
+        height: 100%;
+        transform-origin: center center;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
     }
 
-    .lds-ring div:nth-child(2) {
-        animation-delay: -0.3s;
+    .path {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+        stroke: #375a7f;
+        animation: dash 1.5s ease-in-out infinite;
+        stroke-linecap: round;
     }
 
-    .lds-ring div:nth-child(3) {
-        animation-delay: -0.15s;
-    }
-
-    @keyframes lds-ring {
-        0% {
-            transform: rotate(0deg);
-        }
+    @keyframes rotate {
         100% {
             transform: rotate(360deg);
         }
     }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -35px;
+        }
+        100% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -124px;
+        }
+    }
+
 </style>
 
 {#if isLoading}
-    <div class="container">
-        <div class="lds-ring">
-            <div />
-            <div />
-            <div />
-            <div />
-        </div>
-        <p class="pt-3">Lade Daten</p>
+    <div class="loader-spinner">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
     </div>
 {/if}
+
