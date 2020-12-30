@@ -1,11 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
-    import uuid from 'uuid';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Balance from '../../scripts/Balance';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
-    import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
@@ -45,8 +43,7 @@
             balanceUpdateInProgress = true;
             $currentBalance = await Balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
-            const purchaseApi = new PurchaseApi();
-            purchaseApi.addPurchase(new Purchase(uuid(), new Date(), cart.cartItems));
+            PurchaseApi.addPurchase(cart.cartItems);
 
             // update stock
             cart.cartItems.forEach((item) => {

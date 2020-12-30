@@ -1,5 +1,8 @@
+import { get } from 'svelte/store';
 import LocalStorageKeys from '../LocalStorageKeys';
 import Purchase from './Purchase';
+import Fetch from "../api/Fetch";
+import { name } from '../../stores/user';
 
 export default class PurchaseApi {
     constructor() {
@@ -17,8 +20,17 @@ export default class PurchaseApi {
         }
     }
 
-    addPurchase(purchase) {
-        this.purchases.push(purchase);
-        window.localStorage.setItem(LocalStorageKeys.PURCHASES, JSON.stringify(this.purchases));
+    static async addPurchase(cartItems) {
+        const additionalHeader = {'X-Username': get(name)};
+        const body = {
+            "items" : cartItems.map( item => (
+                {
+                    "id": item.stockItem.id,
+                    "amount": item.quantity
+                }
+            ))
+        };
+
+        return Fetch.post('purchase', JSON.stringify(body), JSON.stringify(additionalHeader));
     }
 }
