@@ -3,13 +3,13 @@
 </script>
 
 <style>
- .loader-spinner {
+    .loader-spinner {
         position: relative;
         margin: 0 auto;
         width: 64px;
         height: 64px;
     }
-    
+
     .loader-spinner::before {
         content: '';
         display: block;
@@ -57,7 +57,6 @@
             stroke-dashoffset: -124px;
         }
     }
-
 </style>
 
 {#if isLoading}
@@ -67,4 +66,3 @@
         </svg>
     </div>
 {/if}
-
