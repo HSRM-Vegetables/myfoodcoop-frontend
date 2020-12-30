@@ -28,10 +28,12 @@
         stockItemIdToRemove = event.detail.id;
     }
 
-    function removeItem() {
-        Stock.removeItem(stockItemIdToRemove);
-        stockList = stockList; // tell svelte to update the view
+    async function removeItem() {
+        isLoading = true;
+        await Stock.removeItem(stockItemIdToRemove);
+        stockList = await Stock.getStockList(); // reload list
         modalIsOpen = false;
+        isLoading = false;
     }
 
     function closeModal() {
