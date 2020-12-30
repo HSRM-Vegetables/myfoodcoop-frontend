@@ -50,7 +50,7 @@
                 {/if}
             {:else if isInDevMode && error !== undefined}
                 <!-- Show the error, if we are in dev mode and the error is not from our api -->
-                <span>{error}</span>
+                <span>{JSON.stringify(error)}</span>
             {:else}
                 <!-- Show generic error -->
                 <span>Es ist ein unbestimmter Fehler aufgetreten!</span>
