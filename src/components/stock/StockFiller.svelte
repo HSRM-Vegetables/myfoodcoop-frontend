@@ -123,7 +123,7 @@
                     descriptionElement.value
                 );
             } else {
-                Stock.updateItem(
+                await Stock.updateItem(
                     item.id,
                     articleTextField.getValue(),
                     unitType,
