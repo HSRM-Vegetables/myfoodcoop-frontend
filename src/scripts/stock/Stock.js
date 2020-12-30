@@ -20,10 +20,10 @@ export default class Stock {
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    static async addItem(name, unitType, pricePerUnit, quantity, description) {
+    static async addItem(name, unitType, pricePerUnit, quantity, description) {       
         return Fetch.post(`stock/`, JSON.stringify({
             'name': name,
-            'unitType': unitType,
+            'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
@@ -77,10 +77,18 @@ export default class Stock {
     static async updateItem(id, name, unitType, pricePerUnit, quantity, description) {
         return Fetch.patch(`stock/${id}`, JSON.stringify({
             'name': name,
-            'unitType': unitType,
+            'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
         }));
     }
+
+    static convertUnitType(unitType) {
+        if (unitType === 'KG') {
+            return 'WEIGHT';
+        }
+        return unitType;
+    }
+
 }
