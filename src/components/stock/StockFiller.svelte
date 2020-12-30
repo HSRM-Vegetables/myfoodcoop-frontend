@@ -4,6 +4,7 @@
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
 
     /**
      * Stock item the form should be prefilled with, if undefined no values are prefilled
@@ -20,12 +21,15 @@
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
     let quantityTextFieldError = false;
+    let errorHint;
 
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
 
     // call the method as soon as the value of item changes
     $: itemChanged(item);
+
+    let requestError;
 
     /**
      * Update the unit type which should be displayed
@@ -40,20 +44,40 @@
     }
 
     function areInputsValid() {
+        errorHint = undefined;
         articleTextFieldError = false;
         pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
 
+        // No name set
         if (!articleTextField || !articleTextField.getValue()) {
             articleTextFieldError = true;
         }
 
+        // No price or price is negative
         if (!pricePerUnitTextField || !pricePerUnitTextField.getValue() || pricePerUnitTextField.getValue() < 0) {
             pricePerUnitTextFieldError = true;
         }
 
+        // no quantity or quantity is negative
         if (!quantityTextField || !quantityTextField.getValue() || quantityTextField.getValue() < 0) {
             quantityTextFieldError = true;
+        }
+
+        // Quantity is not a number
+        if (Number.isNaN(quantityTextField.getValue())) {
+            quantityTextFieldError = true;
+        }
+
+        // Price is not a number
+        if (Number.isNaN(pricePerUnitTextField.getValue())) {
+            pricePerUnitTextFieldError = true;
+        }
+
+        // Fractional quantity with unitType PIECE
+        if (unitType === UnitType.PIECE && parseFloat(quantityTextField.getValue()) % 1 !== 0) {
+            quantityTextFieldError = true;
+            errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
         }
 
         if (articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError) {
@@ -84,27 +108,33 @@
      * Add or Update an existing stock item
      */
     async function addOrUpadteItem() {
+        requestError = undefined;
         if (!areInputsValid()) {
             return;
         }
 
-        if (!item) {
-            await Stock.addItem(
-                articleTextField.getValue(),
-                unitType,
-                pricePerUnitTextField.getValue(),
-                quantityTextField.getValue(),
-                descriptionElement.value
-            );
-        } else {
-            Stock.updateItem(
-                item.id,
-                articleTextField.getValue(),
-                unitType,
-                pricePerUnitTextField.getValue(),
-                quantityTextField.getValue(),
-                descriptionElement.value
-            );
+        try {
+            if (!item) {
+                await Stock.addItem(
+                    articleTextField.getValue(),
+                    unitType,
+                    pricePerUnitTextField.getValue(),
+                    quantityTextField.getValue(),
+                    descriptionElement.value
+                );
+            } else {
+                Stock.updateItem(
+                    item.id,
+                    articleTextField.getValue(),
+                    unitType,
+                    pricePerUnitTextField.getValue(),
+                    quantityTextField.getValue(),
+                    descriptionElement.value
+                );
+            }
+        } catch (error) {
+            requestError = error;
+            return;
         }
 
         goto('/stock/');
@@ -135,6 +165,14 @@
         margin: auto;
     }
 </style>
+
+<ErrorModal error={requestError} />
+
+{#if errorHint}
+    <article class="message is-danger">
+        <div class="message-body">{errorHint}</div>
+    </article>
+{/if}
 
 <div>
     <div class="form">
