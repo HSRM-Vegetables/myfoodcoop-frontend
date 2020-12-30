@@ -5,17 +5,24 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import ShowBalance from './ShowBalance.svelte';
+    import { currentBalance } from '../../stores/balance';
 
     let changeMoneyInput;
     let balanceUpdateInProgress = false;
     let requestError;
-    const balance = new Balance();
 
     async function changeBalance() {
         balanceUpdateInProgress = true;
 
         try {
-            balance.currentBalance = await balance.setBalance(parseFloat(changeMoneyInput.getValue()));
+            // Instead of assigning the result to the store we could also call `currentBalance.forceUpdate()`.
+            // But this is not necessary as the response of the api-call is returning the actual balance,
+            // so we can just assign it to the store. This change will take immediate affect on all other components
+            // that are using this store.
+
+            // This variable is used in other files
+            // eslint-disable-next-line no-unused-vars
+            $currentBalance = await Balance.setBalance(parseFloat(changeMoneyInput.getValue()));
         } catch (error) {
             requestError = error;
         } finally {
@@ -34,7 +41,7 @@
 <ErrorModal error={requestError} />
 <section class="section">
     <div class="has-text-centered">
-        <ShowBalance bind:currentBalance={balance.currentBalance} />
+        <ShowBalance />
 
         <TextField
             bind:this={changeMoneyInput}
