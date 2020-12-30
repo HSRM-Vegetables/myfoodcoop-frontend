@@ -33,7 +33,7 @@
 
         <!-- Main Component, display the error here -->
         <section class="modal-card-body">
-            {#if error && error.errorCode && error.message && error.details}
+            {#if error && error.errorCode && error.message}
                 <!-- Show the error code for everyone -->
                 <p>Fehlercode: {error.errorCode}</p>
 
@@ -50,7 +50,7 @@
                 {/if}
             {:else if isInDevMode && error !== undefined}
                 <!-- Show the error, if we are in dev mode and the error is not from our api -->
-                <span>{JSON.stringify(error)}</span>
+                <span>{error}</span>
             {:else}
                 <!-- Show generic error -->
                 <span>Es ist ein unbestimmter Fehler aufgetreten!</span>
