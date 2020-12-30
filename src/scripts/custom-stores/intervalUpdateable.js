@@ -10,7 +10,9 @@ import { updateable } from './updateableStore';
  * i.e. through a request to store.forceUpdate()
  */
 export function intervalUpdateable(repeatMs, updateCallback) {
-    // Store the interval, so we have the possibility to clear it
+    /**
+     * Store the interval, so we have the possibility to clear it
+     */
     let interval;
 
     // called when an update is necessary, i.e. through a request to store.forceUpdate() or the interval
@@ -20,21 +22,21 @@ export function intervalUpdateable(repeatMs, updateCallback) {
 
     // called after the first subscriber has successfully subscribed to the store
     function firstSubscribe(set) {
-        // start the interval with the specified duration
-        interval = setInterval(() => {
-            // call the updatecallback
-            updateCallbackInternal(set);
-        }, repeatMs);
-    }
-
-    // called after the last subscriber has successfully unsubscribed from the store
-    function lastUnsubscribe() {
-        // clear the interval
-        clearInterval(interval);
+        // If the interval doesn't exists, we are after a page load.
+        // We only want the intervall once, in order to update data in the background
+        // We don't want to clear the Interval on the last unsubscribe, as unsubscriptions 
+        // happen after every route change and we want the updates to proceed even if we have no subscriber.
+        if (!interval) {
+            // start the interval with the specified duration
+            interval = setInterval(() => {
+                // call the updatecallback
+                updateCallbackInternal(set);
+            }, repeatMs);
+        }
     }
 
     // return the svelte custom store
-    return updateable(updateCallbackInternal, firstSubscribe, lastUnsubscribe)
+    return updateable(updateCallbackInternal, firstSubscribe)
 }
 
 /**
