@@ -1,22 +1,22 @@
 <script>
-    import { onMount } from 'svelte';
+    import { stores } from '@sapper/app';
     import BulmaGlobalStyles from '../components/BulmaGlobalStyles.svelte';
     import EnsureLogin from '../components/common/EnsureLogin.svelte';
     import Nav from '../components/Nav.svelte';
-    import { currentBalance } from '../stores/balance';
 
-    onMount(() => {
-        // Force update all store on page load. This is necessary because the window property and so
-        // the fetch call are not available during store initialization.
-        currentBalance.forceUpdate();
-    });
+    const { page } = stores();
+
+    let isLoggedIn;
 </script>
 
 <BulmaGlobalStyles />
-<EnsureLogin />
+<EnsureLogin bind:isLoggedIn />
 
 <Nav />
 
 <main>
-    <slot />
+    <!-- Only allow the user to visit the page if he is logged in, he tries to login, or if an error occured -->
+    {#if isLoggedIn || $page.path.includes('/login') || $page.error}
+        <slot />
+    {/if}
 </main>
