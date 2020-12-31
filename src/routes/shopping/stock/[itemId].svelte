@@ -14,9 +14,8 @@
 
     let stockItem;
 
-    onMount(() => {
-        const stock = new Stock();
-        stockItem = stock.getItem(itemId);
+    onMount(async () => {
+        stockItem = await Stock.getItem(itemId);
     });
 </script>
 

@@ -1,18 +1,23 @@
 <script>
     import { stores } from '@sapper/app';
     import { onMount } from 'svelte';
+    import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import StockFiller from '../../../components/stock/StockFiller.svelte';
     import Stock from '../../../scripts/stock/Stock';
 
     const { page } = stores();
     const { itemId } = $page.params;
+    let item;
+    let requestError;
 
-    let stockItem;
-
-    onMount(() => {
-        const stock = new Stock();
-        stockItem = stock.getItem(itemId);
+    onMount(async () => {
+        try {
+            item = await Stock.getItem(itemId);
+        } catch (error) {
+            requestError = error;
+        }
     });
 </script>
 
-<StockFiller item={stockItem} />
+<ErrorModal error={requestError} />
+<StockFiller item={item} />

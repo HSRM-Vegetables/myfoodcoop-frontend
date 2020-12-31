@@ -21,7 +21,6 @@
     };
     let balanceUpdateInProgress = false;
     let requestError;
-    let stock;
     let balanceAfterPurchase;
 
     $: {
@@ -32,7 +31,6 @@
 
     onMount(() => {
         cart = new ShoppingCart();
-        stock = new Stock();
     });
 
     // removes an item from the cart
@@ -53,7 +51,7 @@
 
             // update stock
             cart.cartItems.forEach((item) => {
-                stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
+                Stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
             });
 
             cart.clear();

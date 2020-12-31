@@ -1,17 +1,17 @@
 <script>
     import { goto } from '@sapper/app';
-    import uuid from 'uuid';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
 
     /**
      * Stock item the form should be prefilled with, if undefined no values are prefilled
      */
     export let item;
 
-    let unitPriceTextField;
+    let pricePerUnitTextField;
     let quantityTextField;
     let articleTextField;
     let descriptionElement;
@@ -19,14 +19,17 @@
     let unitTypeBoolean = false;
 
     let articleTextFieldError = false;
-    let unitPriceTextFieldError = false;
+    let pricePerUnitTextFieldError = false;
     let quantityTextFieldError = false;
+    let errorHint;
 
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
 
     // call the method as soon as the value of item changes
     $: itemChanged(item);
+
+    let requestError;
 
     /**
      * Update the unit type which should be displayed
@@ -41,23 +44,43 @@
     }
 
     function areInputsValid() {
+        errorHint = undefined;
         articleTextFieldError = false;
-        unitPriceTextFieldError = false;
+        pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
 
+        // No name set
         if (!articleTextField || !articleTextField.getValue()) {
             articleTextFieldError = true;
         }
 
-        if (!unitPriceTextField || !unitPriceTextField.getValue() || unitPriceTextField.getValue() < 0) {
-            unitPriceTextFieldError = true;
+        // No price or price is negative
+        if (!pricePerUnitTextField || !pricePerUnitTextField.getValue() || pricePerUnitTextField.getValue() < 0) {
+            pricePerUnitTextFieldError = true;
         }
 
+        // no quantity or quantity is negative
         if (!quantityTextField || !quantityTextField.getValue() || quantityTextField.getValue() < 0) {
             quantityTextFieldError = true;
         }
 
-        if (articleTextFieldError || unitPriceTextFieldError || quantityTextFieldError) {
+        // Quantity is not a number
+        if (Number.isNaN(quantityTextField.getValue())) {
+            quantityTextFieldError = true;
+        }
+
+        // Price is not a number
+        if (Number.isNaN(pricePerUnitTextField.getValue())) {
+            pricePerUnitTextFieldError = true;
+        }
+
+        // Fractional quantity with unitType PIECE
+        if (unitType === UnitType.PIECE && parseFloat(quantityTextField.getValue()) % 1 !== 0) {
+            quantityTextFieldError = true;
+            errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
+        }
+
+        if (articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError) {
             return false;
         }
 
@@ -84,31 +107,34 @@
     /**
      * Add or Update an existing stock item
      */
-    function addOrUpadteItem() {
+    async function addOrUpadteItem() {
+        requestError = undefined;
         if (!areInputsValid()) {
             return;
         }
 
-        const stock = new Stock();
-
-        if (!item) {
-            stock.addItem(
-                uuid(),
-                articleTextField.getValue(),
-                unitType,
-                unitPriceTextField.getValue(),
-                quantityTextField.getValue(),
-                descriptionElement.value
-            );
-        } else {
-            stock.updateItem(
-                item.id,
-                articleTextField.getValue(),
-                unitType,
-                unitPriceTextField.getValue(),
-                quantityTextField.getValue(),
-                descriptionElement.value
-            );
+        try {
+            if (!item) {
+                await Stock.addItem(
+                    articleTextField.getValue(),
+                    unitType,
+                    pricePerUnitTextField.getValue(),
+                    quantityTextField.getValue(),
+                    descriptionElement.value
+                );
+            } else {
+                await Stock.updateItem(
+                    item.id,
+                    articleTextField.getValue(),
+                    unitType,
+                    pricePerUnitTextField.getValue(),
+                    quantityTextField.getValue(),
+                    descriptionElement.value
+                );
+            }
+        } catch (error) {
+            requestError = error;
+            return;
         }
 
         goto('/stock/');
@@ -119,7 +145,7 @@
      */
     function clearInputs() {
         articleTextField.clear();
-        unitPriceTextField.clear();
+        pricePerUnitTextField.clear();
         quantityTextField.clear();
         descriptionElement.value = '';
     }
@@ -139,6 +165,14 @@
         margin: auto;
     }
 </style>
+
+<ErrorModal error={requestError} />
+
+{#if errorHint}
+    <article class="message is-danger">
+        <div class="message-body">{errorHint}</div>
+    </article>
+{/if}
 
 <div>
     <div class="form">
@@ -161,14 +195,14 @@
         </div>
         <div class="pt-4">
             <TextField
-                bind:this={unitPriceTextField}
+                bind:this={pricePerUnitTextField}
                 type="number"
                 placeholder="Warenpreis"
                 label="Warenpreis"
                 decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                 minimum="0"
-                isInErrorState={unitPriceTextFieldError}
-                value={item ? item.unitPrice : ''}
+                isInErrorState={pricePerUnitTextFieldError}
+                value={item ? item.pricePerUnit : ''}
             />
         </div>
         <div class="pt-4">

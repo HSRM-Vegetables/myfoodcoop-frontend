@@ -36,8 +36,8 @@
     function calcTotalPrice() {
         const quantity = quantityElement ? quantityElement.getValue() : $currentShoppingItemQuantity;
 
-        if (!Number.isNaN(stockItem.unitPrice) && !Number.isNaN(quantity)) {
-            currentTotal = (stockItem.unitPrice * quantity).toFixed(2);
+        if (!Number.isNaN(stockItem.pricePerUnit) && !Number.isNaN(quantity)) {
+            currentTotal = (stockItem.pricePerUnit * quantity).toFixed(2);
         }
     }
 
@@ -115,7 +115,7 @@
         <div>
             Warenpreis<br />
             <span class="is-size-4">
-                {stockItem.unitPrice}
+                {stockItem.pricePerUnit}
                 {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
             </span>
         </div>

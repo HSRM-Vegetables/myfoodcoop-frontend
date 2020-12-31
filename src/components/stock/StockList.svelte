@@ -4,6 +4,8 @@
     import { stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
+    import Loader from '../common/Loader.svelte';
+    import NoData from '../common/NoData.svelte';
 
     /**
      * An Array of StockItems to be displayed
@@ -26,12 +28,16 @@
      */
     export let allowEdit = false;
 
+    /**
+     * Display a loading spinner instead of the list
+     */
+    export let isLoading = false;
+
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
 
     function removeItem(event, itemId) {
         stopPropagation(event);
-
         removeEvent('remove', {
             id: itemId,
         });
@@ -39,7 +45,6 @@
 
     function selectItem(event, itemId) {
         stopPropagation(event);
-
         selectEvent('select', {
             id: itemId,
         });
@@ -78,7 +83,9 @@
     }
 </style>
 
-{#if stockItems && stockItems.length > 0}
+{#if isLoading}
+    <Loader bind:isLoading />
+{:else if stockItems && stockItems.length > 0}
     {#each stockItems as item}
         <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
@@ -105,8 +112,8 @@
                 <div class="column is-half has-text-left ">
                     <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
-                        <span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / Stück</span>
-                    {:else}<span class="is-size-7 is-hidden-desktop">{item.unitPrice} € / kg</span>{/if}
+                        <span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / Stück</span>
+                    {:else}<span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / kg</span>{/if}
                 </div>
                 <div class="column has-text-right">
                     {#if item.unitType === UnitType.PIECE}
@@ -115,8 +122,8 @@
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}
-                        <span>{item.unitPrice} € / Stück</span>
-                    {:else}<span>{item.unitPrice} € / kg</span>{/if}
+                        <span>{item.pricePerUnit} € / Stück</span>
+                    {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
                 </div>
             </div>
 
@@ -129,5 +136,5 @@
         </div>
     {/each}
 {:else}
-    <p>Der Bestand ist leer.</p>
+    <NoData text="Der Bestand ist leer" />
 {/if}

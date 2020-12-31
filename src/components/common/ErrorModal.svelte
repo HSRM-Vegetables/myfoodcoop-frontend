@@ -33,7 +33,7 @@
 
         <!-- Main Component, display the error here -->
         <section class="modal-card-body">
-            {#if error && error.errorCode && error.message && error.details}
+            {#if error && error.errorCode && error.message}
                 <!-- Show the error code for everyone -->
                 <p>Fehlercode: {error.errorCode}</p>
 
