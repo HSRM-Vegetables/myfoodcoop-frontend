@@ -1,5 +1,6 @@
 <script>
     import Balance from '../../scripts/Balance';
+    import { currentBalance } from '../../stores/balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
@@ -10,7 +11,6 @@
     let inputValue;
     let requestError;
 
-    const balance = new Balance();
     let balanceUpdateInProgress = false;
 
     async function addToBalance() {
@@ -24,7 +24,14 @@
         valueHint = '';
         balanceUpdateInProgress = true;
         try {
-            balance.currentBalance = await balance.topupBalance(parseFloat(additionalAmount));
+            // Instead of assigning the result to the store we could also call `currentBalance.forceUpdate()`.
+            // But this is not necessary as the response of the api-call is returning the actual balance,
+            // so we can just assign it to the store. This change will take immediate affect on all other components
+            // that are using this store.
+
+            // This variable is used in other files
+            // eslint-disable-next-line no-unused-vars
+            $currentBalance = await Balance.topupBalance(parseFloat(additionalAmount));
 
             inputValue = undefined;
         } catch (error) {
@@ -53,7 +60,7 @@
 
 <section class="section">
     <div class="container has-text-centered">
-        <ShowBalance bind:currentBalance={balance.currentBalance} />
+        <ShowBalance />
         <div class="columns is-centered">
             <div class="column buttons pt-6">
                 <button class="button is-rounded" value="20" on:click={updateInput}>20 €</button>

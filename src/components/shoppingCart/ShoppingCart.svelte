@@ -12,48 +12,39 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Stock from '../../scripts/stock/Stock';
     import { moneyStyler } from '../../scripts/Helper';
+    import { currentBalance } from '../../stores/balance';
 
     // Stub item because onMount is called after the first render
     let cart = {
         cartItems: [],
         totalPrice: () => 0,
     };
-    let balance = {
-        money: 0,
-    };
     let balanceUpdateInProgress = false;
     let requestError;
     let balanceAfterPurchase;
 
+    $: {
+        // This block is executed as soon as one of the stores or variables in this block is reassigned.
+        // Immediatly after the currentBalance is set, the displayed value will be adapted.
+        balanceAfterPurchase = moneyStyler($currentBalance - cart.totalPrice());
+    }
+
     onMount(() => {
         cart = new ShoppingCart();
-        balance = new Balance();
-        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     });
-
-    async function updateBalanceAfterPurchase() {
-        try {
-            const currentBalance = await balance.getBalance();
-            balanceAfterPurchase = moneyStyler(currentBalance - cart.totalPrice());
-        } catch (error) {
-            balanceAfterPurchase = 0.0;
-        }
-    }
 
     // removes an item from the cart
     function removeItem(event) {
         const itemId = event.detail.id;
         cart.removeItem(itemId);
         cart = cart; // tell svelte to update view
-
-        updateBalanceAfterPurchase(); // no need to await, update when you feel like it
     }
 
     // create a purchase and go to the main page
     async function checkout() {
         try {
             balanceUpdateInProgress = true;
-            balance.currentBalance = await balance.withdrawBalance(parseFloat(cart.totalPrice()));
+            $currentBalance = await Balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
             const purchaseApi = new PurchaseApi();
             purchaseApi.addPurchase(new Purchase(uuid(), new Date(), cart.cartItems));
@@ -74,7 +65,7 @@
 </script>
 
 <div class="has-text-centered">
-    <ShowBalance bind:currentBalance={balance.money} type="inline" />
+    <ShowBalance type="inline" />
 
     <hr />
 
