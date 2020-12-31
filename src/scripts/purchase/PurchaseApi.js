@@ -23,7 +23,7 @@ export default class PurchaseApi {
     static async addPurchase(cartItems) {
         const additionalHeader = {'X-Username': get(name)};
         const body = {
-            "items" : cartItems.map( item => (
+            "items": cartItems.map( item => (
                 {
                     "id": item.stockItem.id,
                     "amount": item.quantity
@@ -31,6 +31,6 @@ export default class PurchaseApi {
             ))
         };
 
-        return Fetch.post('purchase', JSON.stringify(body), JSON.stringify(additionalHeader));
+        return Fetch.post('purchase', JSON.stringify(body), additionalHeader);
     }
 }
