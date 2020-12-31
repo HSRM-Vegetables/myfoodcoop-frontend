@@ -9,7 +9,7 @@
 <script>
     import { onMount } from 'svelte';
     import HistoryDetails from '../../components/history/HistoryDetails.svelte';
-    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import Purchase from '../../scripts/purchase/Purchase';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
 
@@ -20,7 +20,7 @@
 
     let purchase;
     onMount(async () => {
-        purchase = await PurchaseApi.getPurchase(purchasId);
+        purchase = await Purchase.getPurchase(purchasId);
     });
 </script>
 

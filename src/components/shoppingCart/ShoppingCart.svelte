@@ -3,7 +3,7 @@
     import { goto } from '@sapper/app';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Balance from '../../scripts/Balance';
-    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
@@ -43,7 +43,7 @@
             balanceUpdateInProgress = true;
             $currentBalance = await Balance.withdrawBalance(parseFloat(cart.totalPrice()));
 
-            PurchaseApi.addPurchase(cart.cartItems);
+            Purchase.addPurchase(cart.cartItems);
 
             // update stock
             cart.cartItems.forEach((item) => {

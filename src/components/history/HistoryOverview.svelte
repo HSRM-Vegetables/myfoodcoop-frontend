@@ -1,13 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import { mdiMagnify } from '@mdi/js';
-    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import Purchase from '../../scripts/purchase/Purchase';
     import Icon from '../common/Icon.svelte';
     import { moneyStyler } from '../../scripts/Helper';
 
     let purchaseList;
     onMount(async () => {
-        purchaseList = await PurchaseApi.getPurchaseList();
+        purchaseList = await Purchase.getPurchaseList();
     });
 </script>
 
