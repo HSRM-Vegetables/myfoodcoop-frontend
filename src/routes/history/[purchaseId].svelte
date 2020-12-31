@@ -8,8 +8,7 @@
 
 <script>
     import { onMount } from 'svelte';
-    import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
+    import HistoryDetails from '../../components/history/HistoryDetails.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -20,20 +19,13 @@
     $navBalance = 'hidden';
 
     let purchase;
-    onMount(() => {
-        const purchaseApi = new PurchaseApi();
-        purchase = purchaseApi.purchases.find((p) => p.id === purchasId);
+    onMount(async () => {
+        purchase = await PurchaseApi.getPurchase(purchasId);
     });
 </script>
 
 {#if purchase !== undefined}
-    <ShoppingCartItems cartItems={purchase.cartItems} allowRemoval={false} allowVisitPriceCalculator={false} />
-
-    <hr />
-
-    <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice())}€</span>
-
-    <hr />
+    <HistoryDetails purchase={purchase} />
 
     <div class="has-text-centered">
         <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />

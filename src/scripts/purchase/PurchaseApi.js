@@ -20,8 +20,15 @@ export default class PurchaseApi {
         }
     }
 
+    static async getPurchaseList() {
+        return Fetch.get('purchase', {'X-Username': get(name)});
+    }
+
+    static async getPurchase(id) {
+        return Fetch.get(`purchase/${id}`, {'X-Username': get(name)});
+    }
+
     static async addPurchase(cartItems) {
-        const additionalHeader = {'X-Username': get(name)};
         const body = {
             "items": cartItems.map( item => (
                 {
@@ -31,6 +38,6 @@ export default class PurchaseApi {
             ))
         };
 
-        return Fetch.post('purchase', JSON.stringify(body), additionalHeader);
+        return Fetch.post('purchase', JSON.stringify(body), {'X-Username': get(name)});
     }
 }

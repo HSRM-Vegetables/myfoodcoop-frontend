@@ -3,10 +3,11 @@
     import { mdiMagnify } from '@mdi/js';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Icon from '../common/Icon.svelte';
+    import { moneyStyler } from '../../scripts/Helper';
 
-    let purchaseApi;
-    onMount(() => {
-        purchaseApi = new PurchaseApi();
+    let purchaseList;
+    onMount(async () => {
+        purchaseList = await PurchaseApi.getPurchaseList();
     });
 </script>
 
@@ -16,18 +17,18 @@
     }
 </style>
 
-{#if purchaseApi !== undefined && purchaseApi.purchases.length > 0}
+{#if purchaseList !== undefined && purchaseList.purchases.length > 0}
     <div class="columns has-text-weight-bold is-mobile is-vcentered">
         <div class="column">Datum</div>
         <div class="column has-text-centered">Anzahl Artikel</div>
         <div class="column">Preis</div>
         <div class="column">Details</div>
     </div>
-    {#each purchaseApi.purchases.sort((a, b) => b.createdOn - a.createdOn) as purchase}
+    {#each purchaseList.purchases.sort((a, b) => b.createdOn - a.createdOn) as purchase}
         <div class="columns is-mobile">
             <div class="column">{purchase.createdOn.toLocaleString()}</div>
-            <div class="column has-text-centered">{purchase.cartItems.length}</div>
-            <div class="column">{purchase.totalPrice().toFixed(2)}€</div>
+            <div class="column has-text-centered">{purchase.items.length}</div>
+            <div class="column">{moneyStyler(purchase.totalPrice)}€</div>
             <div class="column">
                 <a href="/history/{purchase.id}" class="button is-small is-primary">
                     <span class="icon">

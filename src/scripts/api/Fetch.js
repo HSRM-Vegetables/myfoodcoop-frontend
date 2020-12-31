@@ -4,17 +4,18 @@ export default class Fetch {
     /**
      * Sends a GET request to the api
      * @param {string} subpath Path relativ to the version number of the api
+     * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
-    static async get(subpath) {
-        return Fetch.request('GET', subpath, undefined);
+    static async get(subpath, additionalHeaders) {
+        return Fetch.request('GET', subpath, undefined, additionalHeaders);
     }
 
     /**
      * Sends a POST request to the api
      * @param {string} subpath Path relativ to the version number of the api
      * @param {string} content Stringified JSON which should be send to the api
-     * @param {Object} additionalHeaders Additional header parameters (optional)
+     * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
     static async post(subpath, content, additionalHeaders) {
@@ -45,7 +46,7 @@ export default class Fetch {
      * @param {string} type An http request method
      * @param {string} subpath Path relativ to the version number of the api
      * @param {string} content Stringified JSON which should be send to the api
-     * @param {Object} additionalHeaders Additional header parameters (optional)
+     * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
     static async request(type, subpath, content, additionalHeaders) {
