@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
-    import Balance from '../../scripts/Balance';
+    import ShowBalance from '../balance/ShowBalance.svelte';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
@@ -16,7 +16,7 @@
         cartItems: [],
         totalPrice: () => 0,
     };
-    let balanceUpdateInProgress = false;
+    let checkoutInProgress = false;
     let requestError;
     let balanceAfterPurchase;
 
@@ -40,10 +40,8 @@
     // create a purchase and go to the main page
     async function checkout() {
         try {
-            balanceUpdateInProgress = true;
-            $currentBalance = await Balance.withdrawBalance(parseFloat(cart.totalPrice()));
-
-            Purchase.addPurchase(cart.cartItems);
+            checkoutInProgress = true;
+            $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
 
             // update stock
             cart.cartItems.forEach((item) => {
@@ -55,7 +53,7 @@
         } catch (error) {
             requestError = error;
         } finally {
-            balanceUpdateInProgress = false;
+            checkoutInProgress = false;
         }
     }
 </script>
@@ -83,7 +81,7 @@
             class="is-primary mt-5"
             size="full-width"
             on:click={checkout}
-            isLoading={balanceUpdateInProgress}
+            isLoading={checkoutInProgress}
         />
     {/if}
 
