@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { UnitType } from '../../scripts/UnitType';
     import { moneyStyler } from '../../scripts/Helper';
+    import Loader from '../common/Loader.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import Purchase from '../../scripts/purchase/Purchase';
 
     /**
@@ -9,9 +11,18 @@
      */
     export let purchaseID;
 
+    let isLoading = true;
+    let requestError;
+
     let purchase;
     onMount(async () => {
-        purchase = await Purchase.getPurchase(purchaseID);
+        try {
+            purchase = await Purchase.getPurchase(purchaseID);
+        } catch (error) {
+            requestError = error;
+        } finally {
+            isLoading = false;
+        }
     });
 </script>
 
@@ -31,8 +42,12 @@
     }
 </style>
 
-{#if purchase === undefined}
-    <span>Loading...</span>
+{#if isLoading}
+    <Loader bind:isLoading />
+{:else if requestError !== undefined}
+    <article class="message is-danger">
+        <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
+    </article>
 {:else}
     {#each purchase.items as item}
         <div class="shoppingElement">
@@ -65,3 +80,5 @@
 
     <hr />
 {/if}
+
+<ErrorModal error={requestError} />

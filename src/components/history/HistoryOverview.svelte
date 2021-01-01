@@ -13,7 +13,6 @@
 
     let purchaseList;
     onMount(async () => {
-
         try {
             purchaseList = await Purchase.getPurchaseList();
         } catch (error) {
@@ -34,7 +33,7 @@
     <Loader bind:isLoading />
 {:else if requestError !== undefined}
     <article class="message is-danger">
-        <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen :(</div>
+        <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
 {:else if purchaseList !== undefined && purchaseList.purchases.length > 0}
     <div class="columns has-text-weight-bold is-mobile is-vcentered">
