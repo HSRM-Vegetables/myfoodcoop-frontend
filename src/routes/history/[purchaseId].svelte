@@ -7,9 +7,7 @@
 </script>
 
 <script>
-    import { onMount } from 'svelte';
     import HistoryDetails from '../../components/history/HistoryDetails.svelte';
-    import Purchase from '../../scripts/purchase/Purchase';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
 
@@ -18,16 +16,13 @@
     $title = 'Einkaufshistorie';
     $navBalance = 'hidden';
 
-    let purchase;
-    onMount(async () => {
-        purchase = await Purchase.getPurchase(purchasId);
-    });
+
 </script>
 
-{#if purchase !== undefined}
-    <HistoryDetails purchase={purchase} />
+<HistoryDetails purchaseID={purchasId} />
 
-    <div class="has-text-centered">
-        <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
-    </div>
-{:else}<span>Loading...</span>{/if}
+<div class="has-text-centered"><a href="/history" class="button is-primary">Zur Einkaufshistorie</a></div>
+
+<div class="has-text-centered">
+    <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
+</div>

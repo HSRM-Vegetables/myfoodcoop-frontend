@@ -1,12 +1,18 @@
 <script>
+    import { onMount } from 'svelte';
     import { UnitType } from '../../scripts/UnitType';
     import { moneyStyler } from '../../scripts/Helper';
+    import Purchase from '../../scripts/purchase/Purchase';
 
     /**
-     * API-Response purchase-history-item
+     * the purchase ID to be displayed
      */
-    export let purchase;
+    export let purchaseID;
 
+    let purchase;
+    onMount(async () => {
+        purchase = await Purchase.getPurchase(purchaseID);
+    });
 </script>
 
 <style>
@@ -25,33 +31,37 @@
     }
 </style>
 
-{#each purchase.items as item}
-    <div class="shoppingElement">
-        <div class="columns is-mobile">
-            <div class="column has-text-left has-text-weight-bold">
-                <span class="breakwords">{item.name}</span>
+{#if purchase === undefined}
+    <span>Loading...</span>
+{:else}
+    {#each purchase.items as item}
+        <div class="shoppingElement">
+            <div class="columns is-mobile">
+                <div class="column has-text-left has-text-weight-bold">
+                    <span class="breakwords">{item.name}</span>
+                </div>
+            </div>
+            <div class="columns is-mobile is-vcentered">
+                <div class="column has-text-left">
+                    {#if item.unitType === UnitType.PIECE}
+                        <span>{item.pricePerUnit} € / Stück</span>
+                    {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
+                </div>
+
+                <div class="column has-text-right">
+                    {#if item.unitType === UnitType.PIECE}
+                        <span>{item.amount} Stück</span>
+                    {:else}<span>{item.amount} kg</span>{/if}
+                </div>
+
+                <div class="column has-text-right pr-5">{moneyStyler(item.pricePerUnit * item.amount)} €</div>
             </div>
         </div>
-        <div class="columns is-mobile is-vcentered">
-            <div class="column has-text-left">
-                {#if item.unitType === UnitType.PIECE}
-                    <span>{item.pricePerUnit} € / Stück</span>
-                {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
-            </div>
+    {/each}
 
-            <div class="column has-text-right">
-                {#if item.unitType === UnitType.PIECE}
-                    <span>{item.amount} Stück</span>
-                {:else}<span>{item.amount} kg</span>{/if}
-            </div>
+    <hr />
 
-            <div class="column has-text-right pr-5">{moneyStyler(item.pricePerUnit * item.amount)} €</div>
-        </div>
-    </div>
-{/each}
+    <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice)} €</span>
 
-<hr />
-
-<span>Gesamtbetrag: {moneyStyler(purchase.totalPrice)} €</span>
-
-<hr />
+    <hr />
+{/if}
