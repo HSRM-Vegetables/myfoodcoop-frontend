@@ -4,7 +4,7 @@
     import { title, navBalance } from '../../stores/page';
     import Modal from '../../components/common/Modal.svelte';
     import Button from '../../components/common/Button.svelte';
-    import { stockItems } from '../../stores/stock';
+    import { stockItems, areStockItemsUpdating } from '../../stores/stock';
     import Stock from '../../scripts/stock/Stock';
 
     /* eslint-disable prefer-const */
@@ -14,13 +14,6 @@
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
-    let isLoading = true;
-
-    $: {
-        if ($stockItems) {
-            isLoading = false;
-        }
-    }
 
     function confirmRemoveItem(event) {
         modalIsOpen = true;
@@ -28,13 +21,10 @@
     }
 
     async function removeItem() {
-        isLoading = true;
-
         await Stock.removeItem(stockItemIdToRemove);
         stockItems.forceUpdate();
 
         modalIsOpen = false;
-        isLoading = false;
     }
 
     function closeModal() {
@@ -57,7 +47,7 @@
 <div class="has-text-centered">
     <StockList
         bind:stockItems={$stockItems}
-        bind:isLoading
+        bind:isLoading={$areStockItemsUpdating}
         on:remove={confirmRemoveItem}
         allowRemoval={true}
         allowEdit={true}
