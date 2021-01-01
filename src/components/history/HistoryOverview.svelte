@@ -4,10 +4,23 @@
     import Purchase from '../../scripts/purchase/Purchase';
     import Icon from '../common/Icon.svelte';
     import { moneyStyler } from '../../scripts/Helper';
+    import ErrorModal from '../common/ErrorModal.svelte';
+    import Loader from '../common/Loader.svelte';
+    import NoData from '../common/NoData.svelte';
+
+    let requestError;
+    let isLoading = true;
 
     let purchaseList;
     onMount(async () => {
-        purchaseList = await Purchase.getPurchaseList();
+
+        try {
+            purchaseList = await Purchase.getPurchaseList();
+        } catch (error) {
+            requestError = error;
+        } finally {
+            isLoading = false;
+        }
     });
 </script>
 
@@ -17,7 +30,13 @@
     }
 </style>
 
-{#if purchaseList !== undefined && purchaseList.purchases.length > 0}
+{#if isLoading}
+    <Loader bind:isLoading />
+{:else if requestError !== undefined}
+    <article class="message is-danger">
+        <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen :(</div>
+    </article>
+{:else if purchaseList !== undefined && purchaseList.purchases.length > 0}
     <div class="columns has-text-weight-bold is-mobile is-vcentered">
         <div class="column">Datum</div>
         <div class="column has-text-centered">Anzahl Artikel</div>
@@ -39,4 +58,8 @@
             </div>
         </div>
     {/each}
-{:else}<span>Es wurden noch keine Einkäufe getätigt.</span>{/if}
+{:else}
+    <NoData text="Es wurden noch keine Einkäufe getätigt." />
+{/if}
+
+<ErrorModal error={requestError} />
