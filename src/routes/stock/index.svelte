@@ -1,15 +1,11 @@
 <script>
     import { goto } from '@sapper/app';
-    import { onMount } from 'svelte';
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
-    import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
     import Button from '../../components/common/Button.svelte';
-
-    let stockList = {
-        items: [],
-    };
+    import { stockItems } from '../../stores/stock';
+    import Stock from '../../scripts/stock/Stock';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -20,10 +16,11 @@
     let stockItemIdToRemove;
     let isLoading = true;
 
-    onMount(async () => {
-        stockList = await Stock.getStockList();
-        isLoading = false;
-    });
+    $: {
+        if ($stockItems) {
+            isLoading = false;
+        }
+    }
 
     function confirmRemoveItem(event) {
         modalIsOpen = true;
@@ -32,8 +29,10 @@
 
     async function removeItem() {
         isLoading = true;
+
         await Stock.removeItem(stockItemIdToRemove);
-        stockList = await Stock.getStockList(); // reload list
+        stockItems.forceUpdate();
+
         modalIsOpen = false;
         isLoading = false;
     }
@@ -57,7 +56,7 @@
 
 <div class="has-text-centered">
     <StockList
-        bind:stockItems={stockList.items}
+        bind:stockItems={$stockItems}
         bind:isLoading
         on:remove={confirmRemoveItem}
         allowRemoval={true}

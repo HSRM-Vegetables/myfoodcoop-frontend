@@ -6,6 +6,7 @@
     import Switch from '../common/Switch.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Button from '../common/Button.svelte';
+    import { stockItems } from '../../stores/stock';
 
     /**
      * Stock item the form should be prefilled with, if undefined no values are prefilled
@@ -133,6 +134,8 @@
                     descriptionElement.value
                 );
             }
+
+            stockItems.forceUpdate();
         } catch (error) {
             requestError = error;
             return;
