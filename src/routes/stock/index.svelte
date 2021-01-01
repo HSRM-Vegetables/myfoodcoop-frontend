@@ -22,6 +22,8 @@
 
     async function removeItem() {
         await Stock.removeItem(stockItemIdToRemove);
+
+        // as one item was removed, reload the stock list
         stockItems.forceUpdate();
 
         modalIsOpen = false;

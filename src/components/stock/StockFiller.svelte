@@ -135,6 +135,7 @@
                 );
             }
 
+            // as one item was added or modified, reload the stock list
             stockItems.forceUpdate();
         } catch (error) {
             requestError = error;
