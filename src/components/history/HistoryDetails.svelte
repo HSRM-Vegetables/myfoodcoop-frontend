@@ -76,7 +76,10 @@
 
     <hr />
 
-    <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice)} €</span>
+    <div class="columns is-mobile">
+        <div class="column">Datum, Uhrzeit: {(new Date(purchase.createdOn)).toLocaleString()}</div>
+        <div class="column has-text-right">Gesamtbetrag: {moneyStyler(purchase.totalPrice)}&nbsp;€</div>
+    </div>
 
     <hr />
 {/if}
