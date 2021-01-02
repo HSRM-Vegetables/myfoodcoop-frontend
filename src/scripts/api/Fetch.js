@@ -14,7 +14,7 @@ export default class Fetch {
     /**
      * Sends a POST request to the api
      * @param {string} subpath Path relativ to the version number of the api
-     * @param {string} content Stringified JSON which should be send to the api
+     * @param {string} content Body content which should be send to the api
      * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
@@ -25,7 +25,7 @@ export default class Fetch {
     /**
      * Sends a PATCH request to the api
      * @param {string} subpath Path relativ to the version number of the api
-     * @param {string} content Stringified JSON which should be send to the api
+     * @param {string} content Body content which should be send to the api
      * @returns The JSON response of the request
      */
     static async patch(subpath, content) {
@@ -45,7 +45,7 @@ export default class Fetch {
      * Sends a request to the api
      * @param {string} type An http request method
      * @param {string} subpath Path relativ to the version number of the api
-     * @param {string} content Stringified JSON which should be send to the api
+     * @param {object} content Body content which should be send to the api
      * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
@@ -57,7 +57,7 @@ export default class Fetch {
                 'Content-Type': 'application/json',
                 ...additionalHeaders
             },
-            body: content
+            body: JSON.stringify(content)
         });
         if (response.status >= 400) {
             throw await response.json();

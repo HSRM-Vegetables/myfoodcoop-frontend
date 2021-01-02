@@ -21,13 +21,13 @@ export default class Stock {
      * (due to errors while parsing etc)
      */
     static async addItem(name, unitType, pricePerUnit, quantity, description) {       
-        return Fetch.post(`stock/`, JSON.stringify({
+        return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
-        }));
+        });
     }
 
     /**
@@ -55,9 +55,9 @@ export default class Stock {
     static async removeQuantityFromItem(id, quantity) {
         const getItem = await Fetch.get(`stock/${id}`);
         const newQuantity = getItem.quantity - quantity;
-        return Fetch.patch(`stock/${id}`, JSON.stringify({
+        return Fetch.patch(`stock/${id}`, {
             quantity: newQuantity
-        }));
+        });
     }
 
     /**
@@ -75,13 +75,13 @@ export default class Stock {
      * (due to errors while parsing etc)
      */
     static async updateItem(id, name, unitType, pricePerUnit, quantity, description) {
-        return Fetch.patch(`stock/${id}`, JSON.stringify({
+        return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
-        }));
+        });
     }
 
     static convertUnitType(unitType) {

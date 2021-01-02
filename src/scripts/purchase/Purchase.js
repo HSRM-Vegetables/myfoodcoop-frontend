@@ -41,7 +41,7 @@ export default class Purchase {
             ))
         };
 
-        return Fetch.post('purchase', JSON.stringify(body), {'X-Username': get(name)});
+        return Fetch.post('purchase', body, {'X-Username': get(name)});
     }
     
 }
