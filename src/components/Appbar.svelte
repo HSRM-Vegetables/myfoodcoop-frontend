@@ -1,5 +1,6 @@
 <script>
     import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
+    import Icon from './common/Icon.svelte';
 
     const buttons = [
         {
@@ -30,9 +31,10 @@
         margin: 0;
         border-top: solid 1px #375a7f;
         z-index: 1000;
+
+        height: 70px;
     }
-    .appbar svg {
-        height: 40px;
+    .appbar a {
         color: #375a7f;
     }
 </style>
@@ -41,9 +43,7 @@
     {#each buttons as button}
         <div class="column ">
             <a href={button.href}>
-                <svg viewbox="0 0 24 24">
-                    <path fill="currentColor" d={button.icon} />
-                </svg>
+                <Icon icon={button.icon} />
             </a>
         </div>
     {/each}
