@@ -5,8 +5,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Vergangene Einkäufe';
-    $navBalance= 'hidden';
-
+    $navBalance = 'hidden';
 </script>
 
 <HistoryOverview />

@@ -6,12 +6,11 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Profil';
-    $navBalance= 'show';
+    $navBalance = 'show';
 
     function clearLocalData() {
         localStorage.clear();
     }
-
 </script>
 
 <h1 class="title">Hallo {$name}!</h1>

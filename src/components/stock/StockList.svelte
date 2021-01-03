@@ -31,8 +31,8 @@
     /**
      * Display a loading spinner instead of the list
      */
-    export let isLoading = false;    
-    
+    export let isLoading = false;
+
     /**
      * Display Description on cart
      */
@@ -87,7 +87,7 @@
         cursor: pointer;
     }
     .has-text-right span {
-       float: right;
+        float: right;
     }
 </style>
 
