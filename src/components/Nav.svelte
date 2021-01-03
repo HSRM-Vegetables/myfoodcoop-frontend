@@ -56,18 +56,15 @@
     </a>
 
     <span class="page-title">{$title}</span>
-    {#if isLoggedIn}
-        {#if $navBalance === 'show'}
-            <span class="nav-text is-hidden-desktop"> Guthaben: </span>
-            <a href="/balance" class="balance has-text-centered has-text-weight-bold">
-                <ShowBalance />
-            </a>
-        {/if}
-        {#if $navBalance === 'inline'}
-            <div class="inline-balance">
-                <ShowBalance />
-            </div>
-        {/if}
+    {#if isLoggedIn && $navBalance === 'show'}
+        <span class="nav-text is-hidden-desktop"> Guthaben: </span>
+        <a href="/balance" class="balance has-text-centered has-text-weight-bold">
+            <ShowBalance />
+        </a>
+    {:else if isLoggedIn && $navBalance === 'inline'}
+        <div class="inline-balance">
+            <ShowBalance />
+        </div>
     {/if}
 </div>
-<div class="blue-background" />
+<div class="blue-background is-hidden-desktop" />

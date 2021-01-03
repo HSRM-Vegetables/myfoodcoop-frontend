@@ -53,6 +53,7 @@
         background: #375a7f;
         padding: 7px 24px;
         border-radius: 6px;
+        cursor: pointer;
     }
     .icon-button svg {
         height: 120px;
