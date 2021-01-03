@@ -19,7 +19,5 @@
             <span>Guthaben:</span>
             <span class:has-text-danger={$currentBalance < 0}>{moneyStyler($currentBalance)}€</span>
         </div>
-    {:else}
-        <span class:has-text-danger={$currentBalance < 0} >{moneyStyler($currentBalance)}€</span>
-    {/if}
+    {:else}<span class:has-text-danger={$currentBalance < 0}>{moneyStyler($currentBalance)}€</span>{/if}
 </div>

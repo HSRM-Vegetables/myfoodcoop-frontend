@@ -17,7 +17,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Einkaufshistorie';
-    $navBalance = "hidden";
+    $navBalance = 'hidden';
 
     let purchase;
     onMount(() => {

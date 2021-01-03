@@ -5,7 +5,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand hinzufügen';
-    $navBalance= 'hidden';
+    $navBalance = 'hidden';
 </script>
 
 <StockFiller />

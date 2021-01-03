@@ -7,8 +7,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Warenkorb';
-    $navBalance= 'show';
-
+    $navBalance = 'show';
 </script>
 
 <svelte:head>
