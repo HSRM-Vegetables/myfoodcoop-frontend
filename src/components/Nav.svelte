@@ -36,7 +36,7 @@
     span.nav-text {
         position: absolute;
         left: 25px;
-        top: 60px;
+        top: 70px;
     }
     .inline-balance {
         position: absolute;

@@ -17,6 +17,7 @@
             margin-top: -29px;
             background: white;
             min-height: 60px;
+            padding-bottom: 125px;
         }
     }
 </style>

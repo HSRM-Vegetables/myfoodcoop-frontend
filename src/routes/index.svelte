@@ -1,26 +1,17 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
-    import Icon from '../components/common/Icon.svelte';
+    import { onMount } from 'svelte';
+    import { mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
+    import StockList from '../components/stock/StockList.svelte';
+    import Stock from '../scripts/stock/Stock';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Stadtgemüse e.V.';
     $navBalance = 'show';
 
-    function onKeyPress(event, href) {
-        if (event.code === 'Space' || event.code === 'Enter') {
-            goto(href);
-        }
-    }
-
     const buttons = [
-        {
-            label: 'Einkaufen',
-            icon: mdiBasket,
-            href: '/shopping/cart',
-        },
         {
             label: 'Vorherige Einkäufe',
             icon: mdiShoppingSearch,
@@ -32,60 +23,70 @@
             href: '/balance',
         },
         {
-            label: 'Benutzerdaten',
-            icon: mdiAccount,
-            href: '/profile',
-        },
-        {
-            label: 'Bestand',
+            label: 'Bestands Liste',
             icon: mdiFormatListText,
             href: '/stock/',
         },
     ];
+
+    let stockList = {
+        items: [],
+    };
+    let cutList = [];
+    let isLoading = true;
+
+    onMount(async () => {
+        stockList = await Stock.getStockList();
+        cutList = stockList.items.slice(0, 3);
+        isLoading = false;
+    });
+
+    function itemSelected(event) {
+        goto(`/shopping/stock/${event.detail.id}`);
+    }
 </script>
 
 <style>
-    .button-container {
-        padding-left: 2em;
-        padding-right: 2em;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-    }
-
-    .big-icon-button {
-        background: #375a7f;
+    .icon-button {
+        font-size: 15px;
         color: white;
-        border: 3px solid black;
-        cursor: pointer;
-        max-width: 10em;
-        border-radius: 20%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        margin-bottom: 3em;
-        padding-left: 1em;
-        padding-right: 1em;
+        background: #375a7f;
+        padding: 7px 24px;
+        border-radius: 6px;
     }
-
-    .big-icon-button > span {
-        text-align: center;
-        font-weight: bold;
+    .icon-button svg {
+        height: 120px;
     }
 </style>
 
-<div class="button-container">
+<div class="has-text-centered mb-6">
+    <StockList
+        bind:stockItems={cutList}
+        bind:isLoading
+        isClickable={true}
+        on:select={itemSelected}
+        showDescription={false}
+    />
+</div>
+
+<hr />
+
+<div class="columns">
     {#each buttons as button}
-        <div
-            class="big-icon-button"
-            tabindex="0"
-            role="button"
-            aria-label={button.label}
-            on:keypress={(e) => onKeyPress(e, button.href)}
-            on:click={() => goto(button.href)}
-        >
-            <Icon icon={button.icon} />
-            <span>{button.label}</span>
+        <div class="column">
+            <div
+                class="icon-button"
+                tabindex="0"
+                role="button"
+                aria-label={button.label}
+                on:click={() => goto(button.href)}
+            >
+                <svg viewbox="0 0 24 24">
+                    <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
+                    <path fill="currentColor" d={button.icon} />
+                </svg>
+                <span>{button.label}</span>
+            </div>
         </div>
     {/each}
 </div>
