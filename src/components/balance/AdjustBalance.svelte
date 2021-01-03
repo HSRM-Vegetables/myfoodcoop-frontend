@@ -4,7 +4,6 @@
     import Balance from '../../scripts/Balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import ShowBalance from './ShowBalance.svelte';
     import { currentBalance } from '../../stores/balance';
 
     let changeMoneyInput;
@@ -39,19 +38,16 @@
 </script>
 
 <ErrorModal error={requestError} />
-<section class="section">
-    <div class="has-text-centered">
-        <ShowBalance />
-
-        <TextField
-            bind:this={changeMoneyInput}
-            type="number"
-            placeholder="0"
-            decoration="€"
-            label="Neues Guthaben"
-            on:keydown={onEnterPress}
-            disabled={balanceUpdateInProgress}
-        />
+<div class="has-text-centered mt-3">
+    <TextField
+        bind:this={changeMoneyInput}
+        type="number"
+        placeholder="0"
+        decoration="€"
+        label="Neues Guthaben"
+        on:keydown={onEnterPress}
+        disabled={balanceUpdateInProgress}
+    />
 
         <Button
             text="Guthaben anpassen"

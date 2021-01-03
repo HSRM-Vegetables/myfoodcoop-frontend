@@ -4,7 +4,6 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
-    import ShowBalance from './ShowBalance.svelte';
 
     let addMoneyInput;
     let valueHint = '';
@@ -58,32 +57,28 @@
     }
 </style>
 
-<section class="section">
-    <div class="container has-text-centered">
-        <ShowBalance />
-        <div class="columns is-centered">
-            <div class="column buttons pt-6">
-                <button class="button is-rounded" value="20" on:click={updateInput}>20 €</button>
-                <button class="button is-rounded" value="50" on:click={updateInput}>50 €</button>
-                <button class="button is-rounded" value="100" on:click={updateInput}>100 €</button>
-            </div>
+<div class="container has-text-centered">
+    <div class="columns is-centered">
+        <div class="column buttons pt-6">
+            <button class="button is-rounded" value="20" on:click={updateInput}>20 €</button>
+            <button class="button is-rounded" value="50" on:click={updateInput}>50 €</button>
+            <button class="button is-rounded" value="100" on:click={updateInput}>100 €</button>
         </div>
-        <div class="mt-6">
-            <div class=" is-relative">
-                <TextField
-                    label="Guthaben"
-                    decoration="€"
-                    bind:this={addMoneyInput}
-                    type="number"
-                    placeholder="0"
-                    minimum="0"
-                    on:keydown={onEnterPress}
-                    value={inputValue}
-                    disabled={balanceUpdateInProgress}
-                />
-                <span class="help has-text-left">{valueHint}</span>
-            </div>
-        </div>
+    </div>
+    <div class=" is-relative">
+        <TextField
+            label="Guthaben hinzufügen"
+            decoration="€"
+            bind:this={addMoneyInput}
+            type="number"
+            placeholder="0"
+            minimum="0"
+            on:keydown={onEnterPress}
+            value={inputValue}
+            disabled={balanceUpdateInProgress}
+        />
+        <span class="help has-text-left">{valueHint}</span>
+    </div>
 
         <Button
             text="Guthaben hinzufügen"
@@ -98,5 +93,4 @@
         <Button goHome={true} size="full-width" class="mt-6" />
     </div>
 
-    <ErrorModal error={requestError} />
-</section>
+<ErrorModal error={requestError} />

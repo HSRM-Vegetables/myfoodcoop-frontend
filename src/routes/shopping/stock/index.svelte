@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import StockList from '../../../components/stock/StockList.svelte';
-    import { title } from '../../../stores/page';
+    import { title, navBalance } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
     import Button from '../../../components/common/Button.svelte';
 
@@ -20,6 +20,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
+    $navBalance = 'inline';
 
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
