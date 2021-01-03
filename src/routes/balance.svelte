@@ -5,7 +5,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Guthaben bearbeiten';
-    $navBalance = 'hidden';
+    $navBalance = 'show';
 </script>
 
 <EditBalance />

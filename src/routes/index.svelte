@@ -2,9 +2,12 @@
     import { goto } from '@sapper/app';
     import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
     import Icon from '../components/common/Icon.svelte';
+    import { title, navBalance } from '../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
+    $title = 'Stadtgemüse e.V.';
+    $navBalance = 'show';
 
     function onKeyPress(event, href) {
         if (event.code === 'Space' || event.code === 'Enter') {

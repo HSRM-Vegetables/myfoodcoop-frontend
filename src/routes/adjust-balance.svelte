@@ -5,7 +5,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Guthaben anpassen';
-    $navBalance = 'hidden';
+    $navBalance = 'show';
 </script>
 
 <svelte:head>

@@ -1,24 +1,9 @@
 <script>
     import logo from 'images/logo_white.png';
-    import { mdiBasket, mdiAccount, mdiFormatListText } from '@mdi/js';
     import ShowBalance from './balance/ShowBalance.svelte';
-    import { name } from '../stores/user';
     import { title, navBalance } from '../stores/page';
 
-    const buttons = [
-        {
-            icon: mdiBasket,
-            href: '/shopping/cart',
-        },
-        {
-            icon: mdiAccount,
-            href: '/profile',
-        },
-        {
-            icon: mdiFormatListText,
-            href: '/stock/',
-        },
-    ];
+    export let isLoggedIn;
 </script>
 
 <style>
@@ -29,34 +14,34 @@
         padding: 20px;
     }
     .nav-element img {
-        height: 40px;
+        height: 30px;
     }
-    .name-title {
+    .page-title {
         position: absolute;
-        padding-left: 15px;
-        top: 23px;
+        left: 65px;
+        top: 17px;
         color: white;
+        font-size: 1.6em;
+        font-weight: bold;
     }
     a.balance {
-        padding: 50px 0;
         color: white;
+        font-size: 2.5em;
     }
+
     .blue-background {
         height: 30px;
         background: #375a7f;
     }
-    .appbar {
-        width: 100%;
-        background: white;
-        position: fixed;
-        bottom: 0;
-        margin: 0;
-        border-top: solid 1px #375a7f;
-        z-index: 1000;
+    span.nav-text {
+        position: absolute;
+        left: 25px;
+        top: 60px;
     }
-    .appbar svg {
-        height: 40px;
-        color: #375a7f;
+    .inline-balance {
+        position: absolute;
+        right: 15px;
+        top: 25px;
     }
 </style>
 
@@ -64,23 +49,25 @@
     <title>{$title}</title>
 </svelte:head>
 <div class="nav-element">
-    <a href="/"><img src={logo} alt="Logo" /></a>
-    <a href="/profile" class="is-size-4 name-title"> {$name} </a>
-    {#if $navBalance === 'show'}
-        <a href="/balance" class="balance has-text-centered has-text-weight-bold">
-            <ShowBalance />
-        </a>
+    <a href="/">
+        {#if $navBalance === 'show' && isLoggedIn}
+            <img class="mb-5" src={logo} alt="Logo" />
+        {:else}<img src={logo} alt="Logo" />{/if}
+    </a>
+
+    <span class="page-title">{$title}</span>
+    {#if isLoggedIn}
+        {#if $navBalance === 'show'}
+            <span class="nav-text is-hidden-desktop"> Guthaben: </span>
+            <a href="/balance" class="balance has-text-centered has-text-weight-bold">
+                <ShowBalance />
+            </a>
+        {/if}
+        {#if $navBalance === 'inline'}
+            <div class="inline-balance">
+                <ShowBalance />
+            </div>
+        {/if}
     {/if}
 </div>
 <div class="blue-background" />
-<div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
-    {#each buttons as button}
-        <div class="column ">
-            <a href={button.href}>
-                <svg viewbox="0 0 24 24">
-                    <path fill="currentColor" d={button.icon} />
-                </svg>
-            </a>
-        </div>
-    {/each}
-</div>

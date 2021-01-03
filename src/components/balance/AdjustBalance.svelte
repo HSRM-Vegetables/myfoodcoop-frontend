@@ -4,7 +4,6 @@
     import Balance from '../../scripts/Balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import ShowBalance from './ShowBalance.svelte';
     import { currentBalance } from '../../stores/balance';
 
     let changeMoneyInput;
@@ -39,32 +38,28 @@
 </script>
 
 <ErrorModal error={requestError} />
-<section class="section">
-    <div class="has-text-centered">
-        <ShowBalance />
+<div class="has-text-centered mt-3">
+    <TextField
+        bind:this={changeMoneyInput}
+        type="number"
+        placeholder="0"
+        decoration="€"
+        label="Neues Guthaben"
+        on:keydown={onEnterPress}
+        disabled={balanceUpdateInProgress}
+    />
 
-        <TextField
-            bind:this={changeMoneyInput}
-            type="number"
-            placeholder="0"
-            decoration="€"
-            label="Neues Guthaben"
-            on:keydown={onEnterPress}
-            disabled={balanceUpdateInProgress}
-        />
-
-        <Button
-            text="Guthaben anpassen"
-            class="is-primary mt-3"
-            size="medium"
-            on:click={changeBalance}
-            isLoading={balanceUpdateInProgress}
-        />
-        <br />
-        <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="medium" />
-        <br />
-    </div>
-</section>
+    <Button
+        text="Guthaben anpassen"
+        class="is-primary mt-3"
+        size="medium"
+        on:click={changeBalance}
+        isLoading={balanceUpdateInProgress}
+    />
+    <br />
+    <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="medium" />
+    <br />
+</div>
 <div class="container has-text-centered mt-6">
     <Button href="/" text="Zur Hauptseite" class="is-link" size="medium" />
 </div>
