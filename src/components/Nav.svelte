@@ -59,7 +59,12 @@
     {#if isLoggedIn && $navBalance === 'show'}
         <span class="nav-text is-hidden-desktop"> Guthaben: </span>
         <a href="/balance" class="balance has-text-centered has-text-weight-bold">
-            <ShowBalance />
+            <div class="is-hidden-touch">
+                <ShowBalance type="inline" />
+            </div>
+            <div class="is-hidden-desktop">
+                <ShowBalance />
+            </div>
         </a>
     {:else if isLoggedIn && $navBalance === 'inline'}
         <div class="inline-balance">
