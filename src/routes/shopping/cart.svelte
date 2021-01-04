@@ -1,7 +1,6 @@
 <script>
     import ShoppingCart from '../../components/shoppingCart/ShoppingCart.svelte';
     import { title, navBalance } from '../../stores/page';
-    import { title } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
 
     /* eslint-disable prefer-const */

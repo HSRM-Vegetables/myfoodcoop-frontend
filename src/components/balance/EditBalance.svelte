@@ -80,17 +80,17 @@
         <span class="help has-text-left">{valueHint}</span>
     </div>
 
-        <Button
-            text="Guthaben hinzufügen"
-            class="is-primary mt-3"
-            size="full-width"
-            on:click={addToBalance}
-            isLoading={balanceUpdateInProgress}
-        />
-        <br />
-        <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="full-width" />
-        <br />
-        <Button goHome={true} size="full-width" class="mt-6" />
-    </div>
+    <Button
+        text="Guthaben hinzufügen"
+        class="is-primary mt-3"
+        size="full-width"
+        on:click={addToBalance}
+        isLoading={balanceUpdateInProgress}
+    />
+    <br />
+    <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="full-width" />
+    <br />
+    <Button goHome={true} size="full-width" class="mt-6" />
+</div>
 
 <ErrorModal error={requestError} />
