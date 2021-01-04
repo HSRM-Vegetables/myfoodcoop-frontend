@@ -88,7 +88,7 @@
     }
 </style>
 
-<h2 class="is-size-4 has-text-weight-bold">Neuese Artikel:</h2>
+<h2 class="pt-4 is-size-5 has-text-weight-bold">Neuese Artikel:</h2>
 <div class="has-text-centered mb-6">
     <StockList
         bind:stockItems={cutList}
@@ -100,7 +100,7 @@
 </div>
 
 <hr />
-<h2 class="is-size-4 has-text-weight-bold">Funktionen:</h2>
+<h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
 
 <div class="icon-box">
     {#each buttons as button}

@@ -19,14 +19,12 @@
     .page-title {
         position: absolute;
         left: 65px;
-        top: 17px;
+        top: 20px;
         color: white;
-        font-size: 1.6em;
         font-weight: bold;
     }
     a.balance {
         color: white;
-        font-size: 1.6em;
     }
 
     .blue-background {
@@ -55,10 +53,10 @@
         {:else}<img src={logo} alt="Logo" />{/if}
     </a>
 
-    <span class="page-title">{$title}</span>
+    <span class="page-title is-size-5">{$title}</span>
     {#if isLoggedIn && $navBalance === 'show'}
         <span class="nav-text is-hidden-desktop"> Guthaben: </span>
-        <a href="/balance" class="balance has-text-centered has-text-weight-bold">
+        <a href="/balance" class="balance is-size-2 has-text-centered has-text-weight-bold">
             <div class="is-hidden-touch">
                 <ShowBalance type="inline" />
             </div>
