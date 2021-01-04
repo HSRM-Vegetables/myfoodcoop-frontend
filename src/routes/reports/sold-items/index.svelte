@@ -17,3 +17,5 @@
 <h1 class="title mb-5">Was wurde in den letzten x Tagen verkauft?</h1>
 
 <ErrorModal error={requestError} />
+
+<div class="has-text-centered"><a href="/reports/" class="button is-link container">Zurück</a></div>
