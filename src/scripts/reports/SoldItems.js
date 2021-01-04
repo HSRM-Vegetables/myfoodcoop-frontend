@@ -1,6 +1,7 @@
 export default class SoldItems {
 
-    static async getBalance() {
+    static async getItems() {
+        // todo: fromDate & toDate
         // const response = await Fetch.get('/reports/sold-items');
         const resonse = {
             "items": [
@@ -10,6 +11,14 @@ export default class SoldItems {
                     "fromDate": "2017-07-21",
                     "toDate": "2017-07-21",
                     "quantitySold": 40.2,
+                    "unitType": "WEIGHT"
+                },
+                {
+                    "id": "1234e2e2-f5b2-42fb-a2b3-e12c75897123",
+                    "name": "Kürbis",
+                    "fromDate": "2017-07-21",
+                    "toDate": "2017-07-21",
+                    "quantitySold": 80,
                     "unitType": "PIECE"
                 }
             ]
