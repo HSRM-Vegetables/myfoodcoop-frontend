@@ -1,6 +1,13 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
+    import {
+        mdiAccount,
+        mdiBasket,
+        mdiPiggyBank,
+        mdiShoppingSearch,
+        mdiFormatListText,
+        mdiChartAreasplineVariant,
+    } from '@mdi/js';
     import ShowBalance from '../components/balance/ShowBalance.svelte';
     import { title } from '../stores/page';
     import Icon from '../components/common/Icon.svelte';
@@ -41,6 +48,11 @@
             label: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
+        },
+        {
+            label: 'Reports',
+            icon: mdiChartAreasplineVariant,
+            href: '/reports/',
         },
     ];
 </script>
