@@ -52,18 +52,10 @@
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        {#if $title === button.title}
-            <div class="column active">
-                <a href={button.href}>
-                    <Icon icon={button.icon} />
-                </a>
-            </div>
-        {:else}
-            <div class="column">
-                <a href={button.href}>
-                    <Icon icon={button.icon} />
-                </a>
-            </div>
-        {/if}
+        <div class="column" class:active={$title === button.title}>
+            <a href={button.href}>
+                <Icon icon={button.icon} />
+            </a>
+        </div>
     {/each}
 </div>
