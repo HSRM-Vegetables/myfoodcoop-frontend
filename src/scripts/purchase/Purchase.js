@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import Fetch from "../api/Fetch";
+import Fetch, { Headers } from "../api/Fetch";
 import { name } from '../../stores/user';
 
 export default class Purchase {
@@ -11,7 +11,7 @@ export default class Purchase {
      *                   and items (array of purchase-item)
      */
     static async getPurchaseList() {
-        return Fetch.get('purchase', {'X-Username': get(name)});
+        return Fetch.get('purchase', {[Headers.XUsername]: get(name)});
     }
 
     /**
@@ -22,7 +22,7 @@ export default class Purchase {
      *                  and items (array of purchase-item)
      */
     static async getPurchase(id) {
-        return Fetch.get(`purchase/${id}`, {'X-Username': get(name)});
+        return Fetch.get(`purchase/${id}`, {[Headers.XUsername]: get(name)});
     }
 
     /**
@@ -41,7 +41,7 @@ export default class Purchase {
             ))
         };
 
-        return Fetch.post('purchase', body, {'X-Username': get(name)});
+        return Fetch.post('purchase', body, {[Headers.XUsername]: get(name)});
     }
     
 }

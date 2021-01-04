@@ -1,5 +1,9 @@
 import { url, version } from './ApiConfig';
 
+export const Headers = {
+    XUsername: 'X-Username'
+};
+
 export default class Fetch {
     /**
      * Sends a GET request to the api
