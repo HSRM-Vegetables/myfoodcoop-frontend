@@ -76,12 +76,7 @@
         text-align: center;
         font-size: 1.5em;
     }
-
-    .button-box {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-
+    
     .form > div {
         margin-bottom: 3em;
     }
@@ -149,8 +144,7 @@
         </div>
 
         <hr />
-
-        <div class="button-box">
+        <div class="container has-text-centered">
             <Button
                 text="zum Warenkorb hinzufügen"
                 class="button is-medium is-primary mb-4"
@@ -161,7 +155,7 @@
                 text="Zurück"
                 class="button is-medium is-link mb-4"
                 size="full-width"
-                on:click={() => goto(linkBack)}
+                on:click="{() => goto(linkBack)}"
             />
         </div>
     </div>

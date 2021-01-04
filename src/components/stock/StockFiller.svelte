@@ -225,7 +225,7 @@
             </div>
         </div>
         <hr />
-        <div class="button-box has-text-centered">
+        <div class="container has-text-centered">
             <Button 
                 text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
                 on:click={addOrUpadteItem} 
@@ -241,15 +241,14 @@
             />
 
            <br />
-            <div class="container has-text-centered mt-6">
-                <Button 
-                    text="Zurück zum Bestand"
-                    href="/stock/"
-                    on:click={clearInputs}
-                    class="button is-link mb-4"
-                    size="full-width"
-                />
-            </div>
+           
+            <Button 
+                text="zum Bestand"
+                href="/stock/"
+                on:click={clearInputs}
+                class="button is-link mt-5"
+                size="full-width"
+            />
         </div>
     </div>
 </div>

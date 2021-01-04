@@ -55,16 +55,15 @@
 
         <Button
             text="Guthaben anpassen"
-            class="is-primary mt-3"
-            size="medium"
+            class="is-primary mt-5"
             on:click={changeBalance}
             isLoading={balanceUpdateInProgress}
+            size="full-width" 
         />
         <br />
         <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="full-width" />
         <br />
+        <Button goHome={true} size="full-width" class="mt-6" />
+
     </div>
 </section>
-<div class="container has-text-centered mt-6">
-    <Button goHome={true} size="full-width" />
-</div>

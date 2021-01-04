@@ -33,5 +33,5 @@
 
     <hr />
 
-    <div class="has-text-centered"><a href="/history" class="button is-primary">Zur Einkaufshistorie</a></div>
+    <div class="has-text-centered"><a href="/history" class="button is-primary">Zur Vergangene Einkäufe</a></div>
 {:else}<span>Loading...</span>{/if}
