@@ -52,9 +52,7 @@
     {#each purchase.items as item}
         <div class="shoppingElement">
             <div class="columns is-mobile">
-                <div class="column has-text-left has-text-weight-bold">
-                    <span class="breakwords">{item.name}</span>
-                </div>
+                <div class="column has-text-left has-text-weight-bold"><span class="breakwords">{item.name}</span></div>
             </div>
             <div class="columns is-mobile is-vcentered">
                 <div class="column has-text-left">
@@ -77,7 +75,7 @@
     <hr />
 
     <div class="columns is-mobile">
-        <div class="column">Datum, Uhrzeit: {(new Date(purchase.createdOn)).toLocaleString()}</div>
+        <div class="column">Datum, Uhrzeit: {new Date(purchase.createdOn).toLocaleString()}</div>
         <div class="column has-text-right">Gesamtbetrag: {moneyStyler(purchase.totalPrice)}&nbsp;€</div>
     </div>
 

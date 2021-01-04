@@ -15,8 +15,6 @@
     /* eslint-disable no-unused-vars */
     $title = 'Einkaufshistorie';
     $navBalance = 'hidden';
-
-
 </script>
 
 <HistoryDetails purchaseID={purchasId} />

@@ -44,7 +44,7 @@
     </div>
     {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
         <div class="columns is-mobile">
-            <div class="column">{(new Date(purchase.createdOn)).toLocaleString()}</div>
+            <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
             <div class="column has-text-centered">{purchase.items.length}</div>
             <div class="column">{moneyStyler(purchase.totalPrice)}€</div>
             <div class="column">
