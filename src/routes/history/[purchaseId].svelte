@@ -11,12 +11,13 @@
     import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
     import { moneyStyler } from '../../scripts/Helper';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
-    import { title } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
+    import { title, navBalance } from '../../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Einkaufshistorie';
+    $navBalance = 'hidden';
 
     let purchase;
     onMount(() => {

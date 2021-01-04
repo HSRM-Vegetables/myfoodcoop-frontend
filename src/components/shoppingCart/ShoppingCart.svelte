@@ -4,7 +4,6 @@
     import uuid from 'uuid';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Balance from '../../scripts/Balance';
-    import ShowBalance from '../balance/ShowBalance.svelte';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
@@ -65,10 +64,6 @@
 </script>
 
 <div class="has-text-centered">
-    <ShowBalance type="inline" />
-
-    <hr />
-
     {#if cart.cartItems.length > 0}
         <ShoppingCartItems bind:cartItems={cart.cartItems} on:remove={removeItem} />
     {:else}

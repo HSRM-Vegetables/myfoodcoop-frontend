@@ -1,6 +1,6 @@
 <script>
-    import StockFiller from '../../../components/stock/StockFiller.svelte';
-    import { title, navBalance } from '../../../stores/page';
+    import StockFiller from '../../components/stock/StockFiller.svelte';
+    import { title, navBalance } from '../../stores/page';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */

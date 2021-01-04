@@ -3,7 +3,6 @@
     import { onMount, onDestroy } from 'svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
-    import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
     import Button from '../common/Button.svelte';
@@ -98,10 +97,6 @@
 
 {#if stockItem}
     <div class="form">
-        <ShowBalance type="inline" />
-
-        <hr />
-
         <div class="is-size-3 mb-4 breakwords">{stockItem.name}</div>
 
         {#if stockItem.description}
