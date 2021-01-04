@@ -19,8 +19,6 @@
 
 <HistoryDetails purchaseID={purchasId} />
 
-<div class="has-text-centered"><a href="/history" class="button is-primary">Zur Einkaufshistorie</a></div>
-
 <div class="has-text-centered">
     <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
 </div>
