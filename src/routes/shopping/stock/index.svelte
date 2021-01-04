@@ -4,7 +4,7 @@
     import StockList from '../../../components/stock/StockList.svelte';
     import { title } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
-    import Button from  '../../../components/common/Button.svelte';
+    import Button from '../../../components/common/Button.svelte';
 
     let stockList = {
         items: [],

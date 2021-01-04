@@ -95,8 +95,7 @@
         <br />
         <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="full-width" />
         <br />
-        <Button goHome={true} size="full-width" class="mt-6"/>
-
+        <Button goHome={true} size="full-width" class="mt-6" />
     </div>
 
     <ErrorModal error={requestError} />

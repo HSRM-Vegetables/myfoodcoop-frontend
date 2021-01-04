@@ -6,7 +6,7 @@
     import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
-    import Button from '../common/Button.svelte'
+    import Button from '../common/Button.svelte';
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;
@@ -76,7 +76,7 @@
         text-align: center;
         font-size: 1.5em;
     }
-    
+
     .form > div {
         margin-bottom: 3em;
     }
@@ -155,7 +155,7 @@
                 text="Zurück"
                 class="button is-medium is-link mb-4"
                 size="full-width"
-                on:click="{() => goto(linkBack)}"
+                on:click={() => goto(linkBack)}
             />
         </div>
     </div>

@@ -5,8 +5,7 @@
     import { title } from '../../stores/page';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
-    import Button from  '../../components/common/Button.svelte';
-
+    import Button from '../../components/common/Button.svelte';
 
     let stockList = {
         items: [],
@@ -66,11 +65,10 @@
         isClickable={true}
     />
     <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
-
 </div>
 
 <hr />
 
 <div class="has-text-centered">
-    <Button goHome="{true}" size="full-width" />
+    <Button goHome={true} size="full-width" />
 </div>

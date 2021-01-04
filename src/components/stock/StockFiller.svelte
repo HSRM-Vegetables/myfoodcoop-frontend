@@ -226,23 +226,18 @@
         </div>
         <hr />
         <div class="container has-text-centered">
-            <Button 
+            <Button
                 text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
-                on:click={addOrUpadteItem} 
+                on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
                 size="full-width"
             />
             <br />
-            <Button 
-                text="Eingabe löschen"
-                on:click={clearInputs}
-                class="button is-danger mb-4"
-                size="full-width"
-            />
+            <Button text="Eingabe löschen" on:click={clearInputs} class="button is-danger mb-4" size="full-width" />
 
-           <br />
-           
-            <Button 
+            <br />
+
+            <Button
                 text="zum Bestand"
                 href="/stock/"
                 on:click={clearInputs}
