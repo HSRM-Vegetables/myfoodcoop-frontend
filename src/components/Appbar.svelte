@@ -52,7 +52,7 @@
     {#each buttons as button}
         <div class="column" class:active={$page.path === button.href}>
             <a href={button.href}>
-                <Icon icon={button.icon} />
+                <Icon icon={button.icon} appbar={true} />
             </a>
         </div>
     {/each}
