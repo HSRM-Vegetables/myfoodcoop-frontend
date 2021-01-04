@@ -88,7 +88,7 @@
     }
 </style>
 
-<h2 class="pt-4 is-size-5 has-text-weight-bold">Neuese Artikel:</h2>
+<h2 class="pt-4 is-size-5 has-text-weight-bold">Neueste Artikel:</h2>
 <div class="has-text-centered mb-6">
     <StockList
         bind:stockItems={cutList}
