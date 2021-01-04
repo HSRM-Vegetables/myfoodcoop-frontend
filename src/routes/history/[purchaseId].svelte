@@ -12,6 +12,7 @@
     import { moneyStyler } from '../../scripts/Helper';
     import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import { title } from '../../stores/page';
+    import Button from '../../components/common/Button.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -33,5 +34,7 @@
 
     <hr />
 
-    <div class="has-text-centered"><a href="/history" class="button is-primary">Zur Vergangene Einkäufe</a></div>
+    <div class="has-text-centered">
+        <Button text="Zu Vergangene Einkäufe" href="/history" class="button is-primary" size="full-width" /> 
+    </div>
 {:else}<span>Loading...</span>{/if}
