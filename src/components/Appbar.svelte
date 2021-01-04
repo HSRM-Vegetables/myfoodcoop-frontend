@@ -1,21 +1,26 @@
 <script>
     import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
     import Icon from './common/Icon.svelte';
+    import { title } from '../stores/page';
 
     const buttons = [
         {
+            title: 'Stadtgemüse e.V.',
             icon: mdiHome,
             href: '/',
         },
         {
+            title: 'Warenkorb',
             icon: mdiBasket,
             href: '/shopping/cart',
         },
         {
+            title: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
         },
         {
+            title: 'Profil',
             icon: mdiAccount,
             href: '/profile',
         },
@@ -37,14 +42,28 @@
     .appbar a {
         color: #375a7f;
     }
+    .active {
+        background-color: #5890cc;
+    }
+    .active a {
+        color: white !important;
+    }
 </style>
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        <div class="column ">
-            <a href={button.href}>
-                <Icon icon={button.icon} />
-            </a>
-        </div>
+        {#if $title === button.title}
+            <div class="column active">
+                <a href={button.href}>
+                    <Icon icon={button.icon} />
+                </a>
+            </div>
+        {:else}
+            <div class="column">
+                <a href={button.href}>
+                    <Icon icon={button.icon} />
+                </a>
+            </div>
+        {/if}
     {/each}
 </div>

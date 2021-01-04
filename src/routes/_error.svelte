@@ -5,7 +5,7 @@
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Uups, du hast das Internt kaputt gemacht';
+    $title = 'Uups';
     $navBalance = 'hidden';
 
     export let status;

@@ -1,7 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { onMount } from 'svelte';
-    import { mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
+    import { mdiAccount, mdiBasket, mdiPiggyBank, mdiShoppingSearch, mdiFormatListText } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
     import Stock from '../scripts/stock/Stock';
@@ -13,6 +13,11 @@
 
     const buttons = [
         {
+            label: 'Einkaufen',
+            icon: mdiBasket,
+            href: '/shopping/cart',
+        },
+        {
             label: 'Vorherige Einkäufe',
             icon: mdiShoppingSearch,
             href: '/history',
@@ -23,7 +28,12 @@
             href: '/balance',
         },
         {
-            label: 'Bestands Liste',
+            label: 'Benutzerdaten',
+            icon: mdiAccount,
+            href: '/profile',
+        },
+        {
+            label: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
         },
@@ -47,6 +57,10 @@
 </script>
 
 <style>
+    .icon-box {
+        display: flex;
+        flex-flow: wrap;
+    }
     .icon-button {
         font-size: 15px;
         color: white;
@@ -54,12 +68,27 @@
         padding: 7px 24px;
         border-radius: 6px;
         cursor: pointer;
+        display: grid;
+        place-items: center;
+        margin: 20px;
+        min-width: 200px;
     }
     .icon-button svg {
         height: 120px;
     }
+    @media (max-width: 920px) {
+        .icon-button {
+            display: inline-flex;
+            place-items: center;
+            margin: 20px 0;
+        }
+        .icon-box div {
+            width: 100%;
+        }
+    }
 </style>
 
+<h2 class="is-size-4 has-text-weight-bold">Neuese Artikel:</h2>
 <div class="has-text-centered mb-6">
     <StockList
         bind:stockItems={cutList}
@@ -71,10 +100,11 @@
 </div>
 
 <hr />
+<h2 class="is-size-4 has-text-weight-bold">Funktionen:</h2>
 
-<div class="columns">
+<div class="icon-box">
     {#each buttons as button}
-        <div class="column">
+        <div class="has-text-centered-desktop-only">
             <div
                 class="icon-button"
                 tabindex="0"
@@ -86,7 +116,7 @@
                     <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
                     <path fill="currentColor" d={button.icon} />
                 </svg>
-                <span>{button.label}</span>
+                <span class="pl-4 has-text-weight-bold">{button.label}</span>
             </div>
         </div>
     {/each}
