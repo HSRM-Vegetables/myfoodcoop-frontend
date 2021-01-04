@@ -1,26 +1,24 @@
 <script>
+    import { stores } from '@sapper/app';
     import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
     import Icon from './common/Icon.svelte';
-    import { title } from '../stores/page';
+
+    const { page } = stores();
 
     const buttons = [
         {
-            title: 'Stadtgemüse e.V.',
             icon: mdiHome,
             href: '/',
         },
         {
-            title: 'Warenkorb',
             icon: mdiBasket,
             href: '/shopping/cart',
         },
         {
-            title: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
         },
         {
-            title: 'Profil',
             icon: mdiAccount,
             href: '/profile',
         },
@@ -52,7 +50,7 @@
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        <div class="column" class:active={$title === button.title}>
+        <div class="column" class:active={$page.path === button.href}>
             <a href={button.href}>
                 <Icon icon={button.icon} />
             </a>
