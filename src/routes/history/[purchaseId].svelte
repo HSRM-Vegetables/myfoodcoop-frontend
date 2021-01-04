@@ -7,10 +7,7 @@
 </script>
 
 <script>
-    import { onMount } from 'svelte';
-    import ShoppingCartItems from '../../components/shoppingCart/ShoppingCartItems.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
-    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
+    import HistoryDetails from '../../components/history/HistoryDetails.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
 
@@ -18,24 +15,12 @@
     /* eslint-disable no-unused-vars */
     $title = 'Einkaufshistorie';
     $navBalance = 'hidden';
-
-    let purchase;
-    onMount(() => {
-        const purchaseApi = new PurchaseApi();
-        purchase = purchaseApi.purchases.find((p) => p.id === purchasId);
-    });
 </script>
 
-{#if purchase !== undefined}
-    <ShoppingCartItems cartItems={purchase.cartItems} allowRemoval={false} allowVisitPriceCalculator={false} />
+<HistoryDetails purchaseID={purchasId} />
 
-    <hr />
+<div class="has-text-centered"><a href="/history" class="button is-primary">Zur Einkaufshistorie</a></div>
 
-    <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice())}€</span>
-
-    <hr />
-
-    <div class="has-text-centered">
-        <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
-    </div>
-{:else}<span>Loading...</span>{/if}
+<div class="has-text-centered">
+    <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
+</div>

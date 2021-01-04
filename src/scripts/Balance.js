@@ -23,9 +23,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.BALANCE_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.patch(`balance/${get(name)}`, JSON.stringify({
+        const response = await Fetch.patch(`balance/${get(name)}`, {
             balance: newBalance
-        }));
+        });
 
         return response.balance;
     }
@@ -40,9 +40,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.TOPUP_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/${get(name)}/topup`, JSON.stringify({
+        const response = await Fetch.post(`balance/${get(name)}/topup`, {
             amount: topupAmount
-        }));
+        });
 
         return response.balance;
     }
@@ -57,9 +57,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.WITHDRAW_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/${get(name)}/withdraw`, JSON.stringify({
+        const response = await Fetch.post(`balance/${get(name)}/withdraw`, {
             amount: withDrawAmount
-        }));
+        });
 
         return response.balance;
     }
