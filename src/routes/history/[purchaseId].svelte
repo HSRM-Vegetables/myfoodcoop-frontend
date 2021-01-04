@@ -35,6 +35,6 @@
     <hr />
 
     <div class="has-text-centered">
-        <Button text="Zu Vergangene Einkäufe" href="/history" class="button is-primary" size="full-width" /> 
+        <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" /> 
     </div>
 {:else}<span>Loading...</span>{/if}

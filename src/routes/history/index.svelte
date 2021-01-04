@@ -6,7 +6,7 @@
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Vergangene Einkäufe';
+    $title = 'Einkaufshistorie';
 </script>
 
 <ShowBalance type="inline" />
