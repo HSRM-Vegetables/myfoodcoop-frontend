@@ -5,6 +5,7 @@
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
+    import Button from '../common/Button.svelte';
 
     /**
      * Stock item the form should be prefilled with, if undefined no values are prefilled
@@ -152,10 +153,6 @@
 </script>
 
 <style>
-    .fix-button-width {
-        width: 230px;
-    }
-
     .form-row {
         display: flex;
         flex-flow: row nowrap;
@@ -229,12 +226,29 @@
         </div>
         <hr />
         <div class="button-box has-text-centered">
-            <button on:click={addOrUpadteItem} class="button is-primary mb-4 fix-button-width">Bestand
-                {item ? 'aktualisieren' : 'hinzufügen'}
-            </button><br />
-            <button on:click={clearInputs} class="button is-danger mb-4 fix-button-width">Eingabe löschen</button><br />
+            <Button 
+                text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
+                on:click={addOrUpadteItem} 
+                class="button is-primary mb-4"
+                size="full-width"
+            />
+            <br />
+            <Button 
+                text="Eingabe löschen"
+                on:click={clearInputs}
+                class="button is-danger mb-4"
+                size="full-width"
+            />
+
+           <br />
             <div class="container has-text-centered mt-6">
-                <a href="/stock/" type="submit" class="button is-primary is-link fix-button-width">Zurück</a><br />
+                <Button 
+                    text="Zurück zum Bestand"
+                    href="/stock/"
+                    on:click={clearInputs}
+                    class="button is-link mb-4"
+                    size="full-width"
+                />
             </div>
         </div>
     </div>

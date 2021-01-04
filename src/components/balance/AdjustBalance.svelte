@@ -61,10 +61,10 @@
             isLoading={balanceUpdateInProgress}
         />
         <br />
-        <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="medium" />
+        <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="full-width" />
         <br />
     </div>
 </section>
 <div class="container has-text-centered mt-6">
-    <Button href="/" text="Zur Hauptseite" class="is-link" size="medium" />
+    <Button goHome={true} size="full-width" />
 </div>

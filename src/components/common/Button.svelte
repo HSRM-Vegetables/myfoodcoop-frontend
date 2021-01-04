@@ -32,6 +32,8 @@
     // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
     // eslint-disable-next-line no-undef-init
     export let href = undefined;
+        
+    export let goHome = false;
 </script>
 
 <style>
@@ -42,8 +44,13 @@
     .full-width {
         width: 100%;
     }
-</style>
+    @media (min-width: 920px) {
+        .full-width {
+               width: 50%;
+        }
+    }
 
+</style>
 {#if href}
     <a
         href={href}
@@ -55,6 +62,9 @@
     >{text}</a>
     <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {:else}
+    {#if goHome}
+    <a href="/" class="button medium is-link {$$props.class}" class:full-width={size === 'full-width'}>Zur Hauptseite</a>
+    {:else}    
     <button
         type="submit"
         class="button {$$props.class}"
@@ -64,5 +74,6 @@
         disabled={isLoading && disableOnLoad}
         on:click
     >{text}</button>
+    {/if}
     <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {/if}

@@ -4,6 +4,7 @@
     import StockList from '../../../components/stock/StockList.svelte';
     import { title } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
+    import Button from  '../../../components/common/Button.svelte';
 
     let stockList = {
         items: [],
@@ -31,4 +32,6 @@
 
 <hr />
 
-<div class="has-text-centered"><a href="/shopping/cart" class="button is-link">Zum Warenkorb</a></div>
+<div class="has-text-centered">
+    <Button text="Zum Warenkorb" class="button is-link" href="/shopping/cart" size="full-width" />
+</div>

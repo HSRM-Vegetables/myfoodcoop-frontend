@@ -75,7 +75,7 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
 
-    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
+    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="full-width" />
 
     <hr />
 
@@ -89,7 +89,7 @@
         <Button
             text="Kaufen"
             class="is-primary mt-5"
-            size="medium"
+            size="full-width"
             on:click={checkout}
             isLoading={balanceUpdateInProgress}
         />

@@ -6,6 +6,7 @@
     import ShowBalance from '../balance/ShowBalance.svelte';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
+    import Button from '../common/Button.svelte'
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;
@@ -150,8 +151,18 @@
         <hr />
 
         <div class="button-box">
-            <button on:click={addItem} class="button is-medium is-primary mb-4"> zum Warenkorb hinzufügen </button>
-            <button on:click={() => goto(linkBack)} class="button is-link is-medium mb-4"> Zurück </button>
+            <Button
+                text="zum Warenkorb hinzufügen"
+                class="button is-medium is-primary mb-4"
+                size="full-width"
+                on:click={addItem}
+            />
+            <Button
+                text="Zurück"
+                class="button is-medium is-link mb-4"
+                size="full-width"
+                on:click={() => goto(linkBack)}
+            />
         </div>
     </div>
 {/if}
