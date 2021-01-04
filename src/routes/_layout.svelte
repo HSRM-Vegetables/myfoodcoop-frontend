@@ -31,4 +31,6 @@
         <slot />
     {/if}
 </main>
-<Appbar />
+{#if isLoggedIn}
+    <Appbar />
+{/if}
