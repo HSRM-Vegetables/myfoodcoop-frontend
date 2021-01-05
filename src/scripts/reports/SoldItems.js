@@ -1,15 +1,14 @@
 export default class SoldItems {
 
-    static async getItems() {
-        // todo: fromDate & toDate
+    static async getItems(fromDate, toDate) {
         // const response = await Fetch.get('/reports/sold-items');
         const resonse = {
             "items": [
                 {
                     "id": "0794e2e2-f5b2-42fb-a2b3-e12c75897f85",
                     "name": "Kartoffeln",
-                    "fromDate": "2017-07-21",
-                    "toDate": "2017-07-21",
+                    "fromDate": fromDate,
+                    "toDate": toDate,
                     "quantitySold": 40.2,
                     "unitType": "WEIGHT"
                 },
