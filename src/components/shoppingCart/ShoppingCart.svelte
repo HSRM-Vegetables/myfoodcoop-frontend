@@ -1,11 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
-    import uuid from 'uuid';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
-    import Balance from '../../scripts/Balance';
-    import ShowBalance from '../balance/ShowBalance.svelte';
-    import PurchaseApi from '../../scripts/purchase/PurchaseApi';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
@@ -19,7 +15,7 @@
         cartItems: [],
         totalPrice: () => 0,
     };
-    let balanceUpdateInProgress = false;
+    let checkoutInProgress = false;
     let requestError;
     let balanceAfterPurchase;
 
@@ -43,11 +39,8 @@
     // create a purchase and go to the main page
     async function checkout() {
         try {
-            balanceUpdateInProgress = true;
-            $currentBalance = await Balance.withdrawBalance(parseFloat(cart.totalPrice()));
-
-            const purchaseApi = new PurchaseApi();
-            purchaseApi.addPurchase(new Purchase(uuid(), new Date(), cart.cartItems));
+            checkoutInProgress = true;
+            $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
 
             // update stock
             cart.cartItems.forEach((item) => {
@@ -59,23 +52,19 @@
         } catch (error) {
             requestError = error;
         } finally {
-            balanceUpdateInProgress = false;
+            checkoutInProgress = false;
         }
     }
 </script>
 
 <div class="has-text-centered">
-    <ShowBalance type="inline" />
-
-    <hr />
-
     {#if cart.cartItems.length > 0}
         <ShoppingCartItems bind:cartItems={cart.cartItems} on:remove={removeItem} />
     {:else}
         <p>Der Warenkorb ist leer.</p>
     {/if}
 
-    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="medium" />
+    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="full-width" />
 
     <hr />
 
@@ -89,9 +78,9 @@
         <Button
             text="Kaufen"
             class="is-primary mt-5"
-            size="medium"
+            size="full-width"
             on:click={checkout}
-            isLoading={balanceUpdateInProgress}
+            isLoading={checkoutInProgress}
         />
     {/if}
 

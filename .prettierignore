@@ -1,0 +1,12 @@
+__sapper__/*
+*.js
+*.md
+static
+Readme.md
+package.json
+package-lock.json
+prettierrc.js
+.eslintrc.json
+.prettierignore
+src/template.html
+.gitlab-ci.yml

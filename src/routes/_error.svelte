@@ -1,5 +1,12 @@
 <script>
     import robby from 'images/robby.gif';
+    import { title, navBalance } from '../stores/page';
+    import Button from '../components/common/Button.svelte';
+
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Uups';
+    $navBalance = 'hidden';
 
     export let status;
     export let error;
@@ -29,7 +36,8 @@
         zurück zur Hauptseite.
     </p>
 
-    <a href="/" class="button is-primary mb-4">Zurück zur Hauptseite</a><br />
+    <Button goHome={true} size="full-width" class="mt-4" />
+    <br />
 </div>
 
 {#if dev && error.stack}

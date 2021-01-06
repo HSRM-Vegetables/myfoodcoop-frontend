@@ -33,6 +33,11 @@
      */
     export let isLoading = false;
 
+    /**
+     * Display Description on cart
+     */
+    export let showDescription = true;
+
     const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
 
@@ -81,6 +86,9 @@
     .is-clickable {
         cursor: pointer;
     }
+    .has-text-right span {
+        float: right;
+    }
 </style>
 
 {#if isLoading}
@@ -109,13 +117,13 @@
                         {/if}
                     </div>
                 {/if}
-                <div class="column is-half has-text-left ">
+                <div class="column has-text-left ">
                     <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
                         <span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / Stück</span>
                     {:else}<span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / kg</span>{/if}
                 </div>
-                <div class="column has-text-right">
+                <div class="column is-one-quarter has-text-right">
                     {#if item.unitType === UnitType.PIECE}
                         <span>{item.quantity} Stück vorhanden</span>
                     {:else}<span>{item.quantity} kg vorhanden</span>{/if}
@@ -128,7 +136,7 @@
             </div>
 
             <!-- Second column with item description -->
-            {#if item.description}
+            {#if item.description && showDescription}
                 <div>
                     <div class="column has-text-justified">{displayDescription(item)}</div>
                 </div>

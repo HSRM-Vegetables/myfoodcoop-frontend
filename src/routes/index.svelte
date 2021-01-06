@@ -8,20 +8,15 @@
         mdiFormatListText,
         mdiChartAreasplineVariant,
     } from '@mdi/js';
-    import ShowBalance from '../components/balance/ShowBalance.svelte';
-    import { title } from '../stores/page';
-    import Icon from '../components/common/Icon.svelte';
-    import { name } from '../stores/user';
+    import { onMount } from 'svelte';
+    import { title, navBalance } from '../stores/page';
+    import StockList from '../components/stock/StockList.svelte';
+    import Stock from '../scripts/stock/Stock';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Stadtgemüse e.V.';
-
-    function onKeyPress(event, href) {
-        if (event.code === 'Space' || event.code === 'Enter') {
-            goto(href);
-        }
-    }
+    $navBalance = 'show';
 
     const buttons = [
         {
@@ -55,58 +50,86 @@
             href: '/reports/',
         },
     ];
+
+    let stockList = {
+        items: [],
+    };
+    let cutList = [];
+    let isLoading = true;
+
+    onMount(async () => {
+        stockList = await Stock.getStockList();
+        cutList = stockList.items.slice(0, 3);
+        isLoading = false;
+    });
+
+    function itemSelected(event) {
+        goto(`/shopping/stock/${event.detail.id}`);
+    }
 </script>
 
 <style>
-    .button-container {
-        padding-left: 2em;
-        padding-right: 2em;
+    .icon-box {
         display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
+        flex-flow: wrap;
     }
-
-    .big-icon-button {
-        background: #375a7f;
+    .icon-button {
+        font-size: 15px;
         color: white;
-        border: 3px solid black;
+        background: #375a7f;
+        padding: 7px 24px;
+        border-radius: 6px;
         cursor: pointer;
-        max-width: 10em;
-        border-radius: 20%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        margin-bottom: 3em;
-        padding-left: 1em;
-        padding-right: 1em;
+        display: grid;
+        place-items: center;
+        margin: 20px;
+        min-width: 200px;
     }
-
-    .big-icon-button > span {
-        text-align: center;
-        font-weight: bold;
+    .icon-button svg {
+        height: 120px;
+    }
+    @media (max-width: 920px) {
+        .icon-button {
+            display: inline-flex;
+            place-items: center;
+            margin: 20px 0;
+        }
+        .icon-box div {
+            width: 100%;
+        }
     }
 </style>
 
-<span class="is-size-4">Hallo {$name}!</span>
+<h2 class="pt-4 is-size-5 has-text-weight-bold">Neueste Artikel:</h2>
+<div class="has-text-centered mb-6">
+    <StockList
+        bind:stockItems={cutList}
+        bind:isLoading
+        isClickable={true}
+        on:select={itemSelected}
+        showDescription={false}
+    />
+</div>
 
 <hr />
+<h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
 
-<ShowBalance type="inline" />
-
-<hr />
-
-<div class="button-container">
+<div class="icon-box">
     {#each buttons as button}
-        <div
-            class="big-icon-button"
-            tabindex="0"
-            role="button"
-            aria-label={button.label}
-            on:keypress={(e) => onKeyPress(e, button.href)}
-            on:click={() => goto(button.href)}
-        >
-            <Icon icon={button.icon} />
-            <span>{button.label}</span>
+        <div class="has-text-centered-desktop-only">
+            <div
+                class="icon-button"
+                tabindex="0"
+                role="button"
+                aria-label={button.label}
+                on:click={() => goto(button.href)}
+            >
+                <svg viewbox="0 0 24 24">
+                    <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
+                    <path fill="currentColor" d={button.icon} />
+                </svg>
+                <span class="pl-4 has-text-weight-bold">{button.label}</span>
+            </div>
         </div>
     {/each}
 </div>

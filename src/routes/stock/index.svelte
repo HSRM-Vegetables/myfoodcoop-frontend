@@ -2,9 +2,10 @@
     import { goto } from '@sapper/app';
     import { onMount } from 'svelte';
     import StockList from '../../components/stock/StockList.svelte';
-    import { title } from '../../stores/page';
+    import { title, navBalance } from '../../stores/page';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../../components/common/Modal.svelte';
+    import Button from '../../components/common/Button.svelte';
 
     let stockList = {
         items: [],
@@ -13,6 +14,7 @@
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
+    $navBalance = 'hidden';
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
@@ -63,9 +65,11 @@
         on:select={onEditItem}
         isClickable={true}
     />
-    <a href="stock/item/new" class="button is-primary mt-6">Bestand hinzufügen</a>
+    <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
 </div>
 
 <hr />
 
-<div class="has-text-centered"><a href="/" class="button is-link container">Zur Hauptseite</a></div>
+<div class="has-text-centered">
+    <Button goHome={true} size="full-width" />
+</div>

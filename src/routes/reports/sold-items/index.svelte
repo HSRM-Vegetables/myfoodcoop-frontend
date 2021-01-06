@@ -27,19 +27,19 @@
         const lastMonthLast = new Date(today.getFullYear(), today.getMonth(), 0);
 
         return {
-            'yesterday': {
-                'fromDate': dateToYYYYMMDD(yesterday),
-                'toDate': dateToYYYYMMDD(yesterday)
+            yesterday: {
+                fromDate: dateToYYYYMMDD(yesterday),
+                toDate: dateToYYYYMMDD(yesterday),
             },
-            'lastWeek': {
-                'fromDate': dateToYYYYMMDD(lastMonday),
-                'toDate': dateToYYYYMMDD(lastSunday)
+            lastWeek: {
+                fromDate: dateToYYYYMMDD(lastMonday),
+                toDate: dateToYYYYMMDD(lastSunday),
             },
-            'lastMonth': {
-                'fromDate': dateToYYYYMMDD(lastMonthFirst),
-                'toDate': dateToYYYYMMDD(lastMonthLast)
-            }
-        }
+            lastMonth: {
+                fromDate: dateToYYYYMMDD(lastMonthFirst),
+                toDate: dateToYYYYMMDD(lastMonthLast),
+            },
+        };
     }
 
     async function loadItems(period) {
@@ -86,14 +86,17 @@
 {:else if soldItems !== undefined && soldItems.length > 0}
     <div class="mt-4 mb-5 is-size-5">
         {#if selectedPeriod === 'yesterday'}
-            Datum: {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+            Datum:
+            {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
         {:else}
-            Zeitraum: {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
-            - {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
+            Zeitraum:
+            {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+            -
+            {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
         {/if}
     </div>
     <hr />
-    <SoldItemsComp soldItems={soldItems}/>
+    <SoldItemsComp soldItems={soldItems} />
 {:else}
     <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
 {/if}
@@ -102,6 +105,4 @@
 
 <hr />
 
-<div class="has-text-centered">
-    <a href="/reports/" class="button is-primary container">Zurück</a>
-</div>
+<div class="has-text-centered"><a href="/reports/" class="button is-primary container">Zurück</a></div>
