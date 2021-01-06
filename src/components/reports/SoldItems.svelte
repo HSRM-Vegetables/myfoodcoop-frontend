@@ -16,7 +16,7 @@
             verkaufte Menge
         </div>
     </div>
-    {#each soldItems as item}
+    {#each soldItems.sort((a,b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1) as item}
         <div class="columns is-mobile">
             <div class="column">
                 {item.name}
