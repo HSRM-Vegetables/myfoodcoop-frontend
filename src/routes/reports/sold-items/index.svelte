@@ -10,6 +10,7 @@
     let requestError;
     let isLoading = true;
     let soldItems;
+    let selectedPeriod = 'yesterday';
     const periods = calcPeriods();
 
     function calcPeriods() {
@@ -43,6 +44,7 @@
 
     async function loadItems(period) {
         isLoading = true;
+        selectedPeriod = period;
         try {
             soldItems = await SoldItems.getItems(periods[period].fromDate, periods[period].toDate);
         } catch (error) {
@@ -52,15 +54,27 @@
         }
     }
 
-    loadItems('yesterday');
+    loadItems(selectedPeriod);
 </script>
 
 <h1 class="title mb-5 has-text-centered">Was wurde in den letzten x Tagen verkauft?</h1>
 
 <div class="has-text-centered">
-    <Button text="Gestern" on:click={() => loadItems('yesterday')}/>
-    <Button class="mx-2" text="Letzte Woche" on:click={() => loadItems('lastWeek')}/>
-    <Button text="Letzter Monat" on:click={() => loadItems('lastMonth')}/>
+    <Button
+        text="Gestern"
+        class="my-2 is-rounded {selectedPeriod === 'yesterday' ? 'is-dark' : ''}"
+        on:click={() => loadItems('yesterday')}
+    />
+    <Button
+        text="Letzte Woche"
+        class="my-2 mx-2 is-rounded {selectedPeriod === 'lastWeek' ? 'is-dark' : ''}"
+        on:click={() => loadItems('lastWeek')}
+    />
+    <Button
+        class="my-2 is-rounded {selectedPeriod === 'lastMonth' ? 'is-dark' : ''}"
+        text="Letzter Monat"
+        on:click={() => loadItems('lastMonth')}
+    />
 </div>
 
 {#if isLoading}
@@ -70,6 +84,15 @@
         <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
 {:else if soldItems !== undefined && soldItems.length > 0}
+    <div class="mt-4 mb-5 is-size-5">
+        {#if selectedPeriod === 'yesterday'}
+            Datum: {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+        {:else}
+            Zeitraum: {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+            - {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
+        {/if}
+    </div>
+    <hr />
     <SoldItemsComp soldItems={soldItems}/>
 {:else}
     <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />

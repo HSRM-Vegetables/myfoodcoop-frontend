@@ -8,11 +8,11 @@
 </script>
 
 {#if soldItems !== undefined}
-    <div class="columns is-mobile mt-6">
-        <div class="column">
+    <div class="columns is-mobile">
+        <div class="column has-text-weight-bold">
             Artikelname
         </div>
-        <div class="column">
+        <div class="column has-text-weight-bold">
             verkaufte Menge
         </div>
     </div>
