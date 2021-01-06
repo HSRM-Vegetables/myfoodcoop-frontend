@@ -22,7 +22,6 @@ export default class SoldItems {
                 }
             ]
         }
-
         return resonse.items;
     }
 }

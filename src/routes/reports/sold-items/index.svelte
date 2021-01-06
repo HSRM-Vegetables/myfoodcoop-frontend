@@ -1,11 +1,14 @@
 <script>
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
+    import Loader from '../../../components/common/Loader.svelte';
+    import NoData from '../../../components/common/NoData.svelte';
     import Button from '../../../components/common/Button.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
     import { dateToYYYYMMDD } from '../../../scripts/Helper';
 
     let requestError;
+    let isLoading = true;
     let soldItems;
     const periods = calcPeriods();
 
@@ -39,17 +42,20 @@
     }
 
     async function loadItems(period) {
+        isLoading = true;
         try {
             soldItems = await SoldItems.getItems(periods[period].fromDate, periods[period].toDate);
         } catch (error) {
             requestError = error;
+        } finally {
+            isLoading = false;
         }
     }
 
     loadItems('yesterday');
 </script>
 
-<h1 class="title mb-5">Was wurde in den letzten x Tagen verkauft?</h1>
+<h1 class="title mb-5 has-text-centered">Was wurde in den letzten x Tagen verkauft?</h1>
 
 <div class="has-text-centered">
     <Button text="Gestern" on:click={() => loadItems('yesterday')}/>
@@ -57,14 +63,22 @@
     <Button text="Letzter Monat" on:click={() => loadItems('lastMonth')}/>
 </div>
 
-{#if requestError !== undefined}
+{#if isLoading}
+    <Loader bind:isLoading />
+{:else if requestError !== undefined}
     <article class="message is-danger">
         <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
-{:else}
+{:else if soldItems !== undefined && soldItems.length > 0}
     <SoldItemsComp soldItems={soldItems}/>
+{:else}
+    <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
 {/if}
 
 <ErrorModal error={requestError} />
 
-<div class="has-text-centered"><a href="/reports/" class="button is-link container">Zurück</a></div>
+<hr />
+
+<div class="has-text-centered">
+    <a href="/reports/" class="button is-primary container">Zurück</a>
+</div>

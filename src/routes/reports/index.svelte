@@ -6,4 +6,8 @@
 
 <Button href="/reports/sold-items" class="is-link" text="Was wurde in den letzten x Tagen verkauft?" />
 
-<div class="has-text-centered"><a href="/" class="button is-link container">Zur Hauptseite</a></div>
+<hr />
+
+<div class="has-text-centered">
+    <a href="/" class="button is-link container">Zur Hauptseite</a>
+</div>
