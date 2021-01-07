@@ -1,11 +1,11 @@
 <script>
+    import { DateTime } from 'luxon';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
     import Button from '../../../components/common/Button.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
-    import { dateToYYYYMMDD } from '../../../scripts/Helper';
 
     let requestError;
     let isLoading = true;
@@ -15,30 +15,24 @@
     const periods = calcPeriods();
 
     function calcPeriods() {
-        const today = new Date();
-        const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
-
-        // lastWeek Dates
-        const day = today.getDay();
-        const lastSunday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (day === 0 ? 7 : day));
-        const lastMonday = new Date(lastSunday.getFullYear(), lastSunday.getMonth(), lastSunday.getDate() - 6);
-
-        // lastMonth Dates
-        const lastMonthFirst = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        const lastMonthLast = new Date(today.getFullYear(), today.getMonth(), 0);
+        const yesterday = DateTime.local().plus({ days: -1 });
+        const lastMonday = DateTime.local().plus({ days: -7 }).startOf('week');
+        const lastSunday = DateTime.local().plus({ days: -7 }).endOf('week');
+        const lastMonthFirst = DateTime.local().plus({ months: -1 }).startOf('month');
+        const lastMonthLast = DateTime.local().plus({ months: -1 }).endOf('month');
 
         return {
             yesterday: {
-                fromDate: dateToYYYYMMDD(yesterday),
-                toDate: dateToYYYYMMDD(yesterday),
+                fromDate: yesterday.toFormat('yyyy-MM-dd'),
+                toDate: yesterday.toFormat('yyyy-MM-dd'),
             },
             lastWeek: {
-                fromDate: dateToYYYYMMDD(lastMonday),
-                toDate: dateToYYYYMMDD(lastSunday),
+                fromDate: lastMonday.toFormat('yyyy-MM-dd'),
+                toDate: lastSunday.toFormat('yyyy-MM-dd'),
             },
             lastMonth: {
-                fromDate: dateToYYYYMMDD(lastMonthFirst),
-                toDate: dateToYYYYMMDD(lastMonthLast),
+                fromDate: lastMonthFirst.toFormat('yyyy-MM-dd'),
+                toDate: lastMonthLast.toFormat('yyyy-MM-dd'),
             },
         };
     }

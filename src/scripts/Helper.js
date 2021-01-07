@@ -60,16 +60,3 @@ export function moneyStyler(money) {
 export function stopPropagation(event) {
     event.stopPropagation();
 }
-
-/**
- * Takes a Date-Object and returns the date as a string in 'YYYY-MM-DD' format
- * @param {Date} date The Date object
- * @return {(string|undefined)} String of the date in 'YYYY-MM-DD' format or undefined if date is not a Date-Object
- */
-export function dateToYYYYMMDD(date) {
-    if (date instanceof Date) {
-        // en-CA for YYYY-MM-DD format
-        return date.toLocaleDateString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit'});
-    }
-    return undefined;
-}
