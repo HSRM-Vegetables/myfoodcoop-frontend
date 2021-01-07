@@ -1,5 +1,6 @@
 <script>
     import { DateTime } from 'luxon';
+    import { goto } from '@sapper/app';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
@@ -57,6 +58,10 @@
         }
     }
 
+    function itemSelected(event) {
+        goto(`stock/item/${event.detail.id}`);
+    }
+
     loadItems(selectedPeriod);
 </script>
 
@@ -99,7 +104,7 @@
         {/if}
     </div>
     <hr />
-    <SoldItemsComp soldItems={soldItems} />
+    <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
 {:else}
     <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
 {/if}
