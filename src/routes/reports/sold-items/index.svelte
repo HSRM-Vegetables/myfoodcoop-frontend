@@ -7,8 +7,15 @@
     import Button from '../../../components/common/Button.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
+    import { title, navBalance } from '../../../stores/page';
+
+    /* eslint-disable prefer-const */
+    /* eslint-disable no-unused-vars */
+    $title = 'Was wurde gekauft';
+    $navBalance = 'hidden';
 
     let requestError;
+    let titleText = 'gestern';
     let isLoading = true;
     let soldItems;
     let selectedPeriod = 'yesterday';
@@ -38,15 +45,16 @@
         };
     }
 
-    async function loadItems(period) {
+    async function loadItems(period, name) {
         selectedPeriod = period;
-
+        if (name !== undefined) {
+            titleText = name;
+        }
         if (cache[period] !== undefined) {
             soldItems = cache[period];
             isLoading = false;
             return;
         }
-
         try {
             isLoading = true;
             soldItems = await SoldItems.getItems(periods[period].fromDate, periods[period].toDate);
@@ -65,26 +73,25 @@
     loadItems(selectedPeriod);
 </script>
 
-<h1 class="title mb-5 has-text-centered">Was wurde in den letzten x Tagen verkauft?</h1>
-
 <div class="has-text-centered">
     <Button
         text="Gestern"
         class="my-2 is-rounded {selectedPeriod === 'yesterday' ? 'is-dark' : ''}"
-        on:click={() => loadItems('yesterday')}
+        on:click={() => loadItems('yesterday', 'gestern')}
     />
     <Button
         text="Letzte Woche"
         class="my-2 mx-2 is-rounded {selectedPeriod === 'lastWeek' ? 'is-dark' : ''}"
-        on:click={() => loadItems('lastWeek')}
+        on:click={() => loadItems('lastWeek', 'letzte Woche')}
     />
     <Button
         class="my-2 is-rounded {selectedPeriod === 'lastMonth' ? 'is-dark' : ''}"
-        text="Letzter Monat"
-        on:click={() => loadItems('lastMonth')}
+        text="Letzten Monat"
+        on:click={() => loadItems('lastMonth', 'letzten Monat')}
     />
 </div>
 
+<h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} verkauft?</h2>
 {#if isLoading}
     <Loader bind:isLoading />
 {:else if requestError !== undefined}
@@ -92,17 +99,16 @@
         <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
 {:else if soldItems !== undefined && soldItems.length > 0}
-    <div class="mt-4 mb-5 is-size-5">
-        {#if selectedPeriod === 'yesterday'}
-            Datum:
-            {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
-        {:else}
-            Zeitraum:
-            {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
-            -
-            {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
-        {/if}
-    </div>
+    {#if selectedPeriod === 'yesterday'}
+        Datum:
+        {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+    {:else}
+        Zeitraum:
+        {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+        -
+        {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
+    {/if}
+
     <hr />
     <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
 {:else}
@@ -114,5 +120,5 @@
 <hr />
 
 <div class="has-text-centered">
-    <Button text="Zurück" href="/reports" class="button is-primary" size="full-width" />
+    <Button text="Zurück zur Reports" href="/reports" class="button is-primary" size="full-width" />
 </div>
