@@ -23,24 +23,23 @@
     const periods = calcPeriods();
 
     function calcPeriods() {
+        const today = DateTime.local();
         const yesterday = DateTime.local().plus({ days: -1 });
-        const lastMonday = DateTime.local().plus({ days: -7 }).startOf('week');
-        const lastSunday = DateTime.local().plus({ days: -7 }).endOf('week');
-        const lastMonthFirst = DateTime.local().plus({ months: -1 }).startOf('month');
-        const lastMonthLast = DateTime.local().plus({ months: -1 }).endOf('month');
+        const lastWeek = DateTime.local().plus({ days: -7 });
+        const lastMonth = DateTime.local().plus({ months: -1 });
 
         return {
             yesterday: {
-                fromDate: yesterday.toFormat('yyyy-MM-dd'),
-                toDate: yesterday.toFormat('yyyy-MM-dd'),
+                fromDate: yesterday,
+                toDate: yesterday,
             },
             lastWeek: {
-                fromDate: lastMonday.toFormat('yyyy-MM-dd'),
-                toDate: lastSunday.toFormat('yyyy-MM-dd'),
+                fromDate: lastWeek,
+                toDate: today,
             },
             lastMonth: {
-                fromDate: lastMonthFirst.toFormat('yyyy-MM-dd'),
-                toDate: lastMonthLast.toFormat('yyyy-MM-dd'),
+                fromDate: lastMonth,
+                toDate: today,
             },
         };
     }
@@ -50,14 +49,19 @@
         if (name !== undefined) {
             titleText = name;
         }
+
         if (cache[period] !== undefined) {
             soldItems = cache[period];
             isLoading = false;
             return;
         }
+
         try {
             isLoading = true;
-            soldItems = await SoldItems.getItems(periods[period].fromDate, periods[period].toDate);
+            soldItems = await SoldItems.getItems(
+                periods[period].fromDate.toFormat('yyyy-MM-dd'),
+                periods[period].toDate.toFormat('yyyy-MM-dd')
+            );
             cache[period] = soldItems;
         } catch (error) {
             requestError = error;
@@ -101,12 +105,12 @@
 {:else if soldItems !== undefined && soldItems.length > 0}
     {#if selectedPeriod === 'yesterday'}
         Datum:
-        {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+        {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
     {:else}
         Zeitraum:
-        {new Date(periods[selectedPeriod].fromDate).toLocaleDateString()}
+        {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
         -
-        {new Date(periods[selectedPeriod].toDate).toLocaleDateString()}
+        {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
     {/if}
 
     <hr />
