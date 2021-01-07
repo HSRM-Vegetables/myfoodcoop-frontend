@@ -8,4 +8,6 @@
 
 <hr />
 
-<div class="has-text-centered"><a href="/" class="button is-link container">Zur Hauptseite</a></div>
+<div class="has-text-centered">
+    <Button goHome={true} size="full-width" />
+</div>

@@ -105,4 +105,6 @@
 
 <hr />
 
-<div class="has-text-centered"><a href="/reports/" class="button is-primary container">Zurück</a></div>
+<div class="has-text-centered">
+    <Button text="Zurück" href="/reports" class="button is-primary" size="full-width" />
+</div>
