@@ -11,6 +11,7 @@
     let isLoading = true;
     let soldItems;
     let selectedPeriod = 'yesterday';
+    const cache = [];
     const periods = calcPeriods();
 
     function calcPeriods() {
@@ -43,10 +44,18 @@
     }
 
     async function loadItems(period) {
-        isLoading = true;
         selectedPeriod = period;
+
+        if (cache[period] !== undefined) {
+            soldItems = cache[period];
+            isLoading = false;
+            return;
+        }
+
         try {
+            isLoading = true;
             soldItems = await SoldItems.getItems(periods[period].fromDate, periods[period].toDate);
+            cache[period] = soldItems;
         } catch (error) {
             requestError = error;
         } finally {
