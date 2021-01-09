@@ -1,7 +1,7 @@
 <script>
     import { mdiDelete, mdiPencil } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
-    import { stopPropagation } from '../../scripts/Helper';
+    import { moneyStyler, stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
     import Loader from '../common/Loader.svelte';
@@ -120,8 +120,8 @@
                 <div class="column has-text-left ">
                     <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
-                        <span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / Stück</span>
-                    {:else}<span class="is-size-7 is-hidden-desktop">{item.pricePerUnit} € / kg</span>{/if}
+                        <span class="is-size-7 is-hidden-desktop">{moneyStyler(item.pricePerUnit)} € / Stück</span>
+                    {:else}<span class="is-size-7 is-hidden-desktop">{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
                 </div>
                 <div class="column is-one-quarter has-text-right">
                     {#if item.unitType === UnitType.PIECE}
@@ -130,8 +130,8 @@
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}
-                        <span>{item.pricePerUnit} € / Stück</span>
-                    {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
+                        <span>{moneyStyler(item.pricePerUnit)} € / Stück</span>
+                    {:else}<span>{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
                 </div>
             </div>
 
