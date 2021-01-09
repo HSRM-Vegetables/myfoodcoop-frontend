@@ -1,5 +1,6 @@
 <script>
     import EditBalance from '../components/balance/EditBalance.svelte';
+    import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { title, navBalance } from '../stores/page';
 
     /* eslint-disable prefer-const */
@@ -8,4 +9,6 @@
     $navBalance = 'show';
 </script>
 
-<EditBalance />
+<AuthorizeByRoles allowedRoles={[Roles.ROLE1]}>
+    <EditBalance />
+</AuthorizeByRoles>
