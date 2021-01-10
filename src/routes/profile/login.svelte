@@ -71,6 +71,8 @@
     on:input={checkLoginStatus}
 />
 
+<p class="mt-3 mb-1">Noch nicht registriert? <a href="/profile/register">Dann hole das hier nach!</a></p>
+
 <div class="has-text-centered">
     <Button
         class="is-primary mt-3"
