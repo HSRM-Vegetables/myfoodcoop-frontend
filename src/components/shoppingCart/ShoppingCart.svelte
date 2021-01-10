@@ -6,7 +6,6 @@
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import Stock from '../../scripts/stock/Stock';
     import { moneyStyler } from '../../scripts/Helper';
     import { currentBalance } from '../../stores/balance';
 
@@ -41,12 +40,6 @@
         try {
             checkoutInProgress = true;
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
-
-            // update stock
-            cart.cartItems.forEach((item) => {
-                Stock.removeQuantityFromItem(item.stockItem.id, item.quantity);
-            });
-
             cart.clear();
             goto('/');
         } catch (error) {
