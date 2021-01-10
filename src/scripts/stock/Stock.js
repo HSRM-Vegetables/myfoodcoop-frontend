@@ -48,19 +48,6 @@ export default class Stock {
     }
 
     /**
-     * Remove the specified quantity from stock
-     * @param {string} name The name of the item
-     * @param {number} quantity quantity to be remove from the item
-     */
-    static async removeQuantityFromItem(id, quantity) {
-        const getItem = await Fetch.get(`stock/${id}`);
-        const newQuantity = getItem.quantity - quantity;
-        return Fetch.patch(`stock/${id}`, {
-            quantity: newQuantity
-        });
-    }
-
-    /**
      * Updates the item by removing it and recreating it with the same id
      * @param {String} id The id of the item
      * @param {String} name The name of the item
