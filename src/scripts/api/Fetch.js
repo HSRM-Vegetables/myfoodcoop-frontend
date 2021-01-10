@@ -1,8 +1,14 @@
+import { get } from 'svelte/store';
 import { url, version } from './ApiConfig';
+import { token } from '../../stores/user';
 
 export const Headers = {
-    XUsername: 'X-Username'
+    Authorization: 'Authorization'
 };
+
+export const getAuthorizationHeader = () => ({
+    [Headers.Authorization]: `Bearer ${get(token)}`,
+});
 
 export default class Fetch {
     /**
@@ -30,19 +36,21 @@ export default class Fetch {
      * Sends a PATCH request to the api
      * @param {string} subpath Path relativ to the version number of the api
      * @param {string} content Body content which should be send to the api
+     * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
-    static async patch(subpath, content) {
-        return Fetch.request('PATCH', subpath, content);
+    static async patch(subpath, content, additionalHeaders) {
+        return Fetch.request('PATCH', subpath, content, additionalHeaders);
     }
     
     /**
      * Sends a DELETE request to the api
      * @param {string} subpath Path relativ to the version number of the api
+     * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
-    static async delete(subpath) {
-        return Fetch.request('DELETE', subpath, undefined);
+    static async delete(subpath, additionalHeaders) {
+        return Fetch.request('DELETE', subpath, undefined, additionalHeaders);
     }
 
     /**
@@ -71,5 +79,4 @@ export default class Fetch {
         }
         return undefined;
     }
-    
 }

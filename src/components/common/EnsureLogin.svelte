@@ -5,7 +5,8 @@
     import Cookie from 'js-cookie';
     import { goto, stores } from '@sapper/app';
     import { onMount } from 'svelte';
-    import { name } from '../../stores/user';
+    import User from '../../scripts/user/User';
+    import { token, tokenExpires } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
     // export the property if the current user is logged in or not
@@ -34,18 +35,21 @@
         }
 
         // if the page has an error, or we are on the login page, then don't redirect
-        if (pageLocal.error || pageLocal.path.includes('/login')) {
+        if (pageLocal.error || pageLocal.path.includes('/login') || $page.path.includes('/register')) {
             isLoggedIn = false;
             return;
         }
 
         // if the name is not set, try to read the cookie
-        if (!$name) {
-            $name = Cookie.get(CookieDefaults.NAME);
+        if (!$token) {
+            $token = Cookie.get(CookieDefaults.TOKEN);
+            if ($token) {
+                User.handleToken($token);
+            }
         }
 
         // if the name still has no value, redirect to login
-        if (!$name) {
+        if (!$token || $tokenExpires < new Date()) {
             isLoggedIn = false;
             goto(`/profile/login?returnUrl=${pageLocal.path}`);
         } else {

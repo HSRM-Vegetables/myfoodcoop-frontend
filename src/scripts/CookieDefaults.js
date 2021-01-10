@@ -1,3 +1,3 @@
 export default {
-    NAME: 'sg_name'
+    TOKEN: 'sg_token'
 }

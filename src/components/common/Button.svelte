@@ -25,6 +25,13 @@
     export let disableOnLoad = true;
 
     /**
+     * Disables the button
+     * Default: false.
+     * Important: Only works if `href` is not set
+     */
+    export let disabled = false;
+
+    /**
      * Converts the button to an anchor element.
      * The Link a click on the button should redirect to.
      * Important: Does not work with `disableOnLoad`
@@ -72,7 +79,7 @@
             class:is-loading={isLoading}
             class:medium={size === 'medium'}
             class:full-width={size === 'full-width'}
-            disabled={isLoading && disableOnLoad}
+            disabled={disabled || (isLoading && disableOnLoad)}
             on:click
         >{text}</button>
     {/if}

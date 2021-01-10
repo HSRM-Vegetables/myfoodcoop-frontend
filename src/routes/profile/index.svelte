@@ -1,7 +1,7 @@
 <script>
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { name } from '../../stores/user';
+    import { userName } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -13,7 +13,7 @@
     }
 </script>
 
-<h1 class="title">Hallo {$name}!</h1>
+<h1 class="title">Hallo {$userName}!</h1>
 
 <div class="container has-text-centered mt-3">
     <Button

@@ -1,10 +1,10 @@
 import { moneyStyler } from '../Helper';
-import Fetch from "../api/Fetch";
+import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {
 
     static async getStockList() {
-        return Fetch.get(`stock/`);
+        return Fetch.get(`stock/`, getAuthorizationHeader());
     }
 
     /**
@@ -27,7 +27,7 @@ export default class Stock {
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
-        });
+        }, getAuthorizationHeader());
     }
 
     /**
@@ -35,7 +35,7 @@ export default class Stock {
      * @param {string} id uuid of the item
      */
     static async removeItem(id) {
-        return Fetch.delete(`stock/${id}`);
+        return Fetch.delete(`stock/${id}`, getAuthorizationHeader());
     }
 
     /**
@@ -44,7 +44,7 @@ export default class Stock {
      * @returns {(StockItem|undefined)} StockItem Object or undefined if no item found
      */
     static async getItem(id) {
-        return Fetch.get(`stock/${id}`);
+        return Fetch.get(`stock/${id}`, getAuthorizationHeader());
     }
 
     /**
@@ -68,7 +68,7 @@ export default class Stock {
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
             'description': description
-        });
+        }, getAuthorizationHeader());
     }
 
     static convertUnitType(unitType) {
