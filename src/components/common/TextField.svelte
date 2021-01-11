@@ -35,6 +35,11 @@
     export let disabled = false;
 
     /**
+     * Char Limit of input field
+     */
+    export let charLimit = 0;
+
+    /**
      * Displays red border around the input field if true
      */
     export let isInErrorState = false;
@@ -67,6 +72,7 @@
 
 <div class="has-text-left pb-2"><span>{label}</span></div>
 <div class="is-relative">
+    <!-- if charLimit is 0 do not show maxlength -->
     <input
         bind:this={inputElement}
         class:error={isInErrorState}
@@ -79,6 +85,8 @@
         on:keydown
         disabled={disabled}
         value={value}
+        maxlength={charLimit === 0 ? undefined : charLimit}
     />
+
     {#if decoration}<span class="balance-input-deco">{decoration}</span>{/if}
 </div>
