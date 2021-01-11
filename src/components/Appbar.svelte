@@ -1,5 +1,5 @@
 <script>
-    import { stores } from '@sapper/app';
+    import { stores, goto } from '@sapper/app';
     import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
     import Icon from './common/Icon.svelte';
 
@@ -23,6 +23,12 @@
             href: '/profile',
         },
     ];
+
+    function onKeyPress(event, href) {
+        if (event.code === 'Space' || event.code === 'Enter') {
+            goto(href);
+        }
+    }
 </script>
 
 <style>
@@ -51,7 +57,7 @@
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
         <div class="column" class:active={$page.path === button.href}>
-            <a href={button.href}>
+            <a on:keypress={(e) => onKeyPress(e, button.href)} href={button.href}>
                 <Icon icon={button.icon} appbar={true} />
             </a>
         </div>
