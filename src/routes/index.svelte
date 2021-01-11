@@ -66,6 +66,12 @@
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
     }
+
+    function onKeyPress(event, href) {
+        if (event.code === 'Space' || event.code === 'Enter') {
+            goto(href);
+        }
+    }
 </script>
 
 <style>
@@ -122,6 +128,7 @@
                 tabindex="0"
                 role="button"
                 aria-label={button.label}
+                on:keypress={(e) => onKeyPress(e, button.href)}
                 on:click={() => goto(button.href)}
             >
                 <svg viewbox="0 0 24 24">
