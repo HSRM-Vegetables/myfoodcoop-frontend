@@ -184,6 +184,7 @@
                 placeholder="Artikel"
                 label="Artikel"
                 isInErrorState={articleTextFieldError}
+                charLimit="250"
                 value={item ? item.name : ''}
             />
         </div>
