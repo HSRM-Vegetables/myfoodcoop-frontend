@@ -29,5 +29,5 @@
 
 <div class="has-text-centered">
     <!-- I don't use an a-tag here, because its harder to disable an a-tag -->
-    <button class="button is-primary mt-3" disabled={$name === ''} on:click={saveName}>Einloggen</button>
+    <button class="button is-primary mt-3" disabled={!$name} on:click={saveName}>Einloggen</button>
 </div>
