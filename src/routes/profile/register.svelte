@@ -183,12 +183,12 @@
 <TextField
     bind:this={memberIdInput}
     type="number"
-    label="Mitgliedernummer"
+    label="Mitgliedsnummer"
     on:input={checkMemberId}
     isInErrorState={memberIdError}
 />
 {#if memberIdError}
-    <span class="has-text-danger">Mitgliedernummer muss mindestens {userNameMinimumLength} Zeichen lang sein!</span>
+    <span class="has-text-danger">Mitgliedsnummer muss mindestens {userNameMinimumLength} Zeichen lang sein!</span>
 {/if}
 
 <br />
