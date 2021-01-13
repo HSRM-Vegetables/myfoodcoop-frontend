@@ -22,7 +22,7 @@
     /**
      * Default input element minimum value
      */
-    export let minimum = '';
+    export let minimum = 0;
 
     /**
      * Value to display
@@ -78,8 +78,8 @@
         class:error={isInErrorState}
         class="input"
         type={type}
-        placeholder={placeholder}
-        min={minimum}
+        placeholder={placeholder === '' ? undefined : placeholder}
+        min={minimum === 0 ? undefined : minimum}
         on:change
         on:input
         on:keydown
