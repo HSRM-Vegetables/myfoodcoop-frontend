@@ -1,5 +1,6 @@
 <script>
     import AdjustBalance from '../components/balance/AdjustBalance.svelte';
+    import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { title, navBalance } from '../stores/page';
 
     /* eslint-disable prefer-const */
@@ -12,4 +13,6 @@
     <title>Guthaben anpassen</title>
 </svelte:head>
 
-<AdjustBalance />
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <AdjustBalance />
+</AuthorizeByRoles>
