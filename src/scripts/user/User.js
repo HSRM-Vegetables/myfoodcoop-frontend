@@ -13,7 +13,7 @@ export default class User {
      * @param {string} email email as defined by the user (optional)
      */
     static async register(username, memberId, password, email) {
-        return Fetch.post('register', {
+        return Fetch.post('user/register', {
             username,
             memberId,
             password,
@@ -27,7 +27,7 @@ export default class User {
      * @param {string} password password of the user
      */
     static async login(username, password) {
-        return Fetch.post('auth/login', {
+        return Fetch.post('user/login', {
             username,
             password
         })
@@ -42,7 +42,7 @@ export default class User {
         tokenStore.set(token);
 
         const decodedToken = jwtDecode(token);
-        userName.set(decodedToken.username);
+        userName.set(decodedToken.sub);
         tokenCreation.set(new Date(parseFloat(decodedToken.iat) * 1000))
 
         const tokenExpiryDate = new Date(parseFloat(decodedToken.exp) * 1000);

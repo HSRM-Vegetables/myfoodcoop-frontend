@@ -7,7 +7,7 @@ export const Headers = {
 };
 
 export const getAuthorizationHeader = () => ({
-    [Headers.Authorization]: `Bearer ${get(token)}`,
+    [Headers.Authorization]: `bearer ${get(token)}`,
 });
 
 export default class Fetch {

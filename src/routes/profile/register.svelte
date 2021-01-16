@@ -24,7 +24,7 @@
     // fields for password handling
     let passwordInput;
     let passwordError = false;
-    const passwordMinimumLength = 8;
+    const passwordMinimumLength = 10;
 
     // fields for repeat password handling
     let repeatPasswordInput;
