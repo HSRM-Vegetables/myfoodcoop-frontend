@@ -1,7 +1,7 @@
 <script>
     import { stores } from '@sapper/app';
     import { onMount } from 'svelte';
-    import PriceCalculator from '../../../components/PriceCalculator/PriceCalculator.svelte';
+    import PriceCalculator from '../../../components/priceCalculator/PriceCalculator.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
 
