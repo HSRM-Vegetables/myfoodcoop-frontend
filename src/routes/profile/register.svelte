@@ -164,11 +164,15 @@
 
 {#if requestError && requestError.errorCode === 400014}
     <article class="message is-danger">
-        <div class="message-body">Email ist bereits vergeben!</div>
+        <div class="message-body">Email wird bereits verwendet!</div>
     </article>
 {:else if requestError && requestError.errorCode === 400015}
     <article class="message is-danger">
-        <div class="message-body">Benutzername ist bereits vergeben!</div>
+        <div class="message-body">Benutzername wird bereits verwendet!</div>
+    </article>
+{:else if requestError && requestError.errorCode === 400016}
+    <article class="message is-danger">
+        <div class="message-body">Mitgliedsnummer wird bereits verwendet!</div>
     </article>
 {:else}
     <!-- Display Error popup if an unexpected error occured. -->
