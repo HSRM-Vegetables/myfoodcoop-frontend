@@ -8,10 +8,9 @@
         mdiFormatListText,
         mdiChartAreasplineVariant,
     } from '@mdi/js';
-    import { onMount } from 'svelte';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
-    import Stock from '../scripts/stock/Stock';
+    import { stockItems, areStockItemsUpdating } from '../stores/stock';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -51,17 +50,13 @@
         },
     ];
 
-    let stockList = {
-        items: [],
-    };
     let cutList = [];
-    let isLoading = true;
 
-    onMount(async () => {
-        stockList = await Stock.getStockList();
-        cutList = stockList.items.slice(0, 3);
-        isLoading = false;
-    });
+    $: {
+        if ($stockItems) {
+            cutList = $stockItems.slice(0, 3);
+        }
+    }
 
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
@@ -110,7 +105,7 @@
 <div class="has-text-centered mb-6">
     <StockList
         bind:stockItems={cutList}
-        bind:isLoading
+        isLoading={$areStockItemsUpdating}
         isClickable={true}
         on:select={itemSelected}
         showDescription={false}
