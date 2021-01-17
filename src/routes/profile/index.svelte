@@ -1,7 +1,9 @@
 <script>
+    import Cookie from 'js-cookie';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { name } from '../../stores/user';
+    import { userName } from '../../stores/user';
+    import CookieDefaults from '../../scripts/CookieDefaults';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -11,9 +13,14 @@
     function clearLocalData() {
         localStorage.clear();
     }
+
+    function logout() {
+        Cookie.remove(CookieDefaults.TOKEN);
+        window.location.reload();
+    }
 </script>
 
-<h1 class="title">Hallo {$name}!</h1>
+<h1 class="title">Hallo {$userName}!</h1>
 
 <div class="container has-text-centered mt-3">
     <Button
@@ -22,5 +29,6 @@
         on:click={clearLocalData}
         size="full-width"
     /><br />
+    <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" /><br />
     <Button goHome={true} size="full-width" />
 </div>

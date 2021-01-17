@@ -27,7 +27,7 @@
 <Nav bind:isLoggedIn />
 <main>
     <!-- Only allow the user to visit the page if he is logged in, he tries to login, or if an error occured -->
-    {#if isLoggedIn || $page.path.includes('/login') || $page.error}
+    {#if isLoggedIn || $page.path.includes('/login') || $page.path.includes('/register') || $page.error}
         <slot />
     {/if}
 </main>

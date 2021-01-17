@@ -1,6 +1,4 @@
-import { get } from 'svelte/store';
-import Fetch from './api/Fetch';
-import { name } from '../stores/user';
+import Fetch, { getAuthorizationHeader } from './api/Fetch';
 import CustomError, { ErrorCodes } from './api/CustomError';
 
 export default class Balance {
@@ -9,7 +7,7 @@ export default class Balance {
      * @returns {number} current balance
      */
     static async getBalance() {
-        const response = await Fetch.get(`balance/${get(name)}`);
+        const response = await Fetch.get(`balance`, getAuthorizationHeader());
         return response.balance;
     }
 
@@ -23,9 +21,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.BALANCE_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.patch(`balance/${get(name)}`, {
+        const response = await Fetch.patch(`balance`, {
             balance: newBalance
-        });
+        }, getAuthorizationHeader());
 
         return response.balance;
     }
@@ -40,9 +38,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.TOPUP_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/${get(name)}/topup`, {
+        const response = await Fetch.post(`balance/topup`, {
             amount: topupAmount
-        });
+        }, getAuthorizationHeader());
 
         return response.balance;
     }
@@ -57,9 +55,9 @@ export default class Balance {
             throw new CustomError(ErrorCodes.WITHDRAW_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/${get(name)}/withdraw`, {
+        const response = await Fetch.post(`balance/withdraw`, {
             amount: withDrawAmount
-        });
+        }, getAuthorizationHeader());
 
         return response.balance;
     }

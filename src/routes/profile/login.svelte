@@ -1,33 +1,91 @@
 <script>
-    import Cookie from 'js-cookie';
     import { stores, goto } from '@sapper/app';
     import { title, navBalance } from '../../stores/page';
-    import { name } from '../../stores/user';
-    import CookieDefaults from '../../scripts/CookieDefaults';
+    import TextField from '../../components/common/TextField.svelte';
+    import Button from '../../components/common/Button.svelte';
+    import User from '../../scripts/user/User';
+    import ErrorModal from '../../components/common/ErrorModal.svelte';
 
     const { page } = stores();
     const { returnUrl } = $page.query;
+
+    let userNameInput;
+    let passwordInput;
+    let allowLogin = false;
+    let requestError;
+    let isLoggingIn = false;
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Login';
     $navBalance = 'hidden';
-    function saveName() {
-        // create cookie that expires after 7 days
-        Cookie.set(CookieDefaults.NAME, $name, { expires: 7 });
-        goto(returnUrl);
+
+    async function login() {
+        isLoggingIn = true;
+        try {
+            const response = await User.login(userNameInput.getValue(), passwordInput.getValue());
+            User.handleToken(response.token);
+            goto(returnUrl);
+        } catch (error) {
+            requestError = error;
+        } finally {
+            isLoggingIn = false;
+        }
+    }
+
+    // enable the login button if both inputs are not empty
+    function checkLoginStatus() {
+        if (userNameInput.getValue() && passwordInput.getValue()) {
+            allowLogin = true;
+        } else {
+            allowLogin = false;
+        }
     }
 </script>
 
 <h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
 <p>
     Damit wir dich während des Einkaufen identifizieren können, und dir das beste Einkaufserlebnis bieten können,
-    brauchen wir deinen Namen:
+    brauchen wir deinen Benutzernamen und dein Passwort:
 </p>
 
-<input type="text" class="input mt-3" placeholder="Name" bind:value={$name} />
+<br />
+
+{#if requestError && requestError.errorCode === 401004}
+    <article class="message is-danger">
+        <div class="message-body">Benutzername oder Passwort nicht korrekt!</div>
+    </article>
+{:else}
+    <ErrorModal error={requestError} />
+{/if}
+
+<TextField
+    bind:this={userNameInput}
+    type="text"
+    label="Benutzername"
+    placeholder="Benutzername"
+    on:input={checkLoginStatus}
+/>
+
+<br />
+
+<TextField
+    bind:this={passwordInput}
+    type="password"
+    label="Passwort"
+    placeholder="Passwort"
+    on:input={checkLoginStatus}
+/>
+
+<p class="mt-3 mb-1">Noch nicht registriert? <a href="/profile/register">Dann hole das hier nach!</a></p>
 
 <div class="has-text-centered">
-    <!-- I don't use an a-tag here, because its harder to disable an a-tag -->
-    <button class="button is-primary mt-3" disabled={!$name} on:click={saveName}>Einloggen</button>
+    <Button
+        class="is-primary mt-3"
+        text="Einloggen"
+        size="full-width"
+        isLoading={isLoggingIn}
+        disabled={!allowLogin}
+        on:click={login}
+    />
 </div>
