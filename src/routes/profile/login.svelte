@@ -51,7 +51,13 @@
 
 <br />
 
-<ErrorModal error={requestError} />
+{#if requestError && requestError.errorCode === 401004}
+    <article class="message is-danger">
+        <div class="message-body">Benutzername oder Passwort nicht korrekt!</div>
+    </article>
+{:else}
+    <ErrorModal error={requestError} />
+{/if}
 
 <TextField
     bind:this={userNameInput}

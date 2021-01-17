@@ -158,12 +158,22 @@
     }
 </script>
 
-<!-- Display Error popup if an error occured. -->
-<ErrorModal error={requestError} />
-
 <h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
 <p>Damit wir dich während des Einkaufen identifizieren können, musst du dir zunächst ein Benutzerkonto anlegen:</p>
 <br />
+
+{#if requestError && requestError.errorCode === 400014}
+    <article class="message is-danger">
+        <div class="message-body">Email ist bereits vergeben!</div>
+    </article>
+{:else if requestError && requestError.errorCode === 400015}
+    <article class="message is-danger">
+        <div class="message-body">Benutzername ist bereits vergeben!</div>
+    </article>
+{:else}
+    <!-- Display Error popup if an unexpected error occured. -->
+    <ErrorModal error={requestError} />
+{/if}
 
 <!-- username textfield -->
 <TextField
