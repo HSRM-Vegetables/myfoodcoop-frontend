@@ -27,7 +27,7 @@ export default class User {
      * @param {string} password password of the user
      */
     static async login(username, password) {
-        return Fetch.post('user/login', {
+        return Fetch.post('auth/login', {
             username,
             password
         })
