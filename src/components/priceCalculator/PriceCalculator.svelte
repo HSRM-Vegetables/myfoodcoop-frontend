@@ -142,16 +142,11 @@
         <div class="container has-text-centered">
             <Button
                 text="zum Warenkorb hinzufügen"
-                class="button is-medium is-primary mb-4"
+                class="button is-primary mb-4"
                 size="full-width"
                 on:click={addItem}
             />
-            <Button
-                text="Zurück"
-                class="button is-medium is-link mb-4"
-                size="full-width"
-                on:click={() => goto(linkBack)}
-            />
+            <Button text="Zurück" class="button is-link mb-4" size="full-width" on:click={() => goto(linkBack)} />
         </div>
     </div>
 {/if}

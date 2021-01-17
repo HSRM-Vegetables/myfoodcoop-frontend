@@ -48,18 +48,19 @@
     }
     .active {
         background-color: #5890cc;
-    }
-    .active a {
         color: white !important;
     }
 </style>
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        <div class="column" class:active={$page.path === button.href}>
-            <a on:keypress={(e) => onKeyPress(e, button.href)} href={button.href}>
-                <Icon icon={button.icon} appbar={true} />
-            </a>
-        </div>
+        <a
+            class="column"
+            href={button.href}
+            on:keypress={(e) => onKeyPress(e, button.href)}
+            class:active={$page.path === button.href}
+        >
+            <Icon icon={button.icon} appbar={true} />
+        </a>
     {/each}
 </div>
