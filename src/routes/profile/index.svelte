@@ -16,6 +16,7 @@
 
     function logout() {
         Cookie.remove(CookieDefaults.TOKEN);
+        window.location.reload();
     }
 </script>
 
