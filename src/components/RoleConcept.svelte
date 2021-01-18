@@ -1,23 +1,13 @@
 <script>
-    import { onMount } from 'svelte';
     import User from '../scripts/user/User';
 
-    let user = {
+    export let user = {
         id: '',
         username: '',
         memberId: '',
         roles: [],
     };
 
-    let requestError;
-
-    onMount(async () => {
-        try {
-            user = await User.getUser();
-        } catch (error) {
-            requestError = error;
-        }
-    });
     const buttons = [
         {
             name: 'Mitglied',
