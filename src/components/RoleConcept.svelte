@@ -1,12 +1,6 @@
 <script>
     import User from '../scripts/user/User';
-
-    export let user = {
-        id: '',
-        username: '',
-        memberId: '',
-        roles: [],
-    };
+    import { userDetails } from '../stores/userDetails';
 
     const buttons = [
         {
@@ -26,13 +20,15 @@
             enum: 'ORDERER',
         },
     ];
-    function changeRoles(enumValue) {
-        if (user.roles.includes(enumValue)) {
-            user = User.userDeleteRole(user.id, enumValue);
+
+    async function changeRoles(enumValue) {
+        if ($userDetails.roles.includes(enumValue)) {
+            await User.userDeleteRole($userDetails.id, enumValue);
         } else {
-            user = User.userAddRole(user.id, enumValue);
+            await User.userAddRole($userDetails.id, enumValue);
         }
-        window.location.reload();
+
+        userDetails.forceUpdate();
     }
 </script>
 
@@ -47,8 +43,8 @@
 <h2 class="pt-4 is-size-5 has-text-weight-bold">Rollen:</h2>
 {#each buttons as button}
     <button
-        class:active={user.roles.includes(button.enum)}
-        class="button is-primary is-outlined mr-2"
+        class:active={$userDetails.roles.includes(button.enum)}
+        class="button is-outlined mr-2"
         on:click={() => changeRoles(button.enum)}
     >
         {button.name}
