@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import jwtDecode from "jwt-decode";
-import Fetch from '../api/Fetch';
+import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import { userName, token as tokenStore, tokenCreation, tokenExpires } from '../../stores/user';
 import CookieDefaults from '../CookieDefaults';
 
@@ -31,6 +31,33 @@ export default class User {
             username,
             password
         })
+    }
+    
+    /**
+     * Login the user in and request the jwt token
+     * @param {string} userId username of the user
+     * @param {string} role password of the user
+     */
+    static async getUser() {
+        return Fetch.get(`user/`, getAuthorizationHeader());
+    }    
+    
+    /**
+     * Login the user in and request the jwt token
+     * @param {string} userId username of the user
+     * @param {string} role password of the user
+     */
+    static async userAddRole(userId, role) {
+        return Fetch.post(`user/${userId}/roles/${role}`,{}, getAuthorizationHeader());
+    }    
+    
+    /**
+     * Login the user in and request the jwt token
+     * @param {string} userId username of the user
+     * @param {string} role password of the user
+     */
+    static async userDeleteRole(userId, role) {
+        return Fetch.delete(`user/${userId}/roles/${role}`, getAuthorizationHeader());
     }
 
     /**

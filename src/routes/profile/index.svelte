@@ -4,6 +4,7 @@
     import Button from '../../components/common/Button.svelte';
     import { userName } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
+    import RoleConcept from '../../components/RoleConcept.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -22,7 +23,9 @@
 
 <h1 class="title">Hallo {$userName}!</h1>
 
-<div class="container has-text-centered mt-3">
+<RoleConcept />
+
+<div class="container has-text-centered mt-6">
     <Button
         text="Achtung: Lokale Daten löschen"
         class="is-danger mb-3"
