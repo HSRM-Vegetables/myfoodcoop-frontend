@@ -6,6 +6,7 @@
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
     import Button from '../common/Button.svelte';
+    import { moneyStyler } from '../../scripts/Helper';
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;
@@ -106,7 +107,7 @@
         <div>
             Warenpreis<br />
             <span class="is-size-4">
-                {stockItem.pricePerUnit}
+                {moneyStyler(stockItem.pricePerUnit)}
                 {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
             </span>
         </div>

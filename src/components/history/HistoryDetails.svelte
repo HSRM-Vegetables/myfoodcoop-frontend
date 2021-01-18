@@ -57,8 +57,8 @@
             <div class="columns is-mobile is-vcentered">
                 <div class="column has-text-left">
                     {#if item.unitType === UnitType.PIECE}
-                        <span>{item.pricePerUnit} € / Stück</span>
-                    {:else}<span>{item.pricePerUnit} € / kg</span>{/if}
+                        <span>{moneyStyler(item.pricePerUnit)} € / Stück</span>
+                    {:else}<span>{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
                 </div>
 
                 <div class="column has-text-right">
