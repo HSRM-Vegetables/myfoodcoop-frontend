@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import jwtDecode from "jwt-decode";
-import Fetch from '../api/Fetch';
+import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import { userName, token as tokenStore, tokenCreation, tokenExpires } from '../../stores/user';
 import CookieDefaults from '../CookieDefaults';
 
@@ -31,6 +31,31 @@ export default class User {
             username,
             password
         })
+    }
+    
+    /**
+     * Fetch the data of the current user
+     */
+    static async getUser() {
+        return Fetch.get(`user/`, getAuthorizationHeader());
+    }    
+    
+    /**
+     * Add a role to the user
+     * @param {string} userId unique user id of the user the role should be added to
+     * @param {string} role name of the role which should be added to the user
+     */
+    static async userAddRole(userId, role) {
+        return Fetch.post(`user/${userId}/roles/${role}`,{}, getAuthorizationHeader());
+    }    
+    
+    /**
+     * Removes a role from the user
+     * @param {string} userId unique user id of the user the role should be removed from
+     * @param {string} role name of the role which should be removed from the user
+     */
+    static async userDeleteRole(userId, role) {
+        return Fetch.delete(`user/${userId}/roles/${role}`, getAuthorizationHeader());
     }
 
     /**
