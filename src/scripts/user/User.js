@@ -34,27 +34,25 @@ export default class User {
     }
     
     /**
-     * Login the user in and request the jwt token
-     * @param {string} userId username of the user
-     * @param {string} role password of the user
+     * Fetch the data of the current user
      */
     static async getUser() {
         return Fetch.get(`user/`, getAuthorizationHeader());
     }    
     
     /**
-     * Login the user in and request the jwt token
-     * @param {string} userId username of the user
-     * @param {string} role password of the user
+     * Add a role to the user
+     * @param {string} userId unique user id of the user the role should be added to
+     * @param {string} role name of the role which should be added to the user
      */
     static async userAddRole(userId, role) {
         return Fetch.post(`user/${userId}/roles/${role}`,{}, getAuthorizationHeader());
     }    
     
     /**
-     * Login the user in and request the jwt token
-     * @param {string} userId username of the user
-     * @param {string} role password of the user
+     * Removes a role from the user
+     * @param {string} userId unique user id of the user the role should be removed from
+     * @param {string} role name of the role which should be removed from the user
      */
     static async userDeleteRole(userId, role) {
         return Fetch.delete(`user/${userId}/roles/${role}`, getAuthorizationHeader());
