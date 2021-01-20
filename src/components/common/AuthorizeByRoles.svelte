@@ -2,26 +2,42 @@
     import { Roles as internalRoles } from '../../scripts/roles/Roles';
 
     export const Roles = internalRoles;
+
+    export function isAccessAllowed(userRoles, allowedRoles) {
+        let allowAccess = false;
+        allowedRoles.forEach((role) => {
+            if (userRoles.includes(role)) {
+                allowAccess = true;
+            }
+        });
+        return allowAccess;
+    }
 </script>
 
 <script>
     import { mdiMinusCircleOutline } from '@mdi/js';
     import Icon from './Icon.svelte';
+    import { userDetails } from '../../stores/userDetails';
+    import Button from './Button.svelte';
 
+    /**
+     * doc here
+     */
     export let allowedRoles = [];
 
-    // export let displayAllowdByRole = true;
+    /**
+     * doc here
+     */
+    export let displayPermissionNotAllowed = true;
 
     let isAuthorized = false;
 
-    // check here in future from BE if roles fits current user
-    function checkAccess() {
-        if (allowedRoles.includes(Roles.MEMBER)) {
-            isAuthorized = true;
+    // if user-roles contains ORDERE set flag
+    $: {
+        if ($userDetails) {
+            isAuthorized = isAccessAllowed($userDetails.roles, allowedRoles);
         }
     }
-
-    checkAccess();
 </script>
 
 <style>
@@ -42,16 +58,17 @@
     }
 </style>
 
-{#if !isAuthorized}
-    <!-- Why false here? Review needed -->
-    <!--{#if displayAllowdByRole = false}  -->
+{#if !isAuthorized && displayPermissionNotAllowed}
     <div class="container">
         <div class="iconContainer">
             <Icon icon={mdiMinusCircleOutline} />
         </div>
         <h3>Zugriff nicht gestattet!</h3>
     </div>
-    <!--{/if}-->
-{:else}
+    <br />
+    <div class="has-text-centered">
+        <Button goHome={true} size="full-width" />
+    </div>
+{:else if isAuthorized}
     <slot />
 {/if}

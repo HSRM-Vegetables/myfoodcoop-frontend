@@ -9,10 +9,6 @@
     $navBalance = 'show';
 </script>
 
-<svelte:head>
-    <title>Guthaben anpassen</title>
-</svelte:head>
-
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <AdjustBalance />
 </AuthorizeByRoles>

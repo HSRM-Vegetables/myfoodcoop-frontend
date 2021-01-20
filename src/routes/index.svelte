@@ -11,8 +11,7 @@
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
     import { stockItems, areStockItemsUpdating } from '../stores/stock';
-    import { Roles } from '../scripts/roles/Roles';
-    import AuthorizeByRoles from '../components/common/AuthorizeByRoles.svelte';
+    import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -30,25 +29,25 @@
             label: 'Vorherige Einkäufe',
             icon: mdiShoppingSearch,
             href: '/history',
-            access: [Roles.MEMBER, Roles.TREASURER],
+            access: [Roles.MEMBER],
         },
         {
             label: 'Guthaben verwalten',
             icon: mdiPiggyBank,
             href: '/balance',
-            access: [Roles.MEMBER, Roles.TREASURER],
+            access: [Roles.MEMBER],
         },
         {
             label: 'Benutzerdaten',
             icon: mdiAccount,
             href: '/profile',
-            access: [Roles.MEMBER, Roles.MANAGEMENTBOARD],
+            access: [Roles.MEMBER],
         },
         {
             label: 'Bestand',
             icon: mdiFormatListText,
             href: '/stock/',
-            access: [Roles.MEMBER, Roles.ORDERER],
+            access: [Roles.MEMBER],
         },
         {
             label: 'Reports',
@@ -109,39 +108,41 @@
     }
 </style>
 
-<h2 class="pt-4 is-size-5 has-text-weight-bold">Neueste Artikel:</h2>
-<div class="has-text-centered mb-6">
-    <StockList
-        bind:stockItems={cutList}
-        isLoading={$areStockItemsUpdating}
-        isClickable={true}
-        on:select={itemSelected}
-        showDescription={false}
-    />
-</div>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
+    <h2 class="pt-4 is-size-5 has-text-weight-bold">Neueste Artikel:</h2>
+    <div class="has-text-centered mb-6">
+        <StockList
+            bind:stockItems={cutList}
+            isLoading={$areStockItemsUpdating}
+            isClickable={true}
+            on:select={itemSelected}
+            showDescription={false}
+        />
+    </div>
 
-<hr />
-<h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
+    <hr />
+    <h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
 
-<div class="icon-box">
-    {#each buttons as button}
-        <AuthorizeByRoles allowedRoles={button.access} displayError="false">
-            <div class="has-text-centered-desktop-only">
-                <div
-                    class="icon-button"
-                    tabindex="0"
-                    role="button"
-                    aria-label={button.label}
-                    on:keypress={(e) => onKeyPress(e, button.href)}
-                    on:click={() => goto(button.href)}
-                >
-                    <svg viewbox="0 0 24 24">
-                        <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
-                        <path fill="currentColor" d={button.icon} />
-                    </svg>
-                    <span class="pl-4 has-text-weight-bold">{button.label}</span>
+    <div class="icon-box">
+        {#each buttons as button}
+            <AuthorizeByRoles allowedRoles={button.access} displayPermissionNotAllowed={false}>
+                <div class="has-text-centered-desktop-only">
+                    <div
+                        class="icon-button"
+                        tabindex="0"
+                        role="button"
+                        aria-label={button.label}
+                        on:keypress={(e) => onKeyPress(e, button.href)}
+                        on:click={() => goto(button.href)}
+                    >
+                        <svg viewbox="0 0 24 24">
+                            <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
+                            <path fill="currentColor" d={button.icon} />
+                        </svg>
+                        <span class="pl-4 has-text-weight-bold">{button.label}</span>
+                    </div>
                 </div>
-            </div>
-        </AuthorizeByRoles>
-    {/each}
-</div>
+            </AuthorizeByRoles>
+        {/each}
+    </div>
+</AuthorizeByRoles>

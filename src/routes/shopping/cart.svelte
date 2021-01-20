@@ -2,6 +2,7 @@
     import ShoppingCart from '../../components/shoppingCart/ShoppingCart.svelte';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
+    import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -9,14 +10,12 @@
     $navBalance = 'show';
 </script>
 
-<svelte:head>
-    <title>Warenkorb</title>
-</svelte:head>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <ShoppingCart />
 
-<ShoppingCart />
+    <hr />
 
-<hr />
-
-<div class="has-text-centered mt-4">
-    <Button goHome={true} size="full-width" />
-</div>
+    <div class="has-text-centered mt-4">
+        <Button goHome={true} size="full-width" />
+    </div>
+</AuthorizeByRoles>

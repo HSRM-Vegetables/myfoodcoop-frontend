@@ -1,7 +1,6 @@
 export const Roles = {
-    MEMBER: "mitglied",
-    MANAGEMENTBOARD: "vorstand",
-    TREASURER: "kassenwart",
-    ORDERER: "besteller/verwalter",
-    ALL: "all"
+    MEMBER: "MEMBER",
+    CHAIRMAN: "CHAIRMAN",
+    TREASURER: "TREASURER",
+    ORDERER: "ORDERER",
 }

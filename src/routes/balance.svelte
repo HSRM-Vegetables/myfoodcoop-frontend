@@ -12,8 +12,3 @@
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <EditBalance />
 </AuthorizeByRoles>
-
-<!-- TODO: view global balance transactions (date/user name/balance/without time limit) -->
-<AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
-    <!--  <ShowAllBalance />-->
-</AuthorizeByRoles>

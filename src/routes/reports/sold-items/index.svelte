@@ -8,6 +8,7 @@
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
     import { title, navBalance } from '../../../stores/page';
+    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -77,52 +78,54 @@
     loadItems(selectedPeriod);
 </script>
 
-<div class="has-text-centered">
-    <Button
-        text="Gestern"
-        class="my-2 is-rounded {selectedPeriod === 'yesterday' ? 'is-dark' : ''}"
-        on:click={() => loadItems('yesterday', 'gestern')}
-    />
-    <Button
-        text="Letzte Woche"
-        class="my-2 mx-2 is-rounded {selectedPeriod === 'lastWeek' ? 'is-dark' : ''}"
-        on:click={() => loadItems('lastWeek', 'letzte Woche')}
-    />
-    <Button
-        class="my-2 is-rounded {selectedPeriod === 'lastMonth' ? 'is-dark' : ''}"
-        text="Letzten Monat"
-        on:click={() => loadItems('lastMonth', 'letzten Monat')}
-    />
-</div>
+<AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
+    <div class="has-text-centered">
+        <Button
+            text="Gestern"
+            class="my-2 is-rounded {selectedPeriod === 'yesterday' ? 'is-dark' : ''}"
+            on:click={() => loadItems('yesterday', 'gestern')}
+        />
+        <Button
+            text="Letzte Woche"
+            class="my-2 mx-2 is-rounded {selectedPeriod === 'lastWeek' ? 'is-dark' : ''}"
+            on:click={() => loadItems('lastWeek', 'letzte Woche')}
+        />
+        <Button
+            class="my-2 is-rounded {selectedPeriod === 'lastMonth' ? 'is-dark' : ''}"
+            text="Letzten Monat"
+            on:click={() => loadItems('lastMonth', 'letzten Monat')}
+        />
+    </div>
 
-<h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} verkauft?</h2>
-{#if isLoading}
-    <Loader bind:isLoading />
-{:else if requestError !== undefined}
-    <article class="message is-danger">
-        <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
-    </article>
-{:else if soldItems !== undefined && soldItems.length > 0}
-    {#if selectedPeriod === 'yesterday'}
-        Datum:
-        {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
+    <h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} verkauft?</h2>
+    {#if isLoading}
+        <Loader bind:isLoading />
+    {:else if requestError !== undefined}
+        <article class="message is-danger">
+            <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
+        </article>
+    {:else if soldItems !== undefined && soldItems.length > 0}
+        {#if selectedPeriod === 'yesterday'}
+            Datum:
+            {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
+        {:else}
+            Zeitraum:
+            {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
+            -
+            {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
+        {/if}
+
+        <hr />
+        <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
     {:else}
-        Zeitraum:
-        {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
-        -
-        {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
+        <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
     {/if}
 
+    <ErrorModal error={requestError} />
+
     <hr />
-    <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
-{:else}
-    <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
-{/if}
 
-<ErrorModal error={requestError} />
-
-<hr />
-
-<div class="has-text-centered">
-    <Button text="Zurück zur Reports" href="/reports" class="button is-primary" size="full-width" />
-</div>
+    <div class="has-text-centered">
+        <Button text="Zurück zur Reports" href="/reports" class="button is-primary" size="full-width" />
+    </div>
+</AuthorizeByRoles>

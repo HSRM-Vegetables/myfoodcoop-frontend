@@ -10,6 +10,7 @@
     import HistoryDetails from '../../components/history/HistoryDetails.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
+    import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -17,8 +18,10 @@
     $navBalance = 'hidden';
 </script>
 
-<HistoryDetails purchaseID={purchasId} />
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <HistoryDetails purchaseID={purchasId} />
 
-<div class="has-text-centered">
-    <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
-</div>
+    <div class="has-text-centered">
+        <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
+    </div>
+</AuthorizeByRoles>

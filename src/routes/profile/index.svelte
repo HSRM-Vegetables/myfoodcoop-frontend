@@ -6,6 +6,7 @@
     import { userDetails } from '../../stores/userDetails';
     import CookieDefaults from '../../scripts/CookieDefaults';
     import RoleConcept from '../../components/RoleConcept.svelte';
+    import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -22,24 +23,26 @@
     }
 </script>
 
-<h1 class="title">Hallo {$userName}!</h1>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <h1 class="title">Hallo {$userName}!</h1>
 
-{#if $userDetails}
-    <p>Mitgliedsnummer: {$userDetails.memberId}</p>
-    {#if $userDetails.email !== undefined}
-        <p>Email: {$userDetails.email}</p>
+    {#if $userDetails}
+        <p>Mitgliedsnummer: {$userDetails.memberId}</p>
+        {#if $userDetails.email !== undefined}
+            <p>Email: {$userDetails.email}</p>
+        {/if}
+
+        <RoleConcept />
+
+        <div class="container has-text-centered mt-6">
+            <Button
+                text="Achtung: Lokale Daten löschen"
+                class="is-danger mb-3"
+                on:click={clearLocalData}
+                size="full-width"
+            /><br />
+            <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" /><br />
+            <Button goHome={true} size="full-width" />
+        </div>
     {/if}
-
-    <RoleConcept />
-
-    <div class="container has-text-centered mt-6">
-        <Button
-            text="Achtung: Lokale Daten löschen"
-            class="is-danger mb-3"
-            on:click={clearLocalData}
-            size="full-width"
-        /><br />
-        <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" /><br />
-        <Button goHome={true} size="full-width" />
-    </div>
-{/if}
+</AuthorizeByRoles>

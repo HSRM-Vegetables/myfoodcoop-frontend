@@ -60,7 +60,7 @@
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        <AuthorizeByRoles allowedRoles={button.access}>
+        <AuthorizeByRoles allowedRoles={button.access} displayPermissionNotAllowed={false}>
             <a
                 class="column"
                 href={button.href}
