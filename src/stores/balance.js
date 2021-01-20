@@ -1,6 +1,6 @@
 import Balance from '../scripts/Balance';
-import { intervalUpdateable, Intervals } from '../scripts/custom-stores/intervalUpdateable';
+import { updateable } from '../scripts/custom-stores/updateableStore';
 
-export const currentBalance = intervalUpdateable(Intervals.TWO_MINUTES, async (set) => {
+export const currentBalance = updateable(async (set) => {
     set(await Balance.getBalance());
 });
