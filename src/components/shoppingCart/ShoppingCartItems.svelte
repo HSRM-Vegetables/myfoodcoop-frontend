@@ -5,7 +5,7 @@
     import Icon from '../common/Icon.svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
-    import { stopPropagation } from '../../scripts/Helper';
+    import { moneyStyler, stopPropagation } from '../../scripts/Helper';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -88,8 +88,8 @@
         <div class="columns is-mobile is-vcentered">
             <div class="column has-text-left">
                 {#if item.stockItem.unitType === UnitType.PIECE}
-                    <span>{item.stockItem.pricePerUnit} € / Stück</span>
-                {:else}<span>{item.stockItem.pricePerUnit} € / kg</span>{/if}
+                    <span>{moneyStyler(item.stockItem.pricePerUnit)} € / Stück</span>
+                {:else}<span>{moneyStyler(item.stockItem.pricePerUnit)} € / kg</span>{/if}
             </div>
 
             <div class="column has-text-right">
@@ -98,7 +98,7 @@
                 {:else}<span>{item.quantity} kg</span>{/if}
             </div>
 
-            <div class="column has-text-right pr-5">{(item.stockItem.pricePerUnit * item.quantity).toFixed(2)} €</div>
+            <div class="column has-text-right pr-5">{moneyStyler(item.stockItem.pricePerUnit * item.quantity)} €</div>
         </div>
     </div>
 {/each}
