@@ -152,7 +152,7 @@
             return;
         }
 
-        goto('/stock/');
+        goto(linkBack);
     }
 
     /**
