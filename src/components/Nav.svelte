@@ -2,6 +2,8 @@
     import logo from 'images/logo_white.png';
     import ShowBalance from './balance/ShowBalance.svelte';
     import { title, navBalance } from '../stores/page';
+    import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
+    import { Roles } from '../scripts/roles/Roles';
 
     export let isLoggedIn;
 </script>
@@ -54,20 +56,22 @@
     </a>
 
     <span class="page-title is-size-5">{$title}</span>
-    {#if isLoggedIn && $navBalance === 'show'}
-        <span class="nav-text is-hidden-desktop"> Guthaben: </span>
-        <a href="/balance" class="balance is-size-2 has-text-centered has-text-weight-bold">
-            <div class="is-hidden-touch">
-                <ShowBalance type="inline" />
-            </div>
-            <div class="is-hidden-desktop">
+    <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
+        {#if isLoggedIn && $navBalance === 'show'}
+            <span class="nav-text is-hidden-desktop"> Guthaben: </span>
+            <a href="/balance" class="balance is-size-2 has-text-centered has-text-weight-bold">
+                <div class="is-hidden-touch">
+                    <ShowBalance type="inline" />
+                </div>
+                <div class="is-hidden-desktop">
+                    <ShowBalance />
+                </div>
+            </a>
+        {:else if isLoggedIn && $navBalance === 'inline'}
+            <div class="inline-balance">
                 <ShowBalance />
             </div>
-        </a>
-    {:else if isLoggedIn && $navBalance === 'inline'}
-        <div class="inline-balance">
-            <ShowBalance />
-        </div>
-    {/if}
+        {/if}
+    </AuthorizeByRoles>
 </div>
 <div class="blue-background is-hidden-desktop" />

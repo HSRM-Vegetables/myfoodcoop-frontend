@@ -2,7 +2,6 @@
     import User from '../scripts/user/User';
     import { refreshToken, userId, userRoles } from '../stores/user';
     import ErrorModal from './common/ErrorModal.svelte';
-    import { Roles, isAccessAllowed } from './common/AuthorizeByRoles.svelte';
 
     let requestError;
 
@@ -59,7 +58,6 @@
         class:active={$userRoles.includes(button.enum)}
         class="button is-outlined mr-2"
         on:click={() => changeRoles(button.enum)}
-        disabled={!isAccessAllowed($userRoles, [Roles.CHAIRMAN])}
     >
         {button.name}
     </button>

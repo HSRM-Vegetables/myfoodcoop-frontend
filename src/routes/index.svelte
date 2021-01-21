@@ -41,7 +41,7 @@
             label: 'Benutzerdaten',
             icon: mdiAccount,
             href: '/profile',
-            access: [Roles.MEMBER],
+            access: [],
         },
         {
             label: 'Bestand',
@@ -119,30 +119,30 @@
             showDescription={false}
         />
     </div>
-
-    <hr />
-    <h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
-
-    <div class="icon-box">
-        {#each buttons as button}
-            <AuthorizeByRoles allowedRoles={button.access} displayPermissionNotAllowed={false}>
-                <div class="has-text-centered-desktop-only">
-                    <div
-                        class="icon-button"
-                        tabindex="0"
-                        role="button"
-                        aria-label={button.label}
-                        on:keypress={(e) => onKeyPress(e, button.href)}
-                        on:click={() => goto(button.href)}
-                    >
-                        <svg viewbox="0 0 24 24">
-                            <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
-                            <path fill="currentColor" d={button.icon} />
-                        </svg>
-                        <span class="pl-4 has-text-weight-bold">{button.label}</span>
-                    </div>
-                </div>
-            </AuthorizeByRoles>
-        {/each}
-    </div>
 </AuthorizeByRoles>
+
+<hr />
+<h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
+
+<div class="icon-box">
+    {#each buttons as button}
+        <AuthorizeByRoles allowedRoles={button.access} displayPermissionNotAllowed={false}>
+            <div class="has-text-centered-desktop-only">
+                <div
+                    class="icon-button"
+                    tabindex="0"
+                    role="button"
+                    aria-label={button.label}
+                    on:keypress={(e) => onKeyPress(e, button.href)}
+                    on:click={() => goto(button.href)}
+                >
+                    <svg viewbox="0 0 24 24">
+                        <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
+                        <path fill="currentColor" d={button.icon} />
+                    </svg>
+                    <span class="pl-4 has-text-weight-bold">{button.label}</span>
+                </div>
+            </div>
+        </AuthorizeByRoles>
+    {/each}
+</div>

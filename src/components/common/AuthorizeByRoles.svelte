@@ -13,6 +13,11 @@
      * @param {string[]} allowedRoles roles that should be able interact with this component
      */
     export function isAccessAllowed(userRoles, allowedRoles) {
+        // if there are no roles selected, allow everyone
+        if (allowedRoles.length === 0) {
+            return true;
+        }
+
         let allowAccess = false;
         allowedRoles.forEach((role) => {
             if (userRoles.includes(role)) {
