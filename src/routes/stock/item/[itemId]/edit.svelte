@@ -26,4 +26,6 @@
 </script>
 
 <ErrorModal error={requestError} />
-<StockFiller item={item} />
+{#if item}
+    <StockFiller item={item} linkBack="/stock/item/{item.id}" linkBackText="zurück" />
+{/if}
