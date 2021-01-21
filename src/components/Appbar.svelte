@@ -11,7 +11,7 @@
         {
             icon: mdiHome,
             href: '/',
-            access: [Roles.MEMBER],
+            access: [],
         },
         {
             icon: mdiBasket,
