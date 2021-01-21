@@ -28,7 +28,7 @@
     });
 </script>
 
-<AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <ErrorModal error={requestError} />
     <StockItemDetails item={item} />
 

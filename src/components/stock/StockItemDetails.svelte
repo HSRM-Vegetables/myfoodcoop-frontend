@@ -6,6 +6,7 @@
     import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Icon from '../common/Icon.svelte';
+    import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
     import { stockItems } from '../../stores/stock';
     import { moneyStyler } from '../../scripts/Helper';
 
@@ -57,20 +58,22 @@
 {#if item}
     <div class="columns is-mobile">
         <div class="column is-size-4">{item.name}</div>
-        {#if !item.isDeleted}
-            <div class="column is-narrow has-text-right">
-                <button class="button is-white" on:click={() => goto(`/stock/item/${item.id}/edit`)}>
-                    <span class="icon">
-                        <Icon icon={mdiPencil} />
-                    </span>
-                </button>
-                <button class="button is-white" on:click={() => confirmRemoveItem(item.id)}>
-                    <span class="icon">
-                        <Icon icon={mdiDelete} />
-                    </span>
-                </button>
-            </div>
-        {/if}
+        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+            {#if !item.isDeleted}
+                <div class="column is-narrow has-text-right">
+                    <button class="button is-white" on:click={() => goto(`/stock/item/${item.id}/edit`)}>
+                        <span class="icon">
+                            <Icon icon={mdiPencil} />
+                        </span>
+                    </button>
+                    <button class="button is-white" on:click={() => confirmRemoveItem(item.id)}>
+                        <span class="icon">
+                            <Icon icon={mdiDelete} />
+                        </span>
+                    </button>
+                </div>
+            {/if}
+        </AuthorizeByRoles>
     </div>
 
     {#if item.isDeleted}

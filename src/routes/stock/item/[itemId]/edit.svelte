@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import ErrorModal from '../../../../components/common/ErrorModal.svelte';
     import StockFiller from '../../../../components/stock/StockFiller.svelte';
+    import AuthorizeByRoles, { Roles } from '../../../../components/common/AuthorizeByRoles.svelte';
     import Stock from '../../../../scripts/stock/Stock';
     import { title, navBalance } from '../../../../stores/page';
 
@@ -25,7 +26,9 @@
     });
 </script>
 
-<ErrorModal error={requestError} />
-{#if item}
-    <StockFiller item={item} linkBack="/stock/item/{item.id}" linkBackText="zurück" />
-{/if}
+<AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
+    <ErrorModal error={requestError} />
+    {#if item}
+        <StockFiller item={item} linkBack="/stock/item/{item.id}" linkBackText="zurück" />
+    {/if}
+</AuthorizeByRoles>
