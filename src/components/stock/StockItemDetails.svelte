@@ -46,18 +46,20 @@
 {#if item}
     <div class="columns is-mobile">
         <div class="column is-size-4">{item.name}</div>
-        <div class="column is-narrow has-text-right">
-            <button class="button is-white" on:click={() => goto(`/stock/item/${item.id}/edit`)}>
-                <span class="icon">
-                    <Icon icon={mdiPencil} />
-                </span>
-            </button>
-            <button class="button is-white" on:click={() => confirmRemoveItem(item.id)}>
-                <span class="icon">
-                    <Icon icon={mdiDelete} />
-                </span>
-            </button>
-        </div>
+        {#if !item.isDeleted}
+            <div class="column is-narrow has-text-right">
+                <button class="button is-white" on:click={() => goto(`/stock/item/${item.id}/edit`)}>
+                    <span class="icon">
+                        <Icon icon={mdiPencil} />
+                    </span>
+                </button>
+                <button class="button is-white" on:click={() => confirmRemoveItem(item.id)}>
+                    <span class="icon">
+                        <Icon icon={mdiDelete} />
+                    </span>
+                </button>
+            </div>
+        {/if}
     </div>
 
     {#if item.isDeleted}
