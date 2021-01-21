@@ -46,7 +46,7 @@
         right: 79px;
         top: 30px;
     }
-    a.test {
+    a.cartIcon {
         color: white;
         position: absolute;
         right: 25px;
@@ -95,7 +95,7 @@
         {/if}
         <div class="is-hidden-touch">
             {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
-            <a href="/shopping/cart" class="test">
+            <a href="/shopping/cart" class="cartIcon">
                 <Icon icon={mdiShopping} appbar={true} />
             </a>
         </div>
