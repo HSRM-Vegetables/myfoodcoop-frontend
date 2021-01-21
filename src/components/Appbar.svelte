@@ -64,7 +64,8 @@
         padding: 5px 10px;
         border-radius: 50%;
         font-size: 12px;
-        left: 75px;
+        left: 61%;
+        top: 5%;
     }
 </style>
 
