@@ -7,7 +7,7 @@
     import { stockItems, areStockItemsUpdating } from '../../stores/stock';
     import Stock from '../../scripts/stock/Stock';
     import AuthorizeByRoles, { Roles, isAccessAllowed } from '../../components/common/AuthorizeByRoles.svelte';
-    import { userDetails } from '../../stores/userDetails';
+    import { userRoles } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -20,10 +20,11 @@
     // flag for role ODERER
     let isOrderer = false;
 
-    // if user-roles contains ORDERE set flag
+    // check the access as soon as the userRoles update and
+    // check if the current user has the ORDERER role.
     $: {
-        if ($userDetails) {
-            isOrderer = isAccessAllowed($userDetails.roles, [Roles.ORDERER]);
+        if ($userRoles) {
+            isOrderer = isAccessAllowed($userRoles, [Roles.ORDERER]);
         }
     }
 

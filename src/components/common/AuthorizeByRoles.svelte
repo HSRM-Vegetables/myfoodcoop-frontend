@@ -1,8 +1,17 @@
 <script context="module">
     import { Roles as internalRoles } from '../../scripts/roles/Roles';
 
+    /**
+     * export the roles from this component, as they are frequently used with this component
+     */
     export const Roles = internalRoles;
 
+    /**
+     * Check if one of the roles of the user is subset of allowed roles.
+     * Export this method, because it's sometimes necessary to use it from outside
+     * @param {string[]} userRoles current roles of the user
+     * @param {string[]} allowedRoles roles that should be able interact with this component
+     */
     export function isAccessAllowed(userRoles, allowedRoles) {
         let allowAccess = false;
         allowedRoles.forEach((role) => {
@@ -17,25 +26,27 @@
 <script>
     import { mdiMinusCircleOutline } from '@mdi/js';
     import Icon from './Icon.svelte';
-    import { userDetails } from '../../stores/userDetails';
+    import { userRoles } from '../../stores/user';
     import Button from './Button.svelte';
 
     /**
-     * doc here
+     * roles that should be able interact with this component
      */
     export let allowedRoles = [];
 
     /**
-     * doc here
+     * Display a message that the permission to visit this component is not allowed.
+     * Default: true
      */
     export let displayPermissionNotAllowed = true;
 
+    // internal flag if the access is allowed
     let isAuthorized = false;
 
-    // if user-roles contains ORDERE set flag
+    // check the access as soon as the userRoles update
     $: {
-        if ($userDetails) {
-            isAuthorized = isAccessAllowed($userDetails.roles, allowedRoles);
+        if ($userRoles) {
+            isAuthorized = isAccessAllowed($userRoles, allowedRoles);
         }
     }
 </script>
@@ -59,6 +70,7 @@
 </style>
 
 {#if !isAuthorized && displayPermissionNotAllowed}
+    <!-- Shows user that he is not allowed to access this component -->
     <div class="container">
         <div class="iconContainer">
             <Icon icon={mdiMinusCircleOutline} />
@@ -70,5 +82,6 @@
         <Button goHome={true} size="full-width" />
     </div>
 {:else if isAuthorized}
+    <!-- Shows the content which is wrapped into the AuthorizeByRoles Tag -->
     <slot />
 {/if}

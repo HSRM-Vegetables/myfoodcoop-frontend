@@ -1,7 +1,15 @@
 import Cookie from 'js-cookie';
 import jwtDecode from "jwt-decode";
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
-import { userName, token as tokenStore, tokenCreation, tokenExpires } from '../../stores/user';
+import { 
+    userName,
+    token as tokenStore,
+    tokenCreation,
+    tokenExpires,
+    userId as userIdStore,
+    userRoles,
+    refreshToken as refreshTokenStore
+} from '../../stores/user';
 import CookieDefaults from '../CookieDefaults';
 
 export default class User {
@@ -61,10 +69,12 @@ export default class User {
     /**
      * Decrypts the token and stores the details in the svelte store.
      * Additionally saves the token as a cookie for later use.
-     * @param {string} token token obtained after a call to login
+     * @param {string} token token initially obtained after a call to login
+     * @param {string} refreshToken refresh token initially obtained after a call to login
      */
-    static handleToken(token) {
+    static handleTokens(token, refreshToken) {
         tokenStore.set(token);
+        refreshTokenStore.set(refreshToken);
 
         const decodedToken = jwtDecode(token);
         userName.set(decodedToken.sub);
@@ -73,6 +83,21 @@ export default class User {
         const tokenExpiryDate = new Date(parseFloat(decodedToken.exp) * 1000);
         tokenExpires.set(tokenExpiryDate)
 
+        userIdStore.set(decodedToken.id);
+        userRoles.set(decodedToken.roles);
+
         Cookie.set(CookieDefaults.TOKEN, token, { expires: tokenExpiryDate });
+        Cookie.set(CookieDefaults.REFRESH_TOKEN, refreshToken, { expires: tokenExpiryDate });
+    }
+
+    /**
+     * Request a new updated token.
+     * In example this will also update all assoziated roles.
+     * @param {string} refreshToken RefreshToke which was initially provided during login
+     */
+    static refreshToken(refreshToken) {
+        return Fetch.post(`auth/refresh`, {
+            refreshToken
+        }, getAuthorizationHeader());
     }
 }
