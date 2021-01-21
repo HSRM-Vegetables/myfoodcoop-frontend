@@ -32,13 +32,15 @@
     <ErrorModal error={requestError} />
     <StockItemDetails item={item} />
 
+    <hr />
+
     <div class="has-text-centered">
         {#if comesFrom === 'home'}
             <Button goHome={true} size="full-width" />
         {:else if comesFrom === 'shopping'}
-            <Button text="zur Artikelauswahl" href="/shopping/stock/" class="button is-link mt-5" size="full-width" />
+            <Button text="Zur Artikelauswahl" href="/shopping/stock/" class="button is-link mt-1" size="full-width" />
         {:else}
-            <Button text="zum Bestand" href="/stock/" class="button is-link mt-5" size="full-width" />
+            <Button text="Zum Bestand" href="/stock/" class="button is-link mt-1" size="full-width" />
         {/if}
     </div>
 </AuthorizeByRoles>
