@@ -7,7 +7,7 @@
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Bestand';
+    $title = 'Artikel auswählen';
     $navBalance = 'inline';
 
     function itemSelected(event) {
