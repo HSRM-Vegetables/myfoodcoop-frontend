@@ -93,7 +93,7 @@
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
                 {#if allowDetails}
-                    <div class="column has-text-left">
+                    <div class="column is-narrow has-text-left">
                         <button class="button is-white" on:click={(event) => selectItemByDetail(event, item.id)}>
                             <span class="icon">
                                 <Icon icon={mdiEye} />

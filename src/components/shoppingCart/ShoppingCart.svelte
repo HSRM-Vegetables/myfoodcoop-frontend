@@ -7,6 +7,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import { moneyStyler } from '../../scripts/Helper';
+    import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
 
     // Stub item because onMount is called after the first render
@@ -26,6 +27,7 @@
 
     onMount(() => {
         cart = new ShoppingCart();
+        cartItemsCount.forceUpdate();
     });
 
     // removes an item from the cart
@@ -33,6 +35,8 @@
         const itemId = event.detail.id;
         cart.removeItem(itemId);
         cart = cart; // tell svelte to update view
+
+        cartItemsCount.forceUpdate();
     }
 
     // create a purchase and go to the main page
@@ -41,6 +45,7 @@
             checkoutInProgress = true;
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
             cart.clear();
+            cartItemsCount.forceUpdate();
             goto('/');
         } catch (error) {
             requestError = error;
