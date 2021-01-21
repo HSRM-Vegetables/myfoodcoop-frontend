@@ -13,6 +13,16 @@
      */
     export let item;
 
+    /**
+     * Link to go back
+     */
+    export let linkBack = '/stock/';
+
+    /**
+     * Text to be displayed on the back button
+     */
+    export let linkBackText = 'zum Bestand';
+
     let pricePerUnitTextField;
     let quantityTextField;
     let articleTextField;
@@ -142,7 +152,7 @@
             return;
         }
 
-        goto('/stock/');
+        goto(linkBack);
     }
 
     /**
@@ -243,8 +253,8 @@
             <br />
 
             <Button
-                text="zum Bestand"
-                href="/stock/"
+                text={linkBackText}
+                href={linkBack}
                 on:click={clearInputs}
                 class="button is-link mt-5"
                 size="full-width"

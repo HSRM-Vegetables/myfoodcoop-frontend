@@ -14,6 +14,10 @@
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
     }
+
+    function itemDetails(event) {
+        goto(`/stock/item/${event.detail.id}?comesFrom=shopping`);
+    }
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
@@ -21,6 +25,8 @@
         <StockList
             bind:stockItems={$stockItems}
             bind:isLoading={$areStockItemsUpdating}
+            allowDetails={true}
+            on:details={itemDetails}
             isClickable={true}
             on:select={itemSelected}
         />

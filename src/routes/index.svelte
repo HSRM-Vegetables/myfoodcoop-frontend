@@ -69,6 +69,10 @@
         goto(`/shopping/stock/${event.detail.id}`);
     }
 
+    function itemDetails(event) {
+        goto(`/stock/item/${event.detail.id}?comesFrom=home`);
+    }
+
     function onKeyPress(event, href) {
         if (event.code === 'Space' || event.code === 'Enter') {
             goto(href);
@@ -115,6 +119,8 @@
             bind:stockItems={cutList}
             isLoading={$areStockItemsUpdating}
             isClickable={true}
+            allowDetails={true}
+            on:details={itemDetails}
             on:select={itemSelected}
             showDescription={false}
         />

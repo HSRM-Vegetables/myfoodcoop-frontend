@@ -3,16 +3,19 @@
     import { onMount } from 'svelte';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
-    import StockFiller from '../../../components/stock/StockFiller.svelte';
+    import StockItemDetails from '../../../components/stock/StockItemDetails.svelte';
     import Stock from '../../../scripts/stock/Stock';
+    import Button from '../../../components/common/Button.svelte';
     import { title, navBalance } from '../../../stores/page';
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Bestand bearbeiten';
+    $title = 'Artikel';
     $navBalance = 'hidden';
 
     const { page } = stores();
     const { itemId } = $page.params;
+    const { comesFrom } = $page.query;
+
     let item;
     let requestError;
 
@@ -25,7 +28,19 @@
     });
 </script>
 
-<AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <ErrorModal error={requestError} />
-    <StockFiller item={item} />
+    <StockItemDetails item={item} />
+
+    <hr />
+
+    <div class="has-text-centered">
+        {#if comesFrom === 'home'}
+            <Button goHome={true} size="full-width" />
+        {:else if comesFrom === 'shopping'}
+            <Button text="Zur Artikelauswahl" href="/shopping/stock/" class="button is-link mt-1" size="full-width" />
+        {:else}
+            <Button text="Zum Bestand" href="/stock/" class="button is-link mt-1" size="full-width" />
+        {/if}
+    </div>
 </AuthorizeByRoles>
