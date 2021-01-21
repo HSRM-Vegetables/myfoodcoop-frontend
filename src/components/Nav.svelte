@@ -93,12 +93,12 @@
                 <ShowBalance />
             </div>
         {/if}
+        <div class="is-hidden-touch">
+            {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
+            <a href="/shopping/cart" class="test">
+                <Icon icon={mdiShopping} appbar={true} />
+            </a>
+        </div>
     </AuthorizeByRoles>
-    <div class="is-hidden-touch">
-        {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
-        <a href="/shopping/cart" class="test">
-            <Icon icon={mdiShopping} appbar={true} />
-        </a>
-    </div>
 </div>
 <div class="blue-background is-hidden-desktop" />
