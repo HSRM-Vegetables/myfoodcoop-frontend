@@ -45,8 +45,8 @@
 
 <h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
 <p>
-    Damit wir dich während des Einkaufen identifizieren können, und dir das beste Einkaufserlebnis bieten können,
-    brauchen wir deinen Benutzernamen und dein Passwort:
+    Damit wir Dich während des Einkaufs identifizieren können, und Dir das beste Einkaufserlebnis bieten können,
+    benötigen wir Benutzername und Passwort:
 </p>
 
 <br />
