@@ -29,4 +29,6 @@
 <ErrorModal error={requestError} />
 <StockItemDetails item={item} />
 
-<Button text="zum Bestand" href="/stock/" class="button is-link mt-5" size="full-width" />
+<div class="has-text-centered">
+    <Button text="zum Bestand" href="/stock/" class="button is-link mt-5" size="full-width" />
+</div>
