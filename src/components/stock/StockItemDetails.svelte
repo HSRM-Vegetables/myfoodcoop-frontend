@@ -4,6 +4,7 @@
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import Icon from '../common/Icon.svelte';
     import { stockItems } from '../../stores/stock';
     import { moneyStyler } from '../../scripts/Helper';
@@ -12,6 +13,8 @@
      * The stock item
      */
     export let item;
+
+    let requestError;
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
@@ -22,18 +25,26 @@
     }
 
     async function removeItem() {
-        await Stock.removeItem(stockItemIdToRemove);
+        try {
+            modalIsOpen = false;
 
-        // as one item was removed, reload the stock list
-        stockItems.forceUpdate();
+            await Stock.removeItem(stockItemIdToRemove);
 
-        goto('/stock/');
+            // as one item was removed, reload the stock list
+            stockItems.forceUpdate();
+
+            goto('/stock/');
+        } catch (error) {
+            requestError = error;
+        }
     }
 
     function closeModal() {
         modalIsOpen = false;
     }
 </script>
+
+<ErrorModal error={requestError} />
 
 <Modal title="Artikel löschen?" bind:open={modalIsOpen}>
     <div slot="body"><span>Willst Du den Artikel wirklich unwiderruflich löschen?</span></div>
