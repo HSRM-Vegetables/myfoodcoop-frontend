@@ -2,7 +2,8 @@
     import { goto } from '@sapper/app';
     import {
         mdiAccount,
-        mdiBasket,
+        mdiCartArrowDown,
+        mdiShopping,
         mdiPiggyBank,
         mdiShoppingSearch,
         mdiFormatListText,
@@ -21,14 +22,14 @@
     const buttons = [
         {
             label: 'Einkaufen',
-            icon: mdiBasket,
-            href: '/shopping/cart',
+            icon: mdiCartArrowDown,
+            href: '/shopping/stock',
             access: [Roles.MEMBER],
         },
         {
-            label: 'Vorherige Einkäufe',
-            icon: mdiShoppingSearch,
-            href: '/history',
+            label: 'Warenkorb',
+            icon: mdiShopping,
+            href: '/shopping/cart',
             access: [Roles.MEMBER],
         },
         {
@@ -54,6 +55,12 @@
             icon: mdiChartAreasplineVariant,
             href: '/reports/',
             access: [Roles.TREASURER],
+        },
+        {
+            label: 'Vorherige Einkäufe',
+            icon: mdiShoppingSearch,
+            href: '/history',
+            access: [Roles.MEMBER],
         },
     ];
 
@@ -146,7 +153,7 @@
                         <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
                         <path fill="currentColor" d={button.icon} />
                     </svg>
-                    <span class="pl-4 has-text-weight-bold">{button.label}</span>
+                    <span class="has-text-weight-bold">{button.label}</span>
                 </div>
             </div>
         </AuthorizeByRoles>

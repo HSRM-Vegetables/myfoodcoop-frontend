@@ -7,6 +7,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import { moneyStyler } from '../../scripts/Helper';
+    import { currentCartItems } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
 
     // Stub item because onMount is called after the first render
@@ -26,6 +27,7 @@
 
     onMount(() => {
         cart = new ShoppingCart();
+        $currentCartItems = cart.getLengthcartItems();
     });
 
     // removes an item from the cart
@@ -33,6 +35,10 @@
         const itemId = event.detail.id;
         cart.removeItem(itemId);
         cart = cart; // tell svelte to update view
+
+        // var will be used in another file
+        /* eslint-disable no-unused-vars */
+        $currentCartItems = cart.getLengthcartItems(); // Update Length
     }
 
     // create a purchase and go to the main page

@@ -1,9 +1,12 @@
 <script>
     import logo from 'images/logo_white.png';
+    import { mdiShopping } from '@mdi/js';
+    import Icon from './common/Icon.svelte';
     import ShowBalance from './balance/ShowBalance.svelte';
     import { title, navBalance } from '../stores/page';
     import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
     import { Roles } from '../scripts/roles/Roles';
+    import { currentCartItems } from '../stores/shoppingCart';
 
     export let isLoggedIn;
 </script>
@@ -40,8 +43,26 @@
     }
     .inline-balance {
         position: absolute;
-        right: 15px;
-        top: 25px;
+        right: 79px;
+        top: 30px;
+    }
+    a.test {
+        color: white;
+        position: absolute;
+        right: 25px;
+        top: 20px;
+    }
+    .cardCount {
+        background: #f14668;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        padding: 5px 10px;
+        border-radius: 50%;
+        font-size: 12px;
+        top: 14px;
+        z-index: 20;
+        right: 10px;
     }
 </style>
 
@@ -73,5 +94,11 @@
             </div>
         {/if}
     </AuthorizeByRoles>
+    <div class="is-hidden-touch">
+        {#if $currentCartItems !== 0}<a href="/shopping/cart" class="cardCount">{$currentCartItems}</a>{/if}
+        <a href="/shopping/cart" class="test">
+            <Icon icon={mdiShopping} appbar={true} />
+        </a>
+    </div>
 </div>
 <div class="blue-background is-hidden-desktop" />

@@ -41,6 +41,10 @@ export default class ShoppingCart {
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 
+    getLengthcartItems() {
+        return this.cartItems.length;
+    }
+    
     totalPrice() {
         let totalPrice = 0.0;
         this.cartItems.forEach((item) => {

@@ -1,12 +1,12 @@
 <script>
     import { stores, goto } from '@sapper/app';
-    import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
+    import { mdiShopping, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
     import Icon from './common/Icon.svelte';
     import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
     import { Roles } from '../scripts/roles/Roles';
+    import { currentCartItems } from '../stores/shoppingCart';
 
     const { page } = stores();
-
     const buttons = [
         {
             icon: mdiHome,
@@ -14,7 +14,7 @@
             access: [],
         },
         {
-            icon: mdiBasket,
+            icon: mdiShopping,
             href: '/shopping/cart',
             access: [Roles.MEMBER],
         },
@@ -46,15 +46,25 @@
         margin: 0;
         border-top: solid 1px #375a7f;
         z-index: 1000;
-
         height: 70px;
     }
     .appbar a {
         color: #375a7f;
+        position: relative;
     }
     .active {
         background-color: #5890cc;
         color: white !important;
+    }
+    .cardCount {
+        background: #f14668;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        padding: 5px 10px;
+        border-radius: 50%;
+        font-size: 12px;
+        left: 75px;
     }
 </style>
 
@@ -67,6 +77,9 @@
                 on:keypress={(e) => onKeyPress(e, button.href)}
                 class:active={$page.path === button.href}
             >
+                {#if mdiShopping === button.icon && $currentCartItems !== 0}
+                    <div class="cardCount">{$currentCartItems}</div>
+                {/if}
                 <Icon icon={button.icon} appbar={true} />
             </a>
         </AuthorizeByRoles>
