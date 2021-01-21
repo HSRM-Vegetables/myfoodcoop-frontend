@@ -36,8 +36,6 @@
         cart.removeItem(itemId);
         cart = cart; // tell svelte to update view
 
-        // var will be used in another file
-        /* eslint-disable no-unused-vars */
         cartItemsCount.forceUpdate();
     }
 
