@@ -1,5 +1,5 @@
 <script>
-    import { mdiDelete, mdiPencil } from '@mdi/js';
+    import { mdiEye } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
     import { moneyStyler, stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
@@ -21,12 +21,7 @@
     /**
      * Displays a button, which allows to delete items
      */
-    export let allowRemoval = false;
-
-    /**
-     * Displays a button, which allows to edit items
-     */
-    export let allowEdit = false;
+    export let allowDetails = false;
 
     /**
      * Display a loading spinner instead of the list
@@ -38,15 +33,7 @@
      */
     export let showDescription = true;
 
-    const removeEvent = createEventDispatcher();
     const selectEvent = createEventDispatcher();
-
-    function removeItem(event, itemId) {
-        stopPropagation(event);
-        removeEvent('remove', {
-            id: itemId,
-        });
-    }
 
     function selectItem(event, itemId) {
         stopPropagation(event);
@@ -98,23 +85,13 @@
         <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
-                {#if allowRemoval || allowEdit}
+                {#if allowDetails}
                     <div class="column has-text-left">
-                        {#if allowRemoval}
-                            <button class="button is-white" on:click={(event) => removeItem(event, item.id)}>
-                                <span class="icon">
-                                    <Icon icon={mdiDelete} />
-                                </span>
-                            </button>
-                        {/if}
-
-                        {#if allowEdit}
-                            <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
-                                <span class="icon">
-                                    <Icon icon={mdiPencil} />
-                                </span>
-                            </button>
-                        {/if}
+                        <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
+                            <span class="icon">
+                                <Icon icon={mdiEye} />
+                            </span>
+                        </button>
                     </div>
                 {/if}
                 <div class="column has-text-left ">

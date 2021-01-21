@@ -2,58 +2,25 @@
     import { goto } from '@sapper/app';
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
-    import Modal from '../../components/common/Modal.svelte';
     import Button from '../../components/common/Button.svelte';
     import { stockItems, areStockItemsUpdating } from '../../stores/stock';
-    import Stock from '../../scripts/stock/Stock';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
     $navBalance = 'hidden';
 
-    let modalIsOpen = false;
-    let stockItemIdToRemove;
-
-    function confirmRemoveItem(event) {
-        modalIsOpen = true;
-        stockItemIdToRemove = event.detail.id;
-    }
-
-    async function removeItem() {
-        await Stock.removeItem(stockItemIdToRemove);
-
-        // as one item was removed, reload the stock list
-        stockItems.forceUpdate();
-
-        modalIsOpen = false;
-    }
-
-    function closeModal() {
-        modalIsOpen = false;
-    }
-
-    function onEditItem(event) {
+    function onSelectItem(event) {
         goto(`/stock/item/${event.detail.id}`);
     }
 </script>
-
-<Modal title="Artikel löschen?" bind:open={modalIsOpen}>
-    <div slot="body"><span>Willst Du den Artikel wirklich unwiderruflich löschen?</span></div>
-    <div slot="footer">
-        <button class="button is-danger" on:click={removeItem}>Löschen</button>
-        <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
-    </div>
-</Modal>
 
 <div class="has-text-centered">
     <StockList
         bind:stockItems={$stockItems}
         bind:isLoading={$areStockItemsUpdating}
-        on:remove={confirmRemoveItem}
-        allowRemoval={true}
-        allowEdit={true}
-        on:select={onEditItem}
+        allowDetails={true}
+        on:select={onSelectItem}
         isClickable={true}
     />
     <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
