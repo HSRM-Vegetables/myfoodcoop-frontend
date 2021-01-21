@@ -6,7 +6,7 @@
     import { goto, stores } from '@sapper/app';
     import { onMount } from 'svelte';
     import User from '../../scripts/user/User';
-    import { token, tokenExpires } from '../../stores/user';
+    import { refreshToken, token, tokenExpires } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
     // export the property if the current user is logged in or not
@@ -43,8 +43,9 @@
         // if the name is not set, try to read the cookie
         if (!$token) {
             $token = Cookie.get(CookieDefaults.TOKEN);
-            if ($token) {
-                User.handleToken($token);
+            $refreshToken = Cookie.get(CookieDefaults.REFRESH_TOKEN);
+            if ($token && $refreshToken) {
+                User.handleTokens($token, $refreshToken);
             }
         }
 

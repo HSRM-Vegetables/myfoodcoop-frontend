@@ -3,6 +3,7 @@
     import { createEventDispatcher } from 'svelte';
     import { moneyStyler, stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
+    import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
     import Icon from '../common/Icon.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
@@ -98,25 +99,28 @@
         <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
-                {#if allowRemoval || allowEdit}
-                    <div class="column has-text-left">
-                        {#if allowRemoval}
-                            <button class="button is-white" on:click={(event) => removeItem(event, item.id)}>
-                                <span class="icon">
-                                    <Icon icon={mdiDelete} />
-                                </span>
-                            </button>
-                        {/if}
+                <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+                    {#if allowRemoval || allowEdit}
+                        <div class="column has-text-left">
+                            {#if allowRemoval}
+                                <button class="button is-white" on:click={(event) => removeItem(event, item.id)}>
+                                    <span class="icon">
+                                        <Icon icon={mdiDelete} />
+                                    </span>
+                                </button>
+                            {/if}
 
-                        {#if allowEdit}
-                            <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
-                                <span class="icon">
-                                    <Icon icon={mdiPencil} />
-                                </span>
-                            </button>
-                        {/if}
-                    </div>
-                {/if}
+                            {#if allowEdit}
+                                <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
+                                    <span class="icon">
+                                        <Icon icon={mdiPencil} />
+                                    </span>
+                                </button>
+                            {/if}
+                        </div>
+                    {/if}
+                </AuthorizeByRoles>
+
                 <div class="column has-text-left ">
                     <span class="has-text-weight-bold breakwords">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
