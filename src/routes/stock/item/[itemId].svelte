@@ -14,6 +14,8 @@
 
     const { page } = stores();
     const { itemId } = $page.params;
+    const { comesFrom } = $page.query;
+
     let item;
     let requestError;
 
@@ -30,5 +32,11 @@
 <StockItemDetails item={item} />
 
 <div class="has-text-centered">
-    <Button text="zum Bestand" href="/stock/" class="button is-link mt-5" size="full-width" />
+    {#if comesFrom === 'home'}
+        <Button goHome={true} size="full-width" />
+    {:else if comesFrom === 'shopping'}
+        <Button text="zur Artikelauswahl" href="/shopping/stock/" class="button is-link mt-5" size="full-width" />
+    {:else}
+        <Button text="zum Bestand" href="/stock/" class="button is-link mt-5" size="full-width" />
+    {/if}
 </div>

@@ -42,6 +42,13 @@
         });
     }
 
+    function selectItemByDetail(event, itemdID) {
+        stopPropagation(event);
+        selectEvent('details', {
+            id: itemdID,
+        });
+    }
+
     function displayDescription(item) {
         if (!item || !item.description) {
             return '';
@@ -87,7 +94,7 @@
             <div class="columns is-mobile">
                 {#if allowDetails}
                     <div class="column has-text-left">
-                        <button class="button is-white" on:click={(event) => selectItem(event, item.id)}>
+                        <button class="button is-white" on:click={(event) => selectItemByDetail(event, item.id)}>
                             <span class="icon">
                                 <Icon icon={mdiEye} />
                             </span>

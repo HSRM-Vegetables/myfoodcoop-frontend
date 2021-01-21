@@ -13,6 +13,10 @@
     function onSelectItem(event) {
         goto(`/stock/item/${event.detail.id}`);
     }
+
+    function itemDetails(event) {
+        goto(`/stock/item/${event.detail.id}`);
+    }
 </script>
 
 <div class="has-text-centered">
@@ -20,6 +24,7 @@
         bind:stockItems={$stockItems}
         bind:isLoading={$areStockItemsUpdating}
         allowDetails={true}
+        on:details={itemDetails}
         on:select={onSelectItem}
         isClickable={true}
     />
