@@ -24,7 +24,7 @@
         isLoggingIn = true;
         try {
             const response = await User.login(userNameInput.getValue(), passwordInput.getValue());
-            User.handleToken(response.token);
+            User.handleTokens(response.token, response.refreshToken);
             goto(returnUrl);
         } catch (error) {
             requestError = error;

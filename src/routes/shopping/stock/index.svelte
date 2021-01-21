@@ -4,10 +4,11 @@
     import { title, navBalance } from '../../../stores/page';
     import Button from '../../../components/common/Button.svelte';
     import { stockItems, areStockItemsUpdating } from '../../../stores/stock';
+    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Bestand';
+    $title = 'Artikel auswählen';
     $navBalance = 'inline';
 
     function itemSelected(event) {
@@ -19,19 +20,21 @@
     }
 </script>
 
-<div class="has-text-centered mb-6">
-    <StockList
-        bind:stockItems={$stockItems}
-        bind:isLoading={$areStockItemsUpdating}
-        allowDetails={true}
-        on:details={itemDetails}
-        isClickable={true}
-        on:select={itemSelected}
-    />
-</div>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <div class="has-text-centered mb-6">
+        <StockList
+            bind:stockItems={$stockItems}
+            bind:isLoading={$areStockItemsUpdating}
+            allowDetails={true}
+            on:details={itemDetails}
+            isClickable={true}
+            on:select={itemSelected}
+        />
+    </div>
 
-<hr />
+    <hr />
 
-<div class="has-text-centered">
-    <Button text="Zum Warenkorb" class="button is-link" href="/shopping/cart" size="full-width" />
-</div>
+    <div class="has-text-centered">
+        <Button text="Zum Warenkorb" class="button is-link" href="/shopping/cart" size="full-width" />
+    </div>
+</AuthorizeByRoles>

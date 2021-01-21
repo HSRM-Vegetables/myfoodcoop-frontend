@@ -1,6 +1,9 @@
 <script>
     import User from '../scripts/user/User';
-    import { userDetails } from '../stores/userDetails';
+    import { refreshToken, userId, userRoles } from '../stores/user';
+    import ErrorModal from './common/ErrorModal.svelte';
+
+    let requestError;
 
     const buttons = [
         {
@@ -22,13 +25,20 @@
     ];
 
     async function changeRoles(enumValue) {
-        if ($userDetails.roles.includes(enumValue)) {
-            await User.userDeleteRole($userDetails.id, enumValue);
-        } else {
-            await User.userAddRole($userDetails.id, enumValue);
-        }
+        try {
+            if ($userRoles.includes(enumValue)) {
+                await User.userDeleteRole($userId, enumValue);
+            } else {
+                await User.userAddRole($userId, enumValue);
+            }
 
-        userDetails.forceUpdate();
+            // The user roles are stored in the jwt token.
+            // As we have now changed the roles, we need to update the token.
+            const response = await User.refreshToken($refreshToken);
+            User.handleTokens(response.token, response.refreshToken);
+        } catch (error) {
+            requestError = error;
+        }
     }
 </script>
 
@@ -40,10 +50,12 @@
     }
 </style>
 
+<ErrorModal error={requestError} />
+
 <h2 class="pt-4 is-size-5 has-text-weight-bold">Rollen:</h2>
 {#each buttons as button}
     <button
-        class:active={$userDetails.roles.includes(button.enum)}
+        class:active={$userRoles.includes(button.enum)}
         class="button is-outlined mr-2"
         on:click={() => changeRoles(button.enum)}
     >

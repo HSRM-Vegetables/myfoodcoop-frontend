@@ -5,7 +5,7 @@
     import { userName } from '../../stores/user';
     import { userDetails } from '../../stores/userDetails';
     import CookieDefaults from '../../scripts/CookieDefaults';
-    import RoleConcept from '../../components/RoleConcept.svelte';
+    import RoleConcept from '../../components/RoleButtons.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */

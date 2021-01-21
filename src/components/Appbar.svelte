@@ -2,6 +2,8 @@
     import { stores, goto } from '@sapper/app';
     import { mdiBasket, mdiAccount, mdiFormatListText, mdiHome } from '@mdi/js';
     import Icon from './common/Icon.svelte';
+    import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
+    import { Roles } from '../scripts/roles/Roles';
 
     const { page } = stores();
 
@@ -9,18 +11,22 @@
         {
             icon: mdiHome,
             href: '/',
+            access: [],
         },
         {
             icon: mdiBasket,
             href: '/shopping/cart',
+            access: [Roles.MEMBER],
         },
         {
             icon: mdiFormatListText,
             href: '/stock/',
+            access: [Roles.MEMBER],
         },
         {
             icon: mdiAccount,
             href: '/profile',
+            access: [Roles.MEMBER],
         },
     ];
 
@@ -54,13 +60,15 @@
 
 <div class="appbar columns is-mobile is-hidden-desktop has-text-centered">
     {#each buttons as button}
-        <a
-            class="column"
-            href={button.href}
-            on:keypress={(e) => onKeyPress(e, button.href)}
-            class:active={$page.path === button.href}
-        >
-            <Icon icon={button.icon} appbar={true} />
-        </a>
+        <AuthorizeByRoles allowedRoles={button.access} displayPermissionNotAllowed={false}>
+            <a
+                class="column"
+                href={button.href}
+                on:keypress={(e) => onKeyPress(e, button.href)}
+                class:active={$page.path === button.href}
+            >
+                <Icon icon={button.icon} appbar={true} />
+            </a>
+        </AuthorizeByRoles>
     {/each}
 </div>

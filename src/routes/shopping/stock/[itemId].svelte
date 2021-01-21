@@ -4,6 +4,7 @@
     import PriceCalculator from '../../../components/priceCalculator/PriceCalculator.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
+    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -20,4 +21,6 @@
     });
 </script>
 
-<PriceCalculator stockItem={stockItem} />
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <PriceCalculator stockItem={stockItem} />
+</AuthorizeByRoles>

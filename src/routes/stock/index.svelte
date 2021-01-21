@@ -4,11 +4,24 @@
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { stockItems, areStockItemsUpdating } from '../../stores/stock';
+    import AuthorizeByRoles, { Roles, isAccessAllowed } from '../../components/common/AuthorizeByRoles.svelte';
+    import { userRoles } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
     $navBalance = 'hidden';
+
+    // flag for role ODERER
+    let isOrderer = false;
+
+    // check the access as soon as the userRoles update and
+    // check if the current user has the ORDERER role.
+    $: {
+        if ($userRoles) {
+            isOrderer = isAccessAllowed($userRoles, [Roles.ORDERER]);
+        }
+    }
 
     function onSelectItem(event) {
         goto(`/stock/item/${event.detail.id}`);
@@ -19,20 +32,24 @@
     }
 </script>
 
-<div class="has-text-centered">
-    <StockList
-        bind:stockItems={$stockItems}
-        bind:isLoading={$areStockItemsUpdating}
-        allowDetails={true}
-        on:details={itemDetails}
-        on:select={onSelectItem}
-        isClickable={true}
-    />
-    <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
-</div>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <div class="has-text-centered">
+        <StockList
+            bind:stockItems={$stockItems}
+            bind:isLoading={$areStockItemsUpdating}
+            allowDetails={true}
+            on:details={itemDetails}
+            on:select={onSelectItem}
+            isClickable={true}
+        />
+        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+            <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
+        </AuthorizeByRoles>
+    </div>
 
-<hr />
+    <hr />
 
-<div class="has-text-centered">
-    <Button goHome={true} size="full-width" />
-</div>
+    <div class="has-text-centered">
+        <Button goHome={true} size="full-width" />
+    </div>
+</AuthorizeByRoles>
