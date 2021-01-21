@@ -4,7 +4,7 @@
     import Icon from './common/Icon.svelte';
     import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
     import { Roles } from '../scripts/roles/Roles';
-    import { currentCartItems } from '../stores/shoppingCart';
+    import { cartItemsCount } from '../stores/shoppingCart';
 
     const { page } = stores();
     const buttons = [
@@ -17,6 +17,7 @@
             icon: mdiShopping,
             href: '/shopping/cart',
             access: [Roles.MEMBER],
+            showCartCounter: true,
         },
         {
             icon: mdiFormatListText,
@@ -78,8 +79,8 @@
                 on:keypress={(e) => onKeyPress(e, button.href)}
                 class:active={$page.path === button.href}
             >
-                {#if mdiShopping === button.icon && $currentCartItems !== 0}
-                    <div class="cardCount">{$currentCartItems}</div>
+                {#if button.showCartCounter && $cartItemsCount !== 0}
+                    <div class="cardCount">{$cartItemsCount}</div>
                 {/if}
                 <Icon icon={button.icon} appbar={true} />
             </a>

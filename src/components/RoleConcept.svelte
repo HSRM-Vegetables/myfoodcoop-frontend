@@ -1,6 +1,7 @@
 <script>
     import User from '../scripts/user/User';
     import { refreshToken, userId, userRoles } from '../stores/user';
+    import Switch from './common/Switch.svelte';
     import ErrorModal from './common/ErrorModal.svelte';
 
     let requestError;
@@ -42,23 +43,18 @@
     }
 </script>
 
-<style>
-    .active {
-        background: #00d1b2 !important;
-        color: white !important;
-        font-weight: bold;
-    }
-</style>
-
 <ErrorModal error={requestError} />
 
-<h2 class="pt-4 is-size-5 has-text-weight-bold">Rollen:</h2>
+<h2 class="pt-4 pb-4 is-size-5 has-text-weight-bold">Rollen:</h2>
 {#each buttons as button}
-    <button
-        class:active={$userRoles.includes(button.enum)}
-        class="button is-outlined mr-2"
-        on:click={() => changeRoles(button.enum)}
-    >
-        {button.name}
-    </button>
+    <div class="columns is-mobile">
+        <div class="column">{button.name}</div>
+        <div class="column has-text-right">
+            <Switch
+                twoColor={true}
+                checked={$userRoles.includes(button.enum)}
+                on:click={() => changeRoles(button.enum)}
+            />
+        </div>
+    </div>
 {/each}

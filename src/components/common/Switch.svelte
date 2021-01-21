@@ -1,5 +1,6 @@
 <script>
     export let checked = false;
+    export let twoColor = false;
 </script>
 
 <style>
@@ -28,7 +29,9 @@
         transition: 0.4s;
         border-radius: 34px;
     }
-
+    .bg-color {
+        background: lightgrey;
+    }
     .slider:before {
         position: absolute;
         content: '';
@@ -57,4 +60,7 @@
     }
 </style>
 
-<label class="switch"> <input type="checkbox" bind:checked /> <span class="slider" /> </label>
+<label class="switch">
+    <input type="checkbox" bind:checked on:click />
+    <span class:bg-color={twoColor} class="slider" />
+</label>

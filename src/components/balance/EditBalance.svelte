@@ -87,10 +87,9 @@
         on:click={addToBalance}
         isLoading={balanceUpdateInProgress}
     />
-    <br />
-    <Button href="/adjust-balance" text="Guthaben anpassen" class="is-primary mt-3" size="full-width" />
-    <br />
-    <Button goHome={true} size="full-width" class="mt-6" />
+    <hr />
+    <Button href="/adjust-balance" text="Guthaben anpassen" class="is-link mt-5" size="full-width" />
+    <Button goHome={true} size="full-width" class="mt-3" />
 </div>
 
 <ErrorModal error={requestError} />

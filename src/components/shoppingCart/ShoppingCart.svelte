@@ -7,7 +7,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import { moneyStyler } from '../../scripts/Helper';
-    import { currentCartItems } from '../../stores/shoppingCart';
+    import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
 
     // Stub item because onMount is called after the first render
@@ -27,7 +27,7 @@
 
     onMount(() => {
         cart = new ShoppingCart();
-        $currentCartItems = cart.getLengthcartItems();
+        cartItemsCount.forceUpdate();
     });
 
     // removes an item from the cart
@@ -38,7 +38,7 @@
 
         // var will be used in another file
         /* eslint-disable no-unused-vars */
-        $currentCartItems = cart.getLengthcartItems(); // Update Length
+        cartItemsCount.forceUpdate();
     }
 
     // create a purchase and go to the main page
@@ -47,6 +47,7 @@
             checkoutInProgress = true;
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
             cart.clear();
+            cartItemsCount.forceUpdate();
             goto('/');
         } catch (error) {
             requestError = error;

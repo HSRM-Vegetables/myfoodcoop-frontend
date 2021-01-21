@@ -98,7 +98,7 @@
 
 {#if stockItem}
     <div class="form">
-        <div class="is-size-3 mb-4 breakwords">{stockItem.name}</div>
+        <div class="is-size-3 mb-4 breakwords has-text-weight-bold">{stockItem.name}</div>
 
         {#if stockItem.description}
             <div class="box">{stockItem.description}</div>

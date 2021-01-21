@@ -6,7 +6,7 @@
     import { title, navBalance } from '../stores/page';
     import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
     import { Roles } from '../scripts/roles/Roles';
-    import { currentCartItems } from '../stores/shoppingCart';
+    import { cartItemsCount } from '../stores/shoppingCart';
 
     export let isLoggedIn;
 </script>
@@ -95,7 +95,7 @@
         {/if}
     </AuthorizeByRoles>
     <div class="is-hidden-touch">
-        {#if $currentCartItems !== 0}<a href="/shopping/cart" class="cardCount">{$currentCartItems}</a>{/if}
+        {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
         <a href="/shopping/cart" class="test">
             <Icon icon={mdiShopping} appbar={true} />
         </a>

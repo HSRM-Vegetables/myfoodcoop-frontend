@@ -41,6 +41,8 @@
     export let href = undefined;
 
     export let goHome = false;
+
+    export let icon;
 </script>
 
 <style>
@@ -81,7 +83,14 @@
             class:full-width={size === 'full-width'}
             disabled={disabled || (isLoading && disableOnLoad)}
             on:click
-        >{text}</button>
+        >
+            <svg viewbox="0 0 24 24">
+                <!-- Give the path the value currentColor, so it inherits the text-color of its parent -->
+                <path fill="currentColor" d={icon} />
+            </svg>
+
+            {text}
+        </button>
     {/if}
     <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {/if}

@@ -41,7 +41,7 @@ export default class ShoppingCart {
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
     }
 
-    getLengthcartItems() {
+    getCartItemsCount() {
         return this.cartItems.length;
     }
     
