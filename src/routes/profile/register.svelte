@@ -146,7 +146,7 @@
 
             // log the user in
             const response = await User.login(userNameInput.getValue(), passwordInput.getValue());
-            User.handleTokens(response.token, response.responseToken);
+            User.handleTokens(response.token, response.refreshToken);
 
             // redirect to homepage
             goto('/');
