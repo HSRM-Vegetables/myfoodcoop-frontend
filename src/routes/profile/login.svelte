@@ -7,7 +7,8 @@
     import ErrorModal from '../../components/common/ErrorModal.svelte';
 
     const { page } = stores();
-    const { returnUrl } = $page.query;
+    // redirect to main page if no query parameter is provided
+    const { returnUrl = '/' } = $page.query;
 
     let userNameInput;
     let passwordInput;
@@ -23,8 +24,8 @@
     async function login() {
         isLoggingIn = true;
         try {
-            const response = await User.login(userNameInput.getValue(), passwordInput.getValue());
-            User.handleTokens(response.token, response.refreshToken);
+            await User.login(userNameInput.getValue(), passwordInput.getValue());
+
             goto(returnUrl);
         } catch (error) {
             requestError = error;

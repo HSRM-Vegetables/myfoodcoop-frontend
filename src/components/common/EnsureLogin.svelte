@@ -6,6 +6,7 @@
     import { goto, stores } from '@sapper/app';
     import { onMount } from 'svelte';
     import User from '../../scripts/user/User';
+    import Tokens from '../../scripts/user/Tokens';
     import { refreshToken, token, tokenExpires } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
@@ -28,7 +29,7 @@
         checkLogin($page);
     });
 
-    function checkLogin(pageLocal) {
+    async function checkLogin(pageLocal) {
         if (!isMounted) {
             isLoggedIn = false;
             return;
@@ -44,12 +45,17 @@
         if (!$token) {
             $token = Cookie.get(CookieDefaults.TOKEN);
             $refreshToken = Cookie.get(CookieDefaults.REFRESH_TOKEN);
+
             if ($token && $refreshToken) {
-                User.handleTokens($token, $refreshToken);
+                // if both tokens are set, use them
+                Tokens.handleTokens($token, $refreshToken);
+            } else if (!$token && $refreshToken) {
+                // if only the refresh token is set, get new tokens
+                await User.refreshToken($refreshToken);
             }
         }
 
-        // if the name still has no value, redirect to login
+        // if the token still has no value, redirect to login
         if (!$token || $tokenExpires < new Date()) {
             isLoggedIn = false;
             goto(`/profile/login?returnUrl=${pageLocal.path}`);

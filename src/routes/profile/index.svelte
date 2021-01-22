@@ -13,12 +13,9 @@
     $title = 'Profil';
     $navBalance = 'show';
 
-    function clearLocalData() {
-        localStorage.clear();
-    }
-
     function logout() {
         Cookie.remove(CookieDefaults.TOKEN);
+        Cookie.remove(CookieDefaults.REFRESH_TOKEN);
         window.location.reload();
     }
 </script>

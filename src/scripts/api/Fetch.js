@@ -1,6 +1,8 @@
 import { get } from 'svelte/store';
+import { goto } from '@sapper/app';
 import { url, version } from './ApiConfig';
-import { token } from '../../stores/user';
+import { refreshToken, refreshTokenExpires, token, tokenExpires } from '../../stores/user';
+import Tokens from '../user/Tokens'
 
 export const Headers = {
     Authorization: 'Authorization'
@@ -62,12 +64,30 @@ export default class Fetch {
      * @returns The JSON response of the request
      */
     static async request(type, subpath, content, additionalHeaders) {
+        const headers = additionalHeaders;
+
+        // check if the authorization header is necessary
+        if (additionalHeaders !== undefined && Headers.Authorization in additionalHeaders) {
+            // check if the current token has expired, the refresh token is set and the refresh token is still valid
+            if (get(tokenExpires) < Date.now() && get(refreshToken) && get(refreshTokenExpires) > Date.now()) {
+                // get a new token
+                await Tokens.refreshToken(get(refreshToken))
+
+                // update the token of the current request
+                headers[Headers.Authorization] = `Bearer ${get(token)}`;
+            } else if (get(tokenExpires) < Date.now()) {
+                // if the token is invalid, the refresh token is not set or is invalid, redirect the user to the login
+                goto("/profile/login");
+            }
+        }
+
+        // do the request
         const response = await fetch(`${url}/${version}/${subpath}`, {
             method: type,
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                ...additionalHeaders
+                ...headers
             },
             body: JSON.stringify(content)
         });
