@@ -9,7 +9,7 @@
     $navBalance = 'hidden';
 </script>
 
-<AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <h1 class="title mb-5">Reports</h1>
 
     <Button href="/reports/sold-items" class="is-link" text="Was wurde gekauft?" />

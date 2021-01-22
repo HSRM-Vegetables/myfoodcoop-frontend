@@ -8,19 +8,19 @@
 
     const buttons = [
         {
-            name: 'Mitglied',
+            name: 'Member',
             enum: 'MEMBER',
         },
         {
-            name: 'Kassenwart',
+            name: 'Treasurer',
             enum: 'TREASURER',
         },
         {
-            name: 'Vorstand',
-            enum: 'CHAIRMAN',
+            name: 'Admin',
+            enum: 'ADMIN',
         },
         {
-            name: 'Besteller/Verwalter',
+            name: 'Orderer',
             enum: 'ORDERER',
         },
     ];

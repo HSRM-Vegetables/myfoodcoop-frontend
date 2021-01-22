@@ -78,7 +78,7 @@
     loadItems(selectedPeriod);
 </script>
 
-<AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <div class="has-text-centered">
         <Button
             text="Gestern"
