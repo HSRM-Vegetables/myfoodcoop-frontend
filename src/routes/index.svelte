@@ -54,7 +54,7 @@
             label: 'Reports',
             icon: mdiChartAreasplineVariant,
             href: '/reports/',
-            access: [Roles.TREASURER],
+            access: [Roles.MEMBER],
         },
         {
             label: 'Vorherige Einkäufe',
