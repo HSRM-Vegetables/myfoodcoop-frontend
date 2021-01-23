@@ -6,6 +6,7 @@
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
     import { moneyStyler, stopPropagation } from '../../scripts/Helper';
+    import ListItem from '../common/ListItem.svelte';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -44,27 +45,13 @@
 </script>
 
 <style>
-    .clickable {
-        cursor: pointer;
-    }
-
-    .shoppingElement {
-        background-color: white;
-        border-radius: 6px;
-        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-        color: #000;
-        display: block;
-        padding: 1.25rem;
-        margin-top: 20px;
-    }
-
     .breakwords {
         word-break: break-all;
     }
 </style>
 
 {#each cartItems as item}
-    <div class="shoppingElement" class:clickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
+    <ListItem isClickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
                 <span class="breakwords">{item.stockItem.name}</span>
@@ -100,5 +87,5 @@
 
             <div class="column has-text-right pr-5">{moneyStyler(item.stockItem.pricePerUnit * item.quantity)} €</div>
         </div>
-    </div>
+    </ListItem>
 {/each}

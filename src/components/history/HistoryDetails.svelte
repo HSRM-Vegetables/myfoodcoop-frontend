@@ -5,6 +5,7 @@
     import Loader from '../common/Loader.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Purchase from '../../scripts/purchase/Purchase';
+    import ListItem from '../common/ListItem.svelte';
 
     /**
      * the purchase ID to be displayed
@@ -27,16 +28,6 @@
 </script>
 
 <style>
-    .shoppingElement {
-        background-color: white;
-        border-radius: 6px;
-        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-        color: #000;
-        display: block;
-        padding: 1.25rem;
-        margin-top: 20px;
-    }
-
     .breakwords {
         word-break: break-all;
     }
@@ -50,7 +41,7 @@
     </article>
 {:else}
     {#each purchase.items as item}
-        <div class="shoppingElement">
+        <ListItem>
             <div class="columns is-mobile">
                 <div class="column has-text-left has-text-weight-bold"><span class="breakwords">{item.name}</span></div>
             </div>
@@ -69,7 +60,7 @@
 
                 <div class="column has-text-right pr-5">{moneyStyler(item.pricePerUnit * item.amount)} €</div>
             </div>
-        </div>
+        </ListItem>
     {/each}
 
     <hr />
