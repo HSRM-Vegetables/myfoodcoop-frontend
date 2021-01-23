@@ -74,7 +74,7 @@ export default class User {
      * @param {string} role name of the role which should be removed from the user
      */
     static async userDeleteRole(userId, role) {
-        return Fetch.delete(`user/${userId}/roles/${role}`, getAuthorizationHeader());
+        return Fetch.delete(`user/${userId}/roles/${role}`, undefined, getAuthorizationHeader());
     }
 
     /**
@@ -99,5 +99,11 @@ export default class User {
      */
     static async revokeAllRefreshTokensByUserId(userId) {
         return Fetch.delete(`auth/refresh/all/${userId}`, getAuthorizationHeader());
+    }
+    
+    static async revokeRefreshToken(refreshToken) {
+        return Fetch.delete(`auth/refresh`, {
+            refreshToken
+        }, getAuthorizationHeader());
     }
 }

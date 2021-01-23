@@ -57,8 +57,8 @@ export default class Fetch {
      * @param {object} additionalHeaders Additional header parameters (optional)
      * @returns The JSON response of the request
      */
-    static async delete(subpath, additionalHeaders) {
-        return Fetch.request('DELETE', subpath, undefined, additionalHeaders);
+    static async delete(subpath, content, additionalHeaders) {
+        return Fetch.request('DELETE', subpath, content, additionalHeaders);
     }
 
     /**
