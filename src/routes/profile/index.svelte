@@ -3,15 +3,27 @@
     import { mdiLogout } from '@mdi/js';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { userName } from '../../stores/user';
+    import { userName, allowKeepLoggedIn } from '../../stores/user';
     import { userDetails } from '../../stores/userDetails';
     import CookieDefaults from '../../scripts/CookieDefaults';
     import UserDetails from '../../components/user/UserDetails.svelte';
+    import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
+    import Switch from '../../components/common/Switch.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Profil';
     $navBalance = 'show';
+
+    $: {
+        // disallow of the future use of the keep logged in workflow
+        localStorage.setItem(CookieDefaults.ALLOW_KEEP_LOGGED_IN, $allowKeepLoggedIn);
+
+        if ($allowKeepLoggedIn === false) {
+            // if its not allow to stay logged in, disable this workflow explicitly
+            localStorage.setItem(CookieDefaults.KEEP_LOGGED_IN, false);
+        }
+    }
 
     function logout() {
         Cookie.remove(CookieDefaults.TOKEN);
@@ -24,6 +36,22 @@
 
 {#if $userDetails}
     <UserDetails user={$userDetails} showRoles={true} />
+
+    <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
+        <hr />
+
+        <div class="columns is-mobile mt-3">
+            <div class="column">
+                Eingeloggt bleiben auf diesem Gerät aktivieren? Wichtig: Wirkt sich erst ab dem nächsten Login aus.
+                Diese Einstellung ist Geräteabhängig.
+            </div>
+            <div class="column has-text-right">
+                <Switch twoColor={true} bind:checked={$allowKeepLoggedIn} />
+            </div>
+        </div>
+
+        <hr />
+    </AuthorizeByRoles>
 
     <div class="container has-text-centered mt-6">
         <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" icon={mdiLogout} /><br />

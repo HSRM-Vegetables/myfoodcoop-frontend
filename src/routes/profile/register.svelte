@@ -5,6 +5,8 @@
     import User from '../../scripts/user/User';
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import { title, navBalance } from '../../stores/page';
+    import Switch from '../../components/common/Switch.svelte';
+    import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -145,7 +147,7 @@
             );
 
             // log the user in
-            await User.login(userNameInput.getValue(), passwordInput.getValue());
+            await User.login(userNameInput.getValue(), passwordInput.getValue(), $keepLoggedIn);
 
             // redirect to homepage
             goto('/');
@@ -243,6 +245,16 @@
 {#if repeatPasswordError}<span class="has-text-danger">Passwörter sind nicht identisch!</span>{/if}
 
 <br />
+
+{#if $allowKeepLoggedIn}
+    <div class="columns is-mobile">
+        <div class="column">Eingeloggt bleiben?</div>
+        <div class="column has-text-right">
+            <Switch twoColor={true} bind:checked={$keepLoggedIn} />
+        </div>
+    </div>
+    <br />
+{/if}
 
 <!-- registration button -->
 <div class="has-text-centered">

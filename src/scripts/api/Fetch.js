@@ -1,8 +1,14 @@
 import { get } from 'svelte/store';
 import { goto } from '@sapper/app';
 import { url, version } from './ApiConfig';
-import { refreshToken, refreshTokenExpires, token, tokenExpires } from '../../stores/user';
-import Tokens from '../user/Tokens'
+import { 
+    refreshToken as refreshTokenStore,
+    refreshTokenExpires,
+    keepLoggedIn,
+    token,
+    tokenExpires
+} from '../../stores/user';
+import Tokens from '../user/Tokens';
 
 export const Headers = {
     Authorization: 'Authorization'
@@ -68,10 +74,14 @@ export default class Fetch {
 
         // check if the authorization header is necessary
         if (additionalHeaders !== undefined && Headers.Authorization in additionalHeaders) {
-            // check if the current token has expired, the refresh token is set and the refresh token is still valid
-            if (get(tokenExpires) < Date.now() && get(refreshToken) && get(refreshTokenExpires) > Date.now()) {
+            if (get(keepLoggedIn) 
+                && get(tokenExpires) < Date.now() 
+                && get(refreshTokenStore) 
+                && get(refreshTokenExpires) > Date.now()) {
+                // check if the current token has expired, the refresh token is set and the refresh token is still valid
+
                 // get a new token
-                await Tokens.refreshToken(get(refreshToken))
+                await Fetch.refreshToken(get(refreshTokenStore))
 
                 // update the token of the current request
                 headers[Headers.Authorization] = `Bearer ${get(token)}`;
@@ -98,5 +108,20 @@ export default class Fetch {
             return response.json();
         }
         return undefined;
+    }
+
+    /**
+     * Request a new updated token.
+     * In example this will also update all assoziated roles.
+     * @param {string} refreshToken refresh token which was initially provided during login
+     */
+    static async refreshToken(refreshToken) {
+        const response = await Fetch.post(`auth/refresh`, {
+            refreshToken
+        });
+
+        Tokens.handleTokens(response.token, response.refreshToken)
+
+        return response;
     }
 }

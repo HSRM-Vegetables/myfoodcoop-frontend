@@ -1,5 +1,6 @@
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import Tokens from './Tokens';
+import CookieDefaults from '../CookieDefaults';
 
 export default class User { 
     /**
@@ -22,8 +23,11 @@ export default class User {
      * Login the user in and request the jwt token
      * @param {string} username username of the user
      * @param {string} password password of the user
+     * @param {boolean} keepLoggedIn whether to keep the user logged in
      */
-    static async login(username, password) {
+    static async login(username, password, keepLoggedIn) {
+        localStorage.setItem(CookieDefaults.KEEP_LOGGED_IN, keepLoggedIn);
+        
         const response = await Fetch.post('auth/login', {
             username,
             password
@@ -76,16 +80,16 @@ export default class User {
     /**
      * Request a new updated token.
      * In example this will also update all assoziated roles.
-     * @param {string} refreshToken RefreshToke which was initially provided during login
+     * @param {string} refreshToken refresh token which was initially provided during login
      */
     static async refreshToken(refreshToken) {
-        const response = await Fetch.post(`auth/refresh`, {
-            refreshToken
-        });
-
-        Tokens.handleTokens(response.token, response.refreshToken)
-
-        return response;
+        // The content of the refreshToken Method should probably be locatet in this class.
+        // The Problem is that we would introduce a depency cycle between Fetch and User class, 
+        // becaus the Fetch class also wants to use this method.
+        // Svelte handles dependency cycles as warnings and eslint gives us an error.
+        // Thats why the content of this method was abstracted as best as possible an placed in Fetch,
+        // which is not ideal but one of the best ways (in this case) to solve this problem.
+        Fetch.refreshToken(refreshToken);
     }
 
     /**

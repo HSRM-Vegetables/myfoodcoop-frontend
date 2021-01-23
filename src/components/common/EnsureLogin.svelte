@@ -7,7 +7,7 @@
     import { onMount } from 'svelte';
     import User from '../../scripts/user/User';
     import Tokens from '../../scripts/user/Tokens';
-    import { refreshToken, token, tokenExpires } from '../../stores/user';
+    import { refreshToken, token, tokenExpires, keepLoggedIn, allowKeepLoggedIn } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
     // export the property if the current user is logged in or not
@@ -35,6 +35,13 @@
             return;
         }
 
+        $keepLoggedIn = localStorage.getItem(CookieDefaults.KEEP_LOGGED_IN) === 'true';
+
+        const allowKeepLoggedInCookieValue = localStorage.getItem(CookieDefaults.ALLOW_KEEP_LOGGED_IN);
+        // if the cookie is not set or the cookie value equals to true, allow to check keepLoggedIn
+        // eslint-disable-next-line no-unused-vars
+        $allowKeepLoggedIn = !allowKeepLoggedInCookieValue || allowKeepLoggedInCookieValue === 'true';
+
         // if the page has an error, or we are on the login page, then don't redirect
         if (pageLocal.error || pageLocal.path.includes('/login') || $page.path.includes('/register')) {
             isLoggedIn = false;
@@ -49,8 +56,8 @@
             if ($token && $refreshToken) {
                 // if both tokens are set, use them
                 Tokens.handleTokens($token, $refreshToken);
-            } else if (!$token && $refreshToken) {
-                // if only the refresh token is set, get new tokens
+            } else if (!$token && $refreshToken && $keepLoggedIn) {
+                // if only the refresh token is set and the user want's to stay logged in, get new tokens
                 await User.refreshToken($refreshToken);
             }
         }

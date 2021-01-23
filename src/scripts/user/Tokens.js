@@ -13,11 +13,6 @@ import {
 } from '../../stores/user';
 import CookieDefaults from '../CookieDefaults';
 
-/**
- * Handles the tokens.
- * Hint: The following method was initially located in the User class, which caused a dependency circle.
- * Thats why this method was exported to it's own file.
- */
 export default class Tokens {
     /**
      * Decrypts the token and stores the details in the svelte store.
