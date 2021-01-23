@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { goto } from '@sapper/app'
+    import { goto } from '@sapper/app';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -20,22 +20,20 @@
 
     let allUsers = [
         {
-            "id": "0794e2e2-f5b2-42fb-a2b3-e12c75897f85",
-            "username": "Manuel",
-            "email": "jupp@stadtgemuese-wiesbaden.de",
-            "memberId": 4321,
-            "roles": [
-                "MEMBER"
-            ]
+            id: '0794e2e2-f5b2-42fb-a2b3-e12c75897f85',
+            username: 'Manuel',
+            email: 'jupp@stadtgemuese-wiesbaden.de',
+            memberId: 4321,
+            roles: ['MEMBER'],
         },
         {
-            "id": "f35e9b57-43f6-415a-8d17-34345ddd12ac",
-            "username": "Manuel2",
-            "email": "robby@stadtgemuese-wiesbaden.de",
-            "memberId": 1234,
-            "roles": []
-        }
-    ]
+            id: 'f35e9b57-43f6-415a-8d17-34345ddd12ac',
+            username: 'Manuel2',
+            email: 'robby@stadtgemuese-wiesbaden.de',
+            memberId: 1234,
+            roles: [],
+        },
+    ];
     let notActivatedUsers = [];
     let activatedUsers = [];
     let isLoading = true;
@@ -44,8 +42,8 @@
         try {
             // allUsers = await UserList.getActivatedUsers();
 
-            notActivatedUsers = allUsers.filter(user => user.roles.length === 0);
-            activatedUsers = allUsers.filter(user => user.roles.length > 0);
+            notActivatedUsers = allUsers.filter((user) => user.roles.length === 0);
+            activatedUsers = allUsers.filter((user) => user.roles.length > 0);
         } catch (error) {
             requestError = error;
         } finally {
@@ -76,28 +74,25 @@
         <!-- If no search term is given, display the users grouped by their activation status -->
         {#if notActivatedUsers.length > 0}
             <div class="mb-5">
-                <div class="is-size-5">
-                    Nicht aktivierte Benutzer
-                </div>
+                <div class="is-size-5">Nicht aktivierte Benutzer</div>
                 {#each notActivatedUsers as user}
                     <UserListItem user={user} on:click={() => goto(`/users/${user.id}`)} />
                 {/each}
             </div>
         {/if}
 
-        <div class="is-size-5">
-            Aktivierte Benutzer
-        </div>
+        <div class="is-size-5">Aktivierte Benutzer</div>
         {#each activatedUsers as user}
             <UserListItem user={user} on:click={() => goto(`/users/${user.id}`)} />
         {:else}
-            <NoData text='Es wurden keine Benutzer gefunden!' />
+            <NoData text="Es wurden keine Benutzer gefunden!" />
         {/each}
     {:else}
         <!-- Display all users that match the search term -->
         {#each allUsers as user}
-            {#if user.username.toLocaleUpperCase().includes(searchTerm.toLocaleUpperCase()) 
-                || user.memberId.toString().includes(searchTerm)}
+            {#if user.username
+                .toLocaleUpperCase()
+                .includes(searchTerm.toLocaleUpperCase()) || user.memberId.toString().includes(searchTerm)}
                 <UserListItem user={user} on:click={() => goto(`/users/${user.id}`)} />
             {/if}
         {/each}

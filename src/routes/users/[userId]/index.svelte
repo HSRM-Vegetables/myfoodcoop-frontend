@@ -31,7 +31,7 @@
         } finally {
             isLoading = false;
         }
-    })
+    });
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.ADMIN, Roles.TREASURER]}>

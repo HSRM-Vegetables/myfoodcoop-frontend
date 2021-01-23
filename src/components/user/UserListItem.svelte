@@ -1,5 +1,5 @@
 <script>
-    import ListItem from "../common/ListItem.svelte";
+    import ListItem from '../common/ListItem.svelte';
 
     /**
      * The user to be displayed
