@@ -1,8 +1,10 @@
 <script>
     import User from '../scripts/user/User';
-    import { refreshToken, userId, userRoles } from '../stores/user';
+    import { refreshToken, userRoles } from '../stores/user';
     import Switch from './common/Switch.svelte';
     import ErrorModal from './common/ErrorModal.svelte';
+
+    export let user;
 
     let requestError;
 
@@ -28,9 +30,9 @@
     async function changeRoles(enumValue) {
         try {
             if ($userRoles.includes(enumValue)) {
-                await User.userDeleteRole($userId, enumValue);
+                await User.userDeleteRole(user.id, enumValue);
             } else {
-                await User.userAddRole($userId, enumValue);
+                await User.userAddRole(user.id, enumValue);
             }
 
             // The user roles are stored in the jwt token.
@@ -52,7 +54,7 @@
         <div class="column has-text-right">
             <Switch
                 twoColor={true}
-                checked={$userRoles.includes(button.enum)}
+                checked={user.roles.includes(button.enum)}
                 on:click={() => changeRoles(button.enum)}
             />
         </div>

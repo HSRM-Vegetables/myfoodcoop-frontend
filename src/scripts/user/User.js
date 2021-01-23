@@ -46,8 +46,15 @@ export default class User {
      */
     static async getUser() {
         return Fetch.get(`user/`, getAuthorizationHeader());
+    }
+
+    /**
+     * Fetch the data of the current user
+     */
+    static async getUserById(userId) {
+        return Fetch.get(`user/${userId}`, getAuthorizationHeader());
     }    
-    
+     
     /**
      * Add a role to the user
      * @param {string} userId unique user id of the user the role should be added to

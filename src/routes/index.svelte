@@ -8,6 +8,7 @@
         mdiShoppingSearch,
         mdiFormatListText,
         mdiChartAreasplineVariant,
+        mdiAccountGroup,
     } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
@@ -61,6 +62,12 @@
             icon: mdiShoppingSearch,
             href: '/history',
             access: [Roles.MEMBER],
+        },
+        {
+            label: 'Benutzerverwaltung',
+            icon: mdiAccountGroup,
+            href: '/users',
+            access: [Roles.TREASURER, Roles.ADMIN],
         },
     ];
 
