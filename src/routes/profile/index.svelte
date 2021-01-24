@@ -3,7 +3,7 @@
     import { mdiLogout } from '@mdi/js';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { userName, allowKeepLoggedIn, refreshToken, tokenExpires } from '../../stores/user';
+    import { userName, allowKeepLoggedIn, refreshToken, tokenExpires, refreshTokenExpires } from '../../stores/user';
     import { userDetails } from '../../stores/userDetails';
     import CookieDefaults from '../../scripts/CookieDefaults';
     import UserDetails from '../../components/user/UserDetails.svelte';
@@ -35,10 +35,17 @@
             isLoggingOut = true;
 
             // logout on the server
-            if ($tokenExpires < new Date()) {
-                await User.refreshToken($refreshToken);
+            if ($refreshTokenExpires > new Date()) {
+                // only logout on the server if the refresh token is still valid
+
+                if ($tokenExpires < new Date()) {
+                    // if the token expired get a new one
+                    await User.refreshToken($refreshToken);
+                }
+
+                // revoke the refresh token
+                await User.revokeRefreshToken($refreshToken);
             }
-            await User.revokeRefreshToken($refreshToken);
 
             // logout on the client
             Cookie.remove(CookieDefaults.TOKEN);
