@@ -42,7 +42,7 @@
             Cookie.remove(CookieDefaults.REFRESH_TOKEN);
 
             // reload the page
-            window.location.reload();
+            window.location.href = '/';
         } catch (error) {
             requestError = error;
         } finally {
