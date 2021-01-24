@@ -53,8 +53,15 @@ export default class User {
      */
     static async getUserById(userId) {
         return Fetch.get(`user/${userId}`, getAuthorizationHeader());
-    }    
+    }
      
+    /**
+     * Deletes the given user
+     */
+    static async deleteUserById(userId) {
+        return Fetch.delete(`user/${userId}`, getAuthorizationHeader());
+    }
+
     /**
      * Add a role to the user
      * @param {string} userId unique user id of the user the role should be added to

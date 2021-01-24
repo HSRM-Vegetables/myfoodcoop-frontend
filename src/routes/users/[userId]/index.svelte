@@ -9,6 +9,7 @@
     import UserDetails from '../../../components/user/UserDetails.svelte';
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
+    import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -32,6 +33,21 @@
             isLoading = false;
         }
     });
+
+    async function onRoleUpdate() {
+        updateUser();
+
+        if ($loggedInUserId === user.id) {
+            // update the token if the logged in user is the same as the user that is currently being eddited
+            const response = await User.refreshToken($refreshToken);
+            User.handleTokens(response.token, response.refreshToken);
+        }
+    }
+
+    async function updateUser() {
+        // user = User.getUserById(userId)
+        user = await User.getUser();
+    }
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.ADMIN, Roles.TREASURER]}>
@@ -41,7 +57,7 @@
         <Loader isLoading={isLoading} />
     {:else}
         <UserDetails user={user} />
-        <RoleConcept user={user} />
+        <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
 
         <div class="container has-text-centered mt-6">
             <Button href="/users" text="Zur Benutzerliste" class="is-primary mb-3" size="full-width" /><br />

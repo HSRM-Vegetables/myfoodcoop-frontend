@@ -1,44 +1,43 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import User from '../scripts/user/User';
-    import { refreshToken, userRoles } from '../stores/user';
     import Switch from './common/Switch.svelte';
     import ErrorModal from './common/ErrorModal.svelte';
+    import { Roles } from '../scripts/roles/Roles';
 
     export let user;
 
+    const onRoleUpdate = createEventDispatcher();
     let requestError;
 
     const buttons = [
         {
             name: 'Member',
-            enum: 'MEMBER',
+            enum: Roles.MEMBER,
         },
         {
             name: 'Treasurer',
-            enum: 'TREASURER',
+            enum: Roles.TREASURER,
         },
         {
             name: 'Admin',
-            enum: 'ADMIN',
+            enum: Roles.ADMIN,
         },
         {
             name: 'Orderer',
-            enum: 'ORDERER',
+            enum: Roles.ORDERER,
         },
     ];
 
     async function changeRoles(enumValue) {
         try {
-            if ($userRoles.includes(enumValue)) {
+            if (user.roles.includes(enumValue)) {
                 await User.userDeleteRole(user.id, enumValue);
             } else {
                 await User.userAddRole(user.id, enumValue);
             }
 
-            // The user roles are stored in the jwt token.
-            // As we have now changed the roles, we need to update the token.
-            const response = await User.refreshToken($refreshToken);
-            User.handleTokens(response.token, response.refreshToken);
+            onRoleUpdate('roleUpdate');
         } catch (error) {
             requestError = error;
         }
