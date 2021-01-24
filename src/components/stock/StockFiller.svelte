@@ -9,9 +9,15 @@
     import { stockItems } from '../../stores/stock';
 
     /**
-     * Stock item the form should be prefilled with, if undefined no values are prefilled
+     * Stock item the form should be prefilled with
      */
     export let item;
+
+    /**
+     * If true, the existing item is edited. Otherwise the item is used as a
+     * blueprint for a new item.
+     */
+    export let edit = true;
 
     /**
      * Link to go back
@@ -126,7 +132,7 @@
         }
 
         try {
-            if (!item) {
+            if (!edit) {
                 await Stock.addItem(
                     articleTextField.getValue(),
                     unitType,
