@@ -1,10 +1,13 @@
 <script>
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
+    import { ExportToCsv } from 'export-to-csv';
+    import { mdiFileDownload } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
     import Button from '../../../components/common/Button.svelte';
+    import Icon from '../../../components/common/Icon.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
     import { title, navBalance } from '../../../stores/page';
@@ -75,8 +78,39 @@
         goto(`stock/item/${event.detail.id}`);
     }
 
+    function csvExport(data) {
+        let from = periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy');
+        let csvTitle = from;
+        if (selectedPeriod !== 'yesterday') {
+            let to = periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy');
+            csvTitle = +`${from} - ${to}`;
+        }
+        const options = {
+            fieldSeparator: ';',
+            quoteStrings: '"',
+            decimalSeparator: ',',
+            showLabels: true,
+            showTitle: true,
+            title: `Zeitraum: ${csvTitle}`,
+            filename: title.replace(' - ', '-'),
+            useBom: true,
+            useKeysAsHeaders: true,
+        };
+        let newData = data.map(({ fromDate, toDate, ...item }) => item);
+        const csvExporter = new ExportToCsv(options);
+
+        csvExporter.generateCsv(newData);
+    }
+
     loadItems(selectedPeriod);
 </script>
+
+<style>
+    button.background-none {
+        background: none;
+        border: 0;
+    }
+</style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <div class="has-text-centered">
@@ -105,16 +139,28 @@
             <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
         </article>
     {:else if soldItems !== undefined && soldItems.length > 0}
-        {#if selectedPeriod === 'yesterday'}
-            Datum:
-            {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
-        {:else}
-            Zeitraum:
-            {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
-            -
-            {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
-        {/if}
-
+        <div class="columns">
+            <div class="column">
+                {#if selectedPeriod === 'yesterday'}
+                    Datum:
+                    {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
+                {:else}
+                    Zeitraum:
+                    {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
+                    -
+                    {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
+                {/if}
+            </div>
+            <div class="column">
+                <button
+                    text="CSV Export"
+                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch"
+                    on:click={() => csvExport(soldItems)}
+                >
+                    <Icon icon={mdiFileDownload} appbar={true} />
+                </button>
+            </div>
+        </div>
         <hr />
         <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
     {:else}
@@ -126,6 +172,12 @@
     <hr />
 
     <div class="has-text-centered">
-        <Button text="Zurück zur Reports" href="/reports" class="button is-primary" size="full-width" />
+        <Button
+            text="CSV Download"
+            class="button is-primary is-hidden-desktop"
+            size="full-width"
+            on:click={() => csvExport(soldItems)}
+        />
+        <Button text="Zurück zur Reports" href="/reports" class="button is-link mt-5" size="full-width" />
     </div>
 </AuthorizeByRoles>
