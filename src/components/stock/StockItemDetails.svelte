@@ -90,7 +90,7 @@
                     text="Artikel neu bestellen"
                     size="full-width"
                     class="is-warning mb-3"
-                    on:click={() => goto(`/stock/item/${item.id}/edit`)}
+                    on:click={() => goto(`/stock/item/new?id=${item.id}`)}
                 />
                 <Button
                     text="Artikel bearbeiten"
