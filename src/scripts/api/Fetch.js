@@ -67,19 +67,17 @@ export default class Fetch {
      * @param {string} subpath Path relativ to the version number of the api
      * @param {object} content Body content which should be send to the api
      * @param {object} additionalHeaders Additional header parameters (optional)
-     * @returns The JSON response of the request
+     * @param {number} tries the number of tries this request had (optional)
+     * @returns The JSON response of the request or undefined if there was no content
      */
-    static async request(type, subpath, content, additionalHeaders) {
+    static async request(type, subpath, content, additionalHeaders, tries = 1) {
         const headers = additionalHeaders;
 
         // check if the authorization header is necessary
         if (additionalHeaders !== undefined && Headers.Authorization in additionalHeaders) {
-            if (get(keepLoggedIn) 
-                && get(tokenExpires) < Date.now() 
-                && get(refreshTokenStore) 
+            // check if the current token has expired, the refresh token is set and the refresh token is still valid
+            if (get(keepLoggedIn) && get(tokenExpires) < Date.now() && get(refreshTokenStore) 
                 && get(refreshTokenExpires) > Date.now()) {
-                // check if the current token has expired, the refresh token is set and the refresh token is still valid
-
                 // get a new token
                 await Fetch.refreshToken(get(refreshTokenStore))
 
@@ -101,12 +99,29 @@ export default class Fetch {
             },
             body: JSON.stringify(content)
         });
+
+        // check if an error occured
         if (response.status >= 400) {
-            throw await response.json();
+            // get the error
+            const errorValue = await response.json();
+
+            if (response.status === 401 && errorValue.errorCode === 401003) {
+                // token has expired, try the request again
+                if (tries < 3) {
+                    // but only if we tried it less then 3 times
+                    return Fetch.request(type, subpath, content, additionalHeaders, tries + 1)
+                }
+            }
+
+            // throw the error
+            throw errorValue;
         }
+
+        // if the status code has content read and return it
         if (response.status !== 204) {
             return response.json();
         }
+        // else return nothing
         return undefined;
     }
 
