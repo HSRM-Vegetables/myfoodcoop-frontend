@@ -89,7 +89,7 @@ export default class User {
         // Svelte handles dependency cycles as warnings and eslint gives us an error.
         // Thats why the content of this method was abstracted as best as possible an placed in Fetch,
         // which is not ideal but one of the best ways (in this case) to solve this problem.
-        Fetch.refreshToken(refreshToken);
+        return Fetch.refreshToken(refreshToken);
     }
 
     /**

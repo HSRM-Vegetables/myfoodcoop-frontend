@@ -7,7 +7,14 @@
     import { onMount } from 'svelte';
     import User from '../../scripts/user/User';
     import Tokens from '../../scripts/user/Tokens';
-    import { refreshToken, token, tokenExpires, keepLoggedIn, allowKeepLoggedIn } from '../../stores/user';
+    import {
+        refreshToken,
+        token,
+        tokenExpires,
+        keepLoggedIn,
+        allowKeepLoggedIn,
+        refreshTokenExpires,
+    } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
 
     // export the property if the current user is logged in or not
@@ -35,39 +42,73 @@
             return;
         }
 
+        // load some cookies
         $keepLoggedIn = localStorage.getItem(CookieDefaults.KEEP_LOGGED_IN) === 'true';
-
         const allowKeepLoggedInCookieValue = localStorage.getItem(CookieDefaults.ALLOW_KEEP_LOGGED_IN);
         // if the cookie is not set or the cookie value equals to true, allow to check keepLoggedIn
         // eslint-disable-next-line no-unused-vars
         $allowKeepLoggedIn = !allowKeepLoggedInCookieValue || allowKeepLoggedInCookieValue === 'true';
 
-        // if the page has an error, or we are on the login page, then don't redirect
-        if (pageLocal.error || pageLocal.path.includes('/login') || $page.path.includes('/register')) {
-            isLoggedIn = false;
+        if (Tokens.areValid($token, $refreshToken, $tokenExpires, $refreshTokenExpires)) {
+            // all tokens are valid, we don't need to do anything
+            isLoggedIn = true;
             return;
         }
 
-        // if the name is not set, try to read the cookie
-        if (!$token) {
-            $token = Cookie.get(CookieDefaults.TOKEN);
-            $refreshToken = Cookie.get(CookieDefaults.REFRESH_TOKEN);
-
-            if ($token && $refreshToken) {
-                // if both tokens are set, use them
-                Tokens.handleTokens($token, $refreshToken);
-            } else if (!$token && $refreshToken && $keepLoggedIn) {
-                // if only the refresh token is set and the user want's to stay logged in, get new tokens
-                await User.refreshToken($refreshToken);
-            }
+        if (
+            $keepLoggedIn &&
+            $token &&
+            $refreshToken &&
+            $tokenExpires <= new Date() &&
+            $refreshTokenExpires > new Date()
+        ) {
+            // token is expired, get a new one
+            await User.refreshToken($refreshToken);
+            isLoggedIn = true;
+            return;
         }
 
-        // if the token still has no value, redirect to login
-        if (!$token || $tokenExpires < new Date()) {
+        // at least one of the tokens is not loaded, try to get them from cookies
+        const tokenTemp = Cookie.get(CookieDefaults.TOKEN);
+        const refreshTokenTemp = Cookie.get(CookieDefaults.REFRESH_TOKEN);
+
+        if (tokenTemp && refreshTokenTemp) {
+            // if both tokens are set, load them and check if they are valid
+            Tokens.handleTokens(tokenTemp, refreshTokenTemp);
+
+            if (Tokens.areValid($token, $refreshToken, $tokenExpires, $refreshTokenExpires)) {
+                // both tokens are still valid, the user is logged in
+                isLoggedIn = true;
+                return;
+            }
+
+            if ($keepLoggedIn && $refreshToken && $refreshTokenExpires > new Date()) {
+                // refresh token is still valid, get a new token
+                await User.refreshToken($refreshToken);
+                isLoggedIn = true;
+                return;
+            }
+
+            // user is not logged in
             isLoggedIn = false;
-            goto(`/profile/login?returnUrl=${pageLocal.path}`);
-        } else {
-            isLoggedIn = true;
+        } else if (!tokenTemp && refreshTokenTemp) {
+            Tokens.handleRefreshToken(refreshTokenTemp);
+
+            if ($keepLoggedIn && $refreshTokenExpires > new Date()) {
+                // refresh token is still valid, gat a new token
+                await User.refreshToken($refreshToken);
+                isLoggedIn = true;
+                return;
+            }
+
+            // user is not logged in
+            isLoggedIn = false;
+        }
+
+        if (!isLoggedIn) {
+            if (!pageLocal.error && !pageLocal.path.includes('/login') && !$page.path.includes('/register')) {
+                goto(`/profile/login?returnUrl=${pageLocal.path}`);
+            }
         }
     }
 </script>
