@@ -72,10 +72,7 @@
 
         try {
             isLoading = true;
-            soldItems = await SoldItems.getItems(
-                periods[period].fromDate.toFormat('yyyy-MM-dd'),
-                periods[period].toDate.toFormat('yyyy-MM-dd')
-            );
+            soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
             cache[period] = soldItems;
         } catch (error) {
             requestError = error;
