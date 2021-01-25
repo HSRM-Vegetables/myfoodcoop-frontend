@@ -2,6 +2,7 @@
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
+    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { mdiFileDownload } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
@@ -26,6 +27,9 @@
     const cache = [];
     const periods = calcPeriods();
 
+    let localFrom;
+    let localTo;
+
     function calcPeriods() {
         const today = DateTime.local();
         const yesterday = DateTime.local().plus({ days: -1 });
@@ -49,6 +53,12 @@
     }
 
     async function loadItems(period, name) {
+        localFrom = periods[period].fromDate;
+        localTo = undefined;
+        if (name !== 'yesterday') {
+            localTo = periods[period].toDate;
+        }
+
         selectedPeriod = period;
         if (name !== undefined) {
             titleText = name;
@@ -79,12 +89,13 @@
     }
 
     function csvExport(data) {
-        let from = periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy');
-        let csvTitle = from;
-        if (selectedPeriod !== 'yesterday') {
-            let to = periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy');
-            csvTitle = +`${from} - ${to}`;
+        let csvTitle;
+        if (selectedPeriod === 'yesterday') {
+            csvTitle = localFrom.toFormat('dd.MM.yyyy');
+        } else {
+            csvTitle = `${localFrom.toFormat('dd.MM.yyyy')} - ${localTo.toFormat('dd.MM.yyyy')}`;
         }
+
         const options = {
             fieldSeparator: ';',
             quoteStrings: '"',
@@ -92,7 +103,7 @@
             showLabels: true,
             showTitle: true,
             title: `Zeitraum: ${csvTitle}`,
-            filename: title.replace(' - ', '-'),
+            filename: csvTitle.replace(' - ', '-'),
             useBom: true,
             useKeysAsHeaders: true,
         };
@@ -100,6 +111,22 @@
         const csvExporter = new ExportToCsv(options);
 
         csvExporter.generateCsv(newData);
+    }
+
+    async function datePicker(dateInfo) {
+        selectedPeriod = 'datepicker';
+        localFrom = DateTime.fromJSDate(new Date(dateInfo.from));
+        localTo = DateTime.fromJSDate(new Date(dateInfo.to));
+
+        try {
+            isLoading = true;
+
+            soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
+        } catch (error) {
+            requestError = error;
+        } finally {
+            isLoading = false;
+        }
     }
 
     loadItems(selectedPeriod);
@@ -128,7 +155,15 @@
             class="my-2 is-rounded {selectedPeriod === 'lastMonth' ? 'is-dark' : ''}"
             text="Letzten Monat"
             on:click={() => loadItems('lastMonth', 'letzten Monat')}
-        />
+        /><br />
+        <div class="pt-4 pb-4">
+            <DatePicker
+                placeholder="Wähle einen Zeitraum"
+                format="DD.MM.YYYY"
+                range={true}
+                on:range-selected={(e) => datePicker(e.detail)}
+            />
+        </div>
     </div>
 
     <h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} verkauft?</h2>
@@ -143,13 +178,8 @@
             <div class="column">
                 {#if selectedPeriod === 'yesterday'}
                     Datum:
-                    {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
-                {:else}
-                    Zeitraum:
-                    {periods[selectedPeriod].fromDate.toFormat('dd.MM.yyyy')}
-                    -
-                    {periods[selectedPeriod].toDate.toFormat('dd.MM.yyyy')}
-                {/if}
+                    {localFrom.toFormat('dd.MM.yyyy')}
+                {:else}Zeitraum: {localFrom.toFormat('dd.MM.yyyy')} - {localTo.toFormat('dd.MM.yyyy')}{/if}
             </div>
             <div class="column">
                 <button
