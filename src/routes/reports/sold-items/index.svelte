@@ -165,6 +165,7 @@
                 format="DD.MM.YYYY"
                 range={true}
                 on:range-selected={(e) => datePicker(e.detail)}
+                end={DateTime.local().toJSDate()}
             />
         </div>
     </div>
