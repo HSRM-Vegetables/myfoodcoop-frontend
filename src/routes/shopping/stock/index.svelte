@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import { mdiShopping } from '@mdi/js';
     import StockList from '../../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Button from '../../../components/common/Button.svelte';
@@ -35,6 +36,12 @@
     <hr />
 
     <div class="has-text-centered">
-        <Button text="Zum Warenkorb" class="button is-link" href="/shopping/cart" size="full-width" />
+        <Button
+            text="Zum Warenkorb"
+            class="button is-link"
+            href="/shopping/cart"
+            size="full-width"
+            icon={mdiShopping}
+        />
     </div>
 </AuthorizeByRoles>
