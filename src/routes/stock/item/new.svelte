@@ -30,6 +30,6 @@
 <AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
     <ErrorModal error={requestError} />
     {#if item}
-        <StockFiller item={item} edit={false} linkBack="/stock/item/{item.id}" linkBackText="zurück" />
+        <StockFiller item={item} edit={false} />
     {/if}
 </AuthorizeByRoles>
