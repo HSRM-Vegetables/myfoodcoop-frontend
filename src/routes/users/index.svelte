@@ -8,6 +8,7 @@
     import TextField from '../../components/common/TextField.svelte';
     import UserListItem from '../../components/user/UserListItem.svelte';
     import Loader from '../../components/common/Loader.svelte';
+    import UserList from '../../scripts/user/UserList';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -41,6 +42,8 @@
     onMount(async () => {
         try {
             // allUsers = await UserList.getActivatedUsers();
+            allUsers = await UserList.getAllUsers();
+            allUsers = allUsers.users;
 
             notActivatedUsers = allUsers.filter((user) => user.roles.length === 0);
             activatedUsers = allUsers.filter((user) => user.roles.length > 0);
@@ -74,14 +77,14 @@
         <!-- If no search term is given, display the users grouped by their activation status -->
         {#if notActivatedUsers.length > 0}
             <div class="mb-5">
-                <div class="is-size-5">Nicht aktivierte Benutzer</div>
+                <div>Nicht aktivierte Benutzer:</div>
                 {#each notActivatedUsers as user}
                     <UserListItem user={user} on:click={() => goto(`/users/${user.id}`)} />
                 {/each}
             </div>
         {/if}
 
-        <div class="is-size-5">Aktivierte Benutzer</div>
+        <div>Aktivierte Benutzer:</div>
         {#each activatedUsers as user}
             <UserListItem user={user} on:click={() => goto(`/users/${user.id}`)} />
         {:else}

@@ -25,8 +25,7 @@
 
     onMount(async () => {
         try {
-            // user = User.getUserById(userId)
-            user = await User.getUser();
+            await updateUser();
         } catch (error) {
             requestError = error;
         } finally {
@@ -35,7 +34,7 @@
     });
 
     async function onRoleUpdate() {
-        updateUser();
+        await updateUser();
 
         if ($loggedInUserId === user.id) {
             // update the token if the logged in user is the same as the user that is currently being eddited
@@ -45,8 +44,7 @@
     }
 
     async function updateUser() {
-        // user = User.getUserById(userId)
-        user = await User.getUser();
+        user = await User.getUserById(userId);
     }
 </script>
 
@@ -57,7 +55,10 @@
         <Loader isLoading={isLoading} />
     {:else}
         <UserDetails user={user} />
-        <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
+
+        <AuthorizeByRoles allowedRoles={[Roles.ADMIN]}>
+            <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
+        </AuthorizeByRoles>
 
         <div class="container has-text-centered mt-6">
             <Button href="/users" text="Zur Benutzerliste" class="is-primary mb-3" size="full-width" /><br />
