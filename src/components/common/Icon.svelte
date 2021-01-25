@@ -15,7 +15,10 @@
      */
     export let icon;
 
-    export let appbar;
+    /**
+     * True if the icon should be displayed in the appbar
+     */
+    export let appbar = false;
 </script>
 
 <style>
