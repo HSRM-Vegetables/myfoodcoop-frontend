@@ -1,6 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiAbTesting } from '@mdi/js';
+    import { mdiArrowLeft } from '@mdi/js';
     import TextField from '../common/TextField.svelte';
     import Balance from '../../scripts/Balance';
     import Button from '../common/Button.svelte';
@@ -58,7 +58,7 @@
         size="full-width"
     />
     <br />
-    <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="full-width" icon={mdiAbTesting} />
+    <Button href="/balance" text="Abbruch" class="is-danger mt-3" size="full-width" icon={mdiArrowLeft} />
     <br />
     <Button goHome={true} size="full-width" class="mt-6" />
 </div>
