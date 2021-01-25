@@ -74,6 +74,9 @@
             isLoading = true;
             soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
             cache[period] = soldItems;
+
+            // reset the error to default value to display the results
+            requestError = undefined;
         } catch (error) {
             requestError = error;
         } finally {
@@ -119,6 +122,9 @@
             isLoading = true;
 
             soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
+
+            // reset the error to default value to display the results
+            requestError = undefined;
         } catch (error) {
             requestError = error;
         } finally {
