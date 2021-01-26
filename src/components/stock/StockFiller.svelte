@@ -1,6 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft } from '@mdi/js';
+    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil } from '@mdi/js';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
@@ -246,7 +246,7 @@
                 text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
                 on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
-                icon={mdiPlusBoxMultiple}
+                icon={item ? mdiPencil : mdiPlusBoxMultiple}
                 size="full-width"
             />
             <br />

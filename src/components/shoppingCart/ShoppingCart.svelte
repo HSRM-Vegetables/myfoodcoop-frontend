@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
-    import { mdiCartArrowDown } from '@mdi/js';
+    import { mdiCartArrowDown, mdiCartArrowRight } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
@@ -86,6 +86,7 @@
             size="full-width"
             on:click={checkout}
             isLoading={checkoutInProgress}
+            icon={mdiCartArrowRight}
         />
     {/if}
 
