@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import { mdiDelete, mdiPencil } from '@mdi/js';
     import { UnitType } from '../../scripts/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
@@ -91,12 +92,14 @@
                     size="full-width"
                     class="is-primary mb-3"
                     on:click={() => goto(`/stock/item/${item.id}/edit`)}
+                    icon={mdiPencil}
                 />
                 <Button
                     text="Artikel löschen"
                     size="full-width"
                     class="is-danger"
                     on:click={() => confirmRemoveItem(item.id)}
+                    icon={mdiDelete}
                 />
             </div>
         {/if}

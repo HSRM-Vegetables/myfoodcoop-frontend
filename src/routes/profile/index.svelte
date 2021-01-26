@@ -1,5 +1,6 @@
 <script>
     import Cookie from 'js-cookie';
+    import { mdiLogout } from '@mdi/js';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { userName } from '../../stores/user';
@@ -39,7 +40,7 @@
     <RoleConcept />
 
     <div class="container has-text-centered mt-6">
-        <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" /><br />
+        <Button text="Ausloggen" class="is-danger mb-3" on:click={logout} size="full-width" icon={mdiLogout} /><br />
         <Button goHome={true} size="full-width" />
     </div>
 {/if}

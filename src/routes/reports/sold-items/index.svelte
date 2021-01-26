@@ -3,7 +3,7 @@
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
     import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
-    import { mdiFileDownload } from '@mdi/js';
+    import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
@@ -212,6 +212,12 @@
             size="full-width"
             on:click={() => csvExport(soldItems)}
         />
-        <Button text="Zurück zur Reports" href="/reports" class="button is-link mt-5" size="full-width" />
+        <Button
+            text="Zurück zu den Reports"
+            href="/reports"
+            class="button is-primary"
+            size="full-width"
+            icon={mdiArrowLeft}
+        />
     </div>
 </AuthorizeByRoles>

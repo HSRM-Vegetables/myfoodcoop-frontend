@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import { mdiPlusBoxMultiple } from '@mdi/js';
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
@@ -31,7 +32,13 @@
             isClickable={true}
         />
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-            <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
+            <Button
+                text="Bestand hinzufügen"
+                class="button is-primary mt-6"
+                href="/stock/item/new"
+                size="full-width"
+                icon={mdiPlusBoxMultiple}
+            />
         </AuthorizeByRoles>
     </div>
 
