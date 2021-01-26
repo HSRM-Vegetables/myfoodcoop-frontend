@@ -1,6 +1,7 @@
 <script>
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
+    import { mdiArrowLeft } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
@@ -126,6 +127,12 @@
     <hr />
 
     <div class="has-text-centered">
-        <Button text="Zurück zur Reports" href="/reports" class="button is-primary" size="full-width" />
+        <Button
+            text="Zurück zu den Reports"
+            href="/reports"
+            class="button is-primary"
+            size="full-width"
+            icon={mdiArrowLeft}
+        />
     </div>
 </AuthorizeByRoles>

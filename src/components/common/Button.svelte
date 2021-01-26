@@ -1,4 +1,7 @@
 <script>
+    import { mdiHome } from '@mdi/js';
+    import Icon from './Icon.svelte';
+
     /**
      * Text content that should be displayed in the button
      */
@@ -41,6 +44,20 @@
     export let href = undefined;
 
     export let goHome = false;
+
+    /**
+     * Material Design Icon to display beside the text
+     */
+    // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
+    // eslint-disable-next-line no-undef-init
+    export let icon = undefined;
+
+    // of this is a go home button, set some defaults
+    if (goHome) {
+        href = '/';
+        icon = mdiHome;
+        text = 'Zur Hauptseite';
+    }
 </script>
 
 <style>
@@ -61,27 +78,36 @@
 {#if href}
     <a
         href={href}
-        class="button {$$props.class}"
+        class="button {$$props.class} {goHome ? 'is-link' : ''}"
         class:is-loading={isLoading}
         class:medium={size === 'medium'}
         class:full-width={size === 'full-width'}
         on:click
-    >{text}</a>
+    >
+        {#if icon}
+            <span class="icon">
+                <Icon icon={icon} />
+            </span>
+        {/if}
+        <span>{text}</span>
+    </a>
     <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {:else}
-    {#if goHome}
-        <a href="/" class="button medium is-link {$$props.class}" class:full-width={size === 'full-width'}>Zur
-            Hauptseite</a>
-    {:else}
-        <button
-            type="submit"
-            class="button {$$props.class}"
-            class:is-loading={isLoading}
-            class:medium={size === 'medium'}
-            class:full-width={size === 'full-width'}
-            disabled={disabled || (isLoading && disableOnLoad)}
-            on:click
-        >{text}</button>
-    {/if}
+    <button
+        type="submit"
+        class="button {$$props.class} {goHome ? 'is-link' : ''}"
+        class:is-loading={isLoading}
+        class:medium={size === 'medium'}
+        class:full-width={size === 'full-width'}
+        disabled={disabled || (isLoading && disableOnLoad)}
+        on:click
+    >
+        {#if icon}
+            <span class="icon">
+                <Icon icon={icon} />
+            </span>
+        {/if}
+        <span>{text}</span>
+    </button>
     <!-- Dom-Event forwarding: https://svelte.dev/tutorial/dom-event-forwarding -->
 {/if}

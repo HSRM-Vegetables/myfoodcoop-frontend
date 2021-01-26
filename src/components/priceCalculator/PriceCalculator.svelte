@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import { mdiShopping, mdiCartArrowDown } from '@mdi/js';
     import { onMount, onDestroy } from 'svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/UnitType';
@@ -145,9 +146,16 @@
                 text="zum Warenkorb hinzufügen"
                 class="button is-primary mb-4"
                 size="full-width"
+                icon={mdiShopping}
                 on:click={addItem}
             />
-            <Button text="Zurück" class="button is-link mb-4" size="full-width" on:click={() => goto(linkBack)} />
+            <Button
+                text="Zurück zur Artikelauswahl"
+                class="button is-link mb-4"
+                size="full-width"
+                icon={mdiCartArrowDown}
+                on:click={() => goto(linkBack)}
+            />
         </div>
     </div>
 {/if}

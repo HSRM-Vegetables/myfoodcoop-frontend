@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
+    import { mdiCartArrowDown, mdiCartArrowRight } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
@@ -62,7 +63,13 @@
         <p>Der Warenkorb ist leer.</p>
     {/if}
 
-    <Button href="/shopping/stock" text="Artikel hinzufügen" class="is-primary mt-6" size="full-width" />
+    <Button
+        href="/shopping/stock"
+        text="Artikel hinzufügen"
+        class="is-primary mt-6"
+        size="full-width"
+        icon={mdiCartArrowDown}
+    />
 
     <hr />
 
@@ -79,6 +86,7 @@
             size="full-width"
             on:click={checkout}
             isLoading={checkoutInProgress}
+            icon={mdiCartArrowRight}
         />
     {/if}
 
