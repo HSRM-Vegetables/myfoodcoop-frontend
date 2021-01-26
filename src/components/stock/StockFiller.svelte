@@ -248,7 +248,7 @@
         <hr />
         <div class="container has-text-centered">
             <Button
-                text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
+                text="Artikel neu bestellen"
                 on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
                 size="full-width"
