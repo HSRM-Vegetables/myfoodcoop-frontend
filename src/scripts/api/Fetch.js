@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { goto } from '@sapper/app';
+import Cookie from 'js-cookie';
 import { url, version } from './ApiConfig';
 import { 
     refreshToken as refreshTokenStore,
@@ -9,6 +10,7 @@ import {
     tokenExpires
 } from '../../stores/user';
 import Tokens from '../user/Tokens';
+import CookieDefaults from '../CookieDefaults';
 
 export const Headers = {
     Authorization: 'Authorization'
@@ -110,6 +112,15 @@ export default class Fetch {
                 if (tries < 3) {
                     // but only if we tried it less then 3 times
                     return Fetch.request(type, subpath, content, additionalHeaders, tries + 1)
+                }
+            } else if (response.status === 401 && errorValue.errorCode === 401009) {
+                // refresh token has been revoked
+                Cookie.remove(CookieDefaults.REFRESH_TOKEN);
+                Cookie.remove(CookieDefaults.TOKEN);
+                
+                if (!window.location.href.includes('/login')) {
+                    // if we are not on the login page, redirect to login
+                    goto("/profile/login");
                 }
             }
 
