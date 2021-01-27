@@ -1,6 +1,5 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import User from '../scripts/user/User';
     import Switch from './common/Switch.svelte';
     import ErrorModal from './common/ErrorModal.svelte';
     import { Roles } from '../scripts/roles/Roles';
@@ -30,17 +29,9 @@
     ];
 
     async function changeRoles(enumValue) {
-        try {
-            if (user.roles.includes(enumValue)) {
-                await User.userDeleteRole(user.id, enumValue);
-            } else {
-                await User.userAddRole(user.id, enumValue);
-            }
-
-            onRoleUpdate('roleUpdate');
-        } catch (error) {
-            requestError = error;
-        }
+        onRoleUpdate('roleUpdate', {
+            role: enumValue,
+        });
     }
 </script>
 

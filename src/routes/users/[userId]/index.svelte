@@ -1,5 +1,5 @@
 <script>
-    import { stores } from '@sapper/app';
+    import { stores, goto } from '@sapper/app';
     import { onMount } from 'svelte';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import Button from '../../../components/common/Button.svelte';
@@ -33,8 +33,21 @@
         }
     });
 
-    async function onRoleUpdate() {
-        await updateUser();
+    async function onRoleUpdate(e) {
+        const { role } = e.detail;
+
+        try {
+            if (user.roles.includes(role)) {
+                await User.userDeleteRole(user.id, role);
+            } else {
+                await User.userAddRole(user.id, role);
+            }
+        } catch (error) {
+            requestError = error;
+        } finally {
+            // refresh the user in every case, to stay up to date on its roles
+            await updateUser();
+        }
 
         if ($loggedInUserId === user.id) {
             // update the token if the logged in user is the same as the user that is currently being eddited
@@ -45,6 +58,18 @@
 
     async function updateUser() {
         user = await User.getUserById(userId);
+    }
+
+    async function deleteMember() {
+        try {
+            await User.deleteUserById(userId);
+            goto('/users');
+        } catch (error) {
+            requestError = error;
+        } finally {
+            // refresh the user in every case, to stay up to date on its roles
+            await updateUser();
+        }
     }
 </script>
 
@@ -57,8 +82,24 @@
         <UserDetails user={user} />
 
         <AuthorizeByRoles allowedRoles={[Roles.ADMIN]}>
+            <hr />
             <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
+
+            <div class="container has-text-centered mt-6">
+                {#if user.roles.length === 0}
+                    <Button
+                        text="Mitglied aktivieren"
+                        class="is-primary mb-3"
+                        size="full-width"
+                        on:click={() => onRoleUpdate({ detail: { role: Roles.MEMBER } })}
+                    />
+                {/if}
+
+                <Button text="Mitglied löschen" class="is-danger" size="full-width" on:click={deleteMember} />
+            </div>
         </AuthorizeByRoles>
+
+        <hr />
 
         <div class="container has-text-centered mt-6">
             <Button href="/users" text="Zur Benutzerliste" class="is-primary mb-3" size="full-width" /><br />
