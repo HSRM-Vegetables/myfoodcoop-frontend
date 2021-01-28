@@ -46,8 +46,22 @@ export default class User {
      */
     static async getUser() {
         return Fetch.get(`user/`, getAuthorizationHeader());
-    }    
-    
+    }
+
+    /**
+     * Fetch the data of the current user
+     */
+    static async getUserById(userId) {
+        return Fetch.get(`user/${userId}`, getAuthorizationHeader());
+    }
+     
+    /**
+     * Deletes the given user
+     */
+    static async deleteUserById(userId) {
+        return Fetch.delete(`user/${userId}`, getAuthorizationHeader());
+    }
+
     /**
      * Add a role to the user
      * @param {string} userId unique user id of the user the role should be added to
@@ -99,5 +113,14 @@ export default class User {
         return Fetch.post(`auth/refresh`, {
             refreshToken
         }, getAuthorizationHeader());
+    }
+
+    /**
+     * Request a new updated token.
+     * In example this will also update all assoziated roles.
+     * @param {string} refreshToken refresh token which was initially provided during login
+     */
+    static async revokeAllRefreshTokensByUserId(userId) {
+        return Fetch.delete(`auth/refresh/all/${userId}`, getAuthorizationHeader());
     }
 }
