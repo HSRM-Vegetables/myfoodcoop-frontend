@@ -121,6 +121,6 @@ export default class User {
      * @param {string} refreshToken refresh token which was initially provided during login
      */
     static async revokeAllRefreshTokensByUserId(userId) {
-        return Fetch.delete(`auth/refresh/all/${userId}`, undefined, getAuthorizationHeader());
+        return Fetch.delete(`auth/refresh/all/${userId}`, getAuthorizationHeader());
     }
 }
