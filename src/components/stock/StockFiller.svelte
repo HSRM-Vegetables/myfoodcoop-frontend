@@ -1,7 +1,13 @@
 <script>
     import { goto } from '@sapper/app';
+    import { DateTime } from 'luxon';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil } from '@mdi/js';
+    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
+    import { slide } from 'svelte/transition';
+    import { elasticInOut } from 'svelte/easing';
     import { UnitType } from '../../scripts/UnitType';
+    import { CalendarStyle } from '../../scripts/CalendarStyle';
+    import { OriginCategory } from '../../scripts/OriginCategory';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
@@ -27,14 +33,30 @@
     let pricePerUnitTextField;
     let quantityTextField;
     let articleTextField;
+    let producerTextField;
+    let supplierTextField;
     let descriptionElement;
-    let unitType = UnitType.KILO;
-    let unitTypeBoolean = false;
+    let unitType = UnitType.PIECE;
+    let unitTypeBoolean = true;
+    let sustainablyProduced = true;
+    let certificates = [];
+    let originCategory = OriginCategory.UNKNOWN;
+    let deliveryDate;
+    let orderDate;
 
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
     let quantityTextFieldError = false;
+    let producerTextFieldError = false;
+    let supplierTextFieldError = false;
     let errorHint;
+
+    const originCategorys = [
+        { name: 'Lokal', category: OriginCategory.LOCAL },
+        { name: 'Regional', category: OriginCategory.REGIONAL },
+        { name: 'Überregional', category: OriginCategory.SUPRAREGIONAL },
+        { name: 'Unbekannt', category: OriginCategory.UNKNOWN },
+    ];
 
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
@@ -61,6 +83,8 @@
         articleTextFieldError = false;
         pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
+        producerTextFieldError = false;
+        supplierTextFieldError = false;
 
         // No name set
         if (!articleTextField || !articleTextField.getValue()) {
@@ -93,7 +117,20 @@
             errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
         }
 
-        if (articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError) {
+        if (!producerTextField || !producerTextField.getValue() || producerTextField.getValue() < 0) {
+            producerTextFieldError = true;
+        }
+
+        if (!supplierTextField || !supplierTextField.getValue()) {
+            supplierTextFieldError = true;
+        }
+        if (
+            articleTextFieldError ||
+            pricePerUnitTextFieldError ||
+            quantityTextFieldError ||
+            producerTextFieldError ||
+            supplierTextFieldError
+        ) {
             return false;
         }
 
@@ -111,10 +148,12 @@
 
         if (stockItem.unitType === UnitType.KILO) {
             unitTypeBoolean = true;
-
             // force update of unit type
             untiTypeChanged(unitTypeBoolean);
         }
+        certificates = item.certificates;
+        sustainablyProduced = item.sustainablyProduced;
+        originCategory = item.originCategory;
     }
 
     /**
@@ -133,7 +172,14 @@
                     unitType,
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
-                    descriptionElement.value
+                    descriptionElement.value,
+                    sustainablyProduced.valueOf(),
+                    certificates,
+                    originCategory,
+                    producerTextField.getValue(),
+                    supplierTextField.getValue(),
+                    orderDate,
+                    deliveryDate
                 );
             } else {
                 await Stock.updateItem(
@@ -142,7 +188,14 @@
                     unitType,
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
-                    descriptionElement.value
+                    descriptionElement.value,
+                    sustainablyProduced.valueOf(),
+                    certificates,
+                    originCategory,
+                    producerTextField.getValue(),
+                    supplierTextField.getValue(),
+                    orderDate,
+                    deliveryDate
                 );
             }
 
@@ -164,6 +217,32 @@
         pricePerUnitTextField.clear();
         quantityTextField.clear();
         descriptionElement.value = '';
+        pricePerUnitTextField.clear();
+        producerTextField.clear();
+        articleTextField.clear();
+        originCategory = OriginCategory.UNKNOWN;
+        certificates = [];
+    }
+    /**
+     * Certificates List
+     */
+    let inputCertificates = '';
+    function addCertificates() {
+        if (inputCertificates) certificates = [...certificates, inputCertificates];
+        inputCertificates = '';
+    }
+
+    function removeCertificates(name) {
+        const index = certificates.findIndex((certificate) => certificate === name);
+        certificates.splice(index, 1);
+        certificates = certificates;
+    }
+
+    function setOrderDate(date) {
+        orderDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+    }
+    function setDeliveryDate(date) {
+        deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
     }
 </script>
 
@@ -175,6 +254,19 @@
 
     .auto-margin {
         margin: auto;
+    }
+    li.list-item {
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+        color: #000;
+        display: block;
+        padding: 1.25rem;
+        margin-top: 20px;
+    }
+    .dropdown {
+        -moz-appearance: auto;
+        -webkit-appearance: auto;
     }
 </style>
 
@@ -230,12 +322,104 @@
                 value={item ? item.quantity : ''}
             />
         </div>
+        <hr />
+        <div class="columns pt-4 is-mobile">
+            <div class="column">Nachhaltig Produziert</div>
+            <div class="column has-text-right">
+                <Switch bind:checked={sustainablyProduced} twoColor={true} />
+            </div>
+        </div>
+        <div>
+            <div class="has-text-left pb-2">Zertifikate</div>
+            <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
+                <div class="control" style="width: 100%;">
+                    <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
+                </div>
+                <div class="control">
+                    <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
+                </div>
+            </form><br />
+            <ul class:list={certificates.length > 0}>
+                {#each certificates as certificate}
+                    <li class="list-item" transition:slide={{ duration: 300, easing: elasticInOut }}>
+                        <div class="columns" style="align-items: center">
+                            <div class="is-pulled-left column">{certificate}</div>
+                            <div class="column has-text-right">
+                                <Button
+                                    text="Löschen"
+                                    class="button is-danger"
+                                    icon={mdiDelete}
+                                    on:click={() => removeCertificates(certificate)}
+                                />
+                            </div>
+                        </div>
+                    </li>
+                {/each}
+            </ul>
+        </div>
+        <div class="pt-4">
+            <div class="has-text-left pb-2">Herkunftskategorie</div>
+            <select class="input dropdown" bind:value={originCategory}>
+                {#each originCategorys as categorys}
+                    <option value={categorys.category}>{categorys.name}</option>
+                {/each}
+            </select>
+        </div>
+        <hr />
+        <div class="pt-4">
+            <TextField
+                bind:this={producerTextField}
+                type="text"
+                placeholder="Erzeuger"
+                label="Erzeuger"
+                isInErrorState={producerTextFieldError}
+                charLimit="250"
+                value={item ? item.producer : ''}
+            />
+        </div>
+        <div class="pt-4">
+            <TextField
+                bind:this={supplierTextField}
+                type="text"
+                placeholder="Lieferant"
+                label="Lieferant"
+                isInErrorState={supplierTextFieldError}
+                charLimit="250"
+                value={item ? item.supplier : ''}
+            />
+        </div>
+        <div class="pt-4">
+            <div class="columns is-mobile">
+                <div class="column">
+                    <div class="has-text-left pb-2">Lieferdatum</div>
+                    <DatePicker
+                        placeholder="Wähle einen Zeitraum"
+                        format="DD.MM.YYYY"
+                        styling={new CalendarStyle()}
+                        on:date-selected={(e) => setOrderDate(e.detail.date)}
+                        selected={item ? item.orderDate : ''}
+                    />
+                </div>
+                <div class="column">
+                    <div class="has-text-left pb-2 ">Bestelldatum</div>
+                    <DatePicker
+                        placeholder="Wähle einen Zeitraum"
+                        continueText="Bestätigen"
+                        format="DD.MM.YYYY"
+                        styling={new CalendarStyle()}
+                        on:date-selected={(e) => setDeliveryDate(e.detail.date)}
+                        selected={item ? item.deliveryDate : ''}
+                    />
+                </div>
+            </div>
+        </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
             <div class="form-row is-relative">
                 <textarea
                     class="textarea"
                     placeholder="Beschreibung"
+                    continueText="Bestätigen"
                     bind:this={descriptionElement}
                 >{item ? item.description : ''}</textarea>
             </div>

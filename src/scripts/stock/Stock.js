@@ -17,16 +17,32 @@ export default class Stock {
      * @param {String} quantity How many pieces of this item are available.
      * Will be parsed to an integer
      * @param {String} description Additional information for this item
+     * @param {Boolean} sustainablyProduced Additional information for this item
+     * @param {Boolean} sustainablyProduced is the item sustainably produced
+     * @param {Array} certificates array of all certificates
+     * @param {originCategory} originCategory Origin of the item local, regional, supparegional or unknown
+     * @param {String} producer of the item
+     * @param {String} supplier from the item
+     * @param {String} orderDate from the item
+     * @param {String} deliveryDate from the item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    static async addItem(name, unitType, pricePerUnit, quantity, description) {       
+    static async addItem(name, unitType, pricePerUnit, quantity, description,
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate,deliveryDate) {       
         return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
-            'description': description
+            'description': description,
+            'sustainablyProduced': sustainablyProduced,
+            'certificates': certificates,
+            'originCategory': originCategory,
+            'producer': producer,
+            'supplier': supplier,
+            'orderDate': orderDate,
+            'deliveryDate': deliveryDate
         }, getAuthorizationHeader());
     }
 
@@ -58,16 +74,31 @@ export default class Stock {
      * @param {String} quantity How many pieces of this item are available.
      * Will be parsed to an integer
      * @param {String} description Additional information for this item
+     * @param {Boolean} sustainablyProduced is the item sustainably produced
+     * @param {Array} certificates array of all certificates
+     * @param {originCategory} originCategory Origin of the item local, regional, supparegional or unknown
+     * @param {String} producer of the item
+     * @param {String} supplier from the item
+     * @param {String} orderDate from the item
+     * @param {String} deliveryDate from the item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    static async updateItem(id, name, unitType, pricePerUnit, quantity, description) {
+    static async updateItem(id, name, unitType, pricePerUnit, quantity, description,
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate,deliveryDate) {
         return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
-            'description': description
+            'description': description,
+            'sustainablyProduced': sustainablyProduced,
+            'certificates': certificates,
+            'originCategory': originCategory,
+            'producer': producer,
+            'supplier': supplier,
+            'orderDate': orderDate,
+            'deliveryDate': deliveryDate
         }, getAuthorizationHeader());
     }
 
