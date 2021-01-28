@@ -10,14 +10,12 @@
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Switch from '../../components/common/Switch.svelte';
     import User from '../../scripts/user/User';
-    import ErrorModal from '../../components/common/ErrorModal.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Profil';
     $navBalance = 'show';
 
-    let requestError;
     let isLoggingOut = false;
 
     $: {
@@ -47,7 +45,7 @@
                 await User.revokeRefreshToken($refreshToken);
             }
         } catch (error) {
-            requestError = error;
+            // catch errors, but do not show it to the user
         } finally {
             // logout on the client
             Cookie.remove(CookieDefaults.TOKEN);
@@ -60,8 +58,6 @@
         }
     }
 </script>
-
-<ErrorModal error={requestError} />
 
 <div class="is-size-3 has-text-weight-bold pb-5">{$userName}</div>
 
