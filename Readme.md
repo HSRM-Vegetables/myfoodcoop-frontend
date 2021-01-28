@@ -21,3 +21,6 @@
 * Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
 * Als CSS Framwork setzen wir momentan auf [Bulma](https://bulma.io/) (Wichtig: Bulma wird ohne JavaScript ausgeliefert)
 * Als Icon Library benutzen wir [MaterialDesignIcons](https://materialdesignicons.com/). Dort kannst du auch nach neuen Icons suchen.
+
+## Deployment
+* Die Umgebungsvariable `BACKEND_API_URL` muss auf die URL des Backends gesetzt werden.
