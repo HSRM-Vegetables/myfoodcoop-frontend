@@ -42,17 +42,20 @@
             } else {
                 await User.userAddRole(user.id, role);
             }
+
+            if ($loggedInUserId === user.id) {
+                // update the token if the logged in user is the same as the user that is currently being eddited
+                const response = await User.refreshToken($refreshToken);
+                User.handleTokens(response.token, response.refreshToken);
+            } else {
+                // revoke all tokens for the specified user
+                await User.revokeAllRefreshTokensByUserId(user.id);
+            }
         } catch (error) {
             requestError = error;
         } finally {
             // refresh the user in every case, to stay up to date on its roles
             await updateUser();
-        }
-
-        if ($loggedInUserId === user.id) {
-            // update the token if the logged in user is the same as the user that is currently being eddited
-            const response = await User.refreshToken($refreshToken);
-            User.handleTokens(response.token, response.refreshToken);
         }
     }
 

@@ -114,4 +114,13 @@ export default class User {
             refreshToken
         }, getAuthorizationHeader());
     }
+
+    /**
+     * Request a new updated token.
+     * In example this will also update all assoziated roles.
+     * @param {string} refreshToken refresh token which was initially provided during login
+     */
+    static async revokeAllRefreshTokensByUserId(userId) {
+        return Fetch.delete(`auth/refresh/all/${userId}`, undefined, getAuthorizationHeader());
+    }
 }
