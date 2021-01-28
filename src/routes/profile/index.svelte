@@ -46,16 +46,16 @@
                 // revoke the refresh token
                 await User.revokeRefreshToken($refreshToken);
             }
-
+        } catch (error) {
+            requestError = error;
+        } finally {
             // logout on the client
             Cookie.remove(CookieDefaults.TOKEN);
             Cookie.remove(CookieDefaults.REFRESH_TOKEN);
 
             // reload the page
             window.location.href = '/';
-        } catch (error) {
-            requestError = error;
-        } finally {
+
             isLoggingOut = false;
         }
     }
