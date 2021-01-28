@@ -9,6 +9,7 @@
     import UserListItem from '../../components/user/UserListItem.svelte';
     import Loader from '../../components/common/Loader.svelte';
     import UserList from '../../scripts/user/UserList';
+    import Button from '../../components/common/Button.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -100,4 +101,8 @@
             {/if}
         {/each}
     {/if}
+
+    <div class="container has-text-centered mt-6">
+        <Button goHome={true} size="full-width" />
+    </div>
 </AuthorizeByRoles>
