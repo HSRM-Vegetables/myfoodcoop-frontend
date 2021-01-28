@@ -14,10 +14,12 @@
     let requestError;
 
     onMount(async () => {
-        try {
-            item = await Stock.getItem(itemId);
-        } catch (error) {
-            requestError = error;
+        if (itemId) {
+            try {
+                item = await Stock.getItem(itemId);
+            } catch (error) {
+                requestError = error;
+            }
         }
     });
 
@@ -31,5 +33,7 @@
     <ErrorModal error={requestError} />
     {#if item}
         <StockFiller item={item} edit={false} />
+    {:else}
+        <StockFiller edit={false} />
     {/if}
 </AuthorizeByRoles>

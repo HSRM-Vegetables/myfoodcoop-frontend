@@ -132,7 +132,7 @@
         }
 
         try {
-            if (!edit) {
+            if (!item && !edit) {
                 await Stock.addItem(
                     articleTextField.getValue(),
                     unitType,
