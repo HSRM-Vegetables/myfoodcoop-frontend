@@ -1,27 +1,16 @@
 <script>
     import { goto } from '@sapper/app';
+    import { mdiPlusBoxMultiple } from '@mdi/js';
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { stockItems, areStockItemsUpdating } from '../../stores/stock';
-    import AuthorizeByRoles, { Roles, isAccessAllowed } from '../../components/common/AuthorizeByRoles.svelte';
-    import { userRoles } from '../../stores/user';
+    import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
     $title = 'Bestand';
     $navBalance = 'hidden';
-
-    // flag for role ODERER
-    let isOrderer = false;
-
-    // check the access as soon as the userRoles update and
-    // check if the current user has the ORDERER role.
-    $: {
-        if ($userRoles) {
-            isOrderer = isAccessAllowed($userRoles, [Roles.ORDERER]);
-        }
-    }
 
     function onSelectItem(event) {
         goto(`/stock/item/${event.detail.id}`);
@@ -43,7 +32,13 @@
             isClickable={true}
         />
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-            <Button text="Bestand hinzufügen" class="button is-primary mt-6" href="/stock/item/new" size="full-width" />
+            <Button
+                text="Bestand hinzufügen"
+                class="button is-primary mt-6"
+                href="/stock/item/new"
+                size="full-width"
+                icon={mdiPlusBoxMultiple}
+            />
         </AuthorizeByRoles>
     </div>
 

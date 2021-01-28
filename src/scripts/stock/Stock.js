@@ -35,7 +35,7 @@ export default class Stock {
      * @param {string} id uuid of the item
      */
     static async removeItem(id) {
-        return Fetch.delete(`stock/${id}`, getAuthorizationHeader());
+        return Fetch.delete(`stock/${id}`, undefined, getAuthorizationHeader());
     }
 
     /**

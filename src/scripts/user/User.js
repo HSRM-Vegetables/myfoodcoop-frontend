@@ -1,18 +1,8 @@
-import Cookie from 'js-cookie';
-import jwtDecode from "jwt-decode";
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
-import { 
-    userName,
-    token as tokenStore,
-    tokenCreation,
-    tokenExpires,
-    userId as userIdStore,
-    userRoles,
-    refreshToken as refreshTokenStore
-} from '../../stores/user';
+import Tokens from './Tokens';
 import CookieDefaults from '../CookieDefaults';
 
-export default class User {
+export default class User { 
     /**
      * Register the user
      * @param {string} username username as defined by the user
@@ -33,12 +23,19 @@ export default class User {
      * Login the user in and request the jwt token
      * @param {string} username username of the user
      * @param {string} password password of the user
+     * @param {boolean} keepLoggedIn whether to keep the user logged in
      */
-    static async login(username, password) {
-        return Fetch.post('auth/login', {
+    static async login(username, password, keepLoggedIn) {
+        localStorage.setItem(CookieDefaults.KEEP_LOGGED_IN, keepLoggedIn);
+        
+        const response = await Fetch.post('auth/login', {
             username,
             password
         })
+
+        Tokens.handleTokens(response.token, response.refreshToken);
+
+        return response;
     }
     
     /**
@@ -46,8 +43,22 @@ export default class User {
      */
     static async getUser() {
         return Fetch.get(`user/`, getAuthorizationHeader());
-    }    
-    
+    }
+
+    /**
+     * Fetch the data of the current user
+     */
+    static async getUserById(userId) {
+        return Fetch.get(`user/${userId}`, getAuthorizationHeader());
+    }
+     
+    /**
+     * Deletes the given user
+     */
+    static async deleteUserById(userId) {
+        return Fetch.delete(`user/${userId}`, undefined, getAuthorizationHeader());
+    }
+
     /**
      * Add a role to the user
      * @param {string} userId unique user id of the user the role should be added to
@@ -63,41 +74,36 @@ export default class User {
      * @param {string} role name of the role which should be removed from the user
      */
     static async userDeleteRole(userId, role) {
-        return Fetch.delete(`user/${userId}/roles/${role}`, getAuthorizationHeader());
-    }
-
-    /**
-     * Decrypts the token and stores the details in the svelte store.
-     * Additionally saves the token as a cookie for later use.
-     * @param {string} token token initially obtained after a call to login
-     * @param {string} refreshToken refresh token initially obtained after a call to login
-     */
-    static handleTokens(token, refreshToken) {
-        tokenStore.set(token);
-        refreshTokenStore.set(refreshToken);
-
-        const decodedToken = jwtDecode(token);
-        userName.set(decodedToken.sub);
-        tokenCreation.set(new Date(parseFloat(decodedToken.iat) * 1000))
-
-        const tokenExpiryDate = new Date(parseFloat(decodedToken.exp) * 1000);
-        tokenExpires.set(tokenExpiryDate)
-
-        userIdStore.set(decodedToken.id);
-        userRoles.set(decodedToken.roles);
-
-        Cookie.set(CookieDefaults.TOKEN, token, { expires: tokenExpiryDate });
-        Cookie.set(CookieDefaults.REFRESH_TOKEN, refreshToken, { expires: tokenExpiryDate });
+        return Fetch.delete(`user/${userId}/roles/${role}`, undefined, getAuthorizationHeader());
     }
 
     /**
      * Request a new updated token.
      * In example this will also update all assoziated roles.
-     * @param {string} refreshToken RefreshToke which was initially provided during login
+     * @param {string} refreshToken refresh token which was initially provided during login
      */
-    static refreshToken(refreshToken) {
-        return Fetch.post(`auth/refresh`, {
+    static async refreshToken(refreshToken) {
+        // The content of the refreshToken Method should probably be locatet in this class.
+        // The Problem is that we would introduce a depency cycle between Fetch and User class, 
+        // becaus the Fetch class also wants to use this method.
+        // Svelte handles dependency cycles as warnings and eslint gives us an error.
+        // Thats why the content of this method was abstracted as best as possible an placed in Fetch,
+        // which is not ideal but one of the best ways (in this case) to solve this problem.
+        return Fetch.refreshToken(refreshToken);
+    }
+
+    /**
+     * Request a new updated token.
+     * In example this will also update all assoziated roles.
+     * @param {string} refreshToken refresh token which was initially provided during login
+     */
+    static async revokeAllRefreshTokensByUserId(userId) {
+        return Fetch.delete(`auth/refresh/all/${userId}`, undefined, getAuthorizationHeader());
+    }
+    
+    static async revokeRefreshToken(refreshToken) {
+        return Fetch.delete(`auth/refresh`, {
             refreshToken
-        }, getAuthorizationHeader());
+        }, undefined, getAuthorizationHeader());
     }
 }

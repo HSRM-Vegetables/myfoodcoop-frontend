@@ -7,6 +7,7 @@
 </script>
 
 <script>
+    import { mdiShoppingSearch } from '@mdi/js';
     import HistoryDetails from '../../components/history/HistoryDetails.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -22,6 +23,14 @@
     <HistoryDetails purchaseID={purchasId} />
 
     <div class="has-text-centered">
-        <Button text="Zur Einkaufshistorie" href="/history" class="button is-primary" size="full-width" />
+        <div>
+            <Button
+                href="/history"
+                text="Zur Einkaufshistorie"
+                class="is-primary mt6"
+                size="full-width"
+                icon={mdiShoppingSearch}
+            />
+        </div>
     </div>
 </AuthorizeByRoles>
