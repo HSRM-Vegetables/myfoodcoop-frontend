@@ -5,9 +5,12 @@
     import Button from '../../components/common/Button.svelte';
     import User from '../../scripts/user/User';
     import ErrorModal from '../../components/common/ErrorModal.svelte';
+    import Switch from '../../components/common/Switch.svelte';
+    import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
 
     const { page } = stores();
-    const { returnUrl } = $page.query;
+    // redirect to main page if no query parameter is provided
+    const { returnUrl = '/' } = $page.query;
 
     let userNameInput;
     let passwordInput;
@@ -23,8 +26,8 @@
     async function login() {
         isLoggingIn = true;
         try {
-            const response = await User.login(userNameInput.getValue(), passwordInput.getValue());
-            User.handleTokens(response.token, response.refreshToken);
+            await User.login(userNameInput.getValue(), passwordInput.getValue(), $keepLoggedIn);
+
             goto(returnUrl);
         } catch (error) {
             requestError = error;
@@ -76,6 +79,15 @@
     placeholder="Passwort"
     on:input={checkLoginStatus}
 />
+
+{#if $allowKeepLoggedIn}
+    <div class="columns is-mobile mt-3">
+        <div class="column">Eingeloggt bleiben?</div>
+        <div class="column has-text-right">
+            <Switch twoColor={true} bind:checked={$keepLoggedIn} />
+        </div>
+    </div>
+{/if}
 
 <p class="mt-3 mb-1">Noch nicht registriert? <a href="/profile/register">Dann hole das hier nach!</a></p>
 
