@@ -9,15 +9,15 @@
     import { stockItems } from '../../stores/stock';
 
     /**
-     * Stock item the form should be prefilled with
+     * Optional: The item whose values the form is pre-filled with
      */
     export let item;
 
     /**
-     * If true, the existing item is edited. Otherwise the item is used as a
-     * blueprint for a new item.
+     * If item is specified: Whether the form should edit the item (or,
+     * otherwise, only use as a blueprint for creating a new item)
      */
-    export let edit = true;
+    export let edit;
 
     /**
      * Link to go back
@@ -132,8 +132,9 @@
         }
 
         try {
-            if (!item && !edit) {
-                await Stock.addItem(
+            if (item && edit) {
+                await Stock.updateItem(
+                    item.id,
                     articleTextField.getValue(),
                     unitType,
                     pricePerUnitTextField.getValue(),
@@ -141,8 +142,7 @@
                     descriptionElement.value
                 );
             } else {
-                await Stock.updateItem(
-                    item.id,
+                await Stock.addItem(
                     articleTextField.getValue(),
                     unitType,
                     pricePerUnitTextField.getValue(),

@@ -32,8 +32,8 @@
 <AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
     <ErrorModal error={requestError} />
     {#if item}
-        <StockFiller item={item} edit={false} />
+        <StockFiller item={item} />
     {:else}
-        <StockFiller edit={false} />
+        <StockFiller />
     {/if}
 </AuthorizeByRoles>
