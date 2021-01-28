@@ -56,7 +56,7 @@ export default class User {
      * Deletes the given user
      */
     static async deleteUserById(userId) {
-        return Fetch.delete(`user/${userId}`, getAuthorizationHeader());
+        return Fetch.delete(`user/${userId}`, undefined, getAuthorizationHeader());
     }
 
     /**
@@ -98,12 +98,12 @@ export default class User {
      * @param {string} refreshToken refresh token which was initially provided during login
      */
     static async revokeAllRefreshTokensByUserId(userId) {
-        return Fetch.delete(`auth/refresh/all/${userId}`, getAuthorizationHeader());
+        return Fetch.delete(`auth/refresh/all/${userId}`, undefined, getAuthorizationHeader());
     }
     
     static async revokeRefreshToken(refreshToken) {
         return Fetch.delete(`auth/refresh`, {
             refreshToken
-        }, getAuthorizationHeader());
+        }, undefined, getAuthorizationHeader());
     }
 }
