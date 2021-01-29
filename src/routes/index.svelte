@@ -12,8 +12,9 @@
     } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
-    import { perishesSoonStockItems, arePerishesSoonStockItemsUpdating } from '../stores/stock';
+    import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
+    import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -119,11 +120,11 @@
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
-    <h2 class="pt-4 is-size-5 has-text-weight-bold">Bald verfallende Artikel:</h2>
+    <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
     <div class="has-text-centered mb-6">
         <StockList
-            bind:stockItems={$perishesSoonStockItems}
-            isLoading={$arePerishesSoonStockItemsUpdating}
+            stockItems={$spoilsSoonItems}
+            isLoading={$areStockItemsUpdating}
             isClickable={true}
             allowDetails={true}
             on:details={itemDetails}

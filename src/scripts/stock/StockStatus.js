@@ -4,7 +4,7 @@
 export const StockStatus = {
     ORDERED: 'ORDERED',
     INSTOCK: 'INSTOCK',
-    PERISHESSOON: 'PERISHESSOON',
+    SPOILSSOON: 'SPOILSSOON',
     OUTOFSTOCK: 'OUTOFSTOCK',
 }
 
@@ -21,12 +21,12 @@ export const StockStatusWithDescription = [
         descripton: 'Im Lager'
     },
     {
-        identifier: StockStatus.PERISHESSOON,
-        descripton: 'verfällt bald'
+        identifier: StockStatus.SPOILSSOON,
+        descripton: 'Verdirbt bald'
     },
     {
         identifier: StockStatus.OUTOFSTOCK,
-        descripton: 'nicht mehr im Lager'
+        descripton: 'Ausverkauft'
     },
 ]
 

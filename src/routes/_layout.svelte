@@ -1,13 +1,20 @@
 <script>
+    import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
     import BulmaGlobalStyles from '../components/BulmaGlobalStyles.svelte';
     import EnsureLogin from '../components/common/EnsureLogin.svelte';
     import Nav from '../components/Nav.svelte';
     import Appbar from '../components/Appbar.svelte';
+    import { stockItems } from '../stores/stock';
 
     const { page } = stores();
 
     let isLoggedIn;
+
+    onMount(async () => {
+        // force updates of stock items on page load
+        stockItems.forceUpdate();
+    });
 </script>
 
 <style>
