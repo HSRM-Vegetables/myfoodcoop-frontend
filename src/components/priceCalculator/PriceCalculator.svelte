@@ -8,6 +8,7 @@
     import TextField from '../common/TextField.svelte';
     import Button from '../common/Button.svelte';
     import { moneyStyler } from '../../scripts/Helper';
+    import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;
@@ -111,6 +112,11 @@
                 {moneyStyler(stockItem.pricePerUnit)}
                 {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
             </span>
+        </div>
+
+        <div class="columns is-mobile">
+            <div class="column">Artikel Status</div>
+            <div class="column has-text-right">{getLocalizedStockStatus(stockItem.stockStatus)}</div>
         </div>
 
         <div>

@@ -3,8 +3,19 @@ import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {
 
+    /**
+     * Gets all stock items
+     */
     static async getStockList() {
         return Fetch.get(`stock/`, getAuthorizationHeader());
+    }
+
+    /**
+     * Gets all stock items with the specified status
+     * @param {StockStatus} status stock status of items to be fetched
+     */
+    static async getStockListByStatus(status) {
+        return Fetch.get(`stock?filterByStatus=${status}`, getAuthorizationHeader());
     }
 
     /**
@@ -17,16 +28,18 @@ export default class Stock {
      * @param {String} quantity How many pieces of this item are available.
      * Will be parsed to an integer
      * @param {String} description Additional information for this item
+     * @param {StockStatus} status The current status of of this stock item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    static async addItem(name, unitType, pricePerUnit, quantity, description) {       
+    static async addItem(name, unitType, pricePerUnit, quantity, description, status) {       
         return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
-            'description': description
+            'description': description,
+            'stockStatus': status,
         }, getAuthorizationHeader());
     }
 
@@ -58,16 +71,18 @@ export default class Stock {
      * @param {String} quantity How many pieces of this item are available.
      * Will be parsed to an integer
      * @param {String} description Additional information for this item
+     * @param {StockStatus} status The current status of of this stock item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
-    static async updateItem(id, name, unitType, pricePerUnit, quantity, description) {
+    static async updateItem(id, name, unitType, pricePerUnit, quantity, description, status) {
         return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': moneyStyler(pricePerUnit),
             'quantity': moneyStyler(quantity),
-            'description': description
+            'description': description,
+            'stockStatus': status,
         }, getAuthorizationHeader());
     }
 

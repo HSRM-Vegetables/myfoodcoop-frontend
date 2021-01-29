@@ -4,8 +4,9 @@
     import StockList from '../../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Button from '../../../components/common/Button.svelte';
-    import { stockItems, areStockItemsUpdating } from '../../../stores/stock';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
+    import { inStockItems, spoilsSoonItems } from '../../../stores/stock';
+    import { getLocalizedStockStatus, StockStatus } from '../../../scripts/stock/StockStatus';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -22,18 +23,31 @@
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
-    <div class="has-text-centered mb-6">
+    {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
+        <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
         <StockList
-            bind:stockItems={$stockItems}
-            bind:isLoading={$areStockItemsUpdating}
+            stockItems={$spoilsSoonItems}
             allowDetails={true}
             on:details={itemDetails}
-            isClickable={true}
             on:select={itemSelected}
+            isClickable={true}
+            highlight={true}
         />
-    </div>
+        <hr />
+    {/if}
 
-    <hr />
+    {#if $inStockItems && $inStockItems.length > 0}
+        <!-- items that are in stock -->
+        <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
+        <StockList
+            stockItems={$inStockItems}
+            allowDetails={true}
+            on:details={itemDetails}
+            on:select={itemSelected}
+            isClickable={true}
+        />
+        <hr />
+    {/if}
 
     <div class="has-text-centered">
         <Button
