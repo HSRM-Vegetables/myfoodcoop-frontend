@@ -3,8 +3,19 @@ import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {
 
+    /**
+     * Gets all stock items
+     */
     static async getStockList() {
         return Fetch.get(`stock/`, getAuthorizationHeader());
+    }
+
+    /**
+     * Gets all stock items with the specified status
+     * @param {StockStatus} status stock status of items to be fetched
+     */
+    static async getStockListByStatus(status) {
+        return Fetch.get(`stock?filterByStatus=${status}`, getAuthorizationHeader());
     }
 
     /**

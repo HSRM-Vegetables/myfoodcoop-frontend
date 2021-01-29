@@ -12,7 +12,7 @@
     } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
-    import { stockItems, areStockItemsUpdating } from '../stores/stock';
+    import { perishesSoonStockItems, arePerishesSoonStockItemsUpdating } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
 
     /* eslint-disable prefer-const */
@@ -71,14 +71,6 @@
         },
     ];
 
-    let cutList = [];
-
-    $: {
-        if ($stockItems) {
-            cutList = $stockItems.slice(0, 3);
-        }
-    }
-
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
     }
@@ -127,11 +119,11 @@
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
-    <h2 class="pt-4 is-size-5 has-text-weight-bold">Neueste Artikel:</h2>
+    <h2 class="pt-4 is-size-5 has-text-weight-bold">Bald verfallende Artikel:</h2>
     <div class="has-text-centered mb-6">
         <StockList
-            bind:stockItems={cutList}
-            isLoading={$areStockItemsUpdating}
+            bind:stockItems={$perishesSoonStockItems}
+            isLoading={$arePerishesSoonStockItemsUpdating}
             isClickable={true}
             allowDetails={true}
             on:details={itemDetails}
