@@ -8,7 +8,7 @@
 
     const { page } = stores();
 
-    let isLoggedIn;
+    let isLoggedIn = false;
     let hasUpdatedStockAfterMount = false;
 
     $: {

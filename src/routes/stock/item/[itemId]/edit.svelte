@@ -1,7 +1,6 @@
 <script>
     import { stores } from '@sapper/app';
     import { onMount } from 'svelte';
-    import { mdiArrowLeft } from '@mdi/js';
     import ErrorModal from '../../../../components/common/ErrorModal.svelte';
     import StockFiller from '../../../../components/stock/StockFiller.svelte';
     import AuthorizeByRoles, { Roles } from '../../../../components/common/AuthorizeByRoles.svelte';
@@ -30,12 +29,6 @@
 <AuthorizeByRoles allowedRoles={[Roles.ORDERER]}>
     <ErrorModal error={requestError} />
     {#if item}
-        <StockFiller
-            item={item}
-            edit={true}
-            linkBack="/stock/item/{item.id}"
-            linkBackText="zurück"
-            icon={mdiArrowLeft}
-        />
+        <StockFiller item={item} edit={true} linkBack="/stock/item/{item.id}" linkBackText="zurück" />
     {/if}
 </AuthorizeByRoles>
