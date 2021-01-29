@@ -153,6 +153,8 @@
         certificates = item.certificates;
         sustainablyProduced = item.sustainablyProduced;
         originCategory = item.originCategory;
+        deliveryDate = item.deliveryDate;
+        orderDate = item.orderDate;
     }
 
     /**
