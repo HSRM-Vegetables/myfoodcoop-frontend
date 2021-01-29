@@ -6,6 +6,13 @@
     export let isClickable = false;
 
     /**
+     * Defines the size of the component.
+     * One of: medium, small
+     * Default: medium
+     */
+    export let size = 'medium';
+
+    /*
      * Defines if the item should be highlighted
      * Default: false
      */
@@ -23,6 +30,11 @@
         margin-top: 20px;
     }
 
+    .small {
+        margin-top: 5px;
+        padding: 0.75rem;
+    }
+
     .highlight {
         box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(255, 0, 0, 0.4);
     }
@@ -32,6 +44,6 @@
     }
 </style>
 
-<div class="list-item" class:is-clickable={isClickable} class:highlight on:click>
+<div class="list-item" class:is-clickable={isClickable} class:highlight class:small={size === 'small'} on:click>
     <slot />
 </div>

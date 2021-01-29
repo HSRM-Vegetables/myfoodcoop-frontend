@@ -1,7 +1,13 @@
 <script>
     import { goto } from '@sapper/app';
+    import { DateTime } from 'luxon';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil } from '@mdi/js';
+    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
+    import { slide } from 'svelte/transition';
+    import { elasticInOut } from 'svelte/easing';
     import { UnitType } from '../../scripts/UnitType';
+    import { CalendarStyle } from '../../scripts/CalendarStyle';
+    import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
@@ -9,6 +15,7 @@
     import Button from '../common/Button.svelte';
     import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
+    import ListItem from '../common/ListItem.svelte';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -36,14 +43,23 @@
     let pricePerUnitTextField;
     let quantityTextField;
     let articleTextField;
+    let producerTextField;
+    let supplierTextField;
     let descriptionElement;
     let unitType = UnitType.KILO;
     let unitTypeBoolean = false;
+    let sustainablyProduced = true;
+    let certificates = [];
+    let originCategory = OriginCategory.UNKNOWN;
+    let deliveryDate;
+    let orderDate;
     let selectedStatus = StockStatus.ORDERED;
 
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
     let quantityTextFieldError = false;
+    let producerTextFieldError = false;
+    let supplierTextFieldError = false;
     let errorHint;
 
     let requestError;
@@ -80,6 +96,8 @@
         articleTextFieldError = false;
         pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
+        producerTextFieldError = false;
+        supplierTextFieldError = false;
 
         // No name set
         if (!articleTextField || !articleTextField.getValue()) {
@@ -112,7 +130,20 @@
             errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
         }
 
-        if (articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError) {
+        if (!producerTextField || !producerTextField.getValue() || producerTextField.getValue() < 0) {
+            producerTextFieldError = true;
+        }
+
+        if (!supplierTextField || !supplierTextField.getValue()) {
+            supplierTextFieldError = true;
+        }
+        if (
+            articleTextFieldError ||
+            pricePerUnitTextFieldError ||
+            quantityTextFieldError ||
+            producerTextFieldError ||
+            supplierTextFieldError
+        ) {
             return false;
         }
 
@@ -130,11 +161,15 @@
 
         if (stockItem.unitType === UnitType.KILO) {
             unitTypeBoolean = true;
-
             // force update of unit type
             untiTypeChanged(unitTypeBoolean);
         }
 
+        certificates = item.certificates;
+        sustainablyProduced = item.sustainablyProduced;
+        originCategory = item.originCategory;
+        deliveryDate = item.deliveryDate;
+        orderDate = item.orderDate;
         selectedStatus = stockItem.stockStatus;
     }
 
@@ -156,6 +191,13 @@
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
                     descriptionElement.value,
+                    sustainablyProduced.valueOf(),
+                    certificates,
+                    originCategory,
+                    producerTextField.getValue(),
+                    supplierTextField.getValue(),
+                    orderDate,
+                    deliveryDate,
                     selectedStatus
                 );
             } else {
@@ -165,6 +207,13 @@
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
                     descriptionElement.value,
+                    sustainablyProduced.valueOf(),
+                    certificates,
+                    originCategory,
+                    producerTextField.getValue(),
+                    supplierTextField.getValue(),
+                    orderDate,
+                    deliveryDate,
                     selectedStatus
                 );
             }
@@ -187,6 +236,32 @@
         pricePerUnitTextField.clear();
         quantityTextField.clear();
         descriptionElement.value = '';
+        pricePerUnitTextField.clear();
+        producerTextField.clear();
+        articleTextField.clear();
+        originCategory = OriginCategory.UNKNOWN;
+        certificates = [];
+    }
+    /**
+     * Certificates List
+     */
+    let inputCertificates = '';
+    function addCertificates() {
+        if (inputCertificates) certificates = [...certificates, inputCertificates];
+        inputCertificates = '';
+    }
+
+    function removeCertificates(name) {
+        const index = certificates.findIndex((certificate) => certificate === name);
+        certificates.splice(index, 1);
+        certificates = certificates;
+    }
+
+    function setOrderDate(date) {
+        orderDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+    }
+    function setDeliveryDate(date) {
+        deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
     }
 </script>
 
@@ -198,6 +273,11 @@
 
     .auto-margin {
         margin: auto;
+    }
+
+    .dropdown {
+        -moz-appearance: auto;
+        -webkit-appearance: auto;
     }
 </style>
 
@@ -253,10 +333,101 @@
                 value={item ? item.quantity : ''}
             />
         </div>
+        <hr />
+        <div class="columns pt-4 is-mobile">
+            <div class="column">Nachhaltig Produziert</div>
+            <div class="column has-text-right">
+                <Switch bind:checked={sustainablyProduced} twoColor={true} />
+            </div>
+        </div>
+        <div class="mb-2">
+            <div class="has-text-left pb-2">Zertifikate</div>
+            <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
+                <div class="control" style="width: 100%;">
+                    <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
+                </div>
+                <div class="control">
+                    <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
+                </div>
+            </form>
+            {#each certificates as certificate}
+                <div transition:slide={{ duration: 300, easing: elasticInOut }}>
+                    <ListItem size="small">
+                        <div class="columns" style="align-items: center">
+                            <div class="is-pulled-left column">{certificate}</div>
+                            <div class="column has-text-right">
+                                <Button
+                                    text="Löschen"
+                                    class="button is-danger"
+                                    icon={mdiDelete}
+                                    on:click={() => removeCertificates(certificate)}
+                                />
+                            </div>
+                        </div>
+                    </ListItem>
+                </div>
+            {/each}
+        </div>
+        <div class="pt-4">
+            <div class="has-text-left pb-2">Herkunftskategorie</div>
+            <select class="input dropdown" bind:value={originCategory}>
+                {#each OriginCategoryWithDescription as categorys}
+                    <option value={categorys.identifier}>{categorys.descripton}</option>
+                {/each}
+            </select>
+        </div>
+        <hr />
+        <div class="pt-1">
+            <TextField
+                bind:this={producerTextField}
+                type="text"
+                placeholder="Erzeuger"
+                label="Erzeuger"
+                isInErrorState={producerTextFieldError}
+                charLimit="250"
+                value={item ? item.producer : ''}
+            />
+        </div>
+        <div class="pt-4">
+            <TextField
+                bind:this={supplierTextField}
+                type="text"
+                placeholder="Lieferant"
+                label="Lieferant"
+                isInErrorState={supplierTextFieldError}
+                charLimit="250"
+                value={item ? item.supplier : ''}
+            />
+        </div>
+        <div class="pt-5 pb-2">
+            <div class="columns has-text-centered">
+                <div class="column">
+                    <div class="pb-2">Lieferdatum</div>
+                    <DatePicker
+                        placeholder="Wähle einen Zeitraum"
+                        format="DD.MM.YYYY"
+                        styling={new CalendarStyle()}
+                        on:date-selected={(e) => setOrderDate(e.detail.date)}
+                        selected={item ? item.orderDate : ''}
+                    />
+                </div>
+                <div class="column">
+                    <div class="pb-2 ">Bestelldatum</div>
+                    <DatePicker
+                        placeholder="Wähle einen Zeitraum"
+                        continueText="Bestätigen"
+                        format="DD.MM.YYYY"
+                        styling={new CalendarStyle()}
+                        on:date-selected={(e) => setDeliveryDate(e.detail.date)}
+                        selected={item ? item.deliveryDate : ''}
+                    />
+                </div>
+            </div>
+        </div>
         <div>
             <div class="pt-4">
                 <div class="has-text-left pb-2">Artikel Status</div>
-                <select class="input select" bind:value={selectedStatus}>
+                <select class="input dropdown" bind:value={selectedStatus}>
                     {#each StockStatusWithDescription as status}
                         <option value={status.identifier}>{status.descripton}</option>
                     {/each}
@@ -269,6 +440,7 @@
                 <textarea
                     class="textarea"
                     placeholder="Beschreibung"
+                    continueText="Bestätigen"
                     bind:this={descriptionElement}
                 >{item ? item.description : ''}</textarea>
             </div>

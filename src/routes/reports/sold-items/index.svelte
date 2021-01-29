@@ -11,6 +11,7 @@
     import Icon from '../../../components/common/Icon.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
+    import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
@@ -26,7 +27,6 @@
     let selectedPeriod = 'yesterday';
     const cache = [];
     const periods = calcPeriods();
-
     let localFrom;
     let localTo;
 
@@ -164,6 +164,7 @@
                 placeholder="Wähle einen Zeitraum"
                 format="DD.MM.YYYY"
                 range={true}
+                styling={new CalendarStyle()}
                 on:range-selected={(e) => datePicker(e.detail)}
                 end={DateTime.local().toJSDate()}
             />
