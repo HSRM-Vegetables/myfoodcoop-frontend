@@ -34,6 +34,12 @@
      */
     export let showDescription = true;
 
+    /**
+     * Defines if the items should be highlighted
+     * Default: false
+     */
+    export let highlight = false;
+
     const selectEvent = createEventDispatcher();
 
     function selectItem(event, itemId) {
@@ -77,7 +83,7 @@
     <Loader bind:isLoading />
 {:else if stockItems && stockItems.length > 0}
     {#each stockItems as item}
-        <ListItem isClickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
+        <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
                 {#if allowDetails}

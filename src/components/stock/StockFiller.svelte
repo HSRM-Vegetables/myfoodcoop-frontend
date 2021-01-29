@@ -13,19 +13,22 @@
     import Switch from '../common/Switch.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Button from '../common/Button.svelte';
+    import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
 
     /**
      * Optional: The item whose values the form is pre-filled with
      */
-    export let item;
+    // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
+    // eslint-disable-next-line no-undef-init
+    export let item = undefined;
 
     /**
      * If item is specified: Whether the form should edit the item (or,
      * otherwise, only use as a blueprint for creating a new item)
      */
-    export let edit;
+    export let edit = false;
 
     /**
      * Link to go back
@@ -43,13 +46,14 @@
     let producerTextField;
     let supplierTextField;
     let descriptionElement;
-    let unitType = UnitType.PIECE;
-    let unitTypeBoolean = true;
+    let unitType = UnitType.KILO;
+    let unitTypeBoolean = false;
     let sustainablyProduced = true;
     let certificates = [];
     let originCategory = OriginCategory.UNKNOWN;
     let deliveryDate;
     let orderDate;
+    let selectedStatus = StockStatus.ORDERED;
 
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
@@ -58,13 +62,22 @@
     let supplierTextFieldError = false;
     let errorHint;
 
+    let requestError;
+    let saveText;
+
+    if (edit) {
+        saveText = 'Änderungen speichern';
+    } else if (item) {
+        saveText = 'Artikel neu erstellen';
+    } else {
+        saveText = 'Artikel erstellen';
+    }
+
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
 
     // call the method as soon as the value of item changes
     $: itemChanged(item);
-
-    let requestError;
 
     /**
      * Update the unit type which should be displayed
@@ -151,11 +164,13 @@
             // force update of unit type
             untiTypeChanged(unitTypeBoolean);
         }
+
         certificates = item.certificates;
         sustainablyProduced = item.sustainablyProduced;
         originCategory = item.originCategory;
         deliveryDate = item.deliveryDate;
         orderDate = item.orderDate;
+        selectedStatus = stockItem.stockStatus;
     }
 
     /**
@@ -182,7 +197,8 @@
                     producerTextField.getValue(),
                     supplierTextField.getValue(),
                     orderDate,
-                    deliveryDate
+                    deliveryDate,
+                    selectedStatus
                 );
             } else {
                 await Stock.addItem(
@@ -197,7 +213,8 @@
                     producerTextField.getValue(),
                     supplierTextField.getValue(),
                     orderDate,
-                    deliveryDate
+                    deliveryDate,
+                    selectedStatus
                 );
             }
 
@@ -407,6 +424,16 @@
                 </div>
             </div>
         </div>
+        <div>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Artikel Status</div>
+                <select class="input select" bind:value={selectedStatus}>
+                    {#each StockStatusWithDescription as status}
+                        <option value={status.identifier}>{status.descripton}</option>
+                    {/each}
+                </select>
+            </div>
+        </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
             <div class="form-row is-relative">
@@ -421,7 +448,7 @@
         <hr />
         <div class="container has-text-centered">
             <Button
-                text={edit ? 'Änderung speichern' : 'Artikel neu bestellen'}
+                text={saveText}
                 on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
                 icon={item ? mdiPencil : mdiPlusBoxMultiple}

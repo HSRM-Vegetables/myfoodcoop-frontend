@@ -37,11 +37,11 @@ export default class User {
 
         return response;
     }
-    
+
     /**
-     * Fetch the data of the current user
+     * Fetch the data of all users
      */
-    static async getUser() {
+    static async getAllUsers() {
         return Fetch.get(`user/`, getAuthorizationHeader());
     }
 
@@ -92,15 +92,6 @@ export default class User {
         return Fetch.refreshToken(refreshToken);
     }
 
-    /**
-     * Request a new updated token.
-     * In example this will also update all assoziated roles.
-     * @param {string} refreshToken refresh token which was initially provided during login
-     */
-    static async revokeAllRefreshTokensByUserId(userId) {
-        return Fetch.delete(`auth/refresh/all/${userId}`, undefined, getAuthorizationHeader());
-    }
-    
     static async revokeRefreshToken(refreshToken) {
         return Fetch.delete(`auth/refresh`, {
             refreshToken

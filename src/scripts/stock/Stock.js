@@ -3,8 +3,19 @@ import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {
 
+    /**
+     * Gets all stock items
+     */
     static async getStockList() {
         return Fetch.get(`stock/`, getAuthorizationHeader());
+    }
+
+    /**
+     * Gets all stock items with the specified status
+     * @param {StockStatus} status stock status of items to be fetched
+     */
+    static async getStockListByStatus(status) {
+        return Fetch.get(`stock?filterByStatus=${status}`, getAuthorizationHeader());
     }
 
     /**
@@ -25,11 +36,12 @@ export default class Stock {
      * @param {String} supplier from the item
      * @param {String} orderDate from the item
      * @param {String} deliveryDate from the item
+     * @param {StockStatus} status The current status of of this stock item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
     static async addItem(name, unitType, pricePerUnit, quantity, description,
-        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate,deliveryDate) {       
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status) {       
         return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
@@ -42,7 +54,8 @@ export default class Stock {
             'producer': producer,
             'supplier': supplier,
             'orderDate': orderDate,
-            'deliveryDate': deliveryDate
+            'deliveryDate': deliveryDate,
+            'stockStatus': status,
         }, getAuthorizationHeader());
     }
 
@@ -81,11 +94,12 @@ export default class Stock {
      * @param {String} supplier from the item
      * @param {String} orderDate from the item
      * @param {String} deliveryDate from the item
+     * @param {StockStatus} status The current status of of this stock item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
     static async updateItem(id, name, unitType, pricePerUnit, quantity, description,
-        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate,deliveryDate) {
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status) {
         return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
@@ -98,7 +112,8 @@ export default class Stock {
             'producer': producer,
             'supplier': supplier,
             'orderDate': orderDate,
-            'deliveryDate': deliveryDate
+            'deliveryDate': deliveryDate,
+            'stockStatus': status,
         }, getAuthorizationHeader());
     }
 
