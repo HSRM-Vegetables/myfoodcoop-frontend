@@ -64,6 +64,9 @@
         try {
             isReloading = true;
             await Fetch.refreshToken($refreshToken);
+
+            // update UserDetails View
+            userDetails.forceUpdate();
         } catch (error) {
             // catch errors, but do not show it to the user
         } finally {
