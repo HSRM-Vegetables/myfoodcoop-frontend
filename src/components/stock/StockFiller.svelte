@@ -16,9 +16,15 @@
     import { stockItems } from '../../stores/stock';
 
     /**
-     * Stock item the form should be prefilled with, if undefined no values are prefilled
+     * Optional: The item whose values the form is pre-filled with
      */
     export let item;
+
+    /**
+     * If item is specified: Whether the form should edit the item (or,
+     * otherwise, only use as a blueprint for creating a new item)
+     */
+    export let edit;
 
     /**
      * Link to go back
@@ -159,8 +165,9 @@
         }
 
         try {
-            if (!item) {
-                await Stock.addItem(
+            if (item && edit) {
+                await Stock.updateItem(
+                    item.id,
                     articleTextField.getValue(),
                     unitType,
                     pricePerUnitTextField.getValue(),
@@ -175,8 +182,7 @@
                     deliveryDate
                 );
             } else {
-                await Stock.updateItem(
-                    item.id,
+                await Stock.addItem(
                     articleTextField.getValue(),
                     unitType,
                     pricePerUnitTextField.getValue(),
@@ -420,7 +426,7 @@
         <hr />
         <div class="container has-text-centered">
             <Button
-                text="Bestand {item ? 'aktualisieren' : 'hinzufügen'}"
+                text={edit ? 'Änderung speichern' : 'Artikel neu bestellen'}
                 on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
                 icon={item ? mdiPencil : mdiPlusBoxMultiple}

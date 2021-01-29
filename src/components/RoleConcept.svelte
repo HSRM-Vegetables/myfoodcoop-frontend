@@ -1,45 +1,37 @@
 <script>
-    import User from '../scripts/user/User';
-    import { refreshToken, userId, userRoles } from '../stores/user';
+    import { createEventDispatcher } from 'svelte';
     import Switch from './common/Switch.svelte';
     import ErrorModal from './common/ErrorModal.svelte';
+    import { Roles } from '../scripts/roles/Roles';
 
+    export let user;
+
+    const onRoleUpdate = createEventDispatcher();
     let requestError;
 
     const buttons = [
         {
             name: 'Member',
-            enum: 'MEMBER',
+            enum: Roles.MEMBER,
         },
         {
             name: 'Treasurer',
-            enum: 'TREASURER',
+            enum: Roles.TREASURER,
         },
         {
             name: 'Admin',
-            enum: 'ADMIN',
+            enum: Roles.ADMIN,
         },
         {
             name: 'Orderer',
-            enum: 'ORDERER',
+            enum: Roles.ORDERER,
         },
     ];
 
     async function changeRoles(enumValue) {
-        try {
-            if ($userRoles.includes(enumValue)) {
-                await User.userDeleteRole($userId, enumValue);
-            } else {
-                await User.userAddRole($userId, enumValue);
-            }
-
-            // The user roles are stored in the jwt token.
-            // As we have now changed the roles, we need to update the token.
-            const response = await User.refreshToken($refreshToken);
-            User.handleTokens(response.token, response.refreshToken);
-        } catch (error) {
-            requestError = error;
-        }
+        onRoleUpdate('roleUpdate', {
+            role: enumValue,
+        });
     }
 </script>
 
@@ -52,7 +44,7 @@
         <div class="column has-text-right">
             <Switch
                 twoColor={true}
-                checked={$userRoles.includes(button.enum)}
+                checked={user.roles.includes(button.enum)}
                 on:click={() => changeRoles(button.enum)}
             />
         </div>

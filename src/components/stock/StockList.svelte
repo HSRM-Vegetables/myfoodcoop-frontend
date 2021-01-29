@@ -4,6 +4,7 @@
     import { moneyStyler, stopPropagation } from '../../scripts/Helper';
     import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
+    import ListItem from '../common/ListItem.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
 
@@ -63,23 +64,10 @@
 </script>
 
 <style>
-    .shoppingElement {
-        background-color: white;
-        border-radius: 6px;
-        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-        color: #000;
-        display: block;
-        padding: 1.25rem;
-        margin-top: 20px;
-    }
-
     .breakwords {
         word-break: break-all;
     }
 
-    .is-clickable {
-        cursor: pointer;
-    }
     .has-text-right span {
         float: right;
     }
@@ -89,7 +77,7 @@
     <Loader bind:isLoading />
 {:else if stockItems && stockItems.length > 0}
     {#each stockItems as item}
-        <div class="shoppingElement" class:is-clickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
+        <ListItem isClickable={isClickable} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns is-mobile">
                 {#if allowDetails}
@@ -125,7 +113,7 @@
                     <div class="column has-text-justified">{displayDescription(item)}</div>
                 </div>
             {/if}
-        </div>
+        </ListItem>
     {/each}
 {:else}
     <NoData text="Der Bestand ist leer" />

@@ -111,6 +111,12 @@
             <hr />
             <div class="container has-text-centered">
                 <Button
+                    text="Artikel neu bestellen"
+                    size="full-width"
+                    class="is-warning mb-3"
+                    on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
+                />
+                <Button
                     text="Artikel bearbeiten"
                     size="full-width"
                     class="is-primary mb-3"
