@@ -1,6 +1,6 @@
 <script>
     import Cookie from 'js-cookie';
-    import { mdiLogout } from '@mdi/js';
+    import { mdiLogout, mdiRefresh } from '@mdi/js';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { userName, allowKeepLoggedIn, refreshToken, tokenExpires, refreshTokenExpires } from '../../stores/user';
@@ -10,6 +10,7 @@
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Switch from '../../components/common/Switch.svelte';
     import User from '../../scripts/user/User';
+    import Fetch from '../../scripts/api/Fetch';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -17,6 +18,7 @@
     $navBalance = 'show';
 
     let isLoggingOut = false;
+    let isReloading = false;
 
     $: {
         // disallow of the future use of the keep logged in workflow
@@ -57,6 +59,17 @@
             isLoggingOut = false;
         }
     }
+
+    async function reloadUserData() {
+        try {
+            isReloading = true;
+            await Fetch.refreshToken($refreshToken);
+        } catch (error) {
+            // catch errors, but do not show it to the user
+        } finally {
+            isReloading = false;
+        }
+    }
 </script>
 
 <div class="is-size-3 has-text-weight-bold pb-5">{$userName}</div>
@@ -81,6 +94,15 @@
     </AuthorizeByRoles>
 
     <div class="container has-text-centered mt-6">
+        <Button
+            text="Benutzerdaten neu laden"
+            class="is-primary mb-3"
+            on:click={reloadUserData}
+            size="full-width"
+            isLoading={isReloading}
+            icon={mdiRefresh}
+        />
+        <br />
         <Button
             text="Ausloggen"
             class="is-danger mb-3"
