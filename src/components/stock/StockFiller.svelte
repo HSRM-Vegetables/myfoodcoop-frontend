@@ -427,7 +427,7 @@
         <div>
             <div class="pt-4">
                 <div class="has-text-left pb-2">Artikel Status</div>
-                <select class="input select" bind:value={selectedStatus}>
+                <select class="input dropdown" bind:value={selectedStatus}>
                     {#each StockStatusWithDescription as status}
                         <option value={status.identifier}>{status.descripton}</option>
                     {/each}

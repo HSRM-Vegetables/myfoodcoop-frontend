@@ -120,8 +120,10 @@
             <div class="column">{DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy')}</div>
         </div>
 
-        <div class="mb-1">Beschreibung:</div>
-        {item.description}
+        {#if item.description}
+            <div class="mb-1">Beschreibung:</div>
+            <span>{item.description}</span>
+        {/if}
     </div>
 
     <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
