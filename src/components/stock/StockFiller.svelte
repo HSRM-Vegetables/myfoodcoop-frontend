@@ -13,13 +13,15 @@
     /**
      * Optional: The item whose values the form is pre-filled with
      */
-    export let item;
+    // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
+    // eslint-disable-next-line no-undef-init
+    export let item = undefined;
 
     /**
      * If item is specified: Whether the form should edit the item (or,
      * otherwise, only use as a blueprint for creating a new item)
      */
-    export let edit;
+    export let edit = false;
 
     /**
      * Link to go back
@@ -44,13 +46,22 @@
     let quantityTextFieldError = false;
     let errorHint;
 
+    let requestError;
+    let saveText;
+
+    if (edit) {
+        saveText = 'Änderungen speichern';
+    } else if (item) {
+        saveText = 'Artikel neu erstellen';
+    } else {
+        saveText = 'Artikel erstellen';
+    }
+
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
 
     // call the method as soon as the value of item changes
     $: itemChanged(item);
-
-    let requestError;
 
     /**
      * Update the unit type which should be displayed
@@ -265,7 +276,7 @@
         <hr />
         <div class="container has-text-centered">
             <Button
-                text={edit ? 'Änderung speichern' : 'Artikel neu bestellen'}
+                text={saveText}
                 on:click={addOrUpadteItem}
                 class="button is-primary mb-4"
                 icon={item ? mdiPencil : mdiPlusBoxMultiple}
