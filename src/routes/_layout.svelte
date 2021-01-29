@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
     import BulmaGlobalStyles from '../components/BulmaGlobalStyles.svelte';
     import EnsureLogin from '../components/common/EnsureLogin.svelte';
@@ -10,11 +9,15 @@
     const { page } = stores();
 
     let isLoggedIn;
+    let hasUpdatedStockAfterMount = false;
 
-    onMount(async () => {
-        // force updates of stock items on page load
-        stockItems.forceUpdate();
-    });
+    $: {
+        if (isLoggedIn && !hasUpdatedStockAfterMount) {
+            // update stock items after page load and after the user is logged in
+            stockItems.forceUpdate();
+            hasUpdatedStockAfterMount = true;
+        }
+    }
 </script>
 
 <style>
