@@ -32,6 +32,9 @@
 
     onMount(() => {
         isMounted = true;
+
+        // check the login status after page load
+        checkLogin($page);
     });
 
     async function checkLogin(pageLocal) {
