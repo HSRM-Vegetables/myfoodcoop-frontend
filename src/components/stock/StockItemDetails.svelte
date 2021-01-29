@@ -70,6 +70,11 @@
     <div class="box">{item.description}</div>
 
     <div class="columns is-mobile">
+        <div class="column">Artikel Status</div>
+        <div class="column has-text-right">{item.stockStatus}</div>
+    </div>
+
+    <div class="columns is-mobile">
         <div class="column">Warenpreis</div>
         <div class="column has-text-right">
             {#if item.unitType === UnitType.PIECE}

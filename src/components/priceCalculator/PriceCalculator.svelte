@@ -113,6 +113,11 @@
             </span>
         </div>
 
+        <div class="columns is-mobile">
+            <div class="column">Artikel Status</div>
+            <div class="column has-text-right">{stockItem.stockStatus}</div>
+        </div>
+
         <div>
             <TextField
                 label="Menge"

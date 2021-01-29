@@ -7,6 +7,7 @@
     import Switch from '../common/Switch.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Button from '../common/Button.svelte';
+    import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
 
     /**
@@ -36,6 +37,7 @@
     let descriptionElement;
     let unitType = UnitType.KILO;
     let unitTypeBoolean = false;
+    let selectedStatus = StockStatus.ORDERED;
 
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
@@ -121,6 +123,8 @@
             // force update of unit type
             untiTypeChanged(unitTypeBoolean);
         }
+
+        selectedStatus = stockItem.stockStatus;
     }
 
     /**
@@ -140,7 +144,8 @@
                     unitType,
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
-                    descriptionElement.value
+                    descriptionElement.value,
+                    selectedStatus
                 );
             } else {
                 await Stock.addItem(
@@ -148,7 +153,8 @@
                     unitType,
                     pricePerUnitTextField.getValue(),
                     quantityTextField.getValue(),
-                    descriptionElement.value
+                    descriptionElement.value,
+                    selectedStatus
                 );
             }
 
@@ -235,6 +241,16 @@
                 isInErrorState={quantityTextFieldError}
                 value={item ? item.quantity : ''}
             />
+        </div>
+        <div>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Artikel Status</div>
+                <select class="input select" bind:value={selectedStatus}>
+                    {#each StockStatusWithDescription as status}
+                        <option value={status.identifier}>{status.descripton}</option>
+                    {/each}
+                </select>
+            </div>
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Beschreibung</div>
