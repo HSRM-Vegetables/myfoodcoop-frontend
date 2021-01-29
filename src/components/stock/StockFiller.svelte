@@ -14,6 +14,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Button from '../common/Button.svelte';
     import { stockItems } from '../../stores/stock';
+    import ListItem from '../common/ListItem.svelte';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -256,15 +257,7 @@
     .auto-margin {
         margin: auto;
     }
-    li.list-item {
-        background-color: white;
-        border-radius: 6px;
-        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-        color: #000;
-        display: block;
-        padding: 1.25rem;
-        margin-top: 20px;
-    }
+
     .dropdown {
         -moz-appearance: auto;
         -webkit-appearance: auto;
@@ -330,7 +323,7 @@
                 <Switch bind:checked={sustainablyProduced} twoColor={true} />
             </div>
         </div>
-        <div>
+        <div class="mb-2">
             <div class="has-text-left pb-2">Zertifikate</div>
             <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
                 <div class="control" style="width: 100%;">
@@ -339,10 +332,10 @@
                 <div class="control">
                     <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
                 </div>
-            </form><br />
-            <ul class:list={certificates.length > 0}>
-                {#each certificates as certificate}
-                    <li class="list-item" transition:slide={{ duration: 300, easing: elasticInOut }}>
+            </form>
+            {#each certificates as certificate}
+                <div transition:slide={{ duration: 300, easing: elasticInOut }}>
+                    <ListItem size="small">
                         <div class="columns" style="align-items: center">
                             <div class="is-pulled-left column">{certificate}</div>
                             <div class="column has-text-right">
@@ -354,9 +347,9 @@
                                 />
                             </div>
                         </div>
-                    </li>
-                {/each}
-            </ul>
+                    </ListItem>
+                </div>
+            {/each}
         </div>
         <div class="pt-4">
             <div class="has-text-left pb-2">Herkunftskategorie</div>
@@ -367,7 +360,7 @@
             </select>
         </div>
         <hr />
-        <div class="pt-4">
+        <div class="pt-1">
             <TextField
                 bind:this={producerTextField}
                 type="text"

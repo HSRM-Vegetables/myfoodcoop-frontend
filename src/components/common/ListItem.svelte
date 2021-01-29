@@ -1,5 +1,12 @@
 <script>
     export let isClickable = false;
+
+    /**
+     * Defines the size of the component.
+     * One of: medium, small
+     * Default: medium
+     */
+    export let size = 'medium';
 </script>
 
 <style>
@@ -13,11 +20,16 @@
         margin-top: 20px;
     }
 
+    .small {
+        margin-top: 5px;
+        padding: 0.75rem;
+    }
+
     .is-clickable {
         cursor: pointer;
     }
 </style>
 
-<div class="list-item" class:is-clickable={isClickable} on:click>
+<div class="list-item" class:is-clickable={isClickable} class:small={size === 'small'} on:click>
     <slot />
 </div>

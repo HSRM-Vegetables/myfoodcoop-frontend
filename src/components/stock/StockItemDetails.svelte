@@ -8,7 +8,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
     import { stockItems } from '../../stores/stock';
-    import { OriginCategoryWithDescription } from '../../scripts/OriginCategory';
+    import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
     import { moneyStyler } from '../../scripts/Helper';
     import Button from '../common/Button.svelte';
 
@@ -87,22 +87,16 @@
         <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
     </div>
     <hr />
-    Information:
+    <span>Information:</span>
     <div class="box">
         <div class="columns is-mobile">
             <div class="column">Herkunftskategorie:</div>
-            <div class="column">
-                {#each OriginCategoryWithDescription as categorys}
-                    {#if item.originCategory === categorys.identifier}{categorys.descripton}{/if}
-                {/each}
-            </div>
+            <div class="column">{getLocalizedOriginCategory(item.originCategory)}</div>
         </div>
         {#if item.certificates !== []}
             <div class="columns is-mobile">
                 <div class="column">Zertifikate:</div>
-                <div class="column">
-                    {#each item.certificates as i}| {i} |{/each}
-                </div>
+                <div class="column">{item.certificates.join(' | ')}</div>
             </div>
         {/if}
         <div class="columns is-mobile">
