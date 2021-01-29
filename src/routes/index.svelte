@@ -120,21 +120,24 @@
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
-    <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
-    <div class="has-text-centered mb-6">
-        <StockList
-            stockItems={$spoilsSoonItems}
-            isLoading={$areStockItemsUpdating}
-            isClickable={true}
-            allowDetails={true}
-            on:details={itemDetails}
-            on:select={itemSelected}
-            showDescription={false}
-        />
-    </div>
+    {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
+        <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
+        <div class="has-text-centered mb-6">
+            <StockList
+                stockItems={$spoilsSoonItems}
+                isLoading={$areStockItemsUpdating}
+                isClickable={true}
+                allowDetails={true}
+                on:details={itemDetails}
+                on:select={itemSelected}
+                showDescription={false}
+            />
+        </div>
+
+        <hr />
+    {/if}
 </AuthorizeByRoles>
 
-<hr />
 <h2 class="is-size-5 has-text-weight-bold">Funktionen:</h2>
 
 <div class="icon-box">
