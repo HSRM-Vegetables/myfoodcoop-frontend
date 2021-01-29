@@ -8,7 +8,7 @@
     import TextField from '../../components/common/TextField.svelte';
     import UserListItem from '../../components/user/UserListItem.svelte';
     import Loader from '../../components/common/Loader.svelte';
-    import UserList from '../../scripts/user/UserList';
+    import User from '../../scripts/user/User';
     import Button from '../../components/common/Button.svelte';
 
     /* eslint-disable prefer-const */
@@ -43,7 +43,7 @@
     onMount(async () => {
         try {
             // allUsers = await UserList.getActivatedUsers();
-            allUsers = await UserList.getAllUsers();
+            allUsers = await User.getAllUsers();
             allUsers = allUsers.users;
 
             notActivatedUsers = allUsers.filter((user) => user.roles.length === 0);

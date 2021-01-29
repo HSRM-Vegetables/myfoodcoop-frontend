@@ -37,11 +37,11 @@ export default class User {
 
         return response;
     }
-    
+
     /**
-     * Fetch the data of the current user
+     * Fetch the data of all users
      */
-    static async getUser() {
+    static async getAllUsers() {
         return Fetch.get(`user/`, getAuthorizationHeader());
     }
 
