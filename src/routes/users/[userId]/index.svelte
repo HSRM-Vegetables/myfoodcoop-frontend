@@ -45,8 +45,7 @@
 
             if ($loggedInUserId === user.id) {
                 // update the token if the logged in user is the same as the user that is currently being eddited
-                const response = await User.refreshToken($refreshToken);
-                User.handleTokens(response.token, response.refreshToken);
+                await User.refreshToken($refreshToken);
             }
         } catch (error) {
             requestError = error;
