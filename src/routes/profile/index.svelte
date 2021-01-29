@@ -11,6 +11,7 @@
     import Switch from '../../components/common/Switch.svelte';
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
+    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -22,11 +23,11 @@
 
     $: {
         // disallow of the future use of the keep logged in workflow
-        localStorage.setItem(CookieDefaults.ALLOW_KEEP_LOGGED_IN, $allowKeepLoggedIn);
+        localStorage.setItem(LocalStorageKeys.ALLOW_KEEP_LOGGED_IN, $allowKeepLoggedIn);
 
         if ($allowKeepLoggedIn === false) {
             // if its not allow to stay logged in, disable this workflow explicitly
-            localStorage.setItem(CookieDefaults.KEEP_LOGGED_IN, false);
+            localStorage.setItem(LocalStorageKeys.KEEP_LOGGED_IN, false);
         }
     }
 

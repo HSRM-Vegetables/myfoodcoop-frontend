@@ -1,6 +1,5 @@
 export default {
-    BALANCE: 'sg_balance',
-    CART: 'sg_shoppingCart',
-    PURCHASES: 'sg_purchases',
-    STOCK: 'sg_stock'
+    CART: 'shoppingCart',
+    KEEP_LOGGED_IN: 'keep_logged_in',
+    ALLOW_KEEP_LOGGED_IN: 'allow_keep_logged_in'
 };

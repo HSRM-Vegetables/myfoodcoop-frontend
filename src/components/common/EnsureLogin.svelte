@@ -16,6 +16,7 @@
         refreshTokenExpires,
     } from '../../stores/user';
     import CookieDefaults from '../../scripts/CookieDefaults';
+    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
 
     // export the property if the current user is logged in or not
     export let isLoggedIn = false;
@@ -44,8 +45,8 @@
         }
 
         // load some cookies
-        $keepLoggedIn = localStorage.getItem(CookieDefaults.KEEP_LOGGED_IN) === 'true';
-        const allowKeepLoggedInCookieValue = localStorage.getItem(CookieDefaults.ALLOW_KEEP_LOGGED_IN);
+        $keepLoggedIn = localStorage.getItem(LocalStorageKeys.KEEP_LOGGED_IN) === 'true';
+        const allowKeepLoggedInCookieValue = localStorage.getItem(LocalStorageKeys.ALLOW_KEEP_LOGGED_IN);
         // if the cookie is not set or the cookie value equals to true, allow to check keepLoggedIn
         // eslint-disable-next-line no-unused-vars
         $allowKeepLoggedIn = !allowKeepLoggedInCookieValue || allowKeepLoggedInCookieValue === 'true';
