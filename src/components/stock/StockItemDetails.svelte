@@ -9,6 +9,7 @@
     import { stockItems } from '../../stores/stock';
     import { moneyStyler } from '../../scripts/Helper';
     import Button from '../common/Button.svelte';
+    import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
 
     /**
      * The stock item
@@ -71,7 +72,7 @@
 
     <div class="columns is-mobile">
         <div class="column">Artikel Status</div>
-        <div class="column has-text-right">{item.stockStatus}</div>
+        <div class="column has-text-right">{getLocalizedStockStatus(item.stockStatus)}</div>
     </div>
 
     <div class="columns is-mobile">
