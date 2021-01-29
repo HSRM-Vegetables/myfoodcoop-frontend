@@ -1,4 +1,5 @@
 <script>
+    import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
     import { mdiDelete, mdiPencil } from '@mdi/js';
     import { UnitType } from '../../scripts/UnitType';
@@ -46,6 +47,12 @@
     }
 </script>
 
+<style>
+    .small {
+        font-size: 17px;
+    }
+</style>
+
 <ErrorModal error={requestError} />
 
 <Modal title="Artikel löschen?" bind:open={modalIsOpen}>
@@ -56,10 +63,12 @@
     </div>
 </Modal>
 {#if item}
-    <div class="columns is-mobile">
-        <div class="column is-size-3 has-text-weight-bold">{item.name}</div>
-    </div>
-
+    <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
+    <span class="small">Dieser Artikel wurde Nachhaltig produziert</span>
+    {#if item.sustainablyProduced}
+        <div class="mb-1 is-size-4" />
+    {/if}
+    <hr />
     {#if item.isDeleted}
         <article class="message is-danger">
             <div class="message-body">Artikel wurde gelöscht</div>
@@ -77,31 +86,42 @@
         <div class="column">Menge im Bestand</div>
         <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
     </div>
-    {#if item.sustainablyProduced}
-        <div class="mb-1">Dieser Artikel wurde Nachhaltig produziert</div>
-    {/if}
-
-    <div class="mb-1">
-        Herkunftskategorie:
-        {#each OriginCategoryWithDescription as categorys}
-            {#if item.originCategory === categorys.identifier}{categorys.descripton}{/if}
-        {/each}
-    </div>
-    {#if item.certificates !== []}
-        <div class="mb-1">
-            Zertifikate:
-            {#each item.certificates as i}| {i} |{/each}
-        </div>
-    {/if}
-    <div class="mb-1">Erzeuger: {item.producer}</div>
-
-    <div class="mb-1">Lieferant: {item.supplier}</div>
-
-    <div class="mb-1">Lieferdatum: {item.orderDate}</div>
-
-    <div class="mb-1">Bestelldatum: {item.deliveryDate}</div>
-
+    <hr />
+    Information:
     <div class="box">
+        <div class="columns is-mobile">
+            <div class="column">Herkunftskategorie:</div>
+            <div class="column">
+                {#each OriginCategoryWithDescription as categorys}
+                    {#if item.originCategory === categorys.identifier}{categorys.descripton}{/if}
+                {/each}
+            </div>
+        </div>
+        {#if item.certificates !== []}
+            <div class="columns is-mobile">
+                <div class="column">Zertifikate:</div>
+                <div class="column">
+                    {#each item.certificates as i}| {i} |{/each}
+                </div>
+            </div>
+        {/if}
+        <div class="columns is-mobile">
+            <div class="column">Erzeuger:</div>
+            <div class="column">{item.producer}</div>
+        </div>
+        <div class="columns is-mobile">
+            <div class="column">Lieferant:</div>
+            <div class="column">{item.supplier}</div>
+        </div>
+        <div class="columns is-mobile">
+            <div class="column">Lieferdatum:</div>
+            <div class="column">{DateTime.fromJSDate(new Date(item.orderDate)).toFormat('dd.MM.yyyy')}</div>
+        </div>
+        <div class="columns is-mobile">
+            <div class="column">Bestelldatum:</div>
+            <div class="column">{DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy')}</div>
+        </div>
+
         <div class="mb-1">Beschreibung:</div>
         {item.description}
     </div>
