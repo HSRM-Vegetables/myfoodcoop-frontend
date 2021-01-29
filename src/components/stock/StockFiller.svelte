@@ -389,10 +389,10 @@
                 value={item ? item.supplier : ''}
             />
         </div>
-        <div class="pt-4">
-            <div class="columns">
+        <div class="pt-5 pb-2">
+            <div class="columns has-text-centered">
                 <div class="column">
-                    <div class="has-text-left pb-2">Lieferdatum</div>
+                    <div class="pb-2">Lieferdatum</div>
                     <DatePicker
                         placeholder="Wähle einen Zeitraum"
                         format="DD.MM.YYYY"
@@ -402,7 +402,7 @@
                     />
                 </div>
                 <div class="column">
-                    <div class="has-text-left pb-2 ">Bestelldatum</div>
+                    <div class="pb-2 ">Bestelldatum</div>
                     <DatePicker
                         placeholder="Wähle einen Zeitraum"
                         continueText="Bestätigen"
