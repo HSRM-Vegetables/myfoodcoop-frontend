@@ -21,6 +21,7 @@
     export let isLoggedIn = false;
 
     const { page } = stores();
+    const { returnUrl = '/' } = $page.query;
 
     // store if the component is mounted
     let isMounted = false;
@@ -31,9 +32,6 @@
 
     onMount(() => {
         isMounted = true;
-
-        // also check the page
-        checkLogin($page);
     });
 
     async function checkLogin(pageLocal) {
@@ -79,6 +77,7 @@
             if (Tokens.areValid($token, $refreshToken, $tokenExpires, $refreshTokenExpires)) {
                 // both tokens are still valid, the user is logged in
                 isLoggedIn = true;
+                redirectAfterLogin();
                 return;
             }
 
@@ -86,6 +85,7 @@
                 // refresh token is still valid, get a new token
                 await User.refreshToken($refreshToken);
                 isLoggedIn = true;
+                redirectAfterLogin();
                 return;
             }
 
@@ -98,6 +98,7 @@
                 // refresh token is still valid, gat a new token
                 await User.refreshToken($refreshToken);
                 isLoggedIn = true;
+                redirectAfterLogin();
                 return;
             }
 
@@ -109,6 +110,12 @@
             if (!pageLocal.error && !pageLocal.path.includes('/login') && !$page.path.includes('/register')) {
                 goto(`/profile/login?returnUrl=${pageLocal.path}`);
             }
+        }
+    }
+
+    function redirectAfterLogin() {
+        if (isLoggedIn && $page.path.includes('/login')) {
+            goto(returnUrl);
         }
     }
 </script>
