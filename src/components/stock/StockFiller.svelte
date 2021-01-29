@@ -7,7 +7,7 @@
     import { elasticInOut } from 'svelte/easing';
     import { UnitType } from '../../scripts/UnitType';
     import { CalendarStyle } from '../../scripts/CalendarStyle';
-    import { OriginCategory } from '../../scripts/OriginCategory';
+    import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
@@ -50,13 +50,6 @@
     let producerTextFieldError = false;
     let supplierTextFieldError = false;
     let errorHint;
-
-    const originCategorys = [
-        { name: 'Lokal', category: OriginCategory.LOCAL },
-        { name: 'Regional', category: OriginCategory.REGIONAL },
-        { name: 'Überregional', category: OriginCategory.SUPRAREGIONAL },
-        { name: 'Unbekannt', category: OriginCategory.UNKNOWN },
-    ];
 
     // call the method as soon as the value of unitTypeBoolean changes
     $: untiTypeChanged(unitTypeBoolean);
@@ -360,8 +353,8 @@
         <div class="pt-4">
             <div class="has-text-left pb-2">Herkunftskategorie</div>
             <select class="input dropdown" bind:value={originCategory}>
-                {#each originCategorys as categorys}
-                    <option value={categorys.category}>{categorys.name}</option>
+                {#each OriginCategoryWithDescription as categorys}
+                    <option value={categorys.identifier}>{categorys.descripton}</option>
                 {/each}
             </select>
         </div>
@@ -389,7 +382,7 @@
             />
         </div>
         <div class="pt-4">
-            <div class="columns is-mobile">
+            <div class="columns">
                 <div class="column">
                     <div class="has-text-left pb-2">Lieferdatum</div>
                     <DatePicker

@@ -7,6 +7,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
     import { stockItems } from '../../stores/stock';
+    import { OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import { moneyStyler } from '../../scripts/Helper';
     import Button from '../common/Button.svelte';
 
@@ -54,7 +55,6 @@
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
     </div>
 </Modal>
-
 {#if item}
     <div class="columns is-mobile">
         <div class="column is-size-3 has-text-weight-bold">{item.name}</div>
@@ -65,10 +65,6 @@
             <div class="message-body">Artikel wurde gelöscht</div>
         </article>
     {/if}
-
-    <div class="mb-1">Beschreibung:</div>
-    <div class="box">{item.description}</div>
-
     <div class="columns is-mobile">
         <div class="column">Warenpreis</div>
         <div class="column has-text-right">
@@ -77,10 +73,37 @@
             {:else}<span>{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
         </div>
     </div>
-
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
         <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
+    </div>
+    {#if item.sustainablyProduced}
+        <div class="mb-1">Dieser Artikel wurde Nachhaltig produziert</div>
+    {/if}
+
+    <div class="mb-1">
+        Herkunftskategorie:
+        {#each OriginCategoryWithDescription as categorys}
+            {#if item.originCategory === categorys.identifier}{categorys.descripton}{/if}
+        {/each}
+    </div>
+    {#if item.certificates !== []}
+        <div class="mb-1">
+            Zertifikate:
+            {#each item.certificates as i}| {i} |{/each}
+        </div>
+    {/if}
+    <div class="mb-1">Erzeuger: {item.producer}</div>
+
+    <div class="mb-1">Lieferant: {item.supplier}</div>
+
+    <div class="mb-1">Lieferdatum: {item.orderDate}</div>
+
+    <div class="mb-1">Bestelldatum: {item.deliveryDate}</div>
+
+    <div class="box">
+        <div class="mb-1">Beschreibung:</div>
+        {item.description}
     </div>
 
     <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
