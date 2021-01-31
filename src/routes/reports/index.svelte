@@ -14,6 +14,10 @@
 
     <Button href="/reports/sold-items" class="is-link" text="Was wurde gekauft?" />
 
+    <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
+        <Button href="/reports/balance-overview" class="is-link" text="Guthaben-Übersicht" />
+    </AuthorizeByRoles>
+
     <hr />
 
     <div class="has-text-centered">
