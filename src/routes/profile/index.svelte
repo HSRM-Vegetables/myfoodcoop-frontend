@@ -5,13 +5,13 @@
     import Button from '../../components/common/Button.svelte';
     import { userName, allowKeepLoggedIn, refreshToken, tokenExpires, refreshTokenExpires } from '../../stores/user';
     import { userDetails } from '../../stores/userDetails';
-    import CookieDefaults from '../../scripts/CookieDefaults';
+    import CookieDefaults from '../../scripts/common/CookieDefaults';
     import UserDetails from '../../components/user/UserDetails.svelte';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Switch from '../../components/common/Switch.svelte';
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
-    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
+    import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */

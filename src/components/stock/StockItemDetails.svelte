@@ -2,14 +2,14 @@
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
     import { mdiDelete, mdiPencil } from '@mdi/js';
-    import { UnitType } from '../../scripts/UnitType';
+    import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
     import { stockItems } from '../../stores/stock';
     import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
-    import { moneyStyler } from '../../scripts/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
 

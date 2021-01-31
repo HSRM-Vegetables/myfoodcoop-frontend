@@ -1,6 +1,6 @@
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import Tokens from './Tokens';
-import LocalStorageKeys from '../LocalStorageKeys';
+import LocalStorageKeys from '../common/LocalStorageKeys';
 
 export default class User { 
     /**

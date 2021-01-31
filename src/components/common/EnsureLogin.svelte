@@ -15,8 +15,8 @@
         allowKeepLoggedIn,
         refreshTokenExpires,
     } from '../../stores/user';
-    import CookieDefaults from '../../scripts/CookieDefaults';
-    import LocalStorageKeys from '../../scripts/LocalStorageKeys';
+    import CookieDefaults from '../../scripts/common/CookieDefaults';
+    import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
 
     // export the property if the current user is logged in or not
     export let isLoggedIn = false;

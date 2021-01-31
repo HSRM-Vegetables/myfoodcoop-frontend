@@ -1,5 +1,5 @@
-import Fetch, { getAuthorizationHeader } from './api/Fetch';
-import CustomError, { ErrorCodes } from './api/CustomError';
+import Fetch, { getAuthorizationHeader } from '../api/Fetch';
+import CustomError, { ErrorCodes } from '../api/CustomError';
 
 export default class Balance {
     /**
