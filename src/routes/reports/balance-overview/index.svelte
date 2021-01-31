@@ -1,6 +1,8 @@
 <script>
+    import { onMount } from 'svelte';
     import { mdiArrowLeft } from '@mdi/js';
     import { goto } from '@sapper/app';
+    import { ExportToCsv } from 'export-to-csv';
     import { title, navBalance } from '../../../stores/page';
     import Loader from '../../../components/common/Loader.svelte';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
@@ -19,7 +21,24 @@
     let requestError;
     let isLoading = true;
 
-    async function loadBalances() {
+    function csvExport(data) {
+        const options = {
+            fieldSeparator: ';',
+            quoteStrings: '"',
+            decimalSeparator: ',',
+            filename: `Balance-Overview_${new Date().toLocaleDateString()}`,
+            showLabels: true,
+            useBom: true,
+            useKeysAsHeaders: true,
+        };
+        // change order
+        let newData = data.map((item) => JSON.parse(JSON.stringify(item, ['username', 'balance', 'isDeleted'], 1)));
+        const csvExporter = new ExportToCsv(options);
+
+        csvExporter.generateCsv(newData);
+    }
+
+    onMount(async () => {
         try {
             isLoading = true;
             userBalanceList = await BalanceOverview.getBalanceList();
@@ -31,13 +50,11 @@
         } finally {
             isLoading = false;
         }
-    }
+    });
 
     function userSelected(event) {
         goto(`users/${event.detail.id}`);
     }
-
-    loadBalances();
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
@@ -58,6 +75,12 @@
     <hr />
 
     <div class="has-text-centered">
+        <Button
+            text="CSV Download"
+            class="button is-primary"
+            size="full-width"
+            on:click={() => csvExport(userBalanceList)}
+        />
         <Button
             text="Zurück zu den Reports"
             href="/reports"
