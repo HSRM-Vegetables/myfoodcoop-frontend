@@ -27,7 +27,7 @@
         isLoggingIn = true;
         try {
             await User.login(userNameInput.getValue(), passwordInput.getValue(), $keepLoggedIn);
-            // TODO: ask here for User.GetRoles("MEMBER") ??
+
             goto(returnUrl);
         } catch (error) {
             requestError = error;
@@ -60,9 +60,11 @@
             <div class="message-body">Benutzername oder Passwort nicht korrekt!</div>
         </article>
     {/if}
-    {#if requestError.errorCode === 404006}
+    {#if requestError.errorCode === 401011}
         <article class="message is-danger">
-            <div class="message-body">Fehlende Berechtigung! Bitte wende Dich an deinen Administrator"</div>
+            <div class="message-body">
+                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator"
+            </div>
         </article>
     {/if}
 {:else}
