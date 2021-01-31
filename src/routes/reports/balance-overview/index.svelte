@@ -49,10 +49,13 @@
             <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
         </article>
     {:else if userBalanceList}
+        <hr />
         <BalanceOverviewComp userBalanceList={userBalanceList} on:select={userSelected} />
     {/if}
 
     <ErrorModal error={requestError} />
+
+    <hr />
 
     <div class="has-text-centered">
         <Button
