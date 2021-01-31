@@ -15,10 +15,11 @@
     import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
+    import { ORGANIZATION_NAME } from '../scripts/Config';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
-    $title = 'Stadtgemüse e.V.';
+    $title = ORGANIZATION_NAME;
     $navBalance = 'show';
 
     const buttons = [

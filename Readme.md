@@ -1,4 +1,4 @@
-# Stadtgemüse Frontend
+# Frontend
 
 ## Installation
 * Installiere dir NodeJS (Ohne die C / C++ Tools falls du in der Installation danach gefragt wirst)
