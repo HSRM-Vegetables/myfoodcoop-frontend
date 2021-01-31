@@ -24,3 +24,4 @@
 
 ## Deployment
 * Die Umgebungsvariable `BACKEND_API_URL` muss auf die URL des Backends gesetzt werden.
+* Um den Namen der App anzupassen, einfach die Daten in `src/scripts/Config.js` abändern.
