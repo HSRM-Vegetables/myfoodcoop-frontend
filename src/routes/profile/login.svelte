@@ -54,10 +54,19 @@
 
 <br />
 
-{#if requestError && requestError.errorCode === 401004}
-    <article class="message is-danger">
-        <div class="message-body">Benutzername oder Passwort nicht korrekt!</div>
-    </article>
+{#if requestError}
+    {#if requestError.errorCode === 401004}
+        <article class="message is-danger">
+            <div class="message-body">Benutzername oder Passwort nicht korrekt!</div>
+        </article>
+    {/if}
+    {#if requestError.errorCode === 401011}
+        <article class="message is-danger">
+            <div class="message-body">
+                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator"
+            </div>
+        </article>
+    {/if}
 {:else}
     <ErrorModal error={requestError} />
 {/if}
