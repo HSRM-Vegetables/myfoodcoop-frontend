@@ -189,7 +189,7 @@
             <div class="column">
                 <button
                     text="CSV Export"
-                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch"
+                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch is-clickable"
                     on:click={() => csvExport(soldItems)}
                 >
                     <Icon icon={mdiFileDownload} appbar={true} />
@@ -209,7 +209,7 @@
     <div class="has-text-centered">
         <Button
             text="CSV Download"
-            class="button is-primary is-hidden-desktop"
+            class="button is-primary is-hidden-desktop mb-3"
             size="full-width"
             on:click={() => csvExport(soldItems)}
         />

@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { mdiArrowLeft } from '@mdi/js';
+    import { mdiArrowLeft, mdiFileDownload } from '@mdi/js';
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
     import { title, navBalance } from '../../../stores/page';
@@ -10,6 +10,7 @@
     import BalanceOverviewComp from '../../../components/reports/BalanceOverview.svelte';
     import BalanceOverview from '../../../scripts/reports/BalanceOverview';
     import Button from '../../../components/common/Button.svelte';
+    import Icon from '../../../components/common/Icon.svelte';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -57,8 +58,30 @@
     }
 </script>
 
+<style>
+    button.background-none {
+        background: none;
+        border: 0;
+    }
+</style>
+
 <AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
-    <h2 class="pt-4 is-size-5 has-text-weight-bold">Guthaben-Übersicht</h2>
+    <div class="columns">
+        <div class="column">
+            <h2 class="pt-4 is-size-5 has-text-weight-bold">Guthaben-Übersicht</h2>
+        </div>
+        {#if userBalanceList}
+            <div class="column is-narrow">
+                <button
+                    text="CSV Export"
+                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch pt-3 is-clickable"
+                    on:click={() => csvExport(userBalanceList)}
+                >
+                    <Icon icon={mdiFileDownload} appbar={true} />
+                </button>
+            </div>
+        {/if}
+    </div>
     {#if isLoading}
         <Loader bind:isLoading />
     {:else if requestError !== undefined}
@@ -77,7 +100,7 @@
     <div class="has-text-centered">
         <Button
             text="CSV Download"
-            class="button is-primary"
+            class="button is-primary is-hidden-desktop mb-3"
             size="full-width"
             on:click={() => csvExport(userBalanceList)}
         />
