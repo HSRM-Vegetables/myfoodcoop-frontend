@@ -21,6 +21,9 @@
     let userBalanceList;
     let requestError;
     let isLoading = true;
+    const cache = [];
+    // used to determinde wheter active or deleted user was selected
+    let activeUsersSelected = true;
 
     function csvExport(data) {
         const options = {
@@ -42,10 +45,26 @@
     }
 
     onMount(async () => {
+        loadUsers(activeUsersSelected);
+    });
+
+    async function loadUsers(active) {
+        activeUsersSelected = active;
+
+        if (cache[activeUsersSelected] !== undefined) {
+            userBalanceList = cache[activeUsersSelected];
+            isLoading = false;
+            return;
+        }
+
         try {
             isLoading = true;
-            userBalanceList = await BalanceOverview.getBalanceList();
-
+            if (active) {
+                userBalanceList = await BalanceOverview.getBalanceList('OMIT');
+            } else {
+                userBalanceList = await BalanceOverview.getBalanceList('ONLY');
+            }
+            cache[activeUsersSelected] = userBalanceList;
             // reset the error to default value to display the results
             requestError = undefined;
         } catch (error) {
@@ -53,7 +72,7 @@
         } finally {
             isLoading = false;
         }
-    });
+    }
 
     function userSelected(event) {
         goto(`users/${event.detail.id}`);
@@ -68,7 +87,7 @@
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.TREASURER]}>
-    <div class="columns">
+    <div class="columns is-hidden-touch">
         <div class="column">
             <h2 class="pt-4 is-size-5 has-text-weight-bold">Guthaben-Übersicht</h2>
         </div>
@@ -76,7 +95,7 @@
             <div class="column is-narrow">
                 <button
                     text="CSV Export"
-                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch pt-3 is-clickable"
+                    class="is-primary is-pulled-right has-text-black background-none pt-3 is-clickable"
                     on:click={() => csvExport(userBalanceList)}
                 >
                     <Icon icon={mdiFileDownload} appbar={true} />
@@ -84,6 +103,19 @@
             </div>
         {/if}
     </div>
+    <div class="has-text-centered">
+        <Button
+            text="Aktive Mitglieder"
+            class="mt-2 mb-4 mx-1 is-rounded {activeUsersSelected ? 'is-dark' : ''}"
+            on:click={() => loadUsers(true)}
+        />
+        <Button
+            text="Gelöschte Mitglieder"
+            class="mt-2 mb-4 mx-1 is-rounded  {!activeUsersSelected ? 'is-dark' : ''}"
+            on:click={() => loadUsers(false)}
+        />
+    </div>
+    <hr class="is-hidden-touch" />
     {#if isLoading}
         <Loader bind:isLoading />
     {:else if requestError !== undefined}
@@ -91,7 +123,6 @@
             <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
         </article>
     {:else if userBalanceList}
-        <hr />
         <BalanceOverviewComp userBalanceList={userBalanceList} on:select={userSelected} />
     {/if}
 
