@@ -14,8 +14,8 @@
 
     let isLoading = true;
     let requestError;
-
     let purchase;
+
     onMount(async () => {
         try {
             purchase = await Purchase.getPurchase(purchaseID);
@@ -67,7 +67,15 @@
 
     <div class="columns is-mobile">
         <div class="column">Datum, Uhrzeit: {new Date(purchase.createdOn).toLocaleString()}</div>
-        <div class="column has-text-right">Gesamtbetrag: {moneyStyler(purchase.totalPrice)}&nbsp;€</div>
+        <div class="column has-text-right">
+            <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice)}&nbsp;€</span>
+            <br />
+            <span>davon Steuern: {moneyStyler(purchase.totalVat)} €</span>
+            {#each purchase.vatDetails as details}
+                <br />
+                <span class="is-size-7">davon {moneyStyler(details.vat * 100)} %: {moneyStyler(details.amount)} €</span>
+            {/each}
+        </div>
     </div>
 
     <hr />

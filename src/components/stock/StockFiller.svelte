@@ -16,6 +16,7 @@
     import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
+    import { moneyStyler } from '../../scripts/Helper';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -41,6 +42,7 @@
     export let linkBackText = 'zum Bestand';
 
     let pricePerUnitTextField;
+    let vatTextField;
     let quantityTextField;
     let articleTextField;
     let producerTextField;
@@ -57,6 +59,7 @@
 
     let articleTextFieldError = false;
     let pricePerUnitTextFieldError = false;
+    let vatTextFieldError = false;
     let quantityTextFieldError = false;
     let producerTextFieldError = false;
     let supplierTextFieldError = false;
@@ -98,6 +101,7 @@
         quantityTextFieldError = false;
         producerTextFieldError = false;
         supplierTextFieldError = false;
+        vatTextFieldError = false;
 
         // No name set
         if (!articleTextField || !articleTextField.getValue()) {
@@ -124,6 +128,11 @@
             pricePerUnitTextFieldError = true;
         }
 
+        // Vat is not a number, and in valid range
+        if (Number.isNaN(vatTextField.getValue()) || vatTextField.getValue() <= 0 || vatTextField.getValue() > 100) {
+            vatTextFieldError = true;
+        }
+
         // Fractional quantity with unitType PIECE
         if (unitType === UnitType.PIECE && parseFloat(quantityTextField.getValue()) % 1 !== 0) {
             quantityTextFieldError = true;
@@ -142,7 +151,8 @@
             pricePerUnitTextFieldError ||
             quantityTextFieldError ||
             producerTextFieldError ||
-            supplierTextFieldError
+            supplierTextFieldError ||
+            vatTextFieldError
         ) {
             return false;
         }
@@ -198,7 +208,8 @@
                     supplierTextField.getValue(),
                     orderDate,
                     deliveryDate,
-                    selectedStatus
+                    selectedStatus,
+                    moneyStyler(vatTextField.getValue() / 100)
                 );
             } else {
                 await Stock.addItem(
@@ -214,7 +225,8 @@
                     supplierTextField.getValue(),
                     orderDate,
                     deliveryDate,
-                    selectedStatus
+                    selectedStatus,
+                    moneyStyler(vatTextField.getValue() / 100)
                 );
             }
 
@@ -241,6 +253,7 @@
         articleTextField.clear();
         originCategory = OriginCategory.UNKNOWN;
         certificates = [];
+        vatTextField.clear();
     }
     /**
      * Certificates List
@@ -319,6 +332,18 @@
                 minimum="0"
                 isInErrorState={pricePerUnitTextFieldError}
                 value={item ? item.pricePerUnit : ''}
+            />
+        </div>
+        <div class="pt-4">
+            <TextField
+                bind:this={vatTextField}
+                type="number"
+                placeholder="Steuersatz"
+                label="Steuersatz"
+                decoration={'%'}
+                minimum="0"
+                isInErrorState={vatTextFieldError}
+                value={item ? item.vat * 100 : ''}
             />
         </div>
         <div class="pt-4">
