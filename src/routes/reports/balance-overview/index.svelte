@@ -33,7 +33,9 @@
             useKeysAsHeaders: true,
         };
         // change order
-        let newData = data.map((item) => JSON.parse(JSON.stringify(item, ['username', 'balance', 'isDeleted'], 1)));
+        let newData = data.map((item) =>
+            JSON.parse(JSON.stringify(item, ['username', 'memberId', 'balance', 'isDeleted'], 1))
+        );
         const csvExporter = new ExportToCsv(options);
 
         csvExporter.generateCsv(newData);
