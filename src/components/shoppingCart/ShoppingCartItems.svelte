@@ -4,8 +4,8 @@
     import { createEventDispatcher } from 'svelte';
     import Icon from '../common/Icon.svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
-    import { UnitType } from '../../scripts/stock/UnitType';
-    import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
+    import { UnitType } from '../../scripts/UnitType';
+    import { moneyStyler, stopPropagation } from '../../scripts/Helper';
     import ListItem from '../common/ListItem.svelte';
 
     /**

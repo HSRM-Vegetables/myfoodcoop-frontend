@@ -1,8 +1,8 @@
 <script>
     import { mdiEye } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
-    import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
-    import { UnitType } from '../../scripts/stock/UnitType';
+    import { moneyStyler, stopPropagation } from '../../scripts/Helper';
+    import { UnitType } from '../../scripts/UnitType';
     import Icon from '../common/Icon.svelte';
     import ListItem from '../common/ListItem.svelte';
     import Loader from '../common/Loader.svelte';

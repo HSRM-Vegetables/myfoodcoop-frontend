@@ -10,7 +10,7 @@ import {
     tokenExpires
 } from '../../stores/user';
 import Tokens from '../user/Tokens';
-import CookieDefaults from '../common/CookieDefaults';
+import CookieDefaults from '../CookieDefaults';
 
 export const Headers = {
     Authorization: 'Authorization'

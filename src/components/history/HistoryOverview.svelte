@@ -3,7 +3,7 @@
     import { mdiMagnify } from '@mdi/js';
     import Purchase from '../../scripts/purchase/Purchase';
     import Icon from '../common/Icon.svelte';
-    import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler } from '../../scripts/Helper';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';

@@ -2,7 +2,7 @@
     import { goto } from '@sapper/app';
     import { mdiArrowLeft } from '@mdi/js';
     import TextField from '../common/TextField.svelte';
-    import Balance from '../../scripts/balance/Balance';
+    import Balance from '../../scripts/Balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import { currentBalance } from '../../stores/balance';
