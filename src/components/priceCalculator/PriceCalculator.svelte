@@ -3,12 +3,12 @@
     import { mdiShopping, mdiCartArrowDown } from '@mdi/js';
     import { onMount, onDestroy } from 'svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
-    import { UnitType } from '../../scripts/UnitType';
+    import { UnitType } from '../../scripts/stock/UnitType';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
     import Button from '../common/Button.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
+    import { moneyStyler } from '../../scripts/common/Helper';
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;

@@ -1,4 +1,4 @@
 export const url = process.env.NODE_ENV === 'development'
     ? 'http://localhost:8080'
-    : 'https://veg-service.herokuapp.com';
+    : process.env.BACKEND_API_URL ;
 export const version = 'v2';

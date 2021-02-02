@@ -20,22 +20,7 @@
     let searchTerm;
     let searchTermElement;
 
-    let allUsers = [
-        {
-            id: '0794e2e2-f5b2-42fb-a2b3-e12c75897f85',
-            username: 'Manuel',
-            email: 'jupp@stadtgemuese-wiesbaden.de',
-            memberId: 4321,
-            roles: ['MEMBER'],
-        },
-        {
-            id: 'f35e9b57-43f6-415a-8d17-34345ddd12ac',
-            username: 'Manuel2',
-            email: 'robby@stadtgemuese-wiesbaden.de',
-            memberId: 1234,
-            roles: [],
-        },
-    ];
+    let allUsers = [];
     let notActivatedUsers = [];
     let activatedUsers = [];
     let isLoading = true;

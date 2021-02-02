@@ -1,4 +1,4 @@
-import LocalStorageKeys from '../LocalStorageKeys';
+import LocalStorageKeys from '../common/LocalStorageKeys';
 import ShoppingCartItem from './ShoppingCartItem';
 
 export default class ShoppingCart {

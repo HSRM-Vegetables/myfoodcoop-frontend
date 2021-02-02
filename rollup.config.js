@@ -26,7 +26,8 @@ export default {
 		plugins: [
 			replace({
 				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode)
+				'process.env.NODE_ENV': JSON.stringify(mode),
+				'process.env.BACKEND_API_URL': JSON.stringify(process.env.BACKEND_API_URL)
 			}),
 			svelte({
 				preprocess: sveltePreprocess(),
@@ -76,7 +77,7 @@ export default {
 		plugins: [
 			replace({
 				'process.browser': false,
-				'process.env.NODE_ENV': JSON.stringify(mode)
+				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
 			svelte({
 				generate: 'ssr',

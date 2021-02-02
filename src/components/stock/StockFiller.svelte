@@ -5,9 +5,9 @@
     import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
-    import { UnitType } from '../../scripts/UnitType';
     import { CalendarStyle } from '../../scripts/CalendarStyle';
     import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
+    import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import TextField from '../common/TextField.svelte';
     import Switch from '../common/Switch.svelte';
