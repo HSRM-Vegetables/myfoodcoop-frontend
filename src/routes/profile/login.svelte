@@ -19,9 +19,9 @@
     let requestError;
     let isLoggingIn = false;
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Login';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     async function login() {

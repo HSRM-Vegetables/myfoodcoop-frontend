@@ -9,9 +9,9 @@
     import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
     import { ORGANIZATION_NAME } from '../../scripts/Config';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Registrierung';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     // fields for username handling

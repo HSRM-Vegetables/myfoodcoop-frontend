@@ -3,9 +3,9 @@
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import { title, navBalance } from '../../stores/page';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Guthaben bearbeiten';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
 </script>
 

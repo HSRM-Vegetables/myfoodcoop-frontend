@@ -3,9 +3,9 @@
     import { title, navBalance } from '../stores/page';
     import Button from '../components/common/Button.svelte';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Uups';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     export let status;

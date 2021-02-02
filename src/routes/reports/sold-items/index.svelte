@@ -15,9 +15,9 @@
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Was wurde gekauft';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     let requestError;
@@ -107,7 +107,7 @@
             useBom: true,
             useKeysAsHeaders: true,
         };
-        let newData = data.map(({ fromDate, toDate, ...item }) => item);
+        const newData = data.map(({ fromDate, toDate, ...item }) => item);
         const csvExporter = new ExportToCsv(options);
 
         csvExporter.generateCsv(newData);

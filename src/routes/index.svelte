@@ -17,9 +17,9 @@
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
     import { ORGANIZATION_NAME } from '../scripts/Config';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = ORGANIZATION_NAME;
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
 
     const buttons = [

@@ -6,9 +6,9 @@
     import Stock from '../../../scripts/stock/Stock';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Preisrechner';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'inline';
 
     const { page } = stores();

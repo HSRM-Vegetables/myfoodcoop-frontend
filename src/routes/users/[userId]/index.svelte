@@ -11,9 +11,9 @@
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Benutzerdetails';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     const { page } = stores();

@@ -11,9 +11,9 @@
     import User from '../../scripts/user/User';
     import Button from '../../components/common/Button.svelte';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Benutzerliste';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     let requestError;
