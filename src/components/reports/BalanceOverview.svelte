@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../common/ListItem.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
 
     /**
      * A list of users and their balances

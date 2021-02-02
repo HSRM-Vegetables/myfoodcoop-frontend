@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import Balance from '../../scripts/Balance';
+    import Balance from '../../scripts/balance/Balance';
     import Loader from '../common/Loader.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import ErrorModal from '../common/ErrorModal.svelte';
 
     export let userId;
