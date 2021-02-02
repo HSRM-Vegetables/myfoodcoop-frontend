@@ -210,8 +210,9 @@
     <div class="has-text-centered">
         <Button
             text="CSV Download"
-            class="button is-primary is-hidden-desktop"
+            class="button is-primary is-hidden-desktop mb-3"
             size="full-width"
+            icon={mdiFileDownload}
             on:click={() => csvExport(soldItems)}
         />
         <Button
