@@ -12,6 +12,16 @@ export default class Balance {
     }
 
     /**
+     * Requests the current balance for another user from the API
+     * @param {string} userId the ID of the desired user
+     * @returns {number} current balance
+     */
+    static async getBalanceForUser(userId) {
+        const response = await Fetch.get(`balance/${userId}`, getAuthorizationHeader());
+        return response.balance;
+    }
+
+    /**
      * Request to the API to set the balance to the specified value
      * @param {number} newBalance value the balance should be set to
      * @returns {number} current balance
