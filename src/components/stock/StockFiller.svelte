@@ -16,7 +16,6 @@
     import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
-    import { moneyStyler } from '../../scripts/Helper';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -209,7 +208,7 @@
                     orderDate,
                     deliveryDate,
                     selectedStatus,
-                    moneyStyler(vatTextField.getValue() / 100)
+                    vatTextField.getValue() / 100
                 );
             } else {
                 await Stock.addItem(
@@ -226,7 +225,7 @@
                     orderDate,
                     deliveryDate,
                     selectedStatus,
-                    moneyStyler(vatTextField.getValue() / 100)
+                    vatTextField.getValue() / 100
                 );
             }
 
