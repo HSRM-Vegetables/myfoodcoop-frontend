@@ -162,6 +162,7 @@
         <div class="pt-4 pb-4">
             <DatePicker
                 placeholder="Wähle einen Zeitraum"
+                continueText="Bestätigen"
                 format="DD.MM.YYYY"
                 range={true}
                 styling={new CalendarStyle()}

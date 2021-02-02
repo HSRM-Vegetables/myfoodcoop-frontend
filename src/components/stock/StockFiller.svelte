@@ -405,6 +405,7 @@
                     <div class="pb-2">Lieferdatum</div>
                     <DatePicker
                         placeholder="Wähle einen Zeitraum"
+                        continueText="Bestätigen"
                         format="DD.MM.YYYY"
                         styling={new CalendarStyle()}
                         on:date-selected={(e) => setOrderDate(e.detail.date)}
@@ -440,7 +441,6 @@
                 <textarea
                     class="textarea"
                     placeholder="Beschreibung"
-                    continueText="Bestätigen"
                     bind:this={descriptionElement}
                 >{item ? item.description : ''}</textarea>
             </div>
