@@ -13,9 +13,9 @@
     import Fetch from '../../scripts/api/Fetch';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Profil';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
 
     let isLoggingOut = false;

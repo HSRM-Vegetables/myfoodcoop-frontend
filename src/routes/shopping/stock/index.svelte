@@ -8,9 +8,9 @@
     import { inStockItems, spoilsSoonItems } from '../../../stores/stock';
     import { getLocalizedStockStatus, StockStatus } from '../../../scripts/stock/StockStatus';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel auswählen';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'inline';
 
     function itemSelected(event) {

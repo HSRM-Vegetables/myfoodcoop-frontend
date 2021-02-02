@@ -5,9 +5,9 @@
     import { Roles } from '../../scripts/roles/Roles';
     import AuthorizeByRoles from '../../components/common/AuthorizeByRoles.svelte';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Einkaufshistorie';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 </script>
 

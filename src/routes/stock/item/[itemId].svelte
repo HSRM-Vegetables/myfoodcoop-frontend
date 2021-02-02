@@ -9,9 +9,9 @@
     import Button from '../../../components/common/Button.svelte';
     import { title, navBalance } from '../../../stores/page';
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     const { page } = stores();

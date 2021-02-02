@@ -23,9 +23,9 @@
         }
     });
 
-    /* eslint-disable prefer-const */
-    /* eslint-disable no-unused-vars */
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Bestand hinzufügen';
+    // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 </script>
 
