@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { UnitType } from '../../scripts/stock/UnitType';
+    import { UnitType } from '../../scripts/UnitType';
 
     /**
      * A list of items sold in a time window (quantity-sold-list response)

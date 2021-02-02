@@ -1,4 +1,4 @@
-import Balance from '../scripts/balance/Balance';
+import Balance from '../scripts/Balance';
 import { updateable } from '../scripts/custom-stores/updateableStore';
 
 export const currentBalance = updateable(async (set) => {

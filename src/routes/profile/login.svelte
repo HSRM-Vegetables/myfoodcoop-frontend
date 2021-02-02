@@ -7,7 +7,6 @@
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import Switch from '../../components/common/Switch.svelte';
     import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
-    import { ORGANIZATION_NAME } from '../../scripts/Config';
 
     const { page } = stores();
     // redirect to main page if no query parameter is provided
@@ -47,7 +46,7 @@
     }
 </script>
 
-<h1 class="title has-text-centered">Willkommen zur {ORGANIZATION_NAME} Einkaufsapp</h1>
+<h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
 <p>
     Damit wir Dich während des Einkaufs identifizieren können, und Dir das beste Einkaufserlebnis bieten können,
     benötigen wir Benutzername und Passwort:

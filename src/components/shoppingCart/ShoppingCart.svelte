@@ -7,7 +7,7 @@
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler } from '../../scripts/Helper';
     import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
 

@@ -1,1 +1,0 @@
-export const ORGANIZATION_NAME = 'Stadtgemüse e.V.'

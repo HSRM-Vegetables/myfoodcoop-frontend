@@ -1,4 +1,4 @@
-import { moneyStyler } from '../common/Helper';
+import { moneyStyler } from '../Helper';
 import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {

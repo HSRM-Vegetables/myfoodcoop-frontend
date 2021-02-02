@@ -7,7 +7,6 @@
     import { title, navBalance } from '../../stores/page';
     import Switch from '../../components/common/Switch.svelte';
     import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
-    import { ORGANIZATION_NAME } from '../../scripts/Config';
 
     /* eslint-disable prefer-const */
     /* eslint-disable no-unused-vars */
@@ -160,7 +159,7 @@
     }
 </script>
 
-<h1 class="title has-text-centered">Willkommen zur {ORGANIZATION_NAME} Einkaufsapp</h1>
+<h1 class="title has-text-centered">Willkommen zur Stadtgemüse Einkaufsapp</h1>
 <p>Damit wir dich während des Einkaufen identifizieren können, musst du dir zunächst ein Benutzerkonto anlegen:</p>
 <br />
 

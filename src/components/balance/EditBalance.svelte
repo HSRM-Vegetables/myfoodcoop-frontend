@@ -1,5 +1,5 @@
 <script>
-    import Balance from '../../scripts/balance/Balance';
+    import Balance from '../../scripts/Balance';
     import { currentBalance } from '../../stores/balance';
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';

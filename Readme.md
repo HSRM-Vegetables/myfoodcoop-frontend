@@ -1,4 +1,4 @@
-# Frontend
+# Stadtgemüse Frontend
 
 ## Installation
 * Installiere dir NodeJS (Ohne die C / C++ Tools falls du in der Installation danach gefragt wirst)
@@ -21,8 +21,3 @@
 * Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
 * Als CSS Framwork setzen wir momentan auf [Bulma](https://bulma.io/) (Wichtig: Bulma wird ohne JavaScript ausgeliefert)
 * Als Icon Library benutzen wir [MaterialDesignIcons](https://materialdesignicons.com/). Dort kannst du auch nach neuen Icons suchen.
-
-## Deployment
-* Die Umgebungsvariable `BACKEND_API_URL` muss auf die URL des Backends gesetzt werden.
-* Um den Namen der App anzupassen, einfach die Daten in `src/scripts/Config.js` abändern.
-* Die Favicons wurden mit [realfavicongenerator](https://realfavicongenerator.net/) generiert. Die generierten Inhalten müssen aus der Zip extrahiert und in den Ordner `static` verschoben werden.

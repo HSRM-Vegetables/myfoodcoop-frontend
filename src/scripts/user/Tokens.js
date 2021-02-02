@@ -11,7 +11,7 @@ import {
     refreshTokenCreation,
     refreshTokenExpires
 } from '../../stores/user';
-import CookieDefaults from '../common/CookieDefaults';
+import CookieDefaults from '../CookieDefaults';
 
 export default class Tokens {
     /**
