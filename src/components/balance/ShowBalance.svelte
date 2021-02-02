@@ -1,5 +1,5 @@
 <script>
-    import { moneyStyler } from '../../scripts/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import { currentBalance } from '../../stores/balance';
 
     export let type = 'big'; // inline or big

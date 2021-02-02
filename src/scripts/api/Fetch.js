@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { goto } from '@sapper/app';
 import Cookie from 'js-cookie';
-import { url, version } from './ApiConfig';
+import { getUrl, version } from './ApiConfig';
 import { 
     refreshToken as refreshTokenStore,
     refreshTokenExpires,
@@ -10,7 +10,7 @@ import {
     tokenExpires
 } from '../../stores/user';
 import Tokens from '../user/Tokens';
-import CookieDefaults from '../CookieDefaults';
+import CookieDefaults from '../common/CookieDefaults';
 
 export const Headers = {
     Authorization: 'Authorization'
@@ -92,7 +92,7 @@ export default class Fetch {
         }
 
         // do the request
-        const response = await fetch(`${url}/${version}/${subpath}`, {
+        const response = await fetch(`${getUrl()}/${version}/${subpath}`, {
             method: type,
             headers: {
                 Accept: 'application/json',

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
-    import { UnitType } from '../../scripts/UnitType';
-    import { moneyStyler } from '../../scripts/Helper';
+    import { UnitType } from '../../scripts/stock/UnitType';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import Loader from '../common/Loader.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import Purchase from '../../scripts/purchase/Purchase';

@@ -5,8 +5,12 @@
     import Nav from '../components/Nav.svelte';
     import Appbar from '../components/Appbar.svelte';
     import { stockItems } from '../stores/stock';
+    import { backendUrl } from '../stores/page';
 
-    const { page } = stores();
+    const { page, session } = stores();
+
+    // eslint-disable-next-line prefer-const, no-unused-vars
+    $backendUrl = $session.BACKEND_API_URL;
 
     let isLoggedIn = false;
     let hasUpdatedStockAfterMount = false;

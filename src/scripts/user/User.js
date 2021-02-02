@@ -1,6 +1,6 @@
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import Tokens from './Tokens';
-import CookieDefaults from '../CookieDefaults';
+import LocalStorageKeys from '../common/LocalStorageKeys';
 
 export default class User { 
     /**
@@ -26,7 +26,7 @@ export default class User {
      * @param {boolean} keepLoggedIn whether to keep the user logged in
      */
     static async login(username, password, keepLoggedIn) {
-        localStorage.setItem(CookieDefaults.KEEP_LOGGED_IN, keepLoggedIn);
+        localStorage.setItem(LocalStorageKeys.KEEP_LOGGED_IN, keepLoggedIn);
         
         const response = await Fetch.post('auth/login', {
             username,
