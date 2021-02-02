@@ -3,3 +3,4 @@ import { ORGANIZATION_NAME } from '../scripts/Config';
 
 export const title = writable(ORGANIZATION_NAME);
 export const navBalance = writable('show');
+export const backendUrl = writable(undefined);

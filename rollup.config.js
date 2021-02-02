@@ -27,7 +27,6 @@ export default {
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.BACKEND_API_URL': JSON.stringify(process.env.BACKEND_API_URL)
 			}),
 			svelte({
 				preprocess: sveltePreprocess(),
