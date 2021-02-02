@@ -11,6 +11,7 @@
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $backendUrl = $session.BACKEND_API_URL;
+    console.log("frontend", $backendUrl);
 
     let isLoggedIn;
     let hasUpdatedStockAfterMount = false;

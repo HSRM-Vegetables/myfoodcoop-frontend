@@ -6,6 +6,9 @@ import * as sapper from '@sapper/server';
 const { PORT, NODE_ENV, BACKEND_API_URL } = process.env;
 const dev = NODE_ENV === 'development';
 
+console.log("server", BACKEND_API_URL);
+
+
 express()
 	.use(
 		(req, res, next) => {
