@@ -6,6 +6,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import { currentBalance } from '../../stores/balance';
+    import { userId } from '../../stores/user';
 
     let changeMoneyInput;
     let balanceUpdateInProgress = false;
@@ -22,7 +23,7 @@
 
             // This variable is used in other files
             // eslint-disable-next-line no-unused-vars
-            $currentBalance = await Balance.setBalance(parseFloat(changeMoneyInput.getValue()));
+            $currentBalance = await Balance.setBalanceForUser($userId, parseFloat(changeMoneyInput.getValue()));
         } catch (error) {
             requestError = error;
         } finally {

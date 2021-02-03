@@ -3,15 +3,6 @@ import CustomError, { ErrorCodes } from '../api/CustomError';
 
 export default class Balance {
     /**
-     * Requests the current balance from the API
-     * @returns {number} current balance
-     */
-    static async getBalance() {
-        const response = await Fetch.get(`balance`, getAuthorizationHeader());
-        return response.balance;
-    }
-
-    /**
      * Requests the current balance for another user from the API
      * @param {string} userId the ID of the desired user
      * @returns {number} current balance
@@ -26,12 +17,12 @@ export default class Balance {
      * @param {number} newBalance value the balance should be set to
      * @returns {number} current balance
      */
-    static async setBalance(newBalance) {
+    static async setBalanceForUser(userId, newBalance) {
         if (!newBalance || Number.isNaN(newBalance) || typeof newBalance !== 'number') {
             throw new CustomError(ErrorCodes.BALANCE_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.patch(`balance`, {
+        const response = await Fetch.patch(`balance/${userId}`, {
             balance: newBalance
         }, getAuthorizationHeader());
 
@@ -43,12 +34,12 @@ export default class Balance {
      * @param {number} topupAmount value to add on top of balance
      * @returns {number} current balance
      */
-    static async topupBalance(topupAmount) {
+    static async topupBalanceForUser(userId, topupAmount) {
         if (!topupAmount || Number.isNaN(topupAmount) || typeof topupAmount !== 'number') {
             throw new CustomError(ErrorCodes.TOPUP_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/topup`, {
+        const response = await Fetch.post(`balance/${userId}/topup`, {
             amount: topupAmount
         }, getAuthorizationHeader());
 
@@ -60,12 +51,12 @@ export default class Balance {
      * @param {number} withDrawAmount value to subtract from the balance
      * @returns {number} current balance
      */
-    static async withdrawBalance(withDrawAmount) {
+    static async withdrawBalanceForUser(userId, withDrawAmount) {
         if (!withDrawAmount || Number.isNaN(withDrawAmount) || typeof withDrawAmount !== 'number') {
             throw new CustomError(ErrorCodes.WITHDRAW_AMOUNT_NOT_A_NUMBER, 'Value needs to be a number');
         }
 
-        const response = await Fetch.post(`balance/withdraw`, {
+        const response = await Fetch.post(`balance/${userId}/withdraw`, {
             amount: withDrawAmount
         }, getAuthorizationHeader());
 

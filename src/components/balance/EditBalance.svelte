@@ -4,6 +4,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
+    import { userId } from '../../stores/user';
 
     let addMoneyInput;
     let valueHint = '';
@@ -30,7 +31,7 @@
 
             // This variable is used in other files
             // eslint-disable-next-line no-unused-vars
-            $currentBalance = await Balance.topupBalance(parseFloat(additionalAmount));
+            $currentBalance = await Balance.topupBalanceForUser($userId, parseFloat(additionalAmount));
 
             inputValue = undefined;
         } catch (error) {
