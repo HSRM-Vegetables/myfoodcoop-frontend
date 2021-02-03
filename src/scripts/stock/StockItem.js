@@ -16,3 +16,10 @@ export default class StockItem {
         this.deliveryDate = deliveryDate;
     }
 }
+
+/**
+ * Calculates the tax rate given an stock item
+ * @param {StockItem} item stock item
+ * @returns {number} tax rate for given stock item
+ */
+export const getTaxPriceFromItem = (item) => item.pricePerUnit / (1.0 + item.vat) * item.vat;

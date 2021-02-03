@@ -12,6 +12,7 @@
     import { moneyStyler } from '../../scripts/common/Helper';
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
+    import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
     /**
      * The stock item
@@ -85,6 +86,10 @@
                 <span>{moneyStyler(item.pricePerUnit)} € / Stück</span>
             {:else}<span>{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
         </div>
+    </div>
+    <div class="columns is-mobile">
+        <div class="column">Steuersatz</div>
+        <div class="column has-text-right">{item.vat * 100} % ({moneyStyler(getTaxPriceFromItem(item))} €)</div>
     </div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>

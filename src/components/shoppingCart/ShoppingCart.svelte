@@ -10,6 +10,7 @@
     import { moneyStyler } from '../../scripts/common/Helper';
     import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
+    import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
     // Stub item because onMount is called after the first render
     let cart = {
@@ -19,17 +20,53 @@
     let checkoutInProgress = false;
     let requestError;
     let balanceAfterPurchase;
+    let vatDetails = [];
 
     $: {
         // This block is executed as soon as one of the stores or variables in this block is reassigned.
         // Immediatly after the currentBalance is set, the displayed value will be adapted.
         balanceAfterPurchase = moneyStyler($currentBalance - cart.totalPrice());
+        updateTaxes();
     }
 
     onMount(() => {
         cart = new ShoppingCart();
         cartItemsCount.forceUpdate();
     });
+
+    // updates the displayed tax and tax rates
+    function updateTaxes() {
+        const details = [];
+        const distinctVatRates = [];
+
+        // collect all currently existing vat rates
+        cart.cartItems.forEach((item) => {
+            if (!distinctVatRates.includes(item.stockItem.vat)) {
+                distinctVatRates.push(item.stockItem.vat);
+            }
+        });
+
+        // iterate over each vat rate
+        distinctVatRates.forEach((rate) => {
+            // get all items curently in cart, if they have the current rate
+            const itemsByRate = cart.cartItems.filter((ci) => ci.stockItem.vat === rate);
+
+            // accumulate the vat amount of all collected items
+            let vatValue = 0;
+            itemsByRate.forEach((item) => {
+                vatValue += getTaxPriceFromItem(item.stockItem) * item.quantity;
+            });
+
+            // temporaly save the calculate values
+            details.push({
+                vat: rate,
+                amount: vatValue,
+            });
+        });
+
+        // assign the value to the global variable
+        vatDetails = details;
+    }
 
     // removes an item from the cart
     function removeItem(event) {
@@ -74,6 +111,12 @@
     <hr />
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
+    <span>davon Steuern: {moneyStyler(vatDetails.reduce((sum, detail) => sum + detail.amount, 0))} €</span>
+    <br />
+    {#each vatDetails as details}
+        <span class="is-size-7">davon {moneyStyler(details.vat * 100)} %: {moneyStyler(details.amount)} €</span>
+        <br />
+    {/each}
 
     {#if balanceAfterPurchase}
         <p class="is-size-7 mt-3">Guthaben nach Kauf: {balanceAfterPurchase} €</p>

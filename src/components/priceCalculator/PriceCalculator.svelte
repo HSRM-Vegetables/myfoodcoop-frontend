@@ -9,6 +9,7 @@
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { moneyStyler } from '../../scripts/common/Helper';
+    import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
     // if undefined we asume, we are creating a new cart item
     export let stockItem;
@@ -23,6 +24,7 @@
     let quantityElement;
     let quantityError = false;
     let currentTotal = 0;
+    let currentTaxTotal = 0;
     let linkBack = '/shopping/stock';
 
     onMount(() => {
@@ -41,6 +43,7 @@
 
         if (!Number.isNaN(stockItem.pricePerUnit) && !Number.isNaN(quantity)) {
             currentTotal = (stockItem.pricePerUnit * quantity).toFixed(2);
+            currentTaxTotal = getTaxPriceFromItem(stockItem) * quantity;
         }
     }
 
@@ -79,10 +82,6 @@
         font-size: 1.5em;
     }
 
-    .form > div {
-        margin-bottom: 3em;
-    }
-
     .total-container {
         display: flex;
         flex-flow: column nowrap;
@@ -119,7 +118,7 @@
             <div class="column has-text-right">{getLocalizedStockStatus(stockItem.stockStatus)}</div>
         </div>
 
-        <div>
+        <div class="mt-5">
             <TextField
                 label="Menge"
                 placeholder="0"
@@ -143,7 +142,8 @@
 
         <div class="total-container">
             <h2>Gesamtpreis</h2>
-            <div class="total">{currentTotal}€</div>
+            <div class="total">{currentTotal} €</div>
+            <div>davon Steuern ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
         </div>
 
         <hr />

@@ -37,11 +37,12 @@ export default class Stock {
      * @param {String} orderDate from the item
      * @param {String} deliveryDate from the item
      * @param {StockStatus} status The current status of of this stock item
+     * @param {number} vat vat to be applied to the item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
     static async addItem(name, unitType, pricePerUnit, quantity, description,
-        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status) {       
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status, vat) {
         return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
@@ -56,6 +57,7 @@ export default class Stock {
             'orderDate': orderDate,
             'deliveryDate': deliveryDate,
             'stockStatus': status,
+            'vat': vat,
         }, getAuthorizationHeader());
     }
 
@@ -95,11 +97,12 @@ export default class Stock {
      * @param {String} orderDate from the item
      * @param {String} deliveryDate from the item
      * @param {StockStatus} status The current status of of this stock item
+     * @param {number} vat vat to be applied to the item
      * @returns {Boolean} true if item was added, false if it wasn't added
      * (due to errors while parsing etc)
      */
     static async updateItem(id, name, unitType, pricePerUnit, quantity, description,
-        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status) {
+        sustainablyProduced, certificates, originCategory, producer, supplier, orderDate, deliveryDate, status, vat) {
         return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
@@ -114,6 +117,7 @@ export default class Stock {
             'orderDate': orderDate,
             'deliveryDate': deliveryDate,
             'stockStatus': status,
+            'vat': vat
         }, getAuthorizationHeader());
     }
 
