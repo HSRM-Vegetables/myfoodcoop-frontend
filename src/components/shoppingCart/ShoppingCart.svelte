@@ -54,7 +54,7 @@
             // accumulate the vat amount of all collected items
             let vatValue = 0;
             itemsByRate.forEach((item) => {
-                vatValue = getTaxPriceFromItem(item.stockItem) * item.quantity;
+                vatValue += getTaxPriceFromItem(item.stockItem) * item.quantity;
             });
 
             // temporaly save the calculate values

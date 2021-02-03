@@ -22,4 +22,4 @@ export default class StockItem {
  * @param {StockItem} item stock item
  * @returns {number} tax rate for given stock item
  */
-export const getTaxPriceFromItem = (item) => item.pricePerUnit * item.vat;
+export const getTaxPriceFromItem = (item) => item.pricePerUnit / (1.0 + item.vat) * item.vat;
