@@ -1,10 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import Balance from '../../scripts/balance/Balance';
-    import Loader from '../common/Loader.svelte';
     import { moneyStyler } from '../../scripts/common/Helper';
     import ErrorModal from '../common/ErrorModal.svelte';
 
+    /**
+     * The ID of the user whose current balance is to be displayed
+     */
     export let userId;
 
     let balance;
@@ -26,9 +28,7 @@
 <div class="columns is-mobile">
     <div class="column is-size-5 has-text-weight-bold">Aktuelles Guthaben:</div>
     <div class="column has-text-right">
-        {#if isLoading}
-            <Loader isLoading={isLoading} />
-        {:else if balance !== undefined}{moneyStyler(balance)} €{/if}
+        {#if isLoading}Wird geladen...{:else if balance !== undefined}{moneyStyler(balance)} €{/if}
     </div>
 </div>
 
