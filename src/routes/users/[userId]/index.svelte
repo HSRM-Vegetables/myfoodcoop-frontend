@@ -7,6 +7,7 @@
     import Loader from '../../../components/common/Loader.svelte';
     import RoleConcept from '../../../components/RoleConcept.svelte';
     import UserDetails from '../../../components/user/UserDetails.svelte';
+    import UserDetailsBalance from '../../../components/user/UserDetailsBalance.svelte';
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
@@ -80,7 +81,11 @@
     {:else}
         <UserDetails user={user} />
 
-        <AuthorizeByRoles allowedRoles={[Roles.ADMIN]}>
+        <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
+            <UserDetailsBalance userId={user.id} />
+        </AuthorizeByRoles>
+
+        <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
             <hr />
             <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
 
