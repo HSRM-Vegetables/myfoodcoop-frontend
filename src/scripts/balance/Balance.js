@@ -62,4 +62,14 @@ export default class Balance {
 
         return response.balance;
     }
+
+    /**
+     * Gets the balance history of the user
+     * @param {string} userId unique id of the user
+     * @param {number} offset the number of items to skip before starting to collect the result set
+     * @param {number} limit the numbers of items to return
+    */
+    static async getHistory(userId, offset, limit) {
+        return Fetch.get(`balance/history?offset=${offset}&limit=${limit}`, getAuthorizationHeader())
+    }
 }
