@@ -18,6 +18,7 @@
     .centered-loader-wrapper {
         position: relative;
         min-height: 100px;
+        border-radius: 5px;
     }
 
     .is-loading {
