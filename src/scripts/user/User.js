@@ -27,19 +27,11 @@ export default class User {
      * @param {string} email email as defined by the user (optional)
      */
     static async update(userId, memberId, password, email) {
-        if (password === '' || password === null || password === undefined){
-            return Fetch.patch(`user/${userId}`, {
-                'memberId': memberId,
-                'email': email,
-            }, getAuthorizationHeader());    
-        }
-        
         return Fetch.patch(`user/${userId}`, {
-            'password': password,
-            'memberId': memberId,
-            'email': email,
+            password,
+            memberId,
+            email,
         }, getAuthorizationHeader());
-        
     }
 
     /**

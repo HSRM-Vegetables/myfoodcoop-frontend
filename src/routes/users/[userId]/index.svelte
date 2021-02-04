@@ -105,7 +105,7 @@
         </AuthorizeByRoles>
 
         <hr />
-        <UserEdit user={user} otherData={true} password={true} />
+        <UserEdit user={user} otherData={true} password={true} on:update={updateUser} />
         <hr />
 
         <div class="container has-text-centered mt-6">

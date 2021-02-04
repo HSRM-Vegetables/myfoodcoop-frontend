@@ -1,9 +1,12 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import TextField from '../common/TextField.svelte';
+    import ErrorModal from '../common/ErrorModal.svelte';
     import Button from '../common/Button.svelte';
     import User from '../../scripts/user/User';
     import AuthorizeByRoles from '../common/AuthorizeByRoles.svelte';
     import { Roles } from '../../scripts/roles/Roles';
+    import { userDetails } from '../../stores/userDetails';
 
     export let user;
     export let password;
@@ -29,6 +32,10 @@
 
     let allowUpdate = false;
     let message = false;
+
+    let requestError;
+
+    const eventDispatcher = createEventDispatcher();
 
     // check if a given input field has the specified length
     function hasMinimumLength(input, minimumLength) {
@@ -94,10 +101,36 @@
     }
 
     async function updateUserData() {
-        User.update(user.id, memberIdInput.getValue(), passwordInput.getValue(), emailInput.getValue());
-        message = true;
+        try {
+            // patch the user date
+            await User.update(
+                user.id,
+                memberIdInput ? memberIdInput.getValue() : undefined,
+                passwordInput && passwordInput === '' ? passwordInput.getValue() : undefined,
+                emailInput ? emailInput.getValue() : undefined
+            );
+
+            // if its our user, update the user details
+            if (user.id === $userDetails.id) {
+                await userDetails.forceUpdate();
+            }
+
+            // call the update event from the upper component
+            eventDispatcher('update');
+
+            // display the success message
+            message = true;
+
+            // clear the password fields
+            if (passwordInput) passwordInput.clear();
+            if (repeatPasswordInput) repeatPasswordInput.clear();
+        } catch (error) {
+            requestError = error;
+        }
     }
 </script>
+
+<ErrorModal error={requestError} />
 
 {#if user}
     {#if message}
