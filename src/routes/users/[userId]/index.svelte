@@ -7,6 +7,7 @@
     import Loader from '../../../components/common/Loader.svelte';
     import RoleConcept from '../../../components/RoleConcept.svelte';
     import UserDetails from '../../../components/user/UserDetails.svelte';
+    import UserEdit from '../../../components/user/UserEdit.svelte';
     import UserDetailsBalance from '../../../components/user/UserDetailsBalance.svelte';
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
@@ -103,6 +104,8 @@
             </div>
         </AuthorizeByRoles>
 
+        <hr />
+        <UserEdit user={user} otherData={true} password={true} on:update={updateUser} />
         <hr />
 
         <div class="container has-text-centered mt-6">
