@@ -28,6 +28,7 @@
     let emailError = false;
 
     let allowUpdate = false;
+    let message = false;
 
     // check if a given input field has the specified length
     function hasMinimumLength(input, minimumLength) {
@@ -94,10 +95,16 @@
 
     async function updateUserData() {
         User.update(user.id, memberIdInput.getValue(), passwordInput.getValue(), emailInput.getValue());
+        message = true;
     }
 </script>
 
 {#if user}
+    {#if message}
+        <article class="message is-primary">
+            <div class="message-body">Daten wurden aktualisiert!</div>
+        </article>
+    {/if}
     {#if otherData}
         <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
             <div class="pt-4">
