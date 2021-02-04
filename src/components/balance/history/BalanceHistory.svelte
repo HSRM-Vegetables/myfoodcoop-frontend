@@ -72,6 +72,18 @@
 
     // load the dates and convert them for api calls
     convertDates(selectedDatePickerDates[0], selectedDatePickerDates[1]);
+
+    function sign(balanceChangeType) {
+        if (balanceChangeType === 'TOPUP') {
+            return '+';
+        }
+
+        if (balanceChangeType === 'SET') {
+            return '';
+        }
+
+        return '-';
+    }
 </script>
 
 <ErrorModal error={requestError} />
@@ -93,14 +105,20 @@
 </div>
 
 <CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={history.length > 0}>
-    {#each history as balanceEvent}
+    {#each history as balanceHistoryItem}
         <ListItem size="small">
             <div class="columns is-mobile">
                 <div class="column has-text-left">
-                    <span>{DateTime.fromISO(balanceEvent.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
+                    <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
                 </div>
-                <div class="column has-text-centered"><span>{balanceEvent.balanceChangeType}</span></div>
-                <div class="column has-text-right"><span>{moneyStyler(balanceEvent.amount)} €</span></div>
+                <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
+                <div class="column has-text-right">
+                    <span>
+                        {sign(balanceHistoryItem.balanceChangeType)}
+                        {moneyStyler(balanceHistoryItem.amount)}
+                        €
+                    </span>
+                </div>
             </div>
         </ListItem>
     {/each}
