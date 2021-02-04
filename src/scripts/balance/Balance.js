@@ -2,6 +2,7 @@ import Fetch, { getAuthorizationHeader } from '../api/Fetch';
 import CustomError, { ErrorCodes } from '../api/CustomError';
 
 export default class Balance {
+
     /**
      * Requests the current balance for another user from the API
      * @param {string} userId the ID of the desired user
@@ -66,16 +67,15 @@ export default class Balance {
     /**
      * Gets the balance history of the user
      * @param {string} userId unique id of the user
-     * @param {number} offset the number of items to skip before starting to collect the result set
-     * @param {number} limit the numbers of items to return
-     * @param {string} from start date in the format yyyy-MM-dd
-     * @param {string} to end date in the format yyyy-MM-dd
+     * @param {string} fromDate start date in the format yyyy-MM-dd
+     * @param {string} toDate end date in the format yyyy-MM-dd
+     * @param {number} pageNumber page number for pagination
+     * @param {number} pageSize number of elements per page
     */
-    static async getHistory(userId, offset, limit, from, to) {
-        // return Fetch.get(`balance/${userId}/history?offset=${offset}&limit=${limit}`, getAuthorizationHeader())
-        return Fetch.get(
-            `balance/${userId}/history?offset=${offset}&limit=${limit}&fromDate=${from}&toDate=${to}`,
-            getAuthorizationHeader()
-        );
+    static async getHistory(userId, fromDate, toDate, pageNumber, pageSize) {
+        const url = `balance/${userId}/history`;
+        const params = `fromDate=${fromDate}&toDate=${toDate}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+
+        return Fetch.get(`${url}?${params}`, getAuthorizationHeader());
     }
 }

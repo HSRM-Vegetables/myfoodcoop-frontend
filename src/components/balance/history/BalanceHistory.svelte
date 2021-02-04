@@ -16,14 +16,16 @@
 
     let requestError;
 
-    let total = 0;
-    let offset = 0;
-    let limit = 10;
+    let pageNumber = 0;
+    const pageSize = 10;
+    let totalPages = 0;
+
     let history = [];
     let isLoading = false;
 
     let fromDate;
     let toDate;
+
     // the selected start and end of the datepicker. Datepicker needs them as an array.
     // select the transactions from the last 3 months as the default
     const selectedDatePickerDates = [DateTime.local().minus({ months: 3 }), DateTime.local()];
@@ -45,8 +47,7 @@
      * @param e the event
      */
     function updatePaginationDetails(e) {
-        offset = e.detail.offset;
-        limit = e.detail.limit;
+        pageNumber = e.detail.pageNumber;
 
         updateHistory();
     }
@@ -58,8 +59,8 @@
         try {
             isLoading = true;
 
-            const response = await Balance.getHistory(userId, offset, limit, fromDate, toDate);
-            total = response.pagination.total;
+            const response = await Balance.getHistory(userId, fromDate, toDate, pageNumber, pageSize);
+            totalPages = response.pagination.totalPages;
 
             history = response.balanceHistoryItems;
         } catch (error) {
@@ -104,4 +105,5 @@
         </ListItem>
     {/each}
 </CenteredLoader>
-<Pagination limit={limit} total={total} isLoading={isLoading} on:update={updatePaginationDetails} />
+
+<Pagination pageNumber={pageNumber} totalPages={totalPages} isLoading={isLoading} on:update={updatePaginationDetails} />

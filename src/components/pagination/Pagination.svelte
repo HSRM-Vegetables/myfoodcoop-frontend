@@ -1,99 +1,73 @@
 <script>
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
 
     /**
-     * Offset the request should start
+     * Number of currently shown page
      */
-    export let offset = 0;
+    export let pageNumber = 0;
 
     /**
-     * Limit of items for the current page
+     * The total number of pages for pagination
      */
-    export let limit = 10;
-
-    /**
-     * The total amount of responses available
-     */
-    export let total;
+    export let totalPages;
 
     const eventDispatcher = createEventDispatcher();
 
     let pages = [];
-    let currentPage = 1;
-    const initialOffset = offset;
 
     // eslint-disable-next-line no-unused-expressions, no-sequences
-    $: offset, total, updatePages();
+    $: totalPages, updatePages();
 
-    onMount(() => {
-        updateData(initialOffset);
-    });
-
-    function updateData(newOffset) {
-        currentPage = newOffset / limit + 1;
+    function updateData(newPageNumber) {
         updatePages();
 
-        eventDispatcher('update', {
-            offset: newOffset,
-            limit,
-        });
+        eventDispatcher('update', { pageNumber: newPageNumber });
     }
 
     function updatePages() {
         // clear old pages
-        let newPages = [];
-
-        // get the (float) number of pages needet
-        const pagesNeeded = total / limit;
-        // round the float to the next int
-        const pageCount = Math.ceil(pagesNeeded);
-
-        // currentPage = Math.floor(total / (offset + limit));
-        currentPage = offset / limit + 1;
+        const newPages = [];
 
         // create a page object for each page
-        for (let pageNumber = 0; pageNumber < pageCount; pageNumber += 1) {
+        for (let i = 0; i < totalPages; i += 1) {
             newPages.push({
-                pageNumber: pageNumber + 1,
-                offset: initialOffset + limit * pageNumber,
+                pageNumber: i,
                 isEllipsis: false,
             });
         }
 
-        if (newPages.length > 7) {
-            // const centerPage = Math.round(newPages.length / 2);
+        let displayedPages = [];
 
-            let displayedPages = [];
+        if (newPages.length > 7) {
             const ellipsis = { isEllipsis: true };
 
-            if (currentPage === 1 || currentPage === pages.length) {
+            if (pageNumber === 0 || pageNumber === pages.length - 1) {
                 displayedPages = [
                     newPages[0],
                     newPages[1],
                     newPages[2],
                     ellipsis,
-                    newPages[6],
-                    newPages[7],
-                    newPages[8],
+                    newPages[pages.length - 3],
+                    newPages[pages.length - 2],
+                    newPages[pages.length - 1],
                 ];
             } else {
-                const pageIndex = currentPage - 1;
                 displayedPages = [
                     newPages[0],
                     ellipsis,
-                    newPages[pageIndex - 1],
-                    newPages[pageIndex],
-                    newPages[pageIndex - 1],
+                    newPages[pageNumber - 1],
+                    newPages[pageNumber],
+                    newPages[pageNumber + 1],
                     ellipsis,
                     newPages[pages.length - 1],
                 ];
             }
-
-            newPages = displayedPages;
+        } else {
+            displayedPages = newPages;
         }
 
         // tell svelte to update the view
-        pages = newPages;
+        pages = displayedPages;
     }
 </script>
 
@@ -103,15 +77,20 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <a
             class="pagination-previous has-text-weight-bold"
-            disabled={currentPage === 1 ? true : undefined}
-            on:click={updateData(offset)}
-        >&lt;</a>
+            disabled={pageNumber === 0 ? true : undefined}
+            on:click={updateData(pageNumber - 1)}
+        >
+            &lt;
+        </a>
+
         <!-- svelte-ignore a11y-missing-attribute -->
         <a
             class="pagination-next has-text-weight-bold"
-            disabled={currentPage === pages.length ? true : undefined}
-            on:click={updateData(offset + limit)}
-        >&gt;</a>
+            disabled={pageNumber === pages.length - 1 ? true : undefined}
+            on:click={updateData(pageNumber + 1)}
+        >
+            &gt;
+        </a>
 
         <ul class="pagination-list is-hidden-mobile">
             {#each pages as page}
@@ -124,9 +103,11 @@
                         <!-- svelte-ignore a11y-missing-attribute -->
                         <a
                             class="pagination-link is-button"
-                            class:is-current={currentPage === page.pageNumber}
-                            on:click={() => updateData(page.offset)}
-                        >{page.pageNumber}</a>
+                            class:is-current={page.pageNumber === pageNumber}
+                            on:click={() => updateData(page.pageNumber)}
+                        >
+                            {page.pageNumber + 1}
+                        </a>
                     {/if}
                 </li>
             {/each}
