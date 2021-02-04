@@ -7,6 +7,6 @@ export default class SoldItems {
             `reports/sold-items?fromDate=${ fromDate }&toDate=${ toDate}`,
             getAuthorizationHeader()
         );
-        return response.items;
+        return response;
     }
 }
