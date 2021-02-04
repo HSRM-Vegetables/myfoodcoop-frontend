@@ -68,8 +68,14 @@ export default class Balance {
      * @param {string} userId unique id of the user
      * @param {number} offset the number of items to skip before starting to collect the result set
      * @param {number} limit the numbers of items to return
+     * @param {string} from start date in the format yyyy-MM-dd
+     * @param {string} to end date in the format yyyy-MM-dd
     */
-    static async getHistory(userId, offset, limit) {
-        return Fetch.get(`balance/history?offset=${offset}&limit=${limit}`, getAuthorizationHeader())
+    static async getHistory(userId, offset, limit, from, to) {
+        // return Fetch.get(`balance/${userId}/history?offset=${offset}&limit=${limit}`, getAuthorizationHeader())
+        return Fetch.get(
+            `balance/${userId}/history?offset=${offset}&limit=${limit}&fromDate=${from}&toDate=${to}`,
+            getAuthorizationHeader()
+        );
     }
 }
