@@ -7,6 +7,7 @@
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
     import { CalendarStyle } from '../../../scripts/CalendarStyle';
+    import CenteredLoader from '../../common/CenteredLoader.svelte';
 
     /**
      * Unique of id of the user
@@ -16,7 +17,10 @@
     let requestError;
 
     let total = 0;
+    let offset = 0;
+    let limit = 10;
     let history = [];
+    let isLoading = false;
 
     let fromDate;
     let toDate;
@@ -32,20 +36,40 @@
     function convertDates(from, to) {
         fromDate = DateTime.fromJSDate(new Date(from)).toFormat('yyyy-MM-dd');
         toDate = DateTime.fromJSDate(new Date(to)).toFormat('yyyy-MM-dd');
+
+        updateHistory();
     }
 
-    async function updateHistory(e) {
+    /**
+     * Update the pagination details provided by the pagination component
+     * @param e the event
+     */
+    function updatePaginationDetails(e) {
+        offset = e.detail.offset;
+        limit = e.detail.limit;
+
+        updateHistory();
+    }
+
+    /**
+     * Updates the history items, given the userId, offset, limit, from and to date
+     */
+    async function updateHistory() {
         try {
-            const response = await Balance.getHistory(userId, e.detail.offset, e.detail.limit, fromDate, toDate);
+            isLoading = true;
+
+            const response = await Balance.getHistory(userId, offset, limit, fromDate, toDate);
             total = response.pagination.total;
 
             history = response.balanceHistoryItems;
         } catch (error) {
             requestError = error;
+        } finally {
+            isLoading = false;
         }
-        return 10;
     }
 
+    // load the dates and convert them for api calls
     convertDates(selectedDatePickerDates[0], selectedDatePickerDates[1]);
 </script>
 
@@ -66,7 +90,8 @@
         />
     </div>
 </div>
-<Pagination limit={10} total={total} on:update={updateHistory}>
+
+<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={history.length > 0}>
     {#each history as balanceEvent}
         <ListItem size="small">
             <div class="columns is-mobile">
@@ -78,4 +103,5 @@
             </div>
         </ListItem>
     {/each}
-</Pagination>
+</CenteredLoader>
+<Pagination limit={limit} total={total} isLoading={isLoading} on:update={updatePaginationDetails} />

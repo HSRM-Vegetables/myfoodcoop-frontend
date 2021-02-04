@@ -1,8 +1,19 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
 
+    /**
+     * Offset the request should start
+     */
     export let offset = 0;
+
+    /**
+     * Limit of items for the current page
+     */
     export let limit = 10;
+
+    /**
+     * The total amount of responses available
+     */
     export let total;
 
     const eventDispatcher = createEventDispatcher();
@@ -69,8 +80,6 @@
         pages = newPages;
     }
 </script>
-
-<slot />
 
 <!-- Only display paging if there is too much content for one page -->
 {#if pages.length > 1}
