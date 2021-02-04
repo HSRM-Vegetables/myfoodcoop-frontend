@@ -31,7 +31,8 @@
 
     function updateData(newOffset) {
         currentPage = newOffset / limit + 1;
-        // currentPage = Math.floor(total / (offset));
+        updatePages();
+
         eventDispatcher('update', {
             offset: newOffset,
             limit,
@@ -59,19 +60,34 @@
             });
         }
 
-        // if we have more then 7 pages, only display the first, the 3 in the middle and the last page
         if (newPages.length > 7) {
-            const centerPage = Math.round(newPages.length / 2);
+            // const centerPage = Math.round(newPages.length / 2);
 
-            const displayedPages = [
-                newPages[0],
-                { isEllipsis: true },
-                newPages[centerPage - 1],
-                newPages[centerPage],
-                newPages[centerPage + 1],
-                { isEllipsis: true },
-                newPages[newPages.length - 1],
-            ];
+            let displayedPages = [];
+            const ellipsis = { isEllipsis: true };
+
+            if (currentPage === 1 || currentPage === pages.length) {
+                displayedPages = [
+                    newPages[0],
+                    newPages[1],
+                    newPages[2],
+                    ellipsis,
+                    newPages[6],
+                    newPages[7],
+                    newPages[8],
+                ];
+            } else {
+                const pageIndex = currentPage - 1;
+                displayedPages = [
+                    newPages[0],
+                    ellipsis,
+                    newPages[pageIndex - 1],
+                    newPages[pageIndex],
+                    newPages[pageIndex - 1],
+                    ellipsis,
+                    newPages[pages.length - 1],
+                ];
+            }
 
             newPages = displayedPages;
         }
