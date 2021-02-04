@@ -96,18 +96,21 @@
             csvTitle = `${localFrom.toFormat('dd.MM.yyyy')} - ${localTo.toFormat('dd.MM.yyyy')}`;
         }
 
+        let tempTitle = `Zeitraum: ${csvTitle}, Netto = ${soldItems.grossAmount - soldItems.totalVat}, `;
+        tempTitle += `Steuern = ${soldItems.totalVat}, Brutto = ${soldItems.grossAmount}`;
+
         const options = {
             fieldSeparator: ';',
             quoteStrings: '"',
             decimalSeparator: ',',
             showLabels: true,
             showTitle: true,
-            title: `Zeitraum: ${csvTitle}`,
+            title: tempTitle,
             filename: csvTitle.replace(' - ', '-'),
             useBom: true,
             useKeysAsHeaders: true,
         };
-        const newData = data.map(({ fromDate, toDate, ...item }) => item);
+        const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
         const csvExporter = new ExportToCsv(options);
 
         csvExporter.generateCsv(newData);
@@ -139,6 +142,12 @@
     button.background-none {
         background: none;
         border: 0;
+    }
+
+    .vat-container {
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-end;
     }
 </style>
 
@@ -179,7 +188,7 @@
         <article class="message is-danger">
             <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
         </article>
-    {:else if soldItems !== undefined && soldItems.length > 0}
+    {:else if soldItems.items !== undefined && soldItems.items.length > 0}
         <div class="columns">
             <div class="column">
                 {#if selectedPeriod === 'yesterday'}
@@ -187,18 +196,47 @@
                     {localFrom.toFormat('dd.MM.yyyy')}
                 {:else}Zeitraum: {localFrom.toFormat('dd.MM.yyyy')} - {localTo.toFormat('dd.MM.yyyy')}{/if}
             </div>
-            <div class="column">
-                <button
-                    text="CSV Export"
-                    class="is-primary is-pulled-right has-text-black background-none is-hidden-touch is-clickable"
-                    on:click={() => csvExport(soldItems)}
-                >
-                    <Icon icon={mdiFileDownload} appbar={true} />
-                </button>
-            </div>
+
+            <br />
+
+            <button
+                text="CSV Export"
+                class="is-primary is-pulled-right has-text-black background-none is-hidden-touch is-clickable"
+                on:click={() => csvExport(soldItems)}
+            >
+                <Icon icon={mdiFileDownload} appbar={true} />
+            </button>
         </div>
+
         <hr />
-        <SoldItemsComp soldItems={soldItems} on:select={itemSelected} />
+
+        <SoldItemsComp soldItems={soldItems.items} on:select={itemSelected} />
+
+        <hr />
+
+        <div class="vat-container">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Netto</td>
+                        <td class="has-text-weight-bold	has-text-right">
+                            {soldItems.grossAmount - soldItems.totalVat}
+                            €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MwSt. Gesamt</td>
+                        <td class="has-text-weight-bold	has-text-right">{soldItems.totalVat} €</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Brutto</td>
+                        <td class="has-text-weight-bold	has-text-right">{soldItems.grossAmount} €</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     {:else}
         <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
     {/if}
