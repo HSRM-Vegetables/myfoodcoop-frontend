@@ -6,7 +6,7 @@ export default class User {
     /**
      * Register the user
      * @param {string} username username as defined by the user
-     * @param {number} memberId memberid given to the user by the customer
+     * @param {string} memberId memberid given to the user by the customer
      * @param {string} password password as defined by the user
      * @param {string} email email as defined by the user (optional)
      */
@@ -17,6 +17,29 @@ export default class User {
             password,
             email,
         })
+    }
+    
+    /**
+     * Update the user
+     * @param {string} userId username as defined by the user
+     * @param {string} memberId memberid given to the user by the customer
+     * @param {string} password password as defined by the user
+     * @param {string} email email as defined by the user (optional)
+     */
+    static async update(userId, memberId, password, email) {
+        if (password === '' || password === null || password === undefined){
+            return Fetch.patch(`user/${userId}`, {
+                'memberId': memberId,
+                'email': email,
+            }, getAuthorizationHeader());    
+        }
+        
+        return Fetch.patch(`user/${userId}`, {
+            'password': password,
+            'memberId': memberId,
+            'email': email,
+        }, getAuthorizationHeader());
+        
     }
 
     /**

@@ -1,6 +1,7 @@
 <script>
     import Cookie from 'js-cookie';
-    import { mdiLogout, mdiRefresh } from '@mdi/js';
+    import { goto } from '@sapper/app';
+    import { mdiLogout, mdiRefresh, mdiPencil } from '@mdi/js';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { userName, allowKeepLoggedIn, refreshToken, tokenExpires, refreshTokenExpires } from '../../stores/user';
@@ -9,6 +10,7 @@
     import UserDetails from '../../components/user/UserDetails.svelte';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Switch from '../../components/common/Switch.svelte';
+    import Icon from '../../components/common/Icon.svelte';
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
@@ -76,7 +78,20 @@
     }
 </script>
 
-<div class="is-size-3 has-text-weight-bold pb-5">{$userName}</div>
+<style>
+    .pointer {
+        cursor: pointer;
+    }
+</style>
+
+<div class="columns is-mobile">
+    <div class="column">
+        <div class="is-size-3 has-text-weight-bold pb-5">{$userName}</div>
+    </div>
+    <div class="column has-text-right pointer is-one-quarter" on:click={() => goto('/profile/edit/data')}>
+        <Icon icon={mdiPencil} appbar={true} />
+    </div>
+</div>
 
 {#if $userDetails}
     <UserDetails user={$userDetails} showRoles={true} />
@@ -115,6 +130,8 @@
             isLoading={isLoggingOut}
             icon={mdiLogout}
         />
+        <br />
+        <Button text="Passwort ändern" class="is-link mb-3" href="/profile/edit/password" size="full-width" />
         <br />
         <Button goHome={true} size="full-width" />
     </div>

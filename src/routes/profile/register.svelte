@@ -27,7 +27,7 @@
     // fields for password handling
     let passwordInput;
     let passwordError = false;
-    const passwordMinimumLength = 10;
+    const passwordMinimumLength = 8;
 
     // fields for repeat password handling
     let repeatPasswordInput;
@@ -198,7 +198,7 @@
 <!-- memberid inputfield -->
 <TextField
     bind:this={memberIdInput}
-    type="number"
+    type="text"
     label="Mitgliedsnummer"
     on:input={checkMemberId}
     isInErrorState={memberIdError}
@@ -212,7 +212,7 @@
 <!-- Email textfield -->
 <TextField
     bind:this={emailInput}
-    type="text"
+    type="email"
     label="Email (optional)"
     on:input={checkEmail}
     isInErrorState={emailError}
