@@ -4,9 +4,10 @@
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { inStockItems, orderedItems, outOfStockItems, spoilsSoonItems } from '../../stores/stock';
+    import { inStockItems, orderedItems, outOfStockItems, spoilsSoonItems, stockItems } from '../../stores/stock';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import { StockStatus, getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
+    import MobileReloadButton from '../../components/common/MobileReloadButton.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Bestand';
@@ -16,9 +17,15 @@
     function onSelectItem(event) {
         goto(`/stock/item/${event.detail.id}`);
     }
+
+    function updateStock() {
+        stockItems.forceUpdate();
+    }
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <MobileReloadButton on:click={updateStock} />
+
     {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
         <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
         <StockList

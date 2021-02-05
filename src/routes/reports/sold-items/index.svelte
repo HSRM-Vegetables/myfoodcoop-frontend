@@ -14,6 +14,7 @@
     import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
+    import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Was wurde gekauft';
@@ -52,7 +53,7 @@
         };
     }
 
-    async function loadItems(period, name) {
+    async function loadItems(period, name, forceUpdate = false) {
         localFrom = periods[period].fromDate;
         localTo = undefined;
         if (name !== 'yesterday') {
@@ -64,7 +65,7 @@
             titleText = name;
         }
 
-        if (cache[period] !== undefined) {
+        if (!forceUpdate && cache[period] !== undefined) {
             soldItems = cache[period];
             isLoading = false;
             return;
@@ -152,6 +153,8 @@
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <MobileReloadButton on:click={() => loadItems(selectedPeriod, titleText, true)} />
+
     <div class="has-text-centered">
         <Button
             text="Gestern"
