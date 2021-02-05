@@ -12,6 +12,7 @@
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
+    import BalanceHistory from '../../../components/balance/history/BalanceHistory.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Benutzerdetails';
@@ -102,6 +103,11 @@
 
                 <Button text="Mitglied löschen" class="is-danger" size="full-width" on:click={deleteMember} />
             </div>
+        </AuthorizeByRoles>
+
+        <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
+            <hr />
+            <BalanceHistory userId={user.id} />
         </AuthorizeByRoles>
 
         <hr />

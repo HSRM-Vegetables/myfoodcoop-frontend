@@ -14,7 +14,6 @@
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
-    import BalanceHistory from '../../components/balance/history/BalanceHistory.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Profil';
@@ -96,8 +95,6 @@
 
 {#if $userDetails}
     <UserDetails user={$userDetails} showRoles={true} />
-
-    <BalanceHistory userId={$userDetails.id} />
 
     <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
         <hr />

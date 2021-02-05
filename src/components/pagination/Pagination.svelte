@@ -87,7 +87,7 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <a
             class="pagination-next has-text-weight-bold"
-            disabled={pageNumber === pages.length - 1 ? true : undefined}
+            disabled={pageNumber === totalPages - 1 ? true : undefined}
             on:click={updateData(pageNumber + 1)}
         >
             &gt;

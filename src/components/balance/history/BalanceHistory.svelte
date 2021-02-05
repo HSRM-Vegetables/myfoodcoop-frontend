@@ -8,6 +8,7 @@
     import { moneyStyler } from '../../../scripts/common/Helper';
     import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
+    import NoData from '../../common/NoData.svelte';
 
     /**
      * Unique of id of the user
@@ -44,10 +45,10 @@
 
     /**
      * Update the pagination details provided by the pagination component
-     * @param e the event
+     * @param event the event
      */
-    function updatePaginationDetails(e) {
-        pageNumber = e.detail.pageNumber;
+    function updatePaginationDetails(event) {
+        pageNumber = event.detail.pageNumber;
 
         updateHistory();
     }
@@ -120,6 +121,11 @@
                 </div>
             </div>
         </ListItem>
+    {:else}
+        <!-- displayed if the list is empty -->
+        {#if !isLoading}
+            <NoData />
+        {/if}
     {/each}
 </CenteredLoader>
 

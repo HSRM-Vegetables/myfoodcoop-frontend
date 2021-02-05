@@ -89,7 +89,9 @@
         isLoading={balanceUpdateInProgress}
     />
     <hr />
-    <Button href="/balance/adjust" text="Guthaben anpassen" class="is-link mt-5" size="full-width" />
+    <Button href="/balance/adjust" text="Guthaben anpassen" class="is-link mt-2" size="full-width" />
+    <Button href="/balance/history" text="Guthaben Historie" class="is-link mt-3 mb-2" size="full-width" />
+    <hr />
     <Button goHome={true} size="full-width" class="mt-3" />
 </div>
 
