@@ -97,7 +97,6 @@
             format="DD.MM.YYYY"
             styling={new CalendarStyle()}
             range={true}
-            end={new Date()}
             selected={selectedDatePickerDates}
             on:range-selected={(e) => convertDates(e.detail.from, e.detail.to)}
         />

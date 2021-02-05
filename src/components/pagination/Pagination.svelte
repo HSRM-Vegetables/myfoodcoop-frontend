@@ -19,9 +19,10 @@
     $: totalPages, updatePages();
 
     function updateData(newPageNumber) {
-        updatePages();
+        pageNumber = newPageNumber;
 
-        eventDispatcher('update', { pageNumber: newPageNumber });
+        updatePages();
+        eventDispatcher('update', { pageNumber });
     }
 
     function updatePages() {
@@ -41,15 +42,15 @@
         if (newPages.length > 7) {
             const ellipsis = { isEllipsis: true };
 
-            if (pageNumber === 0 || pageNumber === pages.length - 1) {
+            if (pageNumber <= 1 || pageNumber >= newPages.length - 2) {
                 displayedPages = [
                     newPages[0],
                     newPages[1],
                     newPages[2],
                     ellipsis,
-                    newPages[pages.length - 3],
-                    newPages[pages.length - 2],
-                    newPages[pages.length - 1],
+                    newPages[newPages.length - 3],
+                    newPages[newPages.length - 2],
+                    newPages[newPages.length - 1],
                 ];
             } else {
                 displayedPages = [
@@ -59,7 +60,7 @@
                     newPages[pageNumber],
                     newPages[pageNumber + 1],
                     ellipsis,
-                    newPages[pages.length - 1],
+                    newPages[newPages.length - 1],
                 ];
             }
         } else {
