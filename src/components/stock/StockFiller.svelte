@@ -359,7 +359,7 @@
         </div>
         <hr />
         <div class="columns pt-4 is-mobile">
-            <div class="column">Nachhaltig Produziert</div>
+            <div class="column">nachhaltig Produziert</div>
             <div class="column has-text-right">
                 <Switch bind:checked={sustainablyProduced} twoColor={true} />
             </div>
