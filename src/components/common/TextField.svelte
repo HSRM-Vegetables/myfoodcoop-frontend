@@ -82,6 +82,7 @@
         min={minimum === 0 ? undefined : minimum}
         on:change
         on:input
+        on:keypress
         on:keydown
         disabled={disabled}
         value={value}
