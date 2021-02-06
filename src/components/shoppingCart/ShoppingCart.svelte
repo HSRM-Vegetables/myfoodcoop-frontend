@@ -6,8 +6,9 @@
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
     import Button from '../common/Button.svelte';
+    import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler, createCookie } from '../../scripts/common/Helper';
     import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
@@ -21,6 +22,7 @@
     let requestError;
     let balanceAfterPurchase;
     let vatDetails = [];
+    let modalOpen = false;
 
     $: {
         // This block is executed as soon as one of the stores or variables in this block is reassigned.
@@ -84,6 +86,7 @@
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
             cart.clear();
             cartItemsCount.forceUpdate();
+            createCookie('buy', 'true', 0.3);
             goto('/');
         } catch (error) {
             requestError = error;
@@ -91,8 +94,37 @@
             checkoutInProgress = false;
         }
     }
+    function setModalOpen(value) {
+        modalOpen = value;
+    }
 </script>
 
+<Modal title="Kauf bestätigen" bind:open={modalOpen}>
+    <div slot="body">
+        <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
+
+        <span class="pl-3">davon Umsatzsteuer:
+            {moneyStyler(vatDetails.reduce((sum, detail) => sum + detail.amount, 0))}
+            €</span>
+        <br />
+        {#each vatDetails as details}
+            <span class="is-size-7 pl-3">davon
+                {moneyStyler(details.vat * 100)}
+                %:
+                {moneyStyler(details.amount)}
+                €</span>
+            <br />
+        {/each}
+
+        {#if balanceAfterPurchase}
+            <p class="mt-3">Guthaben nach Kauf: {balanceAfterPurchase} €</p>
+        {/if}
+    </div>
+    <div slot="footer">
+        <button class="button is-primary" on:click={checkout}>Kaufen</button>
+        <button class="button is-danger" on:click={() => setModalOpen(false)}>Abbrechen</button>
+    </div>
+</Modal>
 <div class="has-text-centered">
     {#if cart.cartItems.length > 0}
         <ShoppingCartItems bind:cartItems={cart.cartItems} on:remove={removeItem} />
@@ -111,7 +143,7 @@
     <hr />
 
     <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
-    <span>davon Steuern: {moneyStyler(vatDetails.reduce((sum, detail) => sum + detail.amount, 0))} €</span>
+    <span>davon Umsatzsteuer : {moneyStyler(vatDetails.reduce((sum, detail) => sum + detail.amount, 0))} €</span>
     <br />
     {#each vatDetails as details}
         <span class="is-size-7">davon {moneyStyler(details.vat * 100)} %: {moneyStyler(details.amount)} €</span>
@@ -127,7 +159,7 @@
             text="Kaufen"
             class="is-primary mt-5"
             size="full-width"
-            on:click={checkout}
+            on:click={() => setModalOpen(true)}
             isLoading={checkoutInProgress}
             icon={mdiCartArrowRight}
         />
