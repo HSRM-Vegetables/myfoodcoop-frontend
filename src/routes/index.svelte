@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import Cookie from 'js-cookie';
     import {
         mdiAccount,
         mdiCartArrowDown,
@@ -15,12 +16,15 @@
     import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
+
     import { ORGANIZATION_NAME } from '../scripts/Config';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = ORGANIZATION_NAME;
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
+
+    const buyCookie = Cookie.get('buy');
 
     const buttons = [
         {
@@ -120,6 +124,11 @@
     }
 </style>
 
+{#if buyCookie}
+    <article class="message is-primary">
+        <div class="message-body">Dein Kauf ist erfolgreich abgeschlossen!</div>
+    </article>
+{/if}
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
     {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
         <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
