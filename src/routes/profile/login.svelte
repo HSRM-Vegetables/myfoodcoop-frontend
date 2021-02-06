@@ -57,8 +57,9 @@
 {#if register}
     <article class="message is-primary">
         <div class="message-body">
-            Danke für deine registrierung, bitte wende dich an deinen Administrator/Ansprechpartner bei Stadgemuse um
-            die Registrierung abzuschließen.
+            Danke für deine Registrierung, bitte wende dich an deinen Ansprechpartner bei
+            {ORGANIZATION_NAME}
+            um die Registrierung abzuschließen.
         </div>
     </article>
 {/if}
