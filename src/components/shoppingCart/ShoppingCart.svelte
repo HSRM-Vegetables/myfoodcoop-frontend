@@ -3,7 +3,7 @@
     import { goto } from '@sapper/app';
     import Cookie from 'js-cookie';
     import { DateTime } from 'luxon';
-    import { mdiCartArrowDown, mdiCartArrowRight } from '@mdi/js';
+    import { mdiCartArrowDown, mdiCartArrowRight, mdiCloseOctagon } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
     import ShoppingCartItems from './ShoppingCartItems.svelte';
@@ -124,8 +124,14 @@
         {/if}
     </div>
     <div slot="footer">
-        <button class="button is-primary" on:click={checkout}>Kaufen</button>
-        <button class="button is-danger" on:click={() => setModalOpen(false)}>Abbrechen</button>
+        <Button
+            text="Kaufen"
+            class="is-primary mt-5"
+            on:click={checkout}
+            isLoading={checkoutInProgress}
+            icon={mdiCartArrowRight}
+        />
+        <Button text="Abbrechen" class="is-danger mt-5" on:click={() => setModalOpen(false)} icon={mdiCloseOctagon} />
     </div>
 </Modal>
 <div class="has-text-centered">
