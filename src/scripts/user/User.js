@@ -1,6 +1,10 @@
+import { get } from 'svelte/store';
+import Cookie from 'js-cookie'
 import Fetch, {getAuthorizationHeader} from '../api/Fetch';
 import Tokens from './Tokens';
 import LocalStorageKeys from '../common/LocalStorageKeys';
+import { refreshToken as refreshTokenStore, refreshTokenExpires, tokenExpires } from '../../stores/user';
+import CookieDefaults from '../common/CookieDefaults';
 
 export default class User { 
     /**
@@ -111,5 +115,32 @@ export default class User {
         return Fetch.delete(`auth/refresh`, {
             refreshToken
         }, undefined, getAuthorizationHeader());
+    }
+
+    /**
+     * Logs out the current user and reloads the page
+     */
+    static async logout() {
+        try {
+            // logout on the server
+            if (get(refreshTokenExpires) > new Date()) {
+                // only logout on the server if the refresh token is still valid
+
+                if (get(tokenExpires) < new Date()) {
+                    // if the token expired get a new one
+                    await User.refreshToken(get(refreshTokenStore));
+                }
+
+                // revoke the refresh token
+                await User.revokeRefreshToken(get(refreshTokenStore));
+            }
+        } finally {
+            // logout on the client
+            Cookie.remove(CookieDefaults.TOKEN);
+            Cookie.remove(CookieDefaults.REFRESH_TOKEN);
+
+            // reload the page
+            window.location.href = '/';
+        }
     }
 }

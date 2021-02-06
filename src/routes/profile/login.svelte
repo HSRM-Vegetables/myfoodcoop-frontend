@@ -1,12 +1,12 @@
 <script>
     import { stores, goto } from '@sapper/app';
-    import { title, navBalance } from '../../stores/page';
+    import { title, navBalance, isPointOfSales } from '../../stores/page';
     import TextField from '../../components/common/TextField.svelte';
     import Button from '../../components/common/Button.svelte';
     import User from '../../scripts/user/User';
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import Switch from '../../components/common/Switch.svelte';
-    import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
+    import { keepLoggedIn } from '../../stores/user';
     import { ORGANIZATION_NAME } from '../../scripts/Config';
 
     const { page } = stores();
@@ -108,7 +108,7 @@
     on:keypress={(e) => onKeyPress(e)}
 />
 
-{#if $allowKeepLoggedIn}
+{#if !$isPointOfSales}
     <div class="columns is-mobile mt-3">
         <div class="column">Eingeloggt bleiben?</div>
         <div class="column has-text-right">

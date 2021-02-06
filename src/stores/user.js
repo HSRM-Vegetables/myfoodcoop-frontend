@@ -4,7 +4,6 @@ export const userName = writable('');
 export const userId = writable('');
 export const userRoles = writable('');
 export const keepLoggedIn = writable(false);
-export const allowKeepLoggedIn = writable(false);
 
 // token
 export const token = writable('');
