@@ -139,6 +139,8 @@ export default class User {
             Cookie.remove(CookieDefaults.TOKEN);
             Cookie.remove(CookieDefaults.REFRESH_TOKEN);
 
+            localStorage.removeItem(LocalStorageKeys.CART);
+
             // reload the page
             window.location.href = '/';
         }
