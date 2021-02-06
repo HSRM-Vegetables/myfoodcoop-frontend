@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
     import Cookie from 'js-cookie';
+    import { DateTime } from 'luxon';
     import { mdiCartArrowDown, mdiCartArrowRight } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
@@ -88,8 +89,7 @@
             cart.clear();
             cartItemsCount.forceUpdate();
 
-            const date = new Date().setTime(date.getTime() + 0.2 * 60 * 1000);
-            Cookie.set('buy', 'true', { expires: date });
+            Cookie.set('buy', 'true', { expires: DateTime.local().plus({ seconds: 15 }).toJSDate() });
             goto('/');
         } catch (error) {
             requestError = error;
