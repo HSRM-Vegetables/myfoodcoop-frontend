@@ -12,7 +12,7 @@
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel auswählen';
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $navBalance = 'inline';
+    $navBalance = 'hidden';
 
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);

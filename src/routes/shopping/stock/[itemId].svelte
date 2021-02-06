@@ -9,7 +9,7 @@
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Preisrechner';
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $navBalance = 'inline';
+    $navBalance = 'hidden';
 
     const { page } = stores();
     const { itemId } = $page.params;
