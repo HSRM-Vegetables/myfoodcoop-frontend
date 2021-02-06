@@ -1,5 +1,5 @@
 <script>
-    import { submit } from '../../scripts/common/Helper'
+    import { submit } from '../../scripts/common/Helper';
 
     /**
      * Used in order to set the default placeholder of an input field
