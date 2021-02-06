@@ -11,6 +11,7 @@
         top: 21px;
         height: 25px;
         width: 25px;
+        cursor: pointer;
     }
 </style>
 
