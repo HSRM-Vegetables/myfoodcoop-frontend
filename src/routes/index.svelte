@@ -13,11 +13,12 @@
     } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
-    import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
+    import { spoilsSoonItems, areStockItemsUpdating, stockItems } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
 
     import { ORGANIZATION_NAME } from '../scripts/Config';
+    import MobileReloadButton from '../components/common/MobileReloadButton.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = ORGANIZATION_NAME;
@@ -90,6 +91,10 @@
             goto(href);
         }
     }
+
+    function updateStock() {
+        stockItems.forceUpdate();
+    }
 </script>
 
 <style>
@@ -130,6 +135,8 @@
     </article>
 {/if}
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
+    <MobileReloadButton on:click={updateStock} />
+
     {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
         <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
         <div class="has-text-centered mb-6">

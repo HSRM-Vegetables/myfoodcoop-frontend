@@ -41,11 +41,6 @@
         left: 25px;
         top: 70px;
     }
-    .inline-balance {
-        position: absolute;
-        right: 79px;
-        top: 30px;
-    }
     a.cartIcon {
         color: white;
         position: absolute;
@@ -88,10 +83,6 @@
                     <ShowBalance />
                 </div>
             </a>
-        {:else if isLoggedIn && $navBalance === 'inline'}
-            <div class="inline-balance">
-                <ShowBalance />
-            </div>
         {/if}
         <div class="is-hidden-touch">
             {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
