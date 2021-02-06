@@ -1,5 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
+    import Cookie from 'js-cookie';
     import {
         mdiAccount,
         mdiCartArrowDown,
@@ -15,7 +16,7 @@
     import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
-    import { getCookie } from '../scripts/common/Helper';
+
     import { ORGANIZATION_NAME } from '../scripts/Config';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
@@ -23,7 +24,7 @@
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
 
-    const buyCookie = getCookie('buy');
+    const buyCookie = Cookie.get('buy');
 
     const buttons = [
         {

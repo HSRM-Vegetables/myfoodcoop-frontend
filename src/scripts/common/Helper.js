@@ -60,18 +60,3 @@ export function moneyStyler(money) {
 export function stopPropagation(event) {
     event.stopPropagation();
 }
-
-export function createCookie(name,value,minutes) {
-    if (minutes) {
-        const date = new Date();
-        date.setTime(date.getTime() + (minutes * 60 * 1000));
-        document.cookie = `${name}=${value}; expires=${date.toGMTString()}; path=/`;
-    }
-}
-
-export function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return false;
-}

@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
+    import Cookie from 'js-cookie';
     import { mdiCartArrowDown, mdiCartArrowRight } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
@@ -8,7 +9,7 @@
     import Button from '../common/Button.svelte';
     import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
-    import { moneyStyler, createCookie } from '../../scripts/common/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import { cartItemsCount } from '../../stores/shoppingCart';
     import { currentBalance } from '../../stores/balance';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
@@ -86,7 +87,9 @@
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
             cart.clear();
             cartItemsCount.forceUpdate();
-            createCookie('buy', 'true', 0.3);
+
+            const date = new Date().setTime(date.getTime() + 0.2 * 60 * 1000);
+            Cookie.set('buy', 'true', { expires: date });
             goto('/');
         } catch (error) {
             requestError = error;
