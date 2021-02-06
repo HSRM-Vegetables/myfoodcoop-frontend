@@ -146,12 +146,7 @@
                 passwordInput.getValue(),
                 emailInput.getValue()
             );
-
-            // log the user in
-            await User.login(userNameInput.getValue(), passwordInput.getValue(), $keepLoggedIn);
-
-            // redirect to homepage
-            goto('/');
+            goto('/profile/login?register=true');
         } catch (error) {
             requestError = error;
         } finally {

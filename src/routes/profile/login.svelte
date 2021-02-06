@@ -11,7 +11,7 @@
 
     const { page } = stores();
     // redirect to main page if no query parameter is provided
-    const { returnUrl = '/' } = $page.query;
+    const { returnUrl = '/', register } = $page.query;
 
     let userNameInput;
     let passwordInput;
@@ -36,7 +36,14 @@
             isLoggingIn = false;
         }
     }
-
+    function onKeyPress(event) {
+        if (event.code === 'Enter') {
+            checkLoginStatus();
+            if (allowLogin) {
+                login();
+            }
+        }
+    }
     // enable the login button if both inputs are not empty
     function checkLoginStatus() {
         if (userNameInput.getValue() && passwordInput.getValue()) {
@@ -47,6 +54,14 @@
     }
 </script>
 
+{#if register}
+    <article class="message is-primary">
+        <div class="message-body">
+            Danke für deine registrierung, bitte wende dich an deinen Administrator/Ansprechpartner bei Stadgemuse um
+            die Registrierung abzuschließen.
+        </div>
+    </article>
+{/if}
 <h1 class="title has-text-centered">Willkommen zur {ORGANIZATION_NAME} Einkaufsapp</h1>
 <p>
     Damit wir Dich während des Einkaufs identifizieren können, und Dir das beste Einkaufserlebnis bieten können,
@@ -78,6 +93,7 @@
     label="Benutzername"
     placeholder="Benutzername"
     on:input={checkLoginStatus}
+    on:keypress={(e) => onKeyPress(e)}
 />
 
 <br />
@@ -88,6 +104,7 @@
     label="Passwort"
     placeholder="Passwort"
     on:input={checkLoginStatus}
+    on:keypress={(e) => onKeyPress(e)}
 />
 
 {#if $allowKeepLoggedIn}
