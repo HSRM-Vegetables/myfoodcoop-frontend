@@ -494,8 +494,9 @@
                     size="full-width"
                     supplierTextField
                 />
+                <br />
             {/if}
-            <br />
+
             <Button
                 text="Eingabe löschen"
                 on:click={clearInputs}
