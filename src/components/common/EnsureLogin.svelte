@@ -7,14 +7,7 @@
     import { onMount } from 'svelte';
     import User from '../../scripts/user/User';
     import Tokens from '../../scripts/user/Tokens';
-    import {
-        refreshToken,
-        token,
-        tokenExpires,
-        keepLoggedIn,
-        allowKeepLoggedIn,
-        refreshTokenExpires,
-    } from '../../stores/user';
+    import { refreshToken, token, tokenExpires, keepLoggedIn, refreshTokenExpires } from '../../stores/user';
     import CookieDefaults from '../../scripts/common/CookieDefaults';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
 
@@ -46,10 +39,6 @@
 
         // load some cookies
         $keepLoggedIn = localStorage.getItem(LocalStorageKeys.KEEP_LOGGED_IN) === 'true';
-        const allowKeepLoggedInCookieValue = localStorage.getItem(LocalStorageKeys.ALLOW_KEEP_LOGGED_IN);
-        // if the cookie is not set or the cookie value equals to true, allow to check keepLoggedIn
-        // eslint-disable-next-line no-unused-vars
-        $allowKeepLoggedIn = !allowKeepLoggedInCookieValue || allowKeepLoggedInCookieValue === 'true';
 
         if (Tokens.areValid($token, $refreshToken, $tokenExpires, $refreshTokenExpires)) {
             // all tokens are valid, we don't need to do anything

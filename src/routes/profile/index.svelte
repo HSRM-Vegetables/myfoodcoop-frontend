@@ -1,12 +1,10 @@
 <script>
-    import Cookie from 'js-cookie';
     import { goto } from '@sapper/app';
     import { mdiLogout, mdiRefresh, mdiPencil } from '@mdi/js';
-    import { title, navBalance } from '../../stores/page';
+    import { title, navBalance, isPointOfSales } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
-    import { userName, allowKeepLoggedIn, refreshToken, tokenExpires, refreshTokenExpires } from '../../stores/user';
+    import { userName, refreshToken } from '../../stores/user';
     import { userDetails } from '../../stores/userDetails';
-    import CookieDefaults from '../../scripts/common/CookieDefaults';
     import UserDetails from '../../components/user/UserDetails.svelte';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Switch from '../../components/common/Switch.svelte';
@@ -14,6 +12,10 @@
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
+    import {
+        POINT_OF_SALES_INACTIVITY_TIMEOUT_IN_MINUTES,
+        POINT_OF_SALES_MAX_LOGIN_TIME_IN_MINUTES,
+    } from '../../scripts/Config';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Profil';
@@ -24,11 +26,11 @@
     let isReloading = false;
 
     $: {
-        // disallow of the future use of the keep logged in workflow
-        localStorage.setItem(LocalStorageKeys.ALLOW_KEEP_LOGGED_IN, $allowKeepLoggedIn);
+        // disallow the future use of the keep logged in workflow
+        localStorage.setItem(LocalStorageKeys.IS_POINT_OF_SALES, $isPointOfSales);
 
-        if ($allowKeepLoggedIn === false) {
-            // if its not allow to stay logged in, disable this workflow explicitly
+        if ($isPointOfSales === true) {
+            // if we are a point of sales system, disable the use of the future use of the keep logged in functionality
             localStorage.setItem(LocalStorageKeys.KEEP_LOGGED_IN, false);
         }
     }
@@ -37,28 +39,10 @@
         try {
             isLoggingOut = true;
 
-            // logout on the server
-            if ($refreshTokenExpires > new Date()) {
-                // only logout on the server if the refresh token is still valid
-
-                if ($tokenExpires < new Date()) {
-                    // if the token expired get a new one
-                    await User.refreshToken($refreshToken);
-                }
-
-                // revoke the refresh token
-                await User.revokeRefreshToken($refreshToken);
-            }
+            await User.logout();
         } catch (error) {
             // catch errors, but do not show it to the user
         } finally {
-            // logout on the client
-            Cookie.remove(CookieDefaults.TOKEN);
-            Cookie.remove(CookieDefaults.REFRESH_TOKEN);
-
-            // reload the page
-            window.location.href = '/';
-
             isLoggingOut = false;
         }
     }
@@ -101,11 +85,17 @@
 
         <div class="columns is-mobile mt-3">
             <div class="column">
-                Eingeloggt bleiben auf diesem Gerät aktivieren? Wichtig: Wirkt sich erst ab dem nächsten Login aus.
-                Diese Einstellung ist Geräteabhängig.
+                Point of Sales Regeln für dieses Gerät aktivieren?<br />
+                - Ausloggen nach
+                {POINT_OF_SALES_INACTIVITY_TIMEOUT_IN_MINUTES}
+                Minuten.<br />
+                - Maximale Login Dauer
+                {POINT_OF_SALES_MAX_LOGIN_TIME_IN_MINUTES}
+                Minuten.<br />
+                Wichtig: Wirkt sich erst ab dem nächsten Login aus.
             </div>
             <div class="column has-text-right">
-                <Switch twoColor={true} bind:checked={$allowKeepLoggedIn} />
+                <Switch twoColor={true} bind:checked={$isPointOfSales} />
             </div>
         </div>
 
