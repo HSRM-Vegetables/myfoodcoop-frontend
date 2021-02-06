@@ -5,7 +5,6 @@ import { getUrl, version } from './ApiConfig';
 import { 
     refreshToken as refreshTokenStore,
     refreshTokenExpires,
-    keepLoggedIn,
     token,
     tokenExpires
 } from '../../stores/user';
@@ -78,7 +77,7 @@ export default class Fetch {
         // check if the authorization header is necessary
         if (additionalHeaders !== undefined && Headers.Authorization in additionalHeaders) {
             // check if the current token has expired, the refresh token is set and the refresh token is still valid
-            if (get(keepLoggedIn) && get(tokenExpires) < Date.now() && get(refreshTokenStore) 
+            if (get(tokenExpires) < Date.now() && get(refreshTokenStore) 
                 && get(refreshTokenExpires) > Date.now()) {
                 // get a new token
                 await Fetch.refreshToken(get(refreshTokenStore))
