@@ -67,7 +67,7 @@
 {#if item}
     <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
 
-    {#if item.sustainablyProduced}<span class="small">Dieser Artikel wurde Nachhaltig produziert</span>{/if}
+    {#if item.sustainablyProduced}<span class="small">Dieser Artikel wurde nachhaltig produziert</span>{/if}
     <hr />
     {#if item.isDeleted}
         <article class="message is-danger">

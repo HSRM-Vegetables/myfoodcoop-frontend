@@ -64,7 +64,7 @@
     {#if requestError.errorCode === 401011}
         <article class="message is-danger">
             <div class="message-body">
-                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator"
+                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator
             </div>
         </article>
     {/if}
