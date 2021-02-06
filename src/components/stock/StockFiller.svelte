@@ -1,7 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { DateTime } from 'luxon';
-    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil } from '@mdi/js';
+    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
     import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
@@ -185,7 +185,7 @@
     /**
      * Add or Update an existing stock item
      */
-    async function addOrUpadteItem() {
+    async function addOrUpadteItem(saveAndNew) {
         requestError = undefined;
         if (!areInputsValid()) {
             return;
@@ -235,8 +235,13 @@
             requestError = error;
             return;
         }
-
-        goto(linkBack);
+        if (saveAndNew) {
+            clearInputs();
+            item = undefined;
+            goto('/stock/item/new');
+        } else {
+            goto(linkBack);
+        }
     }
 
     /**
@@ -253,6 +258,7 @@
         originCategory = OriginCategory.UNKNOWN;
         certificates = [];
         vatTextField.clear();
+        supplierTextField.clear();
     }
     /**
      * Certificates List
@@ -473,12 +479,24 @@
         <div class="container has-text-centered">
             <Button
                 text={saveText}
-                on:click={addOrUpadteItem}
+                on:click={() => addOrUpadteItem(false)}
                 class="button is-primary mb-4"
                 icon={item ? mdiPencil : mdiPlusBoxMultiple}
                 size="full-width"
             />
             <br />
+            {#if !item}
+                <Button
+                    text="Hinzufügen und neuen Artikel erstellen"
+                    on:click={() => addOrUpadteItem(true)}
+                    class="button is-primary mb-4"
+                    icon={mdiContentSaveMove}
+                    size="full-width"
+                    supplierTextField
+                />
+                <br />
+            {/if}
+
             <Button
                 text="Eingabe löschen"
                 on:click={clearInputs}
