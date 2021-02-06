@@ -1,5 +1,4 @@
 <script>
-    import { goto } from '@sapper/app';
     import { mdiArrowLeft } from '@mdi/js';
     import TextField from '../common/TextField.svelte';
     import Balance from '../../scripts/balance/Balance';
@@ -30,13 +29,6 @@
             balanceUpdateInProgress = false;
         }
     }
-
-    async function onEnterPress(event) {
-        if (event.key === 'Enter') {
-            await changeBalance();
-            goto('/balance');
-        }
-    }
 </script>
 
 <ErrorModal error={requestError} />
@@ -47,7 +39,7 @@
         placeholder="0"
         decoration="€"
         label="Neues Guthaben"
-        on:keydown={onEnterPress}
+        on:enter={changeBalance}
         disabled={balanceUpdateInProgress}
     />
 

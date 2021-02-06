@@ -44,12 +44,6 @@
     function updateInput() {
         inputValue = this.value;
     }
-
-    function onEnterPress(event) {
-        if (event.key === 'Enter') {
-            addToBalance();
-        }
-    }
 </script>
 
 <style>
@@ -74,7 +68,7 @@
             type="number"
             placeholder="0"
             minimum="0"
-            on:keydown={onEnterPress}
+            on:enter={addToBalance}
             value={inputValue}
             disabled={balanceUpdateInProgress}
         />

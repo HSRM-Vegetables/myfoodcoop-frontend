@@ -36,14 +36,7 @@
             isLoggingIn = false;
         }
     }
-    function onKeyPress(event) {
-        if (event.code === 'Enter') {
-            checkLoginStatus();
-            if (allowLogin) {
-                login();
-            }
-        }
-    }
+
     // enable the login button if both inputs are not empty
     function checkLoginStatus() {
         if (userNameInput.getValue() && passwordInput.getValue()) {
@@ -94,7 +87,7 @@
     label="Benutzername"
     placeholder="Benutzername"
     on:input={checkLoginStatus}
-    on:keypress={(e) => onKeyPress(e)}
+    on:enter={allowLogin && login}
 />
 
 <br />
@@ -105,7 +98,7 @@
     label="Passwort"
     placeholder="Passwort"
     on:input={checkLoginStatus}
-    on:keypress={(e) => onKeyPress(e)}
+    on:enter={allowLogin && login}
 />
 
 {#if $allowKeepLoggedIn}

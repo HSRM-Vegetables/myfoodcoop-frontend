@@ -60,3 +60,21 @@ export function moneyStyler(money) {
 export function stopPropagation(event) {
     event.stopPropagation();
 }
+
+/**
+ * Small Svelte actions to fire on enter keypresses: https://svelte.dev/tutorial/actions
+ * @param node html node
+ */
+export function submit(node) {
+    node.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            node.dispatchEvent(new CustomEvent('enter'));
+        }
+    });
+
+    return {
+        destroy() {
+            node.removeEventListener('keydown', undefined);
+        }
+    };
+}
