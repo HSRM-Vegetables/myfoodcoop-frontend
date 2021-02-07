@@ -33,14 +33,8 @@
     {#if item}
         <StockDisposer item={item} />
     {/if}
-</AuthorizeByRoles>
 
-<div class="container has-text-centered mt-6">
-    <Button
-        href="/stock/item/{itemId}"
-        text="zurück"
-        class="is-primary mb-3"
-        size="full-width"
-        icon={mdiArrowLeft}
-    /><br />
-</div>
+    <div class="container has-text-centered">
+        <Button href="/stock/item/{itemId}" text="zurück" class="is-primary" size="full-width" icon={mdiArrowLeft} />
+    </div>
+</AuthorizeByRoles>

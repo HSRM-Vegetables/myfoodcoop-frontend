@@ -136,9 +136,9 @@
     </div>
 
     {#if !item.isDeleted}
-        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-            <hr />
-            <div class="container has-text-centered">
+        <hr />
+        <div class="container has-text-centered">
+            <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
                 <Button
                     text="Artikel neu bestellen"
                     size="full-width"
@@ -159,14 +159,14 @@
                     on:click={() => confirmRemoveItem(item.id)}
                     icon={mdiDelete}
                 />
-            </div>
-        </AuthorizeByRoles>
-        <Button
-            text="Verdorbene Ware entsorgen"
-            size="full-width"
-            class="is-danger mt-3"
-            on:click={() => goto(`/stock/item/${item.id}/dispose`)}
-            icon={mdiDeleteVariant}
-        />
+            </AuthorizeByRoles>
+            <Button
+                text="Verdorbene Ware entsorgen"
+                size="full-width"
+                class="is-danger mt-3"
+                on:click={() => goto(`/stock/item/${item.id}/dispose`)}
+                icon={mdiDeleteVariant}
+            />
+        </div>
     {/if}
 {/if}
