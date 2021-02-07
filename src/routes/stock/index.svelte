@@ -63,21 +63,19 @@
             />
             <hr />
         {/if}
-
+        {#if $orderedItems && $orderedItems.length > 0}
+            <!-- items that are ordered -->
+            <div>{getLocalizedStockStatus(StockStatus.ORDERED)}</div>
+            <StockList
+                stockItems={$orderedItems}
+                allowDetails={true}
+                on:details={onSelectItem}
+                on:select={onSelectItem}
+                isClickable={true}
+            />
+            <hr />
+        {/if}
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-            {#if $orderedItems && $orderedItems.length > 0}
-                <!-- items that are ordered -->
-                <div>{getLocalizedStockStatus(StockStatus.ORDERED)}</div>
-                <StockList
-                    stockItems={$orderedItems}
-                    allowDetails={true}
-                    on:details={onSelectItem}
-                    on:select={onSelectItem}
-                    isClickable={true}
-                />
-                <hr />
-            {/if}
-
             {#if $outOfStockItems && $outOfStockItems.length > 0}
                 <!-- items that are out of stock -->
                 <div>{getLocalizedStockStatus(StockStatus.OUTOFSTOCK)}</div>

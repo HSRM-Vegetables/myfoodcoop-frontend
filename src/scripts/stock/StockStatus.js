@@ -22,7 +22,7 @@ export const StockStatusWithDescription = [
     },
     {
         identifier: StockStatus.SPOILSSOON,
-        descripton: 'Verdirbt bald'
+        descripton: 'Bald zu verbrauchen'
     },
     {
         identifier: StockStatus.OUTOFSTOCK,
