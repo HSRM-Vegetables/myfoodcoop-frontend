@@ -1,6 +1,10 @@
 <script>
     import { goto } from '@sapper/app';
     import { DateTime } from 'luxon';
+    import Bioland from 'images/certificate/bioland.png';
+    import Biosiegel from 'images/certificate/biosiegel.png';
+    import Demeter from 'images/certificate/demeter.png';
+    import Naturland from 'images/certificate/naturland.png';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
     import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
@@ -66,6 +70,27 @@
 
     let requestError;
     let saveText;
+
+    let tabs = 'article';
+
+    const certificateLogos = [
+        {
+            name: 'Bioland',
+            image: Bioland,
+        },
+        {
+            name: 'Biosiegel',
+            image: Biosiegel,
+        },
+        {
+            name: 'Demeter',
+            image: Demeter,
+        },
+        {
+            name: 'Naturland',
+            image: Naturland,
+        },
+    ];
 
     if (edit) {
         saveText = 'Änderungen speichern';
@@ -281,6 +306,14 @@
     function setDeliveryDate(date) {
         deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
     }
+    function tabClick(value) {
+        tabs = value;
+    }
+
+    function addToCertificateLogos(certificate) {
+        if (!certificates.includes(certificate)) certificates = [...certificates, certificate];
+        else removeCertificates(certificate);
+    }
 </script>
 
 <style>
@@ -297,6 +330,30 @@
         -moz-appearance: auto;
         -webkit-appearance: auto;
     }
+    .tabs {
+        display: inline-flex;
+        margin-bottom: 0;
+    }
+
+    .tab {
+        display: inline;
+        padding: 15px 35px 15px 0;
+    }
+    .tab.is-active {
+        color: #1d72aa;
+        font-weight: bold;
+    }
+    .logo-images {
+        max-width: 90px;
+        opacity: 0.3;
+        cursor: pointer;
+    }
+    .logo-images:hover {
+        opacity: 0.7;
+    }
+    .logo-images.is-active {
+        opacity: 1;
+    }
 </style>
 
 <ErrorModal error={requestError} />
@@ -306,175 +363,202 @@
         <div class="message-body">{errorHint}</div>
     </article>
 {/if}
-
+<div class="tabs">
+    <div class="tab" class:is-active={tabs === 'article'} on:click={() => tabClick('article')}>
+        <span>Artikeldetails</span>
+    </div>
+    <div class="tab" class:is-active={tabs === 'certificate'} on:click={() => tabClick('certificate')}>
+        <span>Zertifikate</span>
+    </div>
+    <div class="tab" class:is-active={tabs === 'more'} on:click={() => tabClick('more')}><span>Mehr</span></div>
+</div>
+<hr style="margin-top: 0;" />
 <div>
     <div class="form">
-        <div class="pt-4">
-            <TextField
-                bind:this={articleTextField}
-                type="text"
-                placeholder="Artikel"
-                label="Artikel"
-                isInErrorState={articleTextFieldError}
-                charLimit="250"
-                value={item ? item.name : ''}
-            />
-        </div>
-        <div class="form-row pt-4">
-            <div class="auto-margin">Stückpreis</div>
-            <div class="auto-margin">
-                <Switch bind:checked={unitTypeBoolean} />
+        {#if tabs === 'article'}
+            <div class="pt-4">
+                <TextField
+                    bind:this={articleTextField}
+                    type="text"
+                    placeholder="Artikel"
+                    label="Artikel"
+                    isInErrorState={articleTextFieldError}
+                    charLimit="250"
+                    value={item ? item.name : ''}
+                />
             </div>
-            <div class="auto-margin">Kilopreis</div>
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={pricePerUnitTextField}
-                type="number"
-                placeholder="Warenpreis"
-                label="Warenpreis"
-                decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
-                minimum="0"
-                isInErrorState={pricePerUnitTextFieldError}
-                value={item ? item.pricePerUnit : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={vatTextField}
-                type="number"
-                placeholder="Steuersatz"
-                label="Steuersatz"
-                decoration={'%'}
-                minimum="0"
-                isInErrorState={vatTextFieldError}
-                value={item ? item.vat * 100 : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={quantityTextField}
-                type="number"
-                placeholder="Bestands Menge"
-                label="Bestands Menge"
-                decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
-                minimum="0"
-                isInErrorState={quantityTextFieldError}
-                value={item ? item.quantity : ''}
-            />
-        </div>
-        <hr />
-        <div class="columns pt-4 is-mobile">
-            <div class="column">nachhaltig Produziert</div>
-            <div class="column has-text-right">
-                <Switch bind:checked={sustainablyProduced} twoColor={true} />
+            <div class="form-row pt-4">
+                <div class="auto-margin">Stückpreis</div>
+                <div class="auto-margin">
+                    <Switch bind:checked={unitTypeBoolean} />
+                </div>
+                <div class="auto-margin">Kilopreis</div>
             </div>
-        </div>
-        <div class="mb-2">
-            <div class="has-text-left pb-2">Zertifikate</div>
-            <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
-                <div class="control" style="width: 100%;">
-                    <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
+            <div class="pt-4">
+                <TextField
+                    bind:this={pricePerUnitTextField}
+                    type="number"
+                    placeholder="Warenpreis"
+                    label="Warenpreis"
+                    decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+                    minimum="0"
+                    isInErrorState={pricePerUnitTextFieldError}
+                    value={item ? item.pricePerUnit : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={vatTextField}
+                    type="number"
+                    placeholder="Steuersatz"
+                    label="Steuersatz"
+                    decoration={'%'}
+                    minimum="0"
+                    isInErrorState={vatTextFieldError}
+                    value={item ? item.vat * 100 : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={quantityTextField}
+                    type="number"
+                    placeholder="Bestands Menge"
+                    label="Bestands Menge"
+                    decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                    minimum="0"
+                    isInErrorState={quantityTextFieldError}
+                    value={item ? item.quantity : ''}
+                />
+            </div>
+            <div class="pt-1">
+                <TextField
+                    bind:this={producerTextField}
+                    type="text"
+                    placeholder="Erzeuger"
+                    label="Erzeuger"
+                    isInErrorState={producerTextFieldError}
+                    charLimit="250"
+                    value={item ? item.producer : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={supplierTextField}
+                    type="text"
+                    placeholder="Lieferant"
+                    label="Lieferant"
+                    isInErrorState={supplierTextFieldError}
+                    charLimit="250"
+                    value={item ? item.supplier : ''}
+                />
+            </div>
+            <div class="pt-5 pb-2">
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <div class="pb-2">Lieferdatum</div>
+                        <DatePicker
+                            placeholder="Wähle einen Zeitraum"
+                            continueText="Bestätigen"
+                            format="DD.MM.YYYY"
+                            styling={new CalendarStyle()}
+                            on:date-selected={(e) => setOrderDate(e.detail.date)}
+                            selected={item ? item.orderDate : ''}
+                        />
+                    </div>
+                    <div class="column">
+                        <div class="pb-2 ">Bestelldatum</div>
+                        <DatePicker
+                            placeholder="Wähle einen Zeitraum"
+                            continueText="Bestätigen"
+                            format="DD.MM.YYYY"
+                            styling={new CalendarStyle()}
+                            on:date-selected={(e) => setDeliveryDate(e.detail.date)}
+                            selected={item ? item.deliveryDate : ''}
+                        />
+                    </div>
                 </div>
-                <div class="control">
-                    <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
+            </div>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Beschreibung</div>
+                <div class="form-row is-relative">
+                    <textarea
+                        class="textarea"
+                        placeholder="Beschreibung"
+                        bind:this={descriptionElement}
+                    >{item ? item.description : ''}</textarea>
                 </div>
-            </form>
-            {#each certificates as certificate}
-                <div transition:slide={{ duration: 300, easing: elasticInOut }}>
-                    <ListItem size="small">
-                        <div class="columns" style="align-items: center">
-                            <div class="is-pulled-left column">{certificate}</div>
-                            <div class="column has-text-right">
-                                <Button
-                                    text="Löschen"
-                                    class="button is-danger"
-                                    icon={mdiDelete}
-                                    on:click={() => removeCertificates(certificate)}
-                                />
+            </div>
+        {/if}
+        {#if tabs === 'certificate'}
+            <div class="columns pt-4 is-mobile">
+                <div class="column">nachhaltig Produziert</div>
+                <div class="column has-text-right">
+                    <Switch bind:checked={sustainablyProduced} twoColor={true} />
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="has-text-left pb-2">Zertifikate</div>
+                <div class="columns is-mobile">
+                    {#each certificateLogos as logo}
+                        <div class="column">
+                            <div
+                                class="logo-images"
+                                class:is-active={certificates.includes(logo.name)}
+                                on:click={() => addToCertificateLogos(logo.name)}
+                            >
+                                <img src={logo.image} alt="{logo.name}_Logo" />
                             </div>
                         </div>
-                    </ListItem>
+                    {/each}
                 </div>
-            {/each}
-        </div>
-        <div class="pt-4">
-            <div class="has-text-left pb-2">Herkunftskategorie</div>
-            <select class="input dropdown" bind:value={originCategory}>
-                {#each OriginCategoryWithDescription as categorys}
-                    <option value={categorys.identifier}>{categorys.descripton}</option>
+
+                <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
+                    <div class="control" style="width: 100%;">
+                        <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
+                    </div>
+                    <div class="control">
+                        <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
+                    </div>
+                </form>
+                {#each certificates as certificate}
+                    <div transition:slide={{ duration: 300, easing: elasticInOut }}>
+                        <ListItem size="small">
+                            <div class="columns" style="align-items: center">
+                                <div class="is-pulled-left column">{certificate}</div>
+                                <div class="column has-text-right">
+                                    <Button
+                                        text="Löschen"
+                                        class="button is-danger"
+                                        icon={mdiDelete}
+                                        on:click={() => removeCertificates(certificate)}
+                                    />
+                                </div>
+                            </div>
+                        </ListItem>
+                    </div>
                 {/each}
-            </select>
-        </div>
-        <hr />
-        <div class="pt-1">
-            <TextField
-                bind:this={producerTextField}
-                type="text"
-                placeholder="Erzeuger"
-                label="Erzeuger"
-                isInErrorState={producerTextFieldError}
-                charLimit="250"
-                value={item ? item.producer : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={supplierTextField}
-                type="text"
-                placeholder="Lieferant"
-                label="Lieferant"
-                isInErrorState={supplierTextFieldError}
-                charLimit="250"
-                value={item ? item.supplier : ''}
-            />
-        </div>
-        <div class="pt-5 pb-2">
-            <div class="columns has-text-centered">
-                <div class="column">
-                    <div class="pb-2">Lieferdatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setOrderDate(e.detail.date)}
-                        selected={item ? item.orderDate : ''}
-                    />
-                </div>
-                <div class="column">
-                    <div class="pb-2 ">Bestelldatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setDeliveryDate(e.detail.date)}
-                        selected={item ? item.deliveryDate : ''}
-                    />
+            </div>
+        {/if}
+        {#if tabs === 'more'}
+            <div>
+                <div class="pt-4">
+                    <div class="has-text-left pb-2">Artikel Status</div>
+                    <select class="input dropdown" bind:value={selectedStatus}>
+                        {#each StockStatusWithDescription as status}
+                            <option value={status.identifier}>{status.descripton}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
-        </div>
-        <div>
             <div class="pt-4">
-                <div class="has-text-left pb-2">Artikel Status</div>
-                <select class="input dropdown" bind:value={selectedStatus}>
-                    {#each StockStatusWithDescription as status}
-                        <option value={status.identifier}>{status.descripton}</option>
+                <div class="has-text-left pb-2">Herkunftskategorie</div>
+                <select class="input dropdown" bind:value={originCategory}>
+                    {#each OriginCategoryWithDescription as categorys}
+                        <option value={categorys.identifier}>{categorys.descripton}</option>
                     {/each}
                 </select>
             </div>
-        </div>
-        <div class="pt-4">
-            <div class="has-text-left pb-2">Beschreibung</div>
-            <div class="form-row is-relative">
-                <textarea
-                    class="textarea"
-                    placeholder="Beschreibung"
-                    bind:this={descriptionElement}
-                >{item ? item.description : ''}</textarea>
-            </div>
-        </div>
+        {/if}
         <hr />
         <div class="container has-text-centered">
             <Button
