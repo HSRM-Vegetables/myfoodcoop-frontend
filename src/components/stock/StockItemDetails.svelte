@@ -1,7 +1,7 @@
 <script>
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
-    import { mdiDelete, mdiPencil } from '@mdi/js';
+    import { mdiDelete, mdiDeleteVariant, mdiPencil } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
@@ -135,8 +135,8 @@
         {/if}
     </div>
 
-    <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-        {#if !item.isDeleted}
+    {#if !item.isDeleted}
+        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
             <hr />
             <div class="container has-text-centered">
                 <Button
@@ -160,6 +160,13 @@
                     icon={mdiDelete}
                 />
             </div>
-        {/if}
-    </AuthorizeByRoles>
+        </AuthorizeByRoles>
+        <Button
+            text="Verdorbene Ware entsorgen"
+            size="full-width"
+            class="is-danger mt-3"
+            on:click={() => goto(`/stock/item/${item.id}/dispose`)}
+            icon={mdiDeleteVariant}
+        />
+    {/if}
 {/if}
