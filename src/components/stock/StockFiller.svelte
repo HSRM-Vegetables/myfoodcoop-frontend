@@ -48,8 +48,8 @@
     let producerTextField;
     let supplierTextField;
     let descriptionElement;
-    let unitType = UnitType.KILO;
-    let unitTypeBoolean = false;
+    let unitType = UnitType.PIECE;
+    let unitTypeBoolean = true;
     let sustainablyProduced = true;
     let certificates = [];
     let originCategory = OriginCategory.UNKNOWN;
@@ -394,12 +394,12 @@
                 <TextField
                     bind:this={vatTextField}
                     type="number"
-                    placeholder="Steuersatz"
-                    label="Steuersatz"
+                    placeholder="Umsatzsteuersatz"
+                    label="Umsatzsteuersatz"
                     decoration={'%'}
                     minimum="0"
                     isInErrorState={vatTextFieldError}
-                    value={item ? item.vat * 100 : ''}
+                    value={item ? item.vat * 100 : 7}
                 />
             </div>
             <div class="pt-4">

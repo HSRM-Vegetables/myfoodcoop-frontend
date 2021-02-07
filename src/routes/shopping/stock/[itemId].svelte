@@ -7,7 +7,7 @@
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $title = 'Preisrechner';
+    $title = 'Artikel Kaufen';
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
