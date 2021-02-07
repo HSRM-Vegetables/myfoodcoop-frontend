@@ -10,6 +10,7 @@
     import { stockItems } from '../../stores/stock';
     import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
     import { moneyStyler } from '../../scripts/common/Helper';
+    import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
@@ -18,6 +19,7 @@
      * The stock item
      */
     export let item;
+    export let buttons;
 
     let requestError;
 
@@ -53,6 +55,10 @@
     .small {
         font-size: 17px;
     }
+    img.cert-img {
+        max-height: 55px;
+        float: right;
+    }
 </style>
 
 <ErrorModal error={requestError} />
@@ -65,9 +71,23 @@
     </div>
 </Modal>
 {#if item}
-    <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
-
-    {#if item.sustainablyProduced}<span class="small">Dieser Artikel wurde nachhaltig produziert</span>{/if}
+    <div class="columns">
+        <div class="column">
+            <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
+        </div>
+        <div class="column">
+            {#each CertificateLogos as logo}
+                {#if item.certificates.includes(logo.name)}
+                    <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
+                {/if}
+            {/each}
+        </div>
+    </div>
+    <br />
+    <br />
+    {#if item.sustainablyProduced}
+        <div class="small has-text-right full-width">Dieser Artikel wurde nachhaltig produziert</div>
+    {/if}
     <hr />
     {#if item.isDeleted}
         <article class="message is-danger">
@@ -134,32 +154,33 @@
             <span>{item.description}</span>
         {/if}
     </div>
-
-    <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-        {#if !item.isDeleted}
-            <hr />
-            <div class="container has-text-centered">
-                <Button
-                    text="Artikel neu bestellen"
-                    size="full-width"
-                    class="is-warning mb-3"
-                    on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
-                />
-                <Button
-                    text="Artikel bearbeiten"
-                    size="full-width"
-                    class="is-primary mb-3"
-                    on:click={() => goto(`/stock/item/${item.id}/edit`)}
-                    icon={mdiPencil}
-                />
-                <Button
-                    text="Artikel löschen"
-                    size="full-width"
-                    class="is-danger"
-                    on:click={() => confirmRemoveItem(item.id)}
-                    icon={mdiDelete}
-                />
-            </div>
-        {/if}
-    </AuthorizeByRoles>
+    {#if buttons}
+        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+            {#if !item.isDeleted}
+                <hr />
+                <div class="container has-text-centered">
+                    <Button
+                        text="Artikel neu bestellen"
+                        size="full-width"
+                        class="is-warning mb-3"
+                        on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
+                    />
+                    <Button
+                        text="Artikel bearbeiten"
+                        size="full-width"
+                        class="is-primary mb-3"
+                        on:click={() => goto(`/stock/item/${item.id}/edit`)}
+                        icon={mdiPencil}
+                    />
+                    <Button
+                        text="Artikel löschen"
+                        size="full-width"
+                        class="is-danger"
+                        on:click={() => confirmRemoveItem(item.id)}
+                        icon={mdiDelete}
+                    />
+                </div>
+            {/if}
+        </AuthorizeByRoles>
+    {/if}
 {/if}

@@ -1,15 +1,12 @@
 <script>
     import { goto } from '@sapper/app';
     import { DateTime } from 'luxon';
-    import Bioland from 'images/certificate/bioland.png';
-    import Biosiegel from 'images/certificate/biosiegel.png';
-    import Demeter from 'images/certificate/demeter.png';
-    import Naturland from 'images/certificate/naturland.png';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
     import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
     import { CalendarStyle } from '../../scripts/CalendarStyle';
+    import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
@@ -72,25 +69,6 @@
     let saveText;
 
     let tabs = 'article';
-
-    const certificateLogos = [
-        {
-            name: 'Bioland',
-            image: Bioland,
-        },
-        {
-            name: 'Biosiegel',
-            image: Biosiegel,
-        },
-        {
-            name: 'Demeter',
-            image: Demeter,
-        },
-        {
-            name: 'Naturland',
-            image: Naturland,
-        },
-    ];
 
     if (edit) {
         saveText = 'Änderungen speichern';
@@ -354,6 +332,12 @@
     .logo-images.is-active {
         opacity: 1;
     }
+    .item-block {
+        display: none;
+    }
+    .item-block.is-active {
+        display: block;
+    }
 </style>
 
 <ErrorModal error={requestError} />
@@ -375,7 +359,7 @@
 <hr style="margin-top: 0;" />
 <div>
     <div class="form">
-        {#if tabs === 'article'}
+        <div class="item-block" class:is-active={tabs === 'article'}>
             <div class="pt-4">
                 <TextField
                     bind:this={articleTextField}
@@ -488,8 +472,8 @@
                     >{item ? item.description : ''}</textarea>
                 </div>
             </div>
-        {/if}
-        {#if tabs === 'certificate'}
+        </div>
+        <div class="item-block" class:is-active={tabs === 'certificate'}>
             <div class="columns pt-4 is-mobile">
                 <div class="column">nachhaltig Produziert</div>
                 <div class="column has-text-right">
@@ -499,7 +483,7 @@
             <div class="mb-2">
                 <div class="has-text-left pb-2">Zertifikate</div>
                 <div class="columns is-mobile">
-                    {#each certificateLogos as logo}
+                    {#each CertificateLogos as logo}
                         <div class="column">
                             <div
                                 class="logo-images"
@@ -538,8 +522,8 @@
                     </div>
                 {/each}
             </div>
-        {/if}
-        {#if tabs === 'more'}
+        </div>
+        <div class="item-block" class:is-active={tabs === 'more'}>
             <div>
                 <div class="pt-4">
                     <div class="has-text-left pb-2">Artikel Status</div>
@@ -558,7 +542,7 @@
                     {/each}
                 </select>
             </div>
-        {/if}
+        </div>
         <hr />
         <div class="container has-text-centered">
             <Button
