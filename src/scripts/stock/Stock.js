@@ -121,6 +121,17 @@ export default class Stock {
         }, getAuthorizationHeader());
     }
 
+    /**
+     * Disposes of the specified amount of the item
+     * @param {String} id The id of the item
+     * @param {number} disposeQuantity The quantity to be disposed of
+     */
+    static async disposeItem(id, disposeQuantity) {
+        return Fetch.post(`stock/${id}/dispose`, {
+            'amount': disposeQuantity
+        }, getAuthorizationHeader());
+    }
+
     static convertUnitType(unitType) {
         if (unitType === 'KG') {
             return 'WEIGHT';
