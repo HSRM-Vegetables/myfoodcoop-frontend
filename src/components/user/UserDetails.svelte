@@ -5,6 +5,11 @@
 </script>
 
 {#if user}
+    {#if user.isDeleted}
+        <article class="message is-danger">
+            <div class="message-body">Der Benutzer wurde gelöscht.</div>
+        </article>
+    {/if}
     <div class="columns is-mobile">
         <div class="column is-size-5 has-text-weight-bold">Benutzername:</div>
         <div class="column has-text-right">{user.username}</div>

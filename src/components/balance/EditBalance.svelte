@@ -15,7 +15,10 @@
 
     async function addToBalance() {
         const additionalAmount = addMoneyInput.getValue();
-
+        if (additionalAmount === '') {
+            valueHint = 'Bitte geben Sie ein Wert ein';
+            return;
+        }
         if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
             return;
@@ -34,6 +37,7 @@
             $currentBalance = await Balance.topupBalanceForUser($userId, parseFloat(additionalAmount));
 
             inputValue = undefined;
+            addMoneyInput.clear();
         } catch (error) {
             requestError = error;
         } finally {

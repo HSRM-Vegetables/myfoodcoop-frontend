@@ -1,8 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { DateTime } from 'luxon';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
     import { CalendarStyle } from '../../scripts/CalendarStyle';
@@ -275,10 +273,10 @@
     }
 
     function setOrderDate(date) {
-        orderDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        orderDate = date.target.value;
     }
     function setDeliveryDate(date) {
-        deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        deliveryDate = date.target.value;
     }
     function tabClick(value) {
         currentTabName = value;

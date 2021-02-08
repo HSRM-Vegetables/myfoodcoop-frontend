@@ -36,6 +36,18 @@
         <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
 {:else if purchaseList !== undefined && purchaseList.purchases.length > 0}
+    <div class="columns is-mobile">
+        <div class="column has-text-weight-bold">Anzahl getätigter Einkäufe</div>
+        <div class="column has-text-right">{purchaseList.purchases.length}</div>
+    </div>
+    <div class="columns is-mobile">
+        <div class="column has-text-weight-bold">Gesamtbetrag aller Einkäufe</div>
+        <div class="column has-text-right">{moneyStyler(purchaseList.totalCumulativePrice)} €</div>
+    </div>
+    <div class="columns is-mobile mb-6">
+        <div class="column has-text-weight-bold">Davon Steuern</div>
+        <div class="column has-text-right">{moneyStyler(purchaseList.totalCumulativeVat)} €</div>
+    </div>
     <div class="columns has-text-weight-bold is-mobile is-vcentered">
         <div class="column">Datum</div>
         <div class="column has-text-centered">Anzahl Artikel</div>
@@ -46,7 +58,7 @@
         <div class="columns is-mobile">
             <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
             <div class="column has-text-centered">{purchase.items.length}</div>
-            <div class="column">{moneyStyler(purchase.totalPrice)}€</div>
+            <div class="column">{moneyStyler(purchase.totalPrice)} €</div>
             <div class="column">
                 <a href="/history/{purchase.id}" class="button is-small is-primary">
                     <span class="icon">
