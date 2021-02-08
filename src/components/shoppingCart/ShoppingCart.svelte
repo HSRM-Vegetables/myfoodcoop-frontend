@@ -1,8 +1,6 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '@sapper/app';
-    import Cookie from 'js-cookie';
-    import { DateTime } from 'luxon';
     import { mdiCartArrowDown, mdiCartArrowRight, mdiCloseOctagon } from '@mdi/js';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import Purchase from '../../scripts/purchase/Purchase';
@@ -15,6 +13,7 @@
     import { stockItems } from '../../stores/stock';
     import { currentBalance } from '../../stores/balance';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
+    import { toastText } from '../../stores/toast';
 
     // Stub item because onMount is called after the first render
     let cart = {
@@ -91,7 +90,8 @@
             cartItemsCount.forceUpdate();
             stockItems.forceUpdate();
 
-            Cookie.set('buy', 'true', { expires: DateTime.local().plus({ seconds: 15 }).toJSDate() });
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Dein Kauf ist erfolgreich abgeschlossen!';
             goto('/');
         } catch (error) {
             requestError = error;

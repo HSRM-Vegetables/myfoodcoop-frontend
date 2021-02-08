@@ -14,6 +14,7 @@
         POINT_OF_SALES_MAX_LOGIN_TIME_IN_MINUTES,
     } from '../scripts/Config';
     import LocalStorageKeys from '../scripts/common/LocalStorageKeys';
+    import Toast from '../components/common/Toast.svelte';
 
     const { page, session } = stores();
 
@@ -96,6 +97,8 @@
 <BulmaGlobalStyles />
 <EnsureLogin bind:isLoggedIn />
 <Nav bind:isLoggedIn />
+<Toast />
+
 <main>
     <!-- Only allow the user to visit the page if he is logged in, he tries to login, or if an error occured -->
     {#if isLoggedIn || $page.path.includes('/login') || $page.path.includes('/register') || $page.error}
