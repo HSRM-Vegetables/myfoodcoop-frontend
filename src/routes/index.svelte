@@ -1,6 +1,5 @@
 <script>
     import { goto } from '@sapper/app';
-    import Cookie from 'js-cookie';
     import {
         mdiAccount,
         mdiCartArrowDown,
@@ -24,8 +23,6 @@
     $title = ORGANIZATION_NAME;
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'show';
-
-    const buyCookie = Cookie.get('buy');
 
     const buttons = [
         {
@@ -129,11 +126,6 @@
     }
 </style>
 
-{#if buyCookie}
-    <article class="message is-primary">
-        <div class="message-body">Dein Kauf ist erfolgreich abgeschlossen!</div>
-    </article>
-{/if}
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
     <MobileReloadButton on:click={updateStock} />
 
