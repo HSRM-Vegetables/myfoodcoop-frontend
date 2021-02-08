@@ -79,6 +79,7 @@
         <div class="column">
             <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
         </div>
+        <!-- Show column only if array contains a certificate from CertificateLogos -->
         {#if item.certificates.some((r) => CertificateLogos.map((l) => l.name).includes(r))}
             <div class="column" style="min-height:75px;">
                 {#each CertificateLogos as logo}
