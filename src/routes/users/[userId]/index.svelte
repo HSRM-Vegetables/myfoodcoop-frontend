@@ -86,27 +86,30 @@
             <UserDetailsBalance userId={user.id} />
         </AuthorizeByRoles>
 
-        <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
+        {#if !user.isDeleted}
+            <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
+                <hr />
+                <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
+
+                <div class="container has-text-centered mt-6">
+                    {#if user.roles.length === 0}
+                        <Button
+                            text="Mitglied aktivieren"
+                            class="is-primary mb-3"
+                            size="full-width"
+                            on:click={() => onRoleUpdate({ detail: { role: Roles.MEMBER } })}
+                        />
+                    {/if}
+
+                    <Button text="Mitglied löschen" class="is-danger" size="full-width" on:click={deleteMember} />
+                </div>
+            </AuthorizeByRoles>
+
             <hr />
-            <RoleConcept user={user} on:roleUpdate={onRoleUpdate} />
 
-            <div class="container has-text-centered mt-6">
-                {#if user.roles.length === 0}
-                    <Button
-                        text="Mitglied aktivieren"
-                        class="is-primary mb-3"
-                        size="full-width"
-                        on:click={() => onRoleUpdate({ detail: { role: Roles.MEMBER } })}
-                    />
-                {/if}
-
-                <Button text="Mitglied löschen" class="is-danger" size="full-width" on:click={deleteMember} />
-            </div>
-        </AuthorizeByRoles>
-
-        <hr />
-        <UserEdit user={user} otherData={true} password={true} on:update={updateUser} />
-        <hr />
+            <UserEdit user={user} otherData={true} password={true} on:update={updateUser} />
+            <hr />
+        {/if}
 
         <div class="container has-text-centered mt-6">
             <Button href="/users" text="Zur Benutzerliste" class="is-primary mb-3" size="full-width" /><br />
