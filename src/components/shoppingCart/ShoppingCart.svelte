@@ -12,6 +12,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import { moneyStyler } from '../../scripts/common/Helper';
     import { cartItemsCount } from '../../stores/shoppingCart';
+    import { stockItems } from '../../stores/stock';
     import { currentBalance } from '../../stores/balance';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
@@ -88,6 +89,7 @@
             $currentBalance = (await Purchase.addPurchase(cart.cartItems)).balance;
             cart.clear();
             cartItemsCount.forceUpdate();
+            stockItems.forceUpdate();
 
             Cookie.set('buy', 'true', { expires: DateTime.local().plus({ seconds: 15 }).toJSDate() });
             goto('/');
