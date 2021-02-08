@@ -72,7 +72,6 @@
             type="number"
             placeholder="0"
             minimum="0"
-            z
             on:enter={addToBalance}
             value={inputValue}
             disabled={balanceUpdateInProgress}
