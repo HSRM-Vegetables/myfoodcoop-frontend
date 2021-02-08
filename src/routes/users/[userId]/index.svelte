@@ -12,6 +12,7 @@
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
+    import Modal from '../../../components/common/Modal.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Benutzerdetails';
@@ -22,6 +23,7 @@
     const { userId } = $page.params;
 
     let isLoading = true;
+    let modalIsOpen = false;
     let requestError;
     let user;
 
@@ -61,6 +63,14 @@
         user = await User.getUserById(userId);
     }
 
+    function confirmDeleteMember() {
+        modalIsOpen = true;
+    }
+
+    function closeModal() {
+        modalIsOpen = false;
+    }
+
     async function deleteMember() {
         try {
             await User.deleteUserById(userId);
@@ -76,6 +86,14 @@
 
 <AuthorizeByRoles allowedRoles={[Roles.ADMIN, Roles.TREASURER]}>
     <ErrorModal error={requestError} />
+
+    <Modal title="Benutzer löschen?" bind:open={modalIsOpen}>
+        <div slot="body"><span>Willst Du den Benutzer wirklich unwiderruflich löschen?</span></div>
+        <div slot="footer">
+            <button class="button is-danger" on:click={deleteMember}>Löschen</button>
+            <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
+        </div>
+    </Modal>
 
     {#if isLoading}
         <Loader isLoading={isLoading} />
@@ -101,7 +119,12 @@
                         />
                     {/if}
 
-                    <Button text="Mitglied löschen" class="is-danger" size="full-width" on:click={deleteMember} />
+                    <Button
+                        text="Mitglied löschen"
+                        class="is-danger"
+                        size="full-width"
+                        on:click={confirmDeleteMember}
+                    />
                 </div>
             </AuthorizeByRoles>
 
