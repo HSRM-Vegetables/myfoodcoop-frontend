@@ -2,7 +2,6 @@
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
@@ -11,7 +10,6 @@
     import Icon from '../../../components/common/Icon.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
-    import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
@@ -117,11 +115,12 @@
         csvExporter.generateCsv(newData);
     }
 
-    async function datePicker(dateInfo) {
+    async function datePicker(dateInfo, text) {
         selectedPeriod = 'datepicker';
-        localFrom = DateTime.fromJSDate(new Date(dateInfo.from));
-        localTo = DateTime.fromJSDate(new Date(dateInfo.to));
+        if (text === 'start') localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
+        if (text === 'end') localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
 
+        if (!localFrom && !localTo) return;
         try {
             isLoading = true;
 
@@ -171,16 +170,26 @@
             text="Letzten Monat"
             on:click={() => loadItems('lastMonth', 'letzten Monat')}
         /><br />
-        <div class="pt-4 pb-4">
-            <DatePicker
-                placeholder="Wähle einen Zeitraum"
-                continueText="Bestätigen"
-                format="DD.MM.YYYY"
-                range={true}
-                styling={new CalendarStyle()}
-                on:range-selected={(e) => datePicker(e.detail)}
-                end={DateTime.local().toJSDate()}
-            />
+        <div class="pt-4 pb-4 columns">
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                    value={localFrom.toFormat('yyyy-MM-dd')}
+                    max={DateTime.local().toFormat('yyyy-MM-dd')}
+                    on:change={(e) => datePicker(e, 'start')}
+                />
+            </div>
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                    value={localTo.toFormat('yyyy-MM-dd')}
+                    min={localFrom.toFormat('yyyy-MM-dd')}
+                    max={DateTime.local().toFormat('yyyy-MM-dd')}
+                    on:change={(e) => datePicker(e, 'end')}
+                />
+            </div>
         </div>
     </div>
 
