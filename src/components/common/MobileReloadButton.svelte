@@ -13,6 +13,11 @@
         width: 40px;
         cursor: pointer;
     }
+    @media (max-width: 768px) {
+        .reload-button {
+            right: 15px;
+        }
+    }
 </style>
 
 <Portal target=".nav-element">
