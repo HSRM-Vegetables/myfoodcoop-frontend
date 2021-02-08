@@ -81,6 +81,8 @@
         decoration={item.unitType === UnitType.KILO ? 'kg' : 'Stück'}
         minimum="0"
         value="0"
+        on:enter={dispose}
+        disabled={disposeInProgress}
     />
     <div class="container has-text-centered">
         <Button
