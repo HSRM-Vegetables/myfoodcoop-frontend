@@ -39,6 +39,7 @@
     function isQuantityValid(disposeQuantity) {
         // Quantity is negative
         if (disposeQuantity <= 0) {
+            errorHint = 'Die Bestandsmenge darf nicht negativ sein!';
             return false;
         }
 
