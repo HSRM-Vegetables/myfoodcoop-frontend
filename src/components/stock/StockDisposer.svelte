@@ -62,7 +62,7 @@
 <ErrorModal error={requestError} />
 
 {#if item}
-    <div class=" is-size-3 has-text-weight-bold mb-3">{item.name}</div>
+    <div class="is-size-3 has-text-weight-bold mb-3">{item.name}</div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
         <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
