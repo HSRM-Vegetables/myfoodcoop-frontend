@@ -38,7 +38,7 @@
 {:else if purchaseList !== undefined && purchaseList.purchases.length > 0}
     <div class="columns is-mobile">
         <div class="column has-text-weight-bold">Anzahl getätigter Einkäufe</div>
-        <div class="column has-text-right">{purchaseList.numberOfPurchases}</div>
+        <div class="column has-text-right">{purchaseList.purchases.length}</div>
     </div>
     <div class="columns is-mobile">
         <div class="column has-text-weight-bold">Gesamtbetrag aller Einkäufe</div>
