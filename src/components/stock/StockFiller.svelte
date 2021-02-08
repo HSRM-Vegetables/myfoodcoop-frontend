@@ -1,11 +1,8 @@
 <script>
     import { goto } from '@sapper/app';
-    import { DateTime } from 'luxon';
     import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
-    import { CalendarStyle } from '../../scripts/CalendarStyle';
     import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
@@ -276,10 +273,10 @@
     }
 
     function setOrderDate(date) {
-        orderDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        orderDate = date.target.value;
     }
     function setDeliveryDate(date) {
-        deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        deliveryDate = date.target.value;
     }
 </script>
 
@@ -433,24 +430,20 @@
             <div class="columns has-text-centered">
                 <div class="column">
                     <div class="pb-2">Lieferdatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setOrderDate(e.detail.date)}
-                        selected={item ? item.orderDate : ''}
+                    <input
+                        type="date"
+                        class="input"
+                        value={item ? item.orderDate : ''}
+                        on:change={(i) => setOrderDate(i)}
                     />
                 </div>
                 <div class="column">
                     <div class="pb-2 ">Bestelldatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setDeliveryDate(e.detail.date)}
-                        selected={item ? item.deliveryDate : ''}
+                    <input
+                        type="date"
+                        class="input"
+                        value={item ? item.deliveryDate : ''}
+                        on:change={(i) => setDeliveryDate(i)}
                     />
                 </div>
             </div>
