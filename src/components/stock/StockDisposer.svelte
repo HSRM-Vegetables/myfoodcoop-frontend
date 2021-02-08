@@ -49,7 +49,7 @@
 
         // Fractional quantity with unitType PIECE
         if (item.unitType === UnitType.PIECE && parseFloat(disposeQuantity % 1) !== 0) {
-            errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
+            errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist!';
             return false;
         }
 
