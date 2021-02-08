@@ -1,12 +1,13 @@
 <script>
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
-    import { mdiDelete, mdiPencil } from '@mdi/js';
+    import { mdiDelete, mdiPencil, mdiLeaf, mdiNewBox } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
+    import Icon from '../common/Icon.svelte';
     import { stockItems } from '../../stores/stock';
     import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
     import { moneyStyler } from '../../scripts/common/Helper';
@@ -56,12 +57,15 @@
 </script>
 
 <style>
-    .small {
-        font-size: 17px;
-    }
     img.cert-img {
-        max-height: 55px;
+        max-height: 65px;
         float: right;
+    }
+    .green-line {
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
     }
 </style>
 
@@ -91,7 +95,10 @@
         {/if}
     </div>
     {#if item.sustainablyProduced}
-        <div class="small has-text-right">Dieser Artikel wurde nachhaltig produziert</div>
+        <div class="green-line has-text-right">
+            <Icon icon={mdiLeaf} appbar={true} green={true} />
+            Dieser Artikel wurde nachhaltig produziert
+        </div>
     {/if}
     <hr />
     {#if item.isDeleted}
@@ -114,7 +121,11 @@
     </div>
     <div class="columns is-mobile">
         <div class="column">Steuersatz</div>
-        <div class="column has-text-right">{item.vat * 100} % ({moneyStyler(getTaxPriceFromItem(item))} €)</div>
+        <div class="column has-text-right">
+            {Math.floor(item.vat * 100)}
+            % ({moneyStyler(getTaxPriceFromItem(item))}
+            €)
+        </div>
     </div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
@@ -153,12 +164,11 @@
                 {item.deliveryDate ? DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy') : 'Nicht gesetzt'}
             </div>
         </div>
-
-        {#if item.description}
-            <div class="mb-1">Beschreibung:</div>
-            <span>{item.description}</span>
-        {/if}
     </div>
+    {#if item.description}
+        <span>Beschreibung:</span>
+        <div class="box"><span>{item.description}</span></div>
+    {/if}
     {#if showButtons}
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
             {#if !item.isDeleted}
@@ -169,6 +179,7 @@
                         size="full-width"
                         class="is-warning mb-3"
                         on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
+                        icon={mdiNewBox}
                     />
                     <Button
                         text="Artikel bearbeiten"

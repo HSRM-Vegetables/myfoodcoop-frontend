@@ -1,9 +1,10 @@
 <script>
-    import { mdiEye } from '@mdi/js';
+    import { mdiEye, mdiLeaf } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
     import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Icon from '../common/Icon.svelte';
+    import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import ListItem from '../common/ListItem.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
@@ -30,11 +31,6 @@
     export let isLoading = false;
 
     /**
-     * Display Description on cart
-     */
-    export let showDescription = true;
-
-    /**
      * Defines if the items should be highlighted
      * Default: false
      */
@@ -55,18 +51,6 @@
             id: itemdID,
         });
     }
-
-    function displayDescription(item) {
-        if (!item || !item.description) {
-            return '';
-        }
-
-        if (item.description.length > 200) {
-            return `${item.description.substring(0, 200)}...`;
-        }
-
-        return item.description;
-    }
 </script>
 
 <style>
@@ -77,6 +61,16 @@
     .has-text-right span {
         float: right;
     }
+    img.cert-img {
+        max-height: 25px;
+        float: right;
+    }
+    .logo-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+    }
 </style>
 
 {#if isLoading}
@@ -85,7 +79,7 @@
     {#each stockItems as item}
         <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
-            <div class="columns is-mobile">
+            <div class="columns m-0 is-mobile">
                 {#if allowDetails}
                     <div class="column is-narrow has-text-left">
                         <button class="button is-white" on:click={(event) => selectItemByDetail(event, item.id)}>
@@ -112,13 +106,21 @@
                     {:else}<span>{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}
                 </div>
             </div>
-
-            <!-- Second column with item description -->
-            {#if item.description && showDescription}
-                <div>
-                    <div class="column has-text-justified">{displayDescription(item)}</div>
-                </div>
-            {/if}
+            <div class="logo-container">
+                {#if item.sustainablyProduced}
+                    <div class="has-text-right">
+                        <Icon icon={mdiLeaf} small={true} green={true} />
+                    </div>
+                {/if}
+                <!-- Show column only if array contains a certificate from CertificateLogos -->
+                {#if item.certificates.some((r) => CertificateLogos.map((l) => l.name).includes(r))}
+                    {#each CertificateLogos as logo}
+                        {#if item.certificates.includes(logo.name)}
+                            <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
         </ListItem>
     {/each}
 {:else}

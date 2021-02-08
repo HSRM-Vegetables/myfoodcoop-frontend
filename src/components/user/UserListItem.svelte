@@ -16,6 +16,6 @@
 <ListItem isClickable={true} on:click>
     <div class="columns is-mobile" class:not-activated={user.roles.length === 0}>
         <div class="column has-text-left ">{user.username}</div>
-        <div class="column is-one-quarter has-text-right">{user.memberId}</div>
+        <div class="column break-all has-text-right">{user.memberId}</div>
     </div>
 </ListItem>

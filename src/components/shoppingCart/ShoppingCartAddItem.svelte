@@ -122,7 +122,7 @@
     <div class="total-container">
         <h2>Gesamtpreis</h2>
         <div class="total">{currentTotal} €</div>
-        <div>davon Steuern ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
+        <div>davon Umsatzsteuersatz ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
     </div>
 
     <hr />

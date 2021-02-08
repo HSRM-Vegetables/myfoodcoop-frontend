@@ -1,6 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiPlusBoxMultiple } from '@mdi/js';
+    import { mdiPlusBox } from '@mdi/js';
     import StockList from '../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
@@ -94,7 +94,7 @@
                     class="button is-primary mt-6"
                     href="/stock/item/new"
                     size="full-width"
-                    icon={mdiPlusBoxMultiple}
+                    icon={mdiPlusBox}
                 />
             </div>
         </AuthorizeByRoles>

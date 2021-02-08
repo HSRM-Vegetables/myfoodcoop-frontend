@@ -106,7 +106,7 @@
             await User.update(
                 user.id,
                 memberIdInput ? memberIdInput.getValue() : undefined,
-                passwordInput && passwordInput === '' ? passwordInput.getValue() : undefined,
+                passwordInput && passwordInput.getValue() !== '' ? passwordInput.getValue() : undefined,
                 emailInput ? emailInput.getValue() : undefined
             );
 
@@ -191,7 +191,7 @@
     <div class="container has-text-centered mt-6">
         <Button
             disabled={!allowUpdate}
-            text="Benutzerdaten aktualisiert"
+            text="Benutzerdaten aktualisieren"
             class="is-primary mb-3"
             size="full-width"
             on:click={updateUserData}

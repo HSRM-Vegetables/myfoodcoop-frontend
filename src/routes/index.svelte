@@ -147,7 +147,6 @@
                 allowDetails={true}
                 on:details={itemDetails}
                 on:select={itemSelected}
-                showDescription={false}
             />
         </div>
 

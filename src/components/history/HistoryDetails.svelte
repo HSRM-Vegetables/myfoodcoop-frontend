@@ -70,7 +70,7 @@
         <div class="column has-text-right">
             <span>Gesamtbetrag: {moneyStyler(purchase.totalPrice)}&nbsp;€</span>
             <br />
-            <span>davon Steuern: {moneyStyler(purchase.totalVat)} €</span>
+            <span>davon Umsatzsteuersatz: {moneyStyler(purchase.totalVat)} €</span>
             {#each purchase.vatDetails as details}
                 <br />
                 <span class="is-size-7">davon {moneyStyler(details.vat * 100)} %: {moneyStyler(details.amount)} €</span>

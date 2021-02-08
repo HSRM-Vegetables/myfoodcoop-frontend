@@ -83,7 +83,7 @@
     <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
         <hr />
 
-        <div class="columns is-mobile mt-3">
+        <div class="columns mt-3">
             <div class="column">
                 Point of Sales Regeln für dieses Gerät aktivieren?<br />
                 - Ausloggen nach

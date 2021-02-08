@@ -1,6 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil, mdiContentSaveMove } from '@mdi/js';
+    import { mdiPlusBox, mdiDelete, mdiArrowLeft, mdiPencil, mdiPlusBoxMultiple } from '@mdi/js';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
     import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
@@ -302,13 +302,14 @@
         -webkit-appearance: auto;
     }
     .tabs {
-        display: inline-flex;
+        display: flex;
         cursor: pointer;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     }
 
     .tab {
         display: inline;
-        padding: 15px 35px 15px 0;
+        padding: 15px 0;
     }
     .tab.is-active {
         color: #1d72aa;
@@ -316,14 +317,14 @@
     }
     .logo-images {
         max-width: 90px;
-        opacity: 0.3;
+        filter: grayscale(100%);
         cursor: pointer;
     }
     .logo-images:hover {
-        opacity: 0.7;
+        filter: grayscale(80%);
     }
     .logo-images.is-active {
-        opacity: 1;
+        filter: grayscale(0);
     }
     .item-block {
         display: none;
@@ -333,6 +334,15 @@
     }
     .is-error {
         color: #f14668;
+    }
+    .certificates-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .certificates-col {
+        padding: 0 25px;
     }
 </style>
 
@@ -469,21 +479,21 @@
             <div class="pt-5 pb-2">
                 <div class="columns has-text-centered">
                     <div class="column">
-                        <div class="pb-2">Lieferdatum</div>
-                        <input
-                            type="date"
-                            class="input"
-                            value={item ? item.orderDate : ''}
-                            on:change={(i) => setOrderDate(i)}
-                        />
-                    </div>
-                    <div class="column">
                         <div class="pb-2 ">Bestelldatum</div>
                         <input
                             type="date"
                             class="input"
                             value={item ? item.deliveryDate : ''}
                             on:change={(i) => setDeliveryDate(i)}
+                        />
+                    </div>
+                    <div class="column">
+                        <div class="pb-2">Lieferdatum</div>
+                        <input
+                            type="date"
+                            class="input"
+                            value={item ? item.orderDate : ''}
+                            on:change={(i) => setOrderDate(i)}
                         />
                     </div>
                 </div>
@@ -498,9 +508,9 @@
             </div>
             <div class="mb-2">
                 <div class="has-text-left pb-2">Zertifikate</div>
-                <div class="columns is-mobile">
+                <div class="certificates-row">
                     {#each CertificateLogos as logo}
-                        <div class="column">
+                        <div class="certificates-col">
                             <div
                                 class="logo-images"
                                 class:is-active={certificates.includes(logo.name)}
@@ -517,7 +527,7 @@
                         <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
                     </div>
                     <div class="control">
-                        <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
+                        <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBox} />
                     </div>
                 </form>
                 {#each certificates as certificate}
@@ -545,7 +555,7 @@
                 text={saveText}
                 on:click={() => addOrUpadteItem(false)}
                 class="button is-primary mb-4"
-                icon={item ? mdiPencil : mdiPlusBoxMultiple}
+                icon={item ? mdiPencil : mdiPlusBox}
                 size="full-width"
             />
             <br />
@@ -554,7 +564,7 @@
                     text="Hinzufügen und neuen Artikel erstellen"
                     on:click={() => addOrUpadteItem(true)}
                     class="button is-primary mb-4"
-                    icon={mdiContentSaveMove}
+                    icon={mdiPlusBoxMultiple}
                     size="full-width"
                     supplierTextField
                 />
