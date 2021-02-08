@@ -95,7 +95,7 @@
 </style>
 
 {#if stockItem}
-    <StockItemDetails item={stockItem} buttons={false} />
+    <StockItemDetails item={stockItem} showButtons={false} />
 
     <div class="mt-5">
         <TextField
