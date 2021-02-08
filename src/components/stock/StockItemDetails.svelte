@@ -1,6 +1,7 @@
 <script>
     import { DateTime } from 'luxon';
-    import { goto } from '@sapper/app';
+    import { goto, stores } from '@sapper/app';
+    import { onMount } from 'svelte';
     import { mdiDelete, mdiDeleteVariant, mdiPencil } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
@@ -14,6 +15,8 @@
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
+    const { page } = stores();
+
     /**
      * The stock item
      */
@@ -23,6 +26,20 @@
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
+
+    /**
+     * Message to display at the top of the page
+     */
+    let {
+        query: { message },
+    } = $page;
+
+    onMount(() => {
+        // clear message after 10 sec
+        setTimeout(() => {
+            message = undefined;
+        }, 1000 * 10);
+    });
 
     function confirmRemoveItem(itemID) {
         modalIsOpen = true;
@@ -64,6 +81,13 @@
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
     </div>
 </Modal>
+
+{#if message}
+    <article class="message is-primary">
+        <div class="message-body">{message}</div>
+    </article>
+{/if}
+
 {#if item}
     <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
 

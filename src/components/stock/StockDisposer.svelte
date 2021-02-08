@@ -27,7 +27,7 @@
         if (!disposeQuantityError) {
             try {
                 await Stock.disposeItem(item.id, disposeQuantity);
-                goto(`/stock/item/${item.id}`);
+                goto(`/stock/item/${item.id}?message=Ware%20erfolgreich%20entsorgt`);
             } catch (error) {
                 requestError = error;
             }
