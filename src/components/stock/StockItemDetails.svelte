@@ -19,7 +19,11 @@
      * The stock item
      */
     export let item;
-    export let buttons;
+    /**
+     * Displays buttons to edit or reorder the stock item.
+     * Default: false
+     */
+    export let showButtons = false;
 
     let requestError;
 
@@ -75,18 +79,18 @@
         <div class="column">
             <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
         </div>
-        <div class="column">
-            {#each CertificateLogos as logo}
-                {#if item.certificates.includes(logo.name)}
-                    <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
-                {/if}
-            {/each}
-        </div>
+        {#if item.certificates.some((r) => CertificateLogos.map((l) => l.name).includes(r))}
+            <div class="column" style="min-height:75px;">
+                {#each CertificateLogos as logo}
+                    {#if item.certificates.includes(logo.name)}
+                        <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
+                    {/if}
+                {/each}
+            </div>
+        {/if}
     </div>
-    <br />
-    <br />
     {#if item.sustainablyProduced}
-        <div class="small has-text-right full-width">Dieser Artikel wurde nachhaltig produziert</div>
+        <div class="small has-text-right">Dieser Artikel wurde nachhaltig produziert</div>
     {/if}
     <hr />
     {#if item.isDeleted}
@@ -154,7 +158,7 @@
             <span>{item.description}</span>
         {/if}
     </div>
-    {#if buttons}
+    {#if showButtons}
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
             {#if !item.isDeleted}
                 <hr />

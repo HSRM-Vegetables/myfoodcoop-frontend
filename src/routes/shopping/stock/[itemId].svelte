@@ -1,7 +1,7 @@
 <script>
     import { stores } from '@sapper/app';
     import { onMount } from 'svelte';
-    import PriceCalculator from '../../../components/priceCalculator/PriceCalculator.svelte';
+    import ShoppingCartAddItem from '../../../components/shoppingCart/ShoppingCartAddItem.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
@@ -22,5 +22,5 @@
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
-    <PriceCalculator stockItem={stockItem} />
+    <ShoppingCartAddItem stockItem={stockItem} />
 </AuthorizeByRoles>

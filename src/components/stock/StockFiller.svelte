@@ -63,12 +63,14 @@
     let quantityTextFieldError = false;
     let producerTextFieldError = false;
     let supplierTextFieldError = false;
+    let itemDetailsError = false;
+    let deliveryDetailsError = false;
     let errorHint;
 
     let requestError;
     let saveText;
 
-    let tabs = 'article';
+    let currentTabName = 'article';
 
     if (edit) {
         saveText = 'Änderungen speichern';
@@ -148,17 +150,13 @@
         if (!supplierTextField || !supplierTextField.getValue()) {
             supplierTextFieldError = true;
         }
-        if (
-            articleTextFieldError ||
-            pricePerUnitTextFieldError ||
-            quantityTextFieldError ||
-            producerTextFieldError ||
-            supplierTextFieldError ||
-            vatTextFieldError
-        ) {
+        itemDetailsError =
+            articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError || vatTextFieldError;
+        deliveryDetailsError = producerTextFieldError || supplierTextFieldError;
+
+        if (itemDetailsError || deliveryDetailsError) {
             return false;
         }
-
         return true;
     }
 
@@ -171,11 +169,9 @@
             return;
         }
 
-        if (stockItem.unitType === UnitType.KILO) {
-            unitTypeBoolean = true;
-            // force update of unit type
-            untiTypeChanged(unitTypeBoolean);
-        }
+        unitTypeBoolean = stockItem.unitType === UnitType.KILO;
+        // force update of unit type
+        untiTypeChanged(unitTypeBoolean);
 
         certificates = item.certificates;
         sustainablyProduced = item.sustainablyProduced;
@@ -285,7 +281,7 @@
         deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
     }
     function tabClick(value) {
-        tabs = value;
+        currentTabName = value;
     }
 
     function addToCertificateLogos(certificate) {
@@ -310,7 +306,7 @@
     }
     .tabs {
         display: inline-flex;
-        margin-bottom: 0;
+        cursor: pointer;
     }
 
     .tab {
@@ -338,6 +334,9 @@
     .item-block.is-active {
         display: block;
     }
+    .is-error {
+        color: #f14668;
+    }
 </style>
 
 <ErrorModal error={requestError} />
@@ -347,19 +346,33 @@
         <div class="message-body">{errorHint}</div>
     </article>
 {/if}
-<div class="tabs">
-    <div class="tab" class:is-active={tabs === 'article'} on:click={() => tabClick('article')}>
-        <span>Artikeldetails</span>
+<div class="tabs m-0">
+    <div class="tab" class:is-active={currentTabName === 'article'} on:click={() => tabClick('article')}>
+        <span class:is-error={itemDetailsError}>Artikeldetails</span>
     </div>
-    <div class="tab" class:is-active={tabs === 'certificate'} on:click={() => tabClick('certificate')}>
+    <div
+        class="tab"
+        class:is-active={currentTabName === 'deliveryDetails'}
+        on:click={() => tabClick('deliveryDetails')}
+    >
+        <span class:is-error={deliveryDetailsError}>Lieferdetails</span>
+    </div>
+    <div class="tab" class:is-active={currentTabName === 'certificate'} on:click={() => tabClick('certificate')}>
         <span>Zertifikate</span>
     </div>
-    <div class="tab" class:is-active={tabs === 'more'} on:click={() => tabClick('more')}><span>Mehr</span></div>
 </div>
 <hr style="margin-top: 0;" />
 <div>
     <div class="form">
-        <div class="item-block" class:is-active={tabs === 'article'}>
+        <div class="item-block" class:is-active={currentTabName === 'article'}>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Artikel Status</div>
+                <select class="input dropdown" bind:value={selectedStatus}>
+                    {#each StockStatusWithDescription as status}
+                        <option value={status.identifier}>{status.descripton}</option>
+                    {/each}
+                </select>
+            </div>
             <div class="pt-4">
                 <TextField
                     bind:this={articleTextField}
@@ -414,6 +427,26 @@
                     value={item ? item.quantity : ''}
                 />
             </div>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Beschreibung</div>
+                <div class="form-row is-relative">
+                    <textarea
+                        class="textarea"
+                        placeholder="Beschreibung"
+                        bind:this={descriptionElement}
+                    >{item ? item.description : ''}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="item-block" class:is-active={currentTabName === 'deliveryDetails'}>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Herkunftskategorie</div>
+                <select class="input dropdown" bind:value={originCategory}>
+                    {#each OriginCategoryWithDescription as categorys}
+                        <option value={categorys.identifier}>{categorys.descripton}</option>
+                    {/each}
+                </select>
+            </div>
             <div class="pt-1">
                 <TextField
                     bind:this={producerTextField}
@@ -462,18 +495,8 @@
                     </div>
                 </div>
             </div>
-            <div class="pt-4">
-                <div class="has-text-left pb-2">Beschreibung</div>
-                <div class="form-row is-relative">
-                    <textarea
-                        class="textarea"
-                        placeholder="Beschreibung"
-                        bind:this={descriptionElement}
-                    >{item ? item.description : ''}</textarea>
-                </div>
-            </div>
         </div>
-        <div class="item-block" class:is-active={tabs === 'certificate'}>
+        <div class="item-block" class:is-active={currentTabName === 'certificate'}>
             <div class="columns pt-4 is-mobile">
                 <div class="column">nachhaltig Produziert</div>
                 <div class="column has-text-right">
@@ -521,26 +544,6 @@
                         </ListItem>
                     </div>
                 {/each}
-            </div>
-        </div>
-        <div class="item-block" class:is-active={tabs === 'more'}>
-            <div>
-                <div class="pt-4">
-                    <div class="has-text-left pb-2">Artikel Status</div>
-                    <select class="input dropdown" bind:value={selectedStatus}>
-                        {#each StockStatusWithDescription as status}
-                            <option value={status.identifier}>{status.descripton}</option>
-                        {/each}
-                    </select>
-                </div>
-            </div>
-            <div class="pt-4">
-                <div class="has-text-left pb-2">Herkunftskategorie</div>
-                <select class="input dropdown" bind:value={originCategory}>
-                    {#each OriginCategoryWithDescription as categorys}
-                        <option value={categorys.identifier}>{categorys.descripton}</option>
-                    {/each}
-                </select>
             </div>
         </div>
         <hr />

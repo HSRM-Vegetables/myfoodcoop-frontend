@@ -100,10 +100,10 @@
                 </div>
             </a>
         {/if}
+        <div on:click={logout} class="logoutIcon is-hidden-mobile">
+            <Icon icon={mdiLogout} appbar={true} />
+        </div>
         <div class="is-hidden-touch">
-            <div on:click={logout} class="logoutIcon">
-                <Icon icon={mdiLogout} appbar={true} />
-            </div>
             {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
             <a href="/shopping/cart" class="cartIcon">
                 <Icon icon={mdiShopping} appbar={true} />
