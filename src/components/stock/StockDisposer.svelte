@@ -45,6 +45,7 @@
 
         // Quantity is not a number
         if (Number.isNaN(disposeQuantity)) {
+            errorHint = 'Die Bestandsmenge muss eine Zahl sein!';
             return false;
         }
 
