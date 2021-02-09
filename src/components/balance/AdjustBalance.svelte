@@ -6,6 +6,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import { currentBalance } from '../../stores/balance';
     import { userId } from '../../stores/user';
+    import { toastText } from '../../stores/toast';
 
     let changeMoneyInput;
     let balanceUpdateInProgress = false;
@@ -23,6 +24,9 @@
             // This variable is used in other files
             // eslint-disable-next-line no-unused-vars
             $currentBalance = await Balance.setBalanceForUser($userId, parseFloat(changeMoneyInput.getValue()));
+
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Guthaben erfolgreich aktualisiert';
         } catch (error) {
             requestError = error;
         } finally {

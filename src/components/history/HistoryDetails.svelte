@@ -27,12 +27,6 @@
     });
 </script>
 
-<style>
-    .breakwords {
-        word-break: break-all;
-    }
-</style>
-
 {#if isLoading}
     <Loader bind:isLoading />
 {:else if requestError !== undefined}
@@ -43,7 +37,7 @@
     {#each purchase.items as item}
         <ListItem>
             <div class="columns is-mobile">
-                <div class="column has-text-left has-text-weight-bold"><span class="breakwords">{item.name}</span></div>
+                <div class="column has-text-left has-text-weight-bold"><span class="break-all">{item.name}</span></div>
             </div>
             <div class="columns is-mobile is-vcentered">
                 <div class="column has-text-left">

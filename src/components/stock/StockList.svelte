@@ -54,10 +54,6 @@
 </script>
 
 <style>
-    .breakwords {
-        word-break: break-all;
-    }
-
     .has-text-right span {
         float: right;
     }
@@ -90,7 +86,7 @@
                     </div>
                 {/if}
                 <div class="column has-text-left ">
-                    <span class="has-text-weight-bold breakwords">{item.name}</span><br />
+                    <span class="has-text-weight-bold break-all">{item.name}</span><br />
                     {#if item.unitType === UnitType.PIECE}
                         <span class="is-size-7 is-hidden-desktop">{moneyStyler(item.pricePerUnit)} € / Stück</span>
                     {:else}<span class="is-size-7 is-hidden-desktop">{moneyStyler(item.pricePerUnit)} € / kg</span>{/if}

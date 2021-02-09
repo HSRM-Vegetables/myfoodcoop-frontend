@@ -1,5 +1,4 @@
 <script>
-    import { Duration } from 'luxon';
     import { fade } from 'svelte/transition';
     import { mdiCheck } from '@mdi/js';
     import Icon from './Icon.svelte';
@@ -8,12 +7,7 @@
     /**
      * Seconds the toast should be displayed
      */
-    export let seconds = 15;
-
-    /**
-     * Defines if the item is currently displayed
-     */
-    export let display = false;
+    export let seconds = 5;
 
     /**
      * Icon to be displayed besides the text
@@ -22,12 +16,10 @@
 
     $: {
         if ($toastText) {
-            display = true;
-
             // do not show the component anymore, after the time expired
             setTimeout(() => {
-                display = false;
-            }, Duration.fromObject({ seconds }));
+                $toastText = undefined;
+            }, seconds * 1000);
         }
     }
 </script>
@@ -48,6 +40,7 @@
 
         text-align: center;
         vertical-align: center;
+        user-select: none;
     }
 
     @media (min-width: 1024px) {
@@ -72,9 +65,9 @@
     }
 </style>
 
-{#if display}
+{#if $toastText}
     <div class="toast" transition:fade>
-        <Icon icon={icon} appbar={true} />
+        <Icon icon={icon} small={true} />
         {$toastText}
     </div>
 {/if}

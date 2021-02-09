@@ -44,17 +44,11 @@
     }
 </script>
 
-<style>
-    .breakwords {
-        word-break: break-all;
-    }
-</style>
-
 {#each cartItems as item}
     <ListItem isClickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
-                <span class="breakwords">{item.stockItem.name}</span>
+                <span class="break-all">{item.stockItem.name}</span>
             </div>
             {#if allowRemoval}
                 <div class="column has-text-right">

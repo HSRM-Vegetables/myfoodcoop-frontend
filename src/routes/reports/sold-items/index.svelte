@@ -95,69 +95,54 @@
             csvTitle = `${localFrom.toFormat('dd.MM.yyyy')} - ${localTo.toFormat('dd.MM.yyyy')}`;
         }
 
-        let tempTitle = `Zeitraum: ${csvTitle}, Netto = ${soldItems.grossAmount - soldItems.totalVat}, `;
-        tempTitle += `Steuern = ${soldItems.totalVat}, Brutto = ${soldItems.grossAmount}`;
-
         const options = {
             fieldSeparator: ';',
             quoteStrings: '"',
             decimalSeparator: ',',
             showLabels: true,
             showTitle: true,
-            title: tempTitle,
+            title: `Zeitraum: ${csvTitle}`,
             filename: csvTitle.replace(' - ', '-'),
             useBom: true,
             useKeysAsHeaders: true,
         };
+
         const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
+        const empty = {
+            id: '',
+            name: '',
+            quantitySold: '',
+            unitType: '',
+            vat: '',
+            totalVat: '',
+            grossAmount: '',
+        };
         newData.push(
             {
-                id: '',
-                name: '',
-                quantitySold: '',
-                unitType: '',
-                vat: '',
-                totalVat: '',
-                grossAmount: '',
+                ...empty,
             },
             {
-                id: '',
-                name: '',
-                quantitySold: '',
-                unitType: '',
-                vat: '',
+                ...empty,
                 totalVat: 'Netto',
                 grossAmount: `${soldItems.grossAmount - soldItems.totalVat} €`,
             },
             {
-                id: '',
-                name: '',
-                quantitySold: '',
-                unitType: '',
-                vat: '',
+                ...empty,
                 totalVat: 'MwSt. Gesamt',
                 grossAmount: `${soldItems.totalVat} €`,
             }
         );
-        /* eslint-disable prefer-arrow-callback */
-        soldItems.vatDetails.forEach(function pushVal(vat) {
+
+        soldItems.vatDetails.forEach((vat) => {
             newData.push({
-                id: '',
-                name: '',
-                quantitySold: '',
-                unitType: '',
-                totalVat: '',
+                ...empty,
                 vat: `${Math.floor(vat.vat * 100)}%`,
                 grossAmount: `${vat.amount} €`,
             });
         });
         newData.push({
-            id: '',
-            name: '',
-            quantitySold: '',
-            unitType: '',
+            ...empty,
             totalVat: 'Brutto',
-            vat: '',
             grossAmount: `${soldItems.grossAmount} €`,
         });
         const csvExporter = new ExportToCsv(options);

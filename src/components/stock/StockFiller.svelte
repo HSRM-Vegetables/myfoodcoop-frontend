@@ -14,6 +14,7 @@
     import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
+    import { toastText } from '../../stores/toast';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -206,6 +207,9 @@
                     selectedStatus,
                     vatTextField.getValue() / 100
                 );
+
+                // eslint-disable-next-line no-unused-vars
+                $toastText = 'Artikel erfolgreich aktualisiert';
             } else {
                 await Stock.addItem(
                     articleTextField.getValue(),
@@ -223,6 +227,9 @@
                     selectedStatus,
                     vatTextField.getValue() / 100
                 );
+
+                // eslint-disable-next-line no-unused-vars
+                $toastText = 'Artikel erfolgreich hinzugefügt';
             }
 
             // as one item was added or modified, reload the stock list
@@ -292,23 +299,20 @@
         display: flex;
         flex-flow: row nowrap;
     }
-
     .auto-margin {
         margin: auto;
     }
-
     .dropdown {
         -moz-appearance: auto;
         -webkit-appearance: auto;
     }
     .tabs {
         display: flex;
-        cursor: pointer;
         -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     }
-
     .tab {
         display: inline;
+        cursor: pointer;
         padding: 15px 0;
     }
     .tab.is-active {
@@ -317,6 +321,7 @@
     }
     .logo-images {
         max-width: 90px;
+        min-width: 90px;
         filter: grayscale(100%);
         cursor: pointer;
     }
@@ -338,11 +343,10 @@
     .certificates-row {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
-    }
-    .certificates-col {
-        padding: 0 25px;
+        justify-content: space-around;
+        align-content: center;
     }
 </style>
 
@@ -385,7 +389,7 @@
                     bind:this={articleTextField}
                     type="text"
                     placeholder="Artikel"
-                    label="Artikel"
+                    label="Artikel *"
                     isInErrorState={articleTextFieldError}
                     charLimit="250"
                     value={item ? item.name : ''}
@@ -403,7 +407,7 @@
                     bind:this={pricePerUnitTextField}
                     type="number"
                     placeholder="Warenpreis"
-                    label="Warenpreis"
+                    label="Warenpreis *"
                     decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                     minimum="0"
                     isInErrorState={pricePerUnitTextFieldError}
@@ -415,11 +419,11 @@
                     bind:this={vatTextField}
                     type="number"
                     placeholder="Umsatzsteuersatz"
-                    label="Umsatzsteuersatz"
+                    label="Umsatzsteuersatz *"
                     decoration={'%'}
                     minimum="0"
                     isInErrorState={vatTextFieldError}
-                    value={item ? item.vat * 100 : 7}
+                    value={item ? Math.floor(item.vat * 100) : 7}
                 />
             </div>
             <div class="pt-4">
@@ -427,7 +431,7 @@
                     bind:this={quantityTextField}
                     type="number"
                     placeholder="Bestands Menge"
-                    label="Bestands Menge"
+                    label="Bestands Menge *"
                     decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
                     minimum="0"
                     isInErrorState={quantityTextFieldError}
@@ -459,7 +463,7 @@
                     bind:this={producerTextField}
                     type="text"
                     placeholder="Erzeuger"
-                    label="Erzeuger"
+                    label="Erzeuger *"
                     isInErrorState={producerTextFieldError}
                     charLimit="250"
                     value={item ? item.producer : ''}
@@ -470,7 +474,7 @@
                     bind:this={supplierTextField}
                     type="text"
                     placeholder="Lieferant"
-                    label="Lieferant"
+                    label="Lieferant *"
                     isInErrorState={supplierTextFieldError}
                     charLimit="250"
                     value={item ? item.supplier : ''}
@@ -510,19 +514,17 @@
                 <div class="has-text-left pb-2">Zertifikate</div>
                 <div class="certificates-row">
                     {#each CertificateLogos as logo}
-                        <div class="certificates-col">
-                            <div
-                                class="logo-images"
-                                class:is-active={certificates.includes(logo.name)}
-                                on:click={() => addToCertificateLogos(logo.name)}
-                            >
-                                <img src={logo.image} alt="{logo.name}_Logo" />
-                            </div>
+                        <div
+                            class="logo-images"
+                            class:is-active={certificates.includes(logo.name)}
+                            on:click={() => addToCertificateLogos(logo.name)}
+                        >
+                            <img src={logo.image} alt="{logo.name}_Logo" />
                         </div>
                     {/each}
                 </div>
 
-                <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
+                <form class="field has-addons has-text-centered mt-2" on:submit|preventDefault={addCertificates}>
                     <div class="control" style="width: 100%;">
                         <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
                     </div>
@@ -571,15 +573,16 @@
                 <br />
             {/if}
 
-            <Button
-                text="Eingabe löschen"
-                on:click={clearInputs}
-                class="button is-danger mb-4"
-                icon={mdiDelete}
-                size="full-width"
-            />
-
-            <br />
+            {#if !edit}
+                <Button
+                    text="Eingabe löschen"
+                    on:click={clearInputs}
+                    class="button is-danger mb-4"
+                    icon={mdiDelete}
+                    size="full-width"
+                />
+                <br />
+            {/if}
 
             <Button
                 text={linkBackText}

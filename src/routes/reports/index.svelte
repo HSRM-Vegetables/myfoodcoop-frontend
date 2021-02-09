@@ -1,5 +1,5 @@
 <script>
-    import { mdiCashMultiple, mdiAccountCash } from '@mdi/js';
+    import { mdiAccountCash, mdiArchive } from '@mdi/js';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -18,7 +18,7 @@
             class="is-link"
             text="Was wurde gekauft?"
             size="full-width"
-            icon={mdiCashMultiple}
+            icon={mdiArchive}
         />
 
         <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>

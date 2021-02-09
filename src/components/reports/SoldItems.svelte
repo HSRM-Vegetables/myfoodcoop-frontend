@@ -10,12 +10,6 @@
     const selectEvent = createEventDispatcher();
 </script>
 
-<style>
-    .item-name {
-        word-break: break-all;
-    }
-</style>
-
 {#if soldItems !== undefined}
     <div class="columns is-mobile">
         <div class="column has-text-weight-bold has-text-left">Artikelname</div>
@@ -26,7 +20,7 @@
     </div>
     {#each soldItems.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)) as item}
         <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.id })}>
-            <div class="column item-name has-text-left">{item.name}</div>
+            <div class="column break-all has-text-left">{item.name}</div>
             <div class="column has-text-centered">
                 {item.quantitySold}
                 {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}

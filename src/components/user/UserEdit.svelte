@@ -7,6 +7,7 @@
     import AuthorizeByRoles from '../common/AuthorizeByRoles.svelte';
     import { Roles } from '../../scripts/roles/Roles';
     import { userDetails } from '../../stores/userDetails';
+    import { toastText } from '../../stores/toast';
 
     export let user;
     export let password;
@@ -31,7 +32,6 @@
     let emailError = false;
 
     let allowUpdate = false;
-    let message = false;
 
     let requestError;
 
@@ -119,7 +119,8 @@
             eventDispatcher('update');
 
             // display the success message
-            message = true;
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Benutzerdaten erfolgreich aktualisiert';
 
             // clear the password fields
             if (passwordInput) passwordInput.clear();
@@ -133,11 +134,6 @@
 <ErrorModal error={requestError} />
 
 {#if user}
-    {#if message}
-        <article class="message is-primary">
-            <div class="message-body">Daten wurden aktualisiert!</div>
-        </article>
-    {/if}
     {#if otherData}
         <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
             <div class="pt-4">

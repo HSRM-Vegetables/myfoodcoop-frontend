@@ -1,7 +1,6 @@
 <script>
     import { DateTime } from 'luxon';
-    import { goto, stores } from '@sapper/app';
-    import { onMount } from 'svelte';
+    import { goto } from '@sapper/app';
     import { mdiDelete, mdiPencil, mdiDeleteVariant, mdiLeaf, mdiNewBox } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
@@ -16,8 +15,7 @@
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
-
-    const { page } = stores();
+    import { toastText } from '../../stores/toast';
 
     /**
      * The stock item
@@ -34,20 +32,6 @@
     let modalIsOpen = false;
     let stockItemIdToRemove;
 
-    /**
-     * Message to display at the top of the page
-     */
-    let {
-        query: { message },
-    } = $page;
-
-    onMount(() => {
-        // clear message after 10 sec
-        setTimeout(() => {
-            message = undefined;
-        }, 1000 * 10);
-    });
-
     function confirmRemoveItem(itemID) {
         modalIsOpen = true;
         stockItemIdToRemove = itemID;
@@ -61,6 +45,9 @@
 
             // as one item was removed, reload the stock list
             stockItems.forceUpdate();
+
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Artikel erfolgreich gelöscht';
 
             goto('/stock/');
         } catch (error) {
@@ -95,12 +82,6 @@
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
     </div>
 </Modal>
-
-{#if message}
-    <article class="message is-primary">
-        <div class="message-body">{message}</div>
-    </article>
-{/if}
 
 {#if item}
     <div class="columns">

@@ -91,7 +91,7 @@
             stockItems.forceUpdate();
 
             // eslint-disable-next-line no-unused-vars
-            $toastText = 'Dein Kauf ist erfolgreich abgeschlossen!';
+            $toastText = 'Dein Kauf wurde erfolgreich abgeschlossen';
             goto('/');
         } catch (error) {
             requestError = error;
