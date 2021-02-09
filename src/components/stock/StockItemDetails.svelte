@@ -1,7 +1,8 @@
 <script>
     import { DateTime } from 'luxon';
-    import { goto } from '@sapper/app';
-    import { mdiDelete, mdiPencil, mdiLeaf, mdiNewBox } from '@mdi/js';
+    import { goto, stores } from '@sapper/app';
+    import { onMount } from 'svelte';
+    import { mdiDelete, mdiPencil, mdiDeleteVariant, mdiLeaf, mdiNewBox } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
@@ -15,6 +16,8 @@
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
+
+    const { page } = stores();
 
     /**
      * The stock item
@@ -30,6 +33,20 @@
 
     let modalIsOpen = false;
     let stockItemIdToRemove;
+
+    /**
+     * Message to display at the top of the page
+     */
+    let {
+        query: { message },
+    } = $page;
+
+    onMount(() => {
+        // clear message after 10 sec
+        setTimeout(() => {
+            message = undefined;
+        }, 1000 * 10);
+    });
 
     function confirmRemoveItem(itemID) {
         modalIsOpen = true;
@@ -78,6 +95,13 @@
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
     </div>
 </Modal>
+
+{#if message}
+    <article class="message is-primary">
+        <div class="message-body">{message}</div>
+    </article>
+{/if}
+
 {#if item}
     <div class="columns">
         <div class="column">
@@ -169,34 +193,39 @@
         <span>Beschreibung:</span>
         <div class="box"><span>{item.description}</span></div>
     {/if}
-    {#if showButtons}
-        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-            {#if !item.isDeleted}
-                <hr />
-                <div class="container has-text-centered">
-                    <Button
-                        text="Artikel neu bestellen"
-                        size="full-width"
-                        class="is-warning mb-3"
-                        on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
-                        icon={mdiNewBox}
-                    />
-                    <Button
-                        text="Artikel bearbeiten"
-                        size="full-width"
-                        class="is-primary mb-3"
-                        on:click={() => goto(`/stock/item/${item.id}/edit`)}
-                        icon={mdiPencil}
-                    />
-                    <Button
-                        text="Artikel löschen"
-                        size="full-width"
-                        class="is-danger"
-                        on:click={() => confirmRemoveItem(item.id)}
-                        icon={mdiDelete}
-                    />
-                </div>
-            {/if}
-        </AuthorizeByRoles>
+    {#if showButtons && !item.isDeleted}
+        <hr />
+        <div class="container has-text-centered">
+            <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+                <Button
+                    text="Artikel neu bestellen"
+                    size="full-width"
+                    class="is-warning mb-3"
+                    on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
+                    icon={mdiNewBox}
+                />
+                <Button
+                    text="Artikel bearbeiten"
+                    size="full-width"
+                    class="is-primary mb-3"
+                    on:click={() => goto(`/stock/item/${item.id}/edit`)}
+                    icon={mdiPencil}
+                />
+                <Button
+                    text="Artikel löschen"
+                    size="full-width"
+                    class="is-danger"
+                    on:click={() => confirmRemoveItem(item.id)}
+                    icon={mdiDelete}
+                />
+            </AuthorizeByRoles>
+            <Button
+                text="Verdorbene Ware entsorgen"
+                size="full-width"
+                class="is-danger mt-3"
+                on:click={() => goto(`/stock/item/${item.id}/dispose`)}
+                icon={mdiDeleteVariant}
+            />
+        </div>
     {/if}
 {/if}
