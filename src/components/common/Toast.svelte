@@ -41,6 +41,7 @@
         text-align: center;
         vertical-align: center;
         user-select: none;
+        z-index: 1000;
     }
 
     @media (min-width: 1024px) {
