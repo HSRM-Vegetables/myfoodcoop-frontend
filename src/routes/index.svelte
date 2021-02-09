@@ -137,6 +137,8 @@
                 isLoading={$areStockItemsUpdating}
                 isClickable={true}
                 allowDetails={true}
+                highlight={true}
+                limit="3"
                 on:details={itemDetails}
                 on:select={itemSelected}
             />
