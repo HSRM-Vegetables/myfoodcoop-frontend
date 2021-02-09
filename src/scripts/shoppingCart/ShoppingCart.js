@@ -21,15 +21,18 @@ export default class ShoppingCart {
         if (Number.isNaN(quantityParsed)) {
             return false;
         }
-
-        // check if item name already exists in item array. if true, remove the entry
-        if (this.cartItems.find((item) => item.stockItem.id === stockItem.id) !== undefined) {
+        
+        // check if item name already exists in item array. if true, remove the entry and save old quantity
+        const isOld = this.cartItems.find((item) => item.stockItem.id === stockItem.id);
+        let oldQuantity = 0;
+        if (isOld !== undefined) {
             // remove item from list;
+            oldQuantity = isOld.quantity;
             this.cartItems = this.cartItems.filter((ci) => ci.stockItem.id !== stockItem.id);
         }
 
         this.cartItems = [...this.cartItems,
-            new ShoppingCartItem(stockItem, quantity)];
+            new ShoppingCartItem(stockItem, parseFloat(quantity)+ parseFloat(oldQuantity))];
 
         localStorage.setItem(LocalStorageKeys.CART, JSON.stringify(this.cartItems));
 
