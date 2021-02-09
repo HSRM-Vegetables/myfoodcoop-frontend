@@ -95,23 +95,57 @@
             csvTitle = `${localFrom.toFormat('dd.MM.yyyy')} - ${localTo.toFormat('dd.MM.yyyy')}`;
         }
 
-        let tempTitle = `Zeitraum: ${csvTitle}, Netto = ${soldItems.grossAmount - soldItems.totalVat}, `;
-        tempTitle += `Steuern = ${soldItems.totalVat}, Brutto = ${soldItems.grossAmount}`;
-
         const options = {
             fieldSeparator: ';',
             quoteStrings: '"',
             decimalSeparator: ',',
             showLabels: true,
             showTitle: true,
-            title: tempTitle,
+            title: `Zeitraum: ${csvTitle}`,
             filename: csvTitle.replace(' - ', '-'),
             useBom: true,
             useKeysAsHeaders: true,
         };
-        const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
-        const csvExporter = new ExportToCsv(options);
 
+        const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
+        const empty = {
+            id: '',
+            name: '',
+            quantitySold: '',
+            unitType: '',
+            vat: '',
+            totalVat: '',
+            grossAmount: '',
+        };
+        newData.push(
+            {
+                ...empty,
+            },
+            {
+                ...empty,
+                totalVat: 'Netto',
+                grossAmount: `${soldItems.grossAmount - soldItems.totalVat} €`,
+            },
+            {
+                ...empty,
+                totalVat: 'MwSt. Gesamt',
+                grossAmount: `${soldItems.totalVat} €`,
+            }
+        );
+
+        soldItems.vatDetails.forEach((vat) => {
+            newData.push({
+                ...empty,
+                vat: `${Math.floor(vat.vat * 100)}%`,
+                grossAmount: `${vat.amount} €`,
+            });
+        });
+        newData.push({
+            ...empty,
+            totalVat: 'Brutto',
+            grossAmount: `${soldItems.grossAmount} €`,
+        });
+        const csvExporter = new ExportToCsv(options);
         csvExporter.generateCsv(newData);
     }
 
@@ -134,7 +168,6 @@
             isLoading = false;
         }
     }
-
     loadItems(selectedPeriod);
 </script>
 
@@ -148,6 +181,16 @@
         display: flex;
         flex-flow: row;
         justify-content: flex-end;
+    }
+    .small-table {
+        float: right;
+    }
+    .small-table td:first-child {
+        padding-right: 10px;
+    }
+    .small-table td {
+        padding: 0;
+        margin: 0;
     }
 </style>
 
@@ -225,7 +268,6 @@
         <SoldItemsComp soldItems={soldItems.items} on:select={itemSelected} />
 
         <hr />
-
         <div class="vat-container">
             <table class="table">
                 <tbody>
@@ -238,13 +280,24 @@
                     </tr>
                     <tr>
                         <td>MwSt. Gesamt</td>
-                        <td class="has-text-weight-bold	has-text-right">{soldItems.totalVat} €</td>
+                        <td class="has-text-right">
+                            <span class="has-text-weight-bold">{soldItems.totalVat} €</span>
+                            <br />
+                            <table class="small-table">
+                                {#each soldItems.vatDetails as vat}
+                                    <tr class="is-size-7">
+                                        <td>{Math.floor(vat.vat * 100)}%</td>
+                                        <td>{vat.amount}€</td>
+                                    </tr>
+                                {/each}
+                            </table>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td>Brutto</td>
-                        <td class="has-text-weight-bold	has-text-right">{soldItems.grossAmount} €</td>
+                        <td class="has-text-right has-text-weight-bold">{soldItems.grossAmount} €</td>
                     </tr>
                 </tfoot>
             </table>
@@ -254,7 +307,6 @@
     {/if}
 
     <ErrorModal error={requestError} />
-
     <hr />
 
     <div class="has-text-centered">
@@ -268,7 +320,7 @@
         <Button
             text="Zurück zu den Reports"
             href="/reports"
-            class="button is-primary"
+            class="button is-link"
             size="full-width"
             icon={mdiArrowLeft}
         />

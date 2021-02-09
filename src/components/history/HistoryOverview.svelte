@@ -45,7 +45,7 @@
         <div class="column has-text-right">{moneyStyler(purchaseList.totalCumulativePrice)} €</div>
     </div>
     <div class="columns is-mobile mb-6">
-        <div class="column has-text-weight-bold">Davon Steuern</div>
+        <div class="column has-text-weight-bold">Davon Umsatzsteuersatz</div>
         <div class="column has-text-right">{moneyStyler(purchaseList.totalCumulativeVat)} €</div>
     </div>
     <div class="columns has-text-weight-bold is-mobile is-vcentered">

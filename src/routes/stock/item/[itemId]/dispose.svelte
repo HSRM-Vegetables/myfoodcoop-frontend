@@ -35,6 +35,6 @@
     {/if}
 
     <div class="container has-text-centered">
-        <Button href="/stock/item/{itemId}" text="zurück" class="is-primary" size="full-width" icon={mdiArrowLeft} />
+        <Button href="/stock/item/{itemId}" text="Zurück" class="is-primary" size="full-width" icon={mdiArrowLeft} />
     </div>
 </AuthorizeByRoles>

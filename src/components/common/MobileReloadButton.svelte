@@ -7,11 +7,16 @@
 <style>
     .reload-button {
         position: absolute;
-        right: 25px;
-        top: 21px;
-        height: 25px;
-        width: 25px;
+        right: 75px;
+        top: 20px;
+        height: 40px;
+        width: 40px;
         cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .reload-button {
+            right: 15px;
+        }
     }
 </style>
 

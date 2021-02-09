@@ -6,6 +6,7 @@
     import Button from '../common/Button.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
+    import { toastText } from '../../stores/toast';
 
     /**
      * The item to be disposed of
@@ -27,7 +28,11 @@
         if (!disposeQuantityError) {
             try {
                 await Stock.disposeItem(item.id, disposeQuantity);
-                goto(`/stock/item/${item.id}?message=Ware%20erfolgreich%20entsorgt`);
+
+                // eslint-disable-next-line no-unused-vars
+                $toastText = 'Artikel erfolgreich entsorgt';
+
+                goto(`/stock/item/${item.id}`);
             } catch (error) {
                 requestError = error;
             }
@@ -80,7 +85,6 @@
         label="Menge verdorbener Ware"
         decoration={item.unitType === UnitType.KILO ? 'kg' : 'Stück'}
         minimum="0"
-        value="0"
         on:enter={dispose}
         disabled={disposeInProgress}
     />

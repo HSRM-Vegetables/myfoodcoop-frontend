@@ -13,6 +13,7 @@
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
     import Modal from '../../../components/common/Modal.svelte';
+    import { toastText } from '../../../stores/toast';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Benutzerdetails';
@@ -74,6 +75,10 @@
     async function deleteMember() {
         try {
             await User.deleteUserById(userId);
+
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Mitglied erfolgreich gelöscht';
+
             goto('/users');
         } catch (error) {
             requestError = error;

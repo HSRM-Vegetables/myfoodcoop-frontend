@@ -1,13 +1,13 @@
 <script>
     import { stores } from '@sapper/app';
     import { onMount } from 'svelte';
-    import PriceCalculator from '../../../components/priceCalculator/PriceCalculator.svelte';
+    import ShoppingCartAddItem from '../../../components/shoppingCart/ShoppingCartAddItem.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Stock from '../../../scripts/stock/Stock';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $title = 'Preisrechner';
+    $title = 'Artikel Kaufen';
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
@@ -22,5 +22,5 @@
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
-    <PriceCalculator stockItem={stockItem} />
+    <ShoppingCartAddItem stockItem={stockItem} />
 </AuthorizeByRoles>

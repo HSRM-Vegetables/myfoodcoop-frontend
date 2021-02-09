@@ -5,6 +5,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
     import { userId } from '../../stores/user';
+    import { toastText } from '../../stores/toast';
 
     let addMoneyInput;
     let valueHint = '';
@@ -35,6 +36,9 @@
             // This variable is used in other files
             // eslint-disable-next-line no-unused-vars
             $currentBalance = await Balance.topupBalanceForUser($userId, parseFloat(additionalAmount));
+
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Guthaben erfolgreich aktualisiert';
 
             inputValue = undefined;
             addMoneyInput.clear();

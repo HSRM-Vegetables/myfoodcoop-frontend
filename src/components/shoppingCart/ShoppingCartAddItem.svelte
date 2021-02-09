@@ -6,8 +6,8 @@
     import { UnitType } from '../../scripts/stock/UnitType';
     import ShoppingCart from '../../scripts/shoppingCart/ShoppingCart';
     import TextField from '../common/TextField.svelte';
+    import StockItemDetails from '../stock/StockItemDetails.svelte';
     import Button from '../common/Button.svelte';
-    import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { moneyStyler } from '../../scripts/common/Helper';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
@@ -92,76 +92,54 @@
         font-weight: bold;
         font-size: 4em;
     }
-    .breakwords {
-        word-break: break-all;
-    }
 </style>
 
 {#if stockItem}
-    <div class="form">
-        <div class="is-size-3 mb-4 breakwords has-text-weight-bold">{stockItem.name}</div>
+    <StockItemDetails item={stockItem} showButtons={false} />
 
-        {#if stockItem.description}
-            <div class="box">{stockItem.description}</div>
-        {/if}
+    <div class="mt-5">
+        <TextField
+            label="Menge"
+            placeholder="0"
+            decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
+            type="number"
+            bind:this={quantityElement}
+            value={$currentShoppingItemQuantity || ''}
+            on:change={calcTotalPrice}
+            on:input={calcTotalPrice}
+            minimum="0"
+            isInErrorState={quantityError}
+        />
+        <span class="is-size-7">
+            Menge im Bestand:
+            {stockItem.quantity}
+            {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
+        </span>
+    </div>
 
-        <div>
-            Warenpreis<br />
-            <span class="is-size-4">
-                {moneyStyler(stockItem.pricePerUnit)}
-                {stockItem.unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
-            </span>
-        </div>
+    <hr />
 
-        <div class="columns is-mobile">
-            <div class="column">Artikel Status</div>
-            <div class="column has-text-right">{getLocalizedStockStatus(stockItem.stockStatus)}</div>
-        </div>
+    <div class="total-container">
+        <h2>Gesamtpreis</h2>
+        <div class="total">{currentTotal} €</div>
+        <div>davon Umsatzsteuersatz ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
+    </div>
 
-        <div class="mt-5">
-            <TextField
-                label="Menge"
-                placeholder="0"
-                decoration={stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
-                type="number"
-                bind:this={quantityElement}
-                value={$currentShoppingItemQuantity || ''}
-                on:change={calcTotalPrice}
-                on:input={calcTotalPrice}
-                minimum="0"
-                isInErrorState={quantityError}
-            />
-            <span class="is-size-7">
-                Menge im Bestand:
-                {stockItem.quantity}
-                {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
-            </span>
-        </div>
-
-        <hr />
-
-        <div class="total-container">
-            <h2>Gesamtpreis</h2>
-            <div class="total">{currentTotal} €</div>
-            <div>davon Steuern ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
-        </div>
-
-        <hr />
-        <div class="container has-text-centered">
-            <Button
-                text="zum Warenkorb hinzufügen"
-                class="button is-primary mb-4"
-                size="full-width"
-                icon={mdiShopping}
-                on:click={addItem}
-            />
-            <Button
-                text="Zurück zur Artikelauswahl"
-                class="button is-link mb-4"
-                size="full-width"
-                icon={mdiCartArrowDown}
-                on:click={() => goto(linkBack)}
-            />
-        </div>
+    <hr />
+    <div class="container has-text-centered">
+        <Button
+            text="zum Warenkorb hinzufügen"
+            class="button is-primary mb-4"
+            size="full-width"
+            icon={mdiShopping}
+            on:click={addItem}
+        />
+        <Button
+            text="Zurück zur Artikelauswahl"
+            class="button is-link mb-4"
+            size="full-width"
+            icon={mdiCartArrowDown}
+            on:click={() => goto(linkBack)}
+        />
     </div>
 {/if}

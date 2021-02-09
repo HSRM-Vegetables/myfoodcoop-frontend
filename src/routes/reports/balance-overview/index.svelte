@@ -140,7 +140,7 @@
         <Button
             text="Zurück zu den Reports"
             href="/reports"
-            class="button is-primary"
+            class="button is-link"
             size="full-width"
             icon={mdiArrowLeft}
         />
