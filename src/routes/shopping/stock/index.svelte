@@ -9,11 +9,24 @@
     import { getLocalizedStockStatus, StockStatus } from '../../../scripts/stock/StockStatus';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
     import TextField from '../../../components/common/TextField.svelte';
+    import NoData from '../../../components/common/NoData.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel auswählen';
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
+
+    $: {
+        spoiledItemsToDisplay = $spoilsSoonItems;
+        inStockItemsToDisplay = $inStockItems;
+        checkForNoResults();
+        search();
+    }
+
+    let searchTermElement;
+    let spoiledItemsToDisplay = $spoilsSoonItems;
+    let inStockItemsToDisplay = $inStockItems;
+    let noResults = true;
 
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
@@ -26,56 +39,75 @@
     function updateStock() {
         stockItems.forceUpdate();
     }
-    let searchTermElement;
-    let searchResults;
-    let searchText;
+
+    function checkForNoResults() {
+        noResults =
+        (!inStockItemsToDisplay && !spoiledItemsToDisplay) ||
+        (inStockItemsToDisplay.length <= 0 && spoiledItemsToDisplay.length <= 0);
+    }
+
     function search() {
-        searchText = searchTermElement.getValue();
-        const newStock = $inStockItems.concat($spoilsSoonItems);
-        searchResults = newStock.filter((i) =>
-            i.name.toLocaleUpperCase().includes(searchTermElement.getValue().toLocaleUpperCase())
-        );
+        if (!searchTermElement) {
+            spoiledItemsToDisplay = $spoilsSoonItems;
+            inStockItemsToDisplay = $inStockItems;
+            checkForNoResults();
+            return;
+        }
+
+        const searchText = searchTermElement.getValue();
+
+        if (!searchText) {
+            spoiledItemsToDisplay = $spoilsSoonItems;
+            inStockItemsToDisplay = $inStockItems;
+            checkForNoResults();
+            return;
+        }
+        
+        const filterBySearchTerm = (s, item) => item.name.toLowerCase().includes(s.toLowerCase().trim());
+        
+        spoiledItemsToDisplay = $spoilsSoonItems.filter((item) => filterBySearchTerm(searchText, item));
+        inStockItemsToDisplay = $inStockItems.filter((item) => filterBySearchTerm(searchText, item));
+        checkForNoResults();
     }
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <MobileReloadButton on:click={updateStock} />
     <TextField bind:this={searchTermElement} label="Suchen" placeholder="Suchen" on:input={search} />
-    {#if !searchText}
-        {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
-            <div class="mt-6">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
-            <StockList
-                stockItems={$spoilsSoonItems}
-                allowDetails={true}
-                on:details={itemDetails}
-                on:select={itemSelected}
-                isClickable={true}
-                highlight
-            />
-            <hr />
-        {/if}
 
-        {#if $inStockItems && $inStockItems.length > 0}
-            <!-- items that are in stock -->
-            <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
-            <StockList
-                stockItems={$inStockItems}
-                allowDetails={true}
-                on:details={itemDetails}
-                on:select={itemSelected}
-                isClickable={true}
-            />
-            <hr />
-        {/if}
-    {:else}
+
+    <!-- Items spoiling soon -->
+    {#if spoiledItemsToDisplay && spoiledItemsToDisplay.length > 0}
+        <div class="mt-6">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
         <StockList
-            stockItems={searchResults}
+            stockItems={spoiledItemsToDisplay}
+            allowDetails={true}
+            on:details={itemDetails}
+            on:select={itemSelected}
+            isClickable={true}
+            highlight
+        />
+        <hr />
+    {/if}
+
+    <!-- items that are in stock -->
+    {#if inStockItemsToDisplay && inStockItemsToDisplay.length > 0}
+        <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
+        <StockList
+            stockItems={inStockItemsToDisplay}
             allowDetails={true}
             on:details={itemDetails}
             on:select={itemSelected}
             isClickable={true}
         />
+        <hr />
     {/if}
+
+    {#if noResults }
+        <NoData text="Keine Artikel im Bestand gefunden" />
+    {/if}
+
+
     <div class="has-text-centered">
         <Button
             text="Zum Warenkorb"
