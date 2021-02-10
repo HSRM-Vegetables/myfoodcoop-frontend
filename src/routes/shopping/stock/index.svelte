@@ -8,6 +8,7 @@
     import { inStockItems, spoilsSoonItems, stockItems } from '../../../stores/stock';
     import { getLocalizedStockStatus, StockStatus } from '../../../scripts/stock/StockStatus';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
+    import TextField from '../../../components/common/TextField.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel auswählen';
@@ -25,41 +26,60 @@
     function updateStock() {
         stockItems.forceUpdate();
     }
+    let searchTermElement;
+    let searchResults;
+    let searchText;
+    function search() {
+        searchText = searchTermElement.getValue();
+        const newStock = $inStockItems.concat($spoilsSoonItems);
+        searchResults = newStock.filter((i) =>
+            i.name.toLocaleUpperCase().includes(searchTermElement.getValue().toLocaleUpperCase())
+        );
+    }
 </script>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <MobileReloadButton on:click={updateStock} />
+    <TextField bind:this={searchTermElement} label="Suchen" placeholder="Suchen" on:input={search} />
+    {#if !searchText}
+        {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
+            <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
+            <StockList
+                stockItems={$spoilsSoonItems}
+                allowDetails={true}
+                on:details={itemDetails}
+                on:select={itemSelected}
+                isClickable={true}
+                highlight={true}
+            />
+            <hr />
+        {/if}
 
-    {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
-        <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
+        {#if $inStockItems && $inStockItems.length > 0}
+            <!-- items that are in stock -->
+            <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
+            <StockList
+                stockItems={$inStockItems}
+                allowDetails={true}
+                on:details={itemDetails}
+                on:select={itemSelected}
+                isClickable={true}
+            />
+            <hr />
+        {/if}
+    {:else}
         <StockList
-            stockItems={$spoilsSoonItems}
+            stockItems={searchResults}
             allowDetails={true}
             on:details={itemDetails}
             on:select={itemSelected}
             isClickable={true}
-            highlight={true}
         />
-        <hr />
     {/if}
-
-    {#if $inStockItems && $inStockItems.length > 0}
-        <!-- items that are in stock -->
-        <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
-        <StockList
-            stockItems={$inStockItems}
-            allowDetails={true}
-            on:details={itemDetails}
-            on:select={itemSelected}
-            isClickable={true}
-        />
-        <hr />
-    {/if}
-
     <div class="has-text-centered">
         <Button
             text="Zum Warenkorb"
-            class="button is-link"
+            class="button is-link mt-3"
             href="/shopping/cart"
             size="full-width"
             icon={mdiShopping}

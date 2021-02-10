@@ -1,12 +1,12 @@
 <script>
-    import { mdiEye, mdiLeaf, mdiCartArrowDown } from '@mdi/js';
+    import { mdiEye, mdiLeaf } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
     import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
     import { UnitType } from '../../scripts/stock/UnitType';
+    import { StockStatus } from '../../scripts/stock/StockStatus';
     import Icon from '../common/Icon.svelte';
     import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import ListItem from '../common/ListItem.svelte';
-    import Button from '../common/Button.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
 
@@ -35,12 +35,6 @@
      * Display a loading spinner instead of the list
      */
     export let isLoading = false;
-
-    /**
-     * Defines if the items should be highlighted
-     * Default: false
-     */
-    export let highlight = false;
 
     const selectEvent = createEventDispatcher();
 
@@ -83,7 +77,11 @@
 {:else if stockItems && stockItems.length > 0}
     {#each stockItems as item, i}
         {#if limit >= i + 1}
-            <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
+            <ListItem
+                isClickable={isClickable}
+                highlight={item.stockStatus === StockStatus.SPOILSSOON}
+                on:click={(event) => selectItem(event, item.id)}
+            >
                 <!--First column with item name, buttons, stock quantity and price -->
                 <div class="columns m-0 is-mobile">
                     {#if allowDetails}
@@ -131,7 +129,7 @@
                 </div>
             </ListItem>
         {/if}
-        {#if parseInt(limit) + 1 === i}
+        {#if parseFloat(limit) + 1 === i}
             <div class="has-text-right"><a class="color-main" href="/shopping/stock">Mehr anzeigen ...</a></div>
         {/if}
     {/each}
