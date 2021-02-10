@@ -112,7 +112,7 @@
                 {#if item.certificates.some((r) => CertificateLogos.map((l) => l.name).includes(r))}
                     {#each CertificateLogos as logo}
                         {#if item.certificates.includes(logo.name)}
-                            <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
+                            <img class="cert-img" src={logo.imageMini} alt="{logo.name}_Logo" />
                         {/if}
                     {/each}
                 {/if}
