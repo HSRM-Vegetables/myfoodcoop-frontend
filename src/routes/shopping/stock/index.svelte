@@ -50,7 +50,6 @@
                 on:details={itemDetails}
                 on:select={itemSelected}
                 isClickable={true}
-                highlight={true}
             />
             <hr />
         {/if}
@@ -79,10 +78,11 @@
     <div class="has-text-centered">
         <Button
             text="Zum Warenkorb"
-            class="button is-link mt-3"
+            class="button is-link mt-3 mb-3"
             href="/shopping/cart"
             size="full-width"
             icon={mdiShopping}
         />
+        <Button goHome={true} size="full-width" />
     </div>
 </AuthorizeByRoles>

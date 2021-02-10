@@ -45,7 +45,6 @@
                 on:details={onSelectItem}
                 on:select={onSelectItem}
                 isClickable={true}
-                highlight={true}
             />
 
             <hr />
