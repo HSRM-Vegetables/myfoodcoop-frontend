@@ -32,21 +32,22 @@
     function calcPeriods() {
         const today = DateTime.local();
         const yesterday = DateTime.local().plus({ days: -1 });
-        const lastWeek = DateTime.local().plus({ days: -7 });
-        const lastMonth = DateTime.local().plus({ months: -1 });
-
+        const lastLastWeek = DateTime.local().plus({ days: -today.weekday });
+        const lastFirstWeek = lastLastWeek.plus({ days: -6 });
+        const lastFirstMonth = DateTime.local(today.year, today.month - 1, 1);
+        const lastLastMonth = lastFirstMonth.plus({ month: 1, days: -1 });
         return {
             yesterday: {
                 fromDate: yesterday,
                 toDate: yesterday,
             },
             lastWeek: {
-                fromDate: lastWeek,
-                toDate: today,
+                fromDate: lastFirstWeek,
+                toDate: lastLastWeek,
             },
             lastMonth: {
-                fromDate: lastMonth,
-                toDate: today,
+                fromDate: lastFirstMonth,
+                toDate: lastLastMonth,
             },
         };
     }
@@ -154,7 +155,7 @@
         if (text === 'start') localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
         if (text === 'end') localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
 
-        if (!localFrom && !localTo) return;
+        if (!localFrom || (localFrom !== '' && !localTo) || localTo !== '') return;
         try {
             isLoading = true;
 
