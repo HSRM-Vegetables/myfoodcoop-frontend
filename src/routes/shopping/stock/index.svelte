@@ -43,7 +43,7 @@
     <TextField bind:this={searchTermElement} label="Suchen" placeholder="Suchen" on:input={search} />
     {#if !searchText}
         {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
-            <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
+            <div class="mt-6">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
             <StockList
                 stockItems={$spoilsSoonItems}
                 allowDetails={true}
