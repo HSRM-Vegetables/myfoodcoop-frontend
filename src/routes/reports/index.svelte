@@ -20,6 +20,13 @@
             size="full-width"
             icon={mdiArchive}
         />
+        <Button
+            href="/reports/disposed-items"
+            class="is-link"
+            text="Was wurde entsorgt?"
+            size="full-width"
+            icon={mdiArchive}
+        />
 
         <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
             <Button
