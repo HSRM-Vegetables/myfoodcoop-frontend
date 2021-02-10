@@ -38,6 +38,7 @@
         <Loader />
     {:else}
         {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
+            <!-- Items spoiling soon -->
             <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
             <StockList
                 stockItems={$spoilsSoonItems}
@@ -45,7 +46,7 @@
                 on:details={onSelectItem}
                 on:select={onSelectItem}
                 isClickable={true}
-                highlight={true}
+                highlight
             />
 
             <hr />
@@ -63,6 +64,7 @@
             />
             <hr />
         {/if}
+
         {#if $orderedItems && $orderedItems.length > 0}
             <!-- items that are ordered -->
             <div>{getLocalizedStockStatus(StockStatus.ORDERED)}</div>
@@ -75,6 +77,7 @@
             />
             <hr />
         {/if}
+
         <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
             {#if $outOfStockItems && $outOfStockItems.length > 0}
                 <!-- items that are out of stock -->
