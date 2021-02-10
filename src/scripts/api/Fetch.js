@@ -11,7 +11,7 @@ import {
 } from '../../stores/user';
 import Tokens from '../user/Tokens';
 import CookieDefaults from '../common/CookieDefaults';
-import { isPointOfSales } from '../../stores/page';
+import { isBackendActive, isPointOfSales } from '../../stores/page';
 
 export const Headers = {
     Authorization: 'Authorization'
@@ -102,6 +102,8 @@ export default class Fetch {
             },
             body: JSON.stringify(content)
         });
+
+        isBackendActive.set(true);
 
         // check if an error occured
         if (response.status >= 400) {

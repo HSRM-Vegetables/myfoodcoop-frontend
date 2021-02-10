@@ -7,7 +7,7 @@
     import Nav from '../components/Nav.svelte';
     import Appbar from '../components/Appbar.svelte';
     import { stockItems } from '../stores/stock';
-    import { backendUrl, isPointOfSales } from '../stores/page';
+    import { backendUrl, isBackendActive, isPointOfSales } from '../stores/page';
     import User from '../scripts/user/User';
     import {
         POINT_OF_SALES_INACTIVITY_TIMEOUT_IN_MINUTES,
@@ -15,6 +15,7 @@
     } from '../scripts/Config';
     import LocalStorageKeys from '../scripts/common/LocalStorageKeys';
     import Toast from '../components/common/Toast.svelte';
+    import Loader from '../components/common/Loader.svelte';
 
     const { page, session } = stores();
 
@@ -24,6 +25,15 @@
     let isLoggedIn = false;
     let hasUpdatedStockAfterMount = false;
     let interactionTimeout;
+
+    // true, if the page should be displayed even if the user is not logged in
+    let displayPageIgnoringLoginStatus = false;
+
+    $: {
+        // update the status as soon as the page store updates
+        displayPageIgnoringLoginStatus =
+            $page.path.includes('/login') || $page.path.includes('/register') || $page.error;
+    }
 
     $: {
         if (isLoggedIn && !hasUpdatedStockAfterMount) {
@@ -100,8 +110,14 @@
 <Toast />
 
 <main>
+    {#if !$isBackendActive && !displayPageIgnoringLoginStatus}
+        <!-- Only display this loader if we are not on the login, the register or an error page -->
+        <Loader isLoading={true} />
+        <div class="has-text-centered"><span>Die Applikation wird gestartet...</span></div>
+    {/if}
+
     <!-- Only allow the user to visit the page if he is logged in, he tries to login, or if an error occured -->
-    {#if isLoggedIn || $page.path.includes('/login') || $page.path.includes('/register') || $page.error}
+    {#if isLoggedIn || displayPageIgnoringLoginStatus}
         <slot />
     {/if}
 </main>
