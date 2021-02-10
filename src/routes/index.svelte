@@ -152,6 +152,7 @@
                 allowDetails={true}
                 on:details={itemDetails}
                 on:select={itemSelected}
+                highlight
             />
         </div>
 

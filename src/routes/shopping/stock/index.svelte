@@ -50,6 +50,7 @@
                 on:details={itemDetails}
                 on:select={itemSelected}
                 isClickable={true}
+                highlight
             />
             <hr />
         {/if}
