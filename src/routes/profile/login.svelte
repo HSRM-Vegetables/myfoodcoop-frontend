@@ -7,7 +7,7 @@
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import Switch from '../../components/common/Switch.svelte';
     import { keepLoggedIn } from '../../stores/user';
-    import { ORGANIZATION_NAME } from '../../scripts/Config';
+    import { ORGANIZATION_NAME, LEGAL_NOTICE_LINK } from '../../scripts/Config';
 
     const { page } = stores();
     // redirect to main page if no query parameter is provided
@@ -122,3 +122,5 @@
         on:click={login}
     />
 </div>
+
+<div class="has-text-centered mt-6"><a href={LEGAL_NOTICE_LINK} target="_blank">Impressum</a></div>
