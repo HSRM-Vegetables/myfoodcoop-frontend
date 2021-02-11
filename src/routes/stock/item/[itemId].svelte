@@ -32,7 +32,7 @@
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <ErrorModal error={requestError} />
-    <StockItemDetails item={item} />
+    <StockItemDetails item={item} showButtons={true} />
 
     <hr />
 

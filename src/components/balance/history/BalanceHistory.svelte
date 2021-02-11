@@ -1,12 +1,10 @@
 <script>
     import { DateTime } from 'luxon';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import Balance from '../../../scripts/balance/Balance';
     import ErrorModal from '../../common/ErrorModal.svelte';
     import Pagination from '../../pagination/Pagination.svelte';
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
-    import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
     import NoData from '../../common/NoData.svelte';
 
@@ -92,15 +90,6 @@
 <div class="columns">
     <div class="column has-text-left"><span class="is-size-5 has-text-weight-bold">Guthaben-Historie:</span></div>
     <div class="column has-text-right">
-        <DatePicker
-            placeholder="Wähle einen Zeitraum"
-            continueText="Bestätigen"
-            format="DD.MM.YYYY"
-            styling={new CalendarStyle()}
-            range={true}
-            selected={selectedDatePickerDates}
-            on:range-selected={(e) => convertDates(e.detail.from, e.detail.to)}
-        />
     </div>
 </div>
 

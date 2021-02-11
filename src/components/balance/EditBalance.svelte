@@ -5,6 +5,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
     import { userId } from '../../stores/user';
+    import { toastText } from '../../stores/toast';
 
     let addMoneyInput;
     let valueHint = '';
@@ -15,7 +16,10 @@
 
     async function addToBalance() {
         const additionalAmount = addMoneyInput.getValue();
-
+        if (additionalAmount === '') {
+            valueHint = 'Bitte geben Sie ein Wert ein';
+            return;
+        }
         if (additionalAmount < 0) {
             valueHint = 'Bitte geben Sie ein positven Wert ein';
             return;
@@ -33,7 +37,11 @@
             // eslint-disable-next-line no-unused-vars
             $currentBalance = await Balance.topupBalanceForUser($userId, parseFloat(additionalAmount));
 
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Guthaben erfolgreich aktualisiert';
+
             inputValue = undefined;
+            addMoneyInput.clear();
         } catch (error) {
             requestError = error;
         } finally {
@@ -43,12 +51,6 @@
 
     function updateInput() {
         inputValue = this.value;
-    }
-
-    function onEnterPress(event) {
-        if (event.key === 'Enter') {
-            addToBalance();
-        }
     }
 </script>
 
@@ -74,7 +76,7 @@
             type="number"
             placeholder="0"
             minimum="0"
-            on:keydown={onEnterPress}
+            on:enter={addToBalance}
             value={inputValue}
             disabled={balanceUpdateInProgress}
         />

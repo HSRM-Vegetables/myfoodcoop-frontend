@@ -1,14 +1,23 @@
 <script>
     import logo from 'images/logo_white.png';
-    import { mdiShopping } from '@mdi/js';
+    import { mdiShopping, mdiLogout } from '@mdi/js';
     import Icon from './common/Icon.svelte';
     import ShowBalance from './balance/ShowBalance.svelte';
+    import User from '../scripts/user/User';
     import { title, navBalance } from '../stores/page';
     import AuthorizeByRoles from './common/AuthorizeByRoles.svelte';
     import { Roles } from '../scripts/roles/Roles';
     import { cartItemsCount } from '../stores/shoppingCart';
 
     export let isLoggedIn;
+
+    async function logout() {
+        try {
+            await User.logout();
+        } catch (error) {
+            // catch errors, but do not show it to the user
+        }
+    }
 </script>
 
 <style>
@@ -41,15 +50,10 @@
         left: 25px;
         top: 70px;
     }
-    .inline-balance {
-        position: absolute;
-        right: 79px;
-        top: 30px;
-    }
     a.cartIcon {
         color: white;
         position: absolute;
-        right: 25px;
+        right: 80px;
         top: 20px;
     }
     .cardCount {
@@ -62,7 +66,14 @@
         font-size: 12px;
         top: 14px;
         z-index: 20;
-        right: 10px;
+        right: 70px;
+    }
+    div.logoutIcon {
+        color: white;
+        position: absolute;
+        right: 25px;
+        top: 20px;
+        cursor: pointer;
     }
 </style>
 
@@ -88,11 +99,10 @@
                     <ShowBalance />
                 </div>
             </a>
-        {:else if isLoggedIn && $navBalance === 'inline'}
-            <div class="inline-balance">
-                <ShowBalance />
-            </div>
         {/if}
+        <div on:click={logout} class="logoutIcon is-hidden-mobile">
+            <Icon icon={mdiLogout} appbar={true} />
+        </div>
         <div class="is-hidden-touch">
             {#if $cartItemsCount !== 0}<a href="/shopping/cart" class="cardCount">{$cartItemsCount}</a>{/if}
             <a href="/shopping/cart" class="cartIcon">

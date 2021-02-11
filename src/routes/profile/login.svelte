@@ -1,17 +1,17 @@
 <script>
     import { stores, goto } from '@sapper/app';
-    import { title, navBalance } from '../../stores/page';
+    import { title, navBalance, isPointOfSales } from '../../stores/page';
     import TextField from '../../components/common/TextField.svelte';
     import Button from '../../components/common/Button.svelte';
     import User from '../../scripts/user/User';
     import ErrorModal from '../../components/common/ErrorModal.svelte';
     import Switch from '../../components/common/Switch.svelte';
-    import { allowKeepLoggedIn, keepLoggedIn } from '../../stores/user';
+    import { keepLoggedIn } from '../../stores/user';
     import { ORGANIZATION_NAME } from '../../scripts/Config';
 
     const { page } = stores();
     // redirect to main page if no query parameter is provided
-    const { returnUrl = '/' } = $page.query;
+    const { returnUrl = '/', register } = $page.query;
 
     let userNameInput;
     let passwordInput;
@@ -47,6 +47,15 @@
     }
 </script>
 
+{#if register}
+    <article class="message is-primary">
+        <div class="message-body">
+            Danke für deine Registrierung, bitte wende dich an deinen Ansprechpartner bei
+            {ORGANIZATION_NAME}
+            um die Registrierung abzuschließen.
+        </div>
+    </article>
+{/if}
 <h1 class="title has-text-centered">Willkommen zur {ORGANIZATION_NAME} Einkaufsapp</h1>
 <p>
     Damit wir Dich während des Einkaufs identifizieren können, und Dir das beste Einkaufserlebnis bieten können,
@@ -64,7 +73,7 @@
     {#if requestError.errorCode === 401011}
         <article class="message is-danger">
             <div class="message-body">
-                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator"
+                Benutzerkonto ist noch nicht freigeschaltet! Bitte wende Dich an deinen Administrator
             </div>
         </article>
     {/if}
@@ -78,6 +87,7 @@
     label="Benutzername"
     placeholder="Benutzername"
     on:input={checkLoginStatus}
+    on:enter={allowLogin && login}
 />
 
 <br />
@@ -88,9 +98,10 @@
     label="Passwort"
     placeholder="Passwort"
     on:input={checkLoginStatus}
+    on:enter={allowLogin && login}
 />
 
-{#if $allowKeepLoggedIn}
+{#if !$isPointOfSales}
     <div class="columns is-mobile mt-3">
         <div class="column">Eingeloggt bleiben?</div>
         <div class="column has-text-right">

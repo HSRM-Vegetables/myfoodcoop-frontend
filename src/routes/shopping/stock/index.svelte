@@ -4,14 +4,29 @@
     import StockList from '../../../components/stock/StockList.svelte';
     import { title, navBalance } from '../../../stores/page';
     import Button from '../../../components/common/Button.svelte';
-    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
-    import { inStockItems, spoilsSoonItems } from '../../../stores/stock';
+    import { inStockItems, spoilsSoonItems, stockItems, areStockItemsUpdating } from '../../../stores/stock';
     import { getLocalizedStockStatus, StockStatus } from '../../../scripts/stock/StockStatus';
+    import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
+    import TextField from '../../../components/common/TextField.svelte';
+    import NoData from '../../../components/common/NoData.svelte';
+    import Loader from '../../../components/common/Loader.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Artikel auswählen';
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $navBalance = 'inline';
+    $navBalance = 'hidden';
+
+    $: {
+        spoiledItemsToDisplay = $spoilsSoonItems;
+        inStockItemsToDisplay = $inStockItems;
+        checkForNoResults();
+        search();
+    }
+
+    let searchTermElement;
+    let spoiledItemsToDisplay = $spoilsSoonItems;
+    let inStockItemsToDisplay = $inStockItems;
+    let noResults = true;
 
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
@@ -20,27 +35,69 @@
     function itemDetails(event) {
         goto(`/stock/item/${event.detail.id}?comesFrom=shopping`);
     }
+
+    function updateStock() {
+        stockItems.forceUpdate();
+    }
+
+    function checkForNoResults() {
+        noResults =
+            (!inStockItemsToDisplay && !spoiledItemsToDisplay) ||
+            (inStockItemsToDisplay.length <= 0 && spoiledItemsToDisplay.length <= 0);
+    }
+
+    function search() {
+        if (!searchTermElement) {
+            spoiledItemsToDisplay = $spoilsSoonItems;
+            inStockItemsToDisplay = $inStockItems;
+            checkForNoResults();
+            return;
+        }
+
+        const searchText = searchTermElement.getValue();
+
+        if (!searchText) {
+            spoiledItemsToDisplay = $spoilsSoonItems;
+            inStockItemsToDisplay = $inStockItems;
+            checkForNoResults();
+            return;
+        }
+
+        const filterBySearchTerm = (s, item) => item.name.toLowerCase().includes(s.toLowerCase().trim());
+
+        spoiledItemsToDisplay = $spoilsSoonItems.filter((item) => filterBySearchTerm(searchText, item));
+        inStockItemsToDisplay = $inStockItems.filter((item) => filterBySearchTerm(searchText, item));
+        checkForNoResults();
+    }
 </script>
 
-<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
-    {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
-        <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
+{#if $areStockItemsUpdating}
+    <div class="mt-5 mb-5">
+        <Loader isLoading={true} />
+    </div>
+{:else}
+    <MobileReloadButton on:click={updateStock} />
+    <TextField bind:this={searchTermElement} label="Suchen" placeholder="Suchen" on:input={search} />
+
+    <!-- Items spoiling soon -->
+    {#if spoiledItemsToDisplay && spoiledItemsToDisplay.length > 0}
+        <div class="mt-6">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
         <StockList
-            stockItems={$spoilsSoonItems}
+            stockItems={spoiledItemsToDisplay}
             allowDetails={true}
             on:details={itemDetails}
             on:select={itemSelected}
             isClickable={true}
-            highlight={true}
+            highlight
         />
         <hr />
     {/if}
 
-    {#if $inStockItems && $inStockItems.length > 0}
-        <!-- items that are in stock -->
+    <!-- items that are in stock -->
+    {#if inStockItemsToDisplay && inStockItemsToDisplay.length > 0}
         <div>{getLocalizedStockStatus(StockStatus.INSTOCK)}</div>
         <StockList
-            stockItems={$inStockItems}
+            stockItems={inStockItemsToDisplay}
             allowDetails={true}
             on:details={itemDetails}
             on:select={itemSelected}
@@ -49,13 +106,18 @@
         <hr />
     {/if}
 
-    <div class="has-text-centered">
-        <Button
-            text="Zum Warenkorb"
-            class="button is-link"
-            href="/shopping/cart"
-            size="full-width"
-            icon={mdiShopping}
-        />
-    </div>
-</AuthorizeByRoles>
+    {#if noResults}
+        <NoData text="Keine Artikel im Bestand gefunden" />
+    {/if}
+{/if}
+
+<div class="has-text-centered">
+    <Button
+        text="Zum Warenkorb"
+        class="button is-link mt-3 mb-3"
+        href="/shopping/cart"
+        size="full-width"
+        icon={mdiShopping}
+    />
+    <Button goHome={true} size="full-width" />
+</div>

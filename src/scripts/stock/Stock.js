@@ -7,7 +7,7 @@ export default class Stock {
      * Gets all stock items
      */
     static async getStockList() {
-        return Fetch.get(`stock/`, getAuthorizationHeader());
+        return Fetch.get(`stock?sortBy=NAME`, getAuthorizationHeader());
     }
 
     /**
@@ -15,7 +15,7 @@ export default class Stock {
      * @param {StockStatus} status stock status of items to be fetched
      */
     static async getStockListByStatus(status) {
-        return Fetch.get(`stock?filterByStatus=${status}`, getAuthorizationHeader());
+        return Fetch.get(`stock?filterByStatus=${status}&sortBy=NAME`, getAuthorizationHeader());
     }
 
     /**
@@ -118,6 +118,17 @@ export default class Stock {
             'deliveryDate': deliveryDate,
             'stockStatus': status,
             'vat': vat
+        }, getAuthorizationHeader());
+    }
+
+    /**
+     * Disposes of the specified amount of the item
+     * @param {String} id The id of the item
+     * @param {number} disposeQuantity The quantity to be disposed of
+     */
+    static async disposeItem(id, disposeQuantity) {
+        return Fetch.post(`stock/${id}/dispose`, {
+            'amount': disposeQuantity
         }, getAuthorizationHeader());
     }
 

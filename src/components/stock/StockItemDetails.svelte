@@ -1,23 +1,31 @@
 <script>
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
-    import { mdiDelete, mdiPencil } from '@mdi/js';
+    import { mdiDelete, mdiPencil, mdiDeleteVariant, mdiLeaf, mdiNewBox } from '@mdi/js';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
     import Modal from '../common/Modal.svelte';
     import ErrorModal from '../common/ErrorModal.svelte';
     import AuthorizeByRoles, { Roles } from '../common/AuthorizeByRoles.svelte';
+    import Icon from '../common/Icon.svelte';
     import { stockItems } from '../../stores/stock';
     import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
     import { moneyStyler } from '../../scripts/common/Helper';
+    import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
+    import { toastText } from '../../stores/toast';
 
     /**
      * The stock item
      */
     export let item;
+    /**
+     * Displays buttons to edit or reorder the stock item.
+     * Default: false
+     */
+    export let showButtons = false;
 
     let requestError;
 
@@ -38,6 +46,9 @@
             // as one item was removed, reload the stock list
             stockItems.forceUpdate();
 
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Artikel erfolgreich gelöscht';
+
             goto('/stock/');
         } catch (error) {
             requestError = error;
@@ -50,8 +61,15 @@
 </script>
 
 <style>
-    .small {
+    img.cert-img {
+        max-height: 65px;
+        float: right;
+    }
+    .green-line {
         font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
     }
 </style>
 
@@ -64,10 +82,29 @@
         <button class="button is-primary" on:click={closeModal}>Abbrechen</button>
     </div>
 </Modal>
-{#if item}
-    <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
 
-    {#if item.sustainablyProduced}<span class="small">Dieser Artikel wurde Nachhaltig produziert</span>{/if}
+{#if item}
+    <div class="columns">
+        <div class="column">
+            <div class=" is-size-3 has-text-weight-bold">{item.name}</div>
+        </div>
+        <!-- Show column only if array contains a certificate from CertificateLogos -->
+        {#if item.certificates.some((r) => CertificateLogos.map((l) => l.name).includes(r))}
+            <div class="column" style="min-height:75px;">
+                {#each CertificateLogos as logo}
+                    {#if item.certificates.includes(logo.name)}
+                        <img class="cert-img" src={logo.image} alt="{logo.name}_Logo" />
+                    {/if}
+                {/each}
+            </div>
+        {/if}
+    </div>
+    {#if item.sustainablyProduced}
+        <div class="green-line has-text-right">
+            <Icon icon={mdiLeaf} appbar={true} green={true} />
+            Dieser Artikel wurde nachhaltig produziert
+        </div>
+    {/if}
     <hr />
     {#if item.isDeleted}
         <article class="message is-danger">
@@ -89,7 +126,11 @@
     </div>
     <div class="columns is-mobile">
         <div class="column">Steuersatz</div>
-        <div class="column has-text-right">{item.vat * 100} % ({moneyStyler(getTaxPriceFromItem(item))} €)</div>
+        <div class="column has-text-right">
+            {Math.floor(item.vat * 100)}
+            % ({moneyStyler(getTaxPriceFromItem(item))}
+            €)
+        </div>
     </div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
@@ -128,22 +169,21 @@
                 {item.deliveryDate ? DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy') : 'Nicht gesetzt'}
             </div>
         </div>
-
-        {#if item.description}
-            <div class="mb-1">Beschreibung:</div>
-            <span>{item.description}</span>
-        {/if}
     </div>
-
-    <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
-        {#if !item.isDeleted}
-            <hr />
-            <div class="container has-text-centered">
+    {#if item.description}
+        <span>Beschreibung:</span>
+        <div class="box"><span>{item.description}</span></div>
+    {/if}
+    {#if showButtons && !item.isDeleted}
+        <hr />
+        <div class="container has-text-centered">
+            <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
                 <Button
                     text="Artikel neu bestellen"
                     size="full-width"
                     class="is-warning mb-3"
                     on:click={() => goto(`/stock/item/new?itemId=${item.id}`)}
+                    icon={mdiNewBox}
                 />
                 <Button
                     text="Artikel bearbeiten"
@@ -159,7 +199,14 @@
                     on:click={() => confirmRemoveItem(item.id)}
                     icon={mdiDelete}
                 />
-            </div>
-        {/if}
-    </AuthorizeByRoles>
+            </AuthorizeByRoles>
+            <Button
+                text="Verdorbene Ware entsorgen"
+                size="full-width"
+                class="is-danger mt-3"
+                on:click={() => goto(`/stock/item/${item.id}/dispose`)}
+                icon={mdiDeleteVariant}
+            />
+        </div>
+    {/if}
 {/if}

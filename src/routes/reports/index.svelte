@@ -1,4 +1,5 @@
 <script>
+    import { mdiAccountCash, mdiArchive } from '@mdi/js';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -11,13 +12,25 @@
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <h1 class="title mb-5">Reports</h1>
+    <div class="has-text-centered">
+        <Button
+            href="/reports/sold-items"
+            class="is-link"
+            text="Was wurde gekauft?"
+            size="full-width"
+            icon={mdiArchive}
+        />
 
-    <Button href="/reports/sold-items" class="is-link" text="Was wurde gekauft?" />
-
-    <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
-        <Button href="/reports/balance-overview" class="is-link" text="Guthaben-Übersicht" />
-    </AuthorizeByRoles>
-
+        <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
+            <Button
+                href="/reports/balance-overview"
+                class="is-link mt-3"
+                text="Guthaben-Übersicht"
+                size="full-width"
+                icon={mdiAccountCash}
+            />
+        </AuthorizeByRoles>
+    </div>
     <hr />
 
     <div class="has-text-centered">

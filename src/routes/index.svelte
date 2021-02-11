@@ -12,10 +12,14 @@
     } from '@mdi/js';
     import { title, navBalance } from '../stores/page';
     import StockList from '../components/stock/StockList.svelte';
-    import { spoilsSoonItems, areStockItemsUpdating } from '../stores/stock';
+    import { spoilsSoonItems, areStockItemsUpdating, stockItems } from '../stores/stock';
     import AuthorizeByRoles, { Roles } from '../components/common/AuthorizeByRoles.svelte';
     import { getLocalizedStockStatus, StockStatus } from '../scripts/stock/StockStatus';
+
     import { ORGANIZATION_NAME } from '../scripts/Config';
+    import MobileReloadButton from '../components/common/MobileReloadButton.svelte';
+
+    const SPOILS_SOON_LIMIT = 3;
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = ORGANIZATION_NAME;
@@ -73,6 +77,14 @@
         },
     ];
 
+    let spoiledItemsToDisplay = [];
+
+    $: {
+        // update items to display when store updates
+        spoiledItemsToDisplay =
+            $spoilsSoonItems && $spoilsSoonItems.length > 0 ? $spoilsSoonItems.slice(0, SPOILS_SOON_LIMIT) : [];
+    }
+
     function itemSelected(event) {
         goto(`/shopping/stock/${event.detail.id}`);
     }
@@ -85,6 +97,10 @@
         if (event.code === 'Space' || event.code === 'Enter') {
             goto(href);
         }
+    }
+
+    function updateStock() {
+        stockItems.forceUpdate();
     }
 </script>
 
@@ -108,6 +124,9 @@
     .icon-button svg {
         height: 120px;
     }
+    .color-main {
+        color: #375a7f;
+    }
     @media (max-width: 920px) {
         .icon-button {
             display: inline-flex;
@@ -118,22 +137,41 @@
             width: 100%;
         }
     }
+    @media (min-width: 921px) and (max-width: 1023px) {
+        .icon-box {
+            margin-bottom: 70px;
+        }
+    }
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>
-    {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
+    <MobileReloadButton on:click={updateStock} />
+
+    {#if spoiledItemsToDisplay.length > 0}
         <h2 class="pt-4 is-size-5 has-text-weight-bold">{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</h2>
         <div class="has-text-centered mb-6">
             <StockList
-                stockItems={$spoilsSoonItems}
+                stockItems={spoiledItemsToDisplay}
                 isLoading={$areStockItemsUpdating}
                 isClickable={true}
                 allowDetails={true}
                 on:details={itemDetails}
                 on:select={itemSelected}
-                showDescription={false}
+                highlight
             />
         </div>
+
+        <!-- Display a hint text when there are more spoiling items than we wanna display -->
+        {#if $spoilsSoonItems.length > spoiledItemsToDisplay.length}
+            <div class="has-text-right">
+                <a class="color-main" href="/shopping/stock">
+                    Und
+                    {$spoilsSoonItems.length - spoiledItemsToDisplay.length}
+                    {$spoilsSoonItems.length - spoiledItemsToDisplay.length === 1 ? 'weiterer' : 'weitere'}
+                    Artikel...
+                </a>
+            </div>
+        {/if}
 
         <hr />
     {/if}

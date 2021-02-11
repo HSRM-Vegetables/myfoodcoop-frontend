@@ -1,5 +1,4 @@
 <script>
-    import { goto } from '@sapper/app';
     import { mdiArrowLeft } from '@mdi/js';
     import TextField from '../common/TextField.svelte';
     import Balance from '../../scripts/balance/Balance';
@@ -7,6 +6,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import { currentBalance } from '../../stores/balance';
     import { userId } from '../../stores/user';
+    import { toastText } from '../../stores/toast';
 
     let changeMoneyInput;
     let balanceUpdateInProgress = false;
@@ -24,17 +24,13 @@
             // This variable is used in other files
             // eslint-disable-next-line no-unused-vars
             $currentBalance = await Balance.setBalanceForUser($userId, parseFloat(changeMoneyInput.getValue()));
+
+            // eslint-disable-next-line no-unused-vars
+            $toastText = 'Guthaben erfolgreich aktualisiert';
         } catch (error) {
             requestError = error;
         } finally {
             balanceUpdateInProgress = false;
-        }
-    }
-
-    async function onEnterPress(event) {
-        if (event.key === 'Enter') {
-            await changeBalance();
-            goto('/balance');
         }
     }
 </script>
@@ -47,7 +43,7 @@
         placeholder="0"
         decoration="€"
         label="Neues Guthaben"
-        on:keydown={onEnterPress}
+        on:enter={changeBalance}
         disabled={balanceUpdateInProgress}
     />
 

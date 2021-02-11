@@ -1,11 +1,9 @@
 <script>
     import { goto } from '@sapper/app';
-    import { DateTime } from 'luxon';
-    import { mdiPlusBoxMultiple, mdiDelete, mdiArrowLeft, mdiPencil } from '@mdi/js';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
+    import { mdiPlusBox, mdiDelete, mdiArrowLeft, mdiPencil, mdiPlusBoxMultiple } from '@mdi/js';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
-    import { CalendarStyle } from '../../scripts/CalendarStyle';
+    import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import { OriginCategory, OriginCategoryWithDescription } from '../../scripts/OriginCategory';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Stock from '../../scripts/stock/Stock';
@@ -16,6 +14,7 @@
     import { StockStatus, StockStatusWithDescription } from '../../scripts/stock/StockStatus';
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
+    import { toastText } from '../../stores/toast';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -47,8 +46,8 @@
     let producerTextField;
     let supplierTextField;
     let descriptionElement;
-    let unitType = UnitType.KILO;
-    let unitTypeBoolean = false;
+    let unitType = UnitType.PIECE;
+    let unitTypeBoolean = true;
     let sustainablyProduced = true;
     let certificates = [];
     let originCategory = OriginCategory.UNKNOWN;
@@ -62,10 +61,14 @@
     let quantityTextFieldError = false;
     let producerTextFieldError = false;
     let supplierTextFieldError = false;
+    let itemDetailsError = false;
+    let deliveryDetailsError = false;
     let errorHint;
 
     let requestError;
     let saveText;
+
+    let currentTabName = 'article';
 
     if (edit) {
         saveText = 'Änderungen speichern';
@@ -145,17 +148,13 @@
         if (!supplierTextField || !supplierTextField.getValue()) {
             supplierTextFieldError = true;
         }
-        if (
-            articleTextFieldError ||
-            pricePerUnitTextFieldError ||
-            quantityTextFieldError ||
-            producerTextFieldError ||
-            supplierTextFieldError ||
-            vatTextFieldError
-        ) {
+        itemDetailsError =
+            articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError || vatTextFieldError;
+        deliveryDetailsError = producerTextFieldError || supplierTextFieldError;
+
+        if (itemDetailsError || deliveryDetailsError) {
             return false;
         }
-
         return true;
     }
 
@@ -168,11 +167,9 @@
             return;
         }
 
-        if (stockItem.unitType === UnitType.KILO) {
-            unitTypeBoolean = true;
-            // force update of unit type
-            untiTypeChanged(unitTypeBoolean);
-        }
+        unitTypeBoolean = stockItem.unitType === UnitType.KILO;
+        // force update of unit type
+        untiTypeChanged(unitTypeBoolean);
 
         certificates = item.certificates;
         sustainablyProduced = item.sustainablyProduced;
@@ -185,7 +182,7 @@
     /**
      * Add or Update an existing stock item
      */
-    async function addOrUpadteItem() {
+    async function addOrUpadteItem(saveAndNew) {
         requestError = undefined;
         if (!areInputsValid()) {
             return;
@@ -210,6 +207,9 @@
                     selectedStatus,
                     vatTextField.getValue() / 100
                 );
+
+                // eslint-disable-next-line no-unused-vars
+                $toastText = 'Artikel erfolgreich aktualisiert';
             } else {
                 await Stock.addItem(
                     articleTextField.getValue(),
@@ -227,6 +227,9 @@
                     selectedStatus,
                     vatTextField.getValue() / 100
                 );
+
+                // eslint-disable-next-line no-unused-vars
+                $toastText = 'Artikel erfolgreich hinzugefügt';
             }
 
             // as one item was added or modified, reload the stock list
@@ -235,8 +238,13 @@
             requestError = error;
             return;
         }
-
-        goto(linkBack);
+        if (saveAndNew) {
+            clearInputs();
+            item = undefined;
+            goto('/stock/item/new');
+        } else {
+            goto(linkBack);
+        }
     }
 
     /**
@@ -253,6 +261,7 @@
         originCategory = OriginCategory.UNKNOWN;
         certificates = [];
         vatTextField.clear();
+        supplierTextField.clear();
     }
     /**
      * Certificates List
@@ -270,10 +279,18 @@
     }
 
     function setOrderDate(date) {
-        orderDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        orderDate = date.target.value;
     }
     function setDeliveryDate(date) {
-        deliveryDate = DateTime.fromJSDate(new Date(date)).toFormat('yyyy-MM-dd');
+        deliveryDate = date.target.value;
+    }
+    function tabClick(value) {
+        currentTabName = value;
+    }
+
+    function addToCertificateLogos(certificate) {
+        if (!certificates.includes(certificate)) certificates = [...certificates, certificate];
+        else removeCertificates(certificate);
     }
 </script>
 
@@ -282,14 +299,54 @@
         display: flex;
         flex-flow: row nowrap;
     }
-
     .auto-margin {
         margin: auto;
     }
-
     .dropdown {
         -moz-appearance: auto;
         -webkit-appearance: auto;
+    }
+    .tabs {
+        display: flex;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    }
+    .tab {
+        display: inline;
+        cursor: pointer;
+        padding: 15px 0;
+    }
+    .tab.is-active {
+        color: #1d72aa;
+        font-weight: bold;
+    }
+    .logo-images {
+        max-width: 90px;
+        min-width: 90px;
+        filter: grayscale(100%);
+        cursor: pointer;
+    }
+    .logo-images:hover {
+        filter: grayscale(80%);
+    }
+    .logo-images.is-active {
+        filter: grayscale(0);
+    }
+    .item-block {
+        display: none;
+    }
+    .item-block.is-active {
+        display: block;
+    }
+    .is-error {
+        color: #f14668;
+    }
+    .certificates-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+        align-content: center;
     }
 </style>
 
@@ -300,156 +357,25 @@
         <div class="message-body">{errorHint}</div>
     </article>
 {/if}
-
+<div class="tabs m-0">
+    <div class="tab" class:is-active={currentTabName === 'article'} on:click={() => tabClick('article')}>
+        <span class:is-error={itemDetailsError}>Artikeldetails</span>
+    </div>
+    <div
+        class="tab"
+        class:is-active={currentTabName === 'deliveryDetails'}
+        on:click={() => tabClick('deliveryDetails')}
+    >
+        <span class:is-error={deliveryDetailsError}>Lieferdetails</span>
+    </div>
+    <div class="tab" class:is-active={currentTabName === 'certificate'} on:click={() => tabClick('certificate')}>
+        <span>Zertifikate</span>
+    </div>
+</div>
+<hr style="margin-top: 0;" />
 <div>
     <div class="form">
-        <div class="pt-4">
-            <TextField
-                bind:this={articleTextField}
-                type="text"
-                placeholder="Artikel"
-                label="Artikel"
-                isInErrorState={articleTextFieldError}
-                charLimit="250"
-                value={item ? item.name : ''}
-            />
-        </div>
-        <div class="form-row pt-4">
-            <div class="auto-margin">Stückpreis</div>
-            <div class="auto-margin">
-                <Switch bind:checked={unitTypeBoolean} />
-            </div>
-            <div class="auto-margin">Kilopreis</div>
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={pricePerUnitTextField}
-                type="number"
-                placeholder="Warenpreis"
-                label="Warenpreis"
-                decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
-                minimum="0"
-                isInErrorState={pricePerUnitTextFieldError}
-                value={item ? item.pricePerUnit : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={vatTextField}
-                type="number"
-                placeholder="Steuersatz"
-                label="Steuersatz"
-                decoration={'%'}
-                minimum="0"
-                isInErrorState={vatTextFieldError}
-                value={item ? item.vat * 100 : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={quantityTextField}
-                type="number"
-                placeholder="Bestands Menge"
-                label="Bestands Menge"
-                decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
-                minimum="0"
-                isInErrorState={quantityTextFieldError}
-                value={item ? item.quantity : ''}
-            />
-        </div>
-        <hr />
-        <div class="columns pt-4 is-mobile">
-            <div class="column">Nachhaltig Produziert</div>
-            <div class="column has-text-right">
-                <Switch bind:checked={sustainablyProduced} twoColor={true} />
-            </div>
-        </div>
-        <div class="mb-2">
-            <div class="has-text-left pb-2">Zertifikate</div>
-            <form class="field has-addons has-text-centered" on:submit|preventDefault={addCertificates}>
-                <div class="control" style="width: 100%;">
-                    <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
-                </div>
-                <div class="control">
-                    <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBoxMultiple} />
-                </div>
-            </form>
-            {#each certificates as certificate}
-                <div transition:slide={{ duration: 300, easing: elasticInOut }}>
-                    <ListItem size="small">
-                        <div class="columns" style="align-items: center">
-                            <div class="is-pulled-left column">{certificate}</div>
-                            <div class="column has-text-right">
-                                <Button
-                                    text="Löschen"
-                                    class="button is-danger"
-                                    icon={mdiDelete}
-                                    on:click={() => removeCertificates(certificate)}
-                                />
-                            </div>
-                        </div>
-                    </ListItem>
-                </div>
-            {/each}
-        </div>
-        <div class="pt-4">
-            <div class="has-text-left pb-2">Herkunftskategorie</div>
-            <select class="input dropdown" bind:value={originCategory}>
-                {#each OriginCategoryWithDescription as categorys}
-                    <option value={categorys.identifier}>{categorys.descripton}</option>
-                {/each}
-            </select>
-        </div>
-        <hr />
-        <div class="pt-1">
-            <TextField
-                bind:this={producerTextField}
-                type="text"
-                placeholder="Erzeuger"
-                label="Erzeuger"
-                isInErrorState={producerTextFieldError}
-                charLimit="250"
-                value={item ? item.producer : ''}
-            />
-        </div>
-        <div class="pt-4">
-            <TextField
-                bind:this={supplierTextField}
-                type="text"
-                placeholder="Lieferant"
-                label="Lieferant"
-                isInErrorState={supplierTextFieldError}
-                charLimit="250"
-                value={item ? item.supplier : ''}
-            />
-        </div>
-        <div class="pt-5 pb-2">
-            <div class="columns has-text-centered">
-                <div class="column">
-                    <div class="pb-2">Lieferdatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setOrderDate(e.detail.date)}
-                        selected={item ? item.orderDate : ''}
-                    />
-                </div>
-                <div class="column">
-                    <div class="pb-2 ">Bestelldatum</div>
-                    <DatePicker
-                        placeholder="Wähle einen Zeitraum"
-                        continueText="Bestätigen"
-                        format="DD.MM.YYYY"
-                        styling={new CalendarStyle()}
-                        on:date-selected={(e) => setDeliveryDate(e.detail.date)}
-                        selected={item ? item.deliveryDate : ''}
-                    />
-                </div>
-            </div>
-        </div>
-        <div>
+        <div class="item-block" class:is-active={currentTabName === 'article'}>
             <div class="pt-4">
                 <div class="has-text-left pb-2">Artikel Status</div>
                 <select class="input dropdown" bind:value={selectedStatus}>
@@ -458,36 +384,205 @@
                     {/each}
                 </select>
             </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={articleTextField}
+                    type="text"
+                    placeholder="Artikel"
+                    label="Artikel *"
+                    isInErrorState={articleTextFieldError}
+                    charLimit="250"
+                    value={item ? item.name : ''}
+                />
+            </div>
+            <div class="form-row pt-4">
+                <div class="auto-margin">Stückpreis</div>
+                <div class="auto-margin">
+                    <Switch bind:checked={unitTypeBoolean} />
+                </div>
+                <div class="auto-margin">Kilopreis</div>
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={pricePerUnitTextField}
+                    type="number"
+                    placeholder="Warenpreis"
+                    label="Warenpreis *"
+                    decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
+                    minimum="0"
+                    isInErrorState={pricePerUnitTextFieldError}
+                    value={item ? item.pricePerUnit : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={vatTextField}
+                    type="number"
+                    placeholder="Umsatzsteuersatz"
+                    label="Umsatzsteuersatz *"
+                    decoration={'%'}
+                    minimum="0"
+                    isInErrorState={vatTextFieldError}
+                    value={item ? Math.floor(item.vat * 100) : 7}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={quantityTextField}
+                    type="number"
+                    placeholder="Bestands Menge"
+                    label="Bestands Menge *"
+                    decoration={unitType === UnitType.KILO ? 'kg' : 'Stück'}
+                    minimum="0"
+                    isInErrorState={quantityTextFieldError}
+                    value={item ? item.quantity : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Beschreibung</div>
+                <div class="form-row is-relative">
+                    <textarea
+                        class="textarea"
+                        placeholder="Beschreibung"
+                        bind:this={descriptionElement}
+                    >{item ? item.description : ''}</textarea>
+                </div>
+            </div>
         </div>
-        <div class="pt-4">
-            <div class="has-text-left pb-2">Beschreibung</div>
-            <div class="form-row is-relative">
-                <textarea
-                    class="textarea"
-                    placeholder="Beschreibung"
-                    bind:this={descriptionElement}
-                >{item ? item.description : ''}</textarea>
+        <div class="item-block" class:is-active={currentTabName === 'deliveryDetails'}>
+            <div class="pt-4">
+                <div class="has-text-left pb-2">Herkunftskategorie</div>
+                <select class="input dropdown" bind:value={originCategory}>
+                    {#each OriginCategoryWithDescription as categorys}
+                        <option value={categorys.identifier}>{categorys.descripton}</option>
+                    {/each}
+                </select>
+            </div>
+            <div class="pt-1">
+                <TextField
+                    bind:this={producerTextField}
+                    type="text"
+                    placeholder="Erzeuger"
+                    label="Erzeuger *"
+                    isInErrorState={producerTextFieldError}
+                    charLimit="250"
+                    value={item ? item.producer : ''}
+                />
+            </div>
+            <div class="pt-4">
+                <TextField
+                    bind:this={supplierTextField}
+                    type="text"
+                    placeholder="Lieferant"
+                    label="Lieferant *"
+                    isInErrorState={supplierTextFieldError}
+                    charLimit="250"
+                    value={item ? item.supplier : ''}
+                />
+            </div>
+            <div class="pt-5 pb-2">
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <div class="pb-2 ">Bestelldatum</div>
+                        <input
+                            type="date"
+                            class="input"
+                            value={item ? item.deliveryDate : ''}
+                            on:change={(i) => setDeliveryDate(i)}
+                        />
+                    </div>
+                    <div class="column">
+                        <div class="pb-2">Lieferdatum</div>
+                        <input
+                            type="date"
+                            class="input"
+                            value={item ? item.orderDate : ''}
+                            on:change={(i) => setOrderDate(i)}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item-block" class:is-active={currentTabName === 'certificate'}>
+            <div class="columns pt-4 is-mobile">
+                <div class="column">nachhaltig Produziert</div>
+                <div class="column has-text-right">
+                    <Switch bind:checked={sustainablyProduced} twoColor={true} />
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="has-text-left pb-2">Zertifikate</div>
+                <div class="certificates-row">
+                    {#each CertificateLogos as logo}
+                        <div
+                            class="logo-images"
+                            class:is-active={certificates.includes(logo.name)}
+                            on:click={() => addToCertificateLogos(logo.name)}
+                        >
+                            <img src={logo.image} alt="{logo.name}_Logo" />
+                        </div>
+                    {/each}
+                </div>
+
+                <form class="field has-addons has-text-centered mt-2" on:submit|preventDefault={addCertificates}>
+                    <div class="control" style="width: 100%;">
+                        <input bind:value={inputCertificates} class="input" type="text" placeholder="Zertikat" />
+                    </div>
+                    <div class="control">
+                        <Button text="Hinzufügen" class="button is-primary" icon={mdiPlusBox} />
+                    </div>
+                </form>
+                {#each certificates as certificate}
+                    <div transition:slide={{ duration: 300, easing: elasticInOut }}>
+                        <ListItem size="small">
+                            <div class="columns" style="align-items: center">
+                                <div class="is-pulled-left column">{certificate}</div>
+                                <div class="column has-text-right">
+                                    <Button
+                                        text="Löschen"
+                                        class="button is-danger"
+                                        icon={mdiDelete}
+                                        on:click={() => removeCertificates(certificate)}
+                                    />
+                                </div>
+                            </div>
+                        </ListItem>
+                    </div>
+                {/each}
             </div>
         </div>
         <hr />
         <div class="container has-text-centered">
             <Button
                 text={saveText}
-                on:click={addOrUpadteItem}
+                on:click={() => addOrUpadteItem(false)}
                 class="button is-primary mb-4"
-                icon={item ? mdiPencil : mdiPlusBoxMultiple}
+                icon={item ? mdiPencil : mdiPlusBox}
                 size="full-width"
             />
             <br />
-            <Button
-                text="Eingabe löschen"
-                on:click={clearInputs}
-                class="button is-danger mb-4"
-                icon={mdiDelete}
-                size="full-width"
-            />
+            {#if !item}
+                <Button
+                    text="Hinzufügen und neuen Artikel erstellen"
+                    on:click={() => addOrUpadteItem(true)}
+                    class="button is-primary mb-4"
+                    icon={mdiPlusBoxMultiple}
+                    size="full-width"
+                    supplierTextField
+                />
+                <br />
+            {/if}
 
-            <br />
+            {#if !edit}
+                <Button
+                    text="Eingabe löschen"
+                    on:click={clearInputs}
+                    class="button is-danger mb-4"
+                    icon={mdiDelete}
+                    size="full-width"
+                />
+                <br />
+            {/if}
 
             <Button
                 text={linkBackText}

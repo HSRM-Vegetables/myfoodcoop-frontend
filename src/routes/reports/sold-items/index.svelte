@@ -2,7 +2,6 @@
     import { DateTime } from 'luxon';
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
-    import DatePicker from '@beyonk/svelte-datepicker/src/components/DatePicker.svelte';
     import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
@@ -11,9 +10,9 @@
     import Icon from '../../../components/common/Icon.svelte';
     import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
     import SoldItems from '../../../scripts/reports/SoldItems';
-    import { CalendarStyle } from '../../../scripts/CalendarStyle';
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
+    import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Was wurde gekauft';
@@ -33,26 +32,27 @@
     function calcPeriods() {
         const today = DateTime.local();
         const yesterday = DateTime.local().plus({ days: -1 });
-        const lastWeek = DateTime.local().plus({ days: -7 });
-        const lastMonth = DateTime.local().plus({ months: -1 });
-
+        const lastLastWeek = DateTime.local().plus({ days: -today.weekday });
+        const lastFirstWeek = lastLastWeek.plus({ days: -6 });
+        const lastFirstMonth = DateTime.local(today.year, today.month - 1, 1);
+        const lastLastMonth = lastFirstMonth.plus({ month: 1, days: -1 });
         return {
             yesterday: {
                 fromDate: yesterday,
                 toDate: yesterday,
             },
             lastWeek: {
-                fromDate: lastWeek,
-                toDate: today,
+                fromDate: lastFirstWeek,
+                toDate: lastLastWeek,
             },
             lastMonth: {
-                fromDate: lastMonth,
-                toDate: today,
+                fromDate: lastFirstMonth,
+                toDate: lastLastMonth,
             },
         };
     }
 
-    async function loadItems(period, name) {
+    async function loadItems(period, name, forceUpdate = false) {
         localFrom = periods[period].fromDate;
         localTo = undefined;
         if (name !== 'yesterday') {
@@ -64,7 +64,7 @@
             titleText = name;
         }
 
-        if (cache[period] !== undefined) {
+        if (!forceUpdate && cache[period] !== undefined) {
             soldItems = cache[period];
             isLoading = false;
             return;
@@ -96,31 +96,66 @@
             csvTitle = `${localFrom.toFormat('dd.MM.yyyy')} - ${localTo.toFormat('dd.MM.yyyy')}`;
         }
 
-        let tempTitle = `Zeitraum: ${csvTitle}, Netto = ${soldItems.grossAmount - soldItems.totalVat}, `;
-        tempTitle += `Steuern = ${soldItems.totalVat}, Brutto = ${soldItems.grossAmount}`;
-
         const options = {
             fieldSeparator: ';',
             quoteStrings: '"',
             decimalSeparator: ',',
             showLabels: true,
             showTitle: true,
-            title: tempTitle,
+            title: `Zeitraum: ${csvTitle}`,
             filename: csvTitle.replace(' - ', '-'),
             useBom: true,
             useKeysAsHeaders: true,
         };
-        const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
-        const csvExporter = new ExportToCsv(options);
 
+        const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
+        const empty = {
+            id: '',
+            name: '',
+            quantitySold: '',
+            unitType: '',
+            vat: '',
+            totalVat: '',
+            grossAmount: '',
+        };
+        newData.push(
+            {
+                ...empty,
+            },
+            {
+                ...empty,
+                totalVat: 'Netto',
+                grossAmount: `${soldItems.grossAmount - soldItems.totalVat} €`,
+            },
+            {
+                ...empty,
+                totalVat: 'MwSt. Gesamt',
+                grossAmount: `${soldItems.totalVat} €`,
+            }
+        );
+
+        soldItems.vatDetails.forEach((vat) => {
+            newData.push({
+                ...empty,
+                vat: `${Math.floor(vat.vat * 100)}%`,
+                grossAmount: `${vat.amount} €`,
+            });
+        });
+        newData.push({
+            ...empty,
+            totalVat: 'Brutto',
+            grossAmount: `${soldItems.grossAmount} €`,
+        });
+        const csvExporter = new ExportToCsv(options);
         csvExporter.generateCsv(newData);
     }
 
-    async function datePicker(dateInfo) {
+    async function datePicker(dateInfo, text) {
         selectedPeriod = 'datepicker';
-        localFrom = DateTime.fromJSDate(new Date(dateInfo.from));
-        localTo = DateTime.fromJSDate(new Date(dateInfo.to));
+        if (text === 'start') localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
+        if (text === 'end') localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
 
+        if (!localFrom || !localTo) return;
         try {
             isLoading = true;
 
@@ -134,7 +169,6 @@
             isLoading = false;
         }
     }
-
     loadItems(selectedPeriod);
 </script>
 
@@ -149,9 +183,21 @@
         flex-flow: row;
         justify-content: flex-end;
     }
+    .small-table {
+        float: right;
+    }
+    .small-table td:first-child {
+        padding-right: 10px;
+    }
+    .small-table td {
+        padding: 0;
+        margin: 0;
+    }
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <MobileReloadButton on:click={() => loadItems(selectedPeriod, titleText, true)} />
+
     <div class="has-text-centered">
         <Button
             text="Gestern"
@@ -168,16 +214,26 @@
             text="Letzten Monat"
             on:click={() => loadItems('lastMonth', 'letzten Monat')}
         /><br />
-        <div class="pt-4 pb-4">
-            <DatePicker
-                placeholder="Wähle einen Zeitraum"
-                continueText="Bestätigen"
-                format="DD.MM.YYYY"
-                range={true}
-                styling={new CalendarStyle()}
-                on:range-selected={(e) => datePicker(e.detail)}
-                end={DateTime.local().toJSDate()}
-            />
+        <div class="pt-4 pb-4 columns">
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                    value={localFrom.toFormat('yyyy-MM-dd')}
+                    max={DateTime.local().toFormat('yyyy-MM-dd')}
+                    on:change={(e) => datePicker(e, 'start')}
+                />
+            </div>
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                    value={localTo.toFormat('yyyy-MM-dd')}
+                    min={localFrom.toFormat('yyyy-MM-dd')}
+                    max={DateTime.local().toFormat('yyyy-MM-dd')}
+                    on:change={(e) => datePicker(e, 'end')}
+                />
+            </div>
         </div>
     </div>
 
@@ -213,7 +269,6 @@
         <SoldItemsComp soldItems={soldItems.items} on:select={itemSelected} />
 
         <hr />
-
         <div class="vat-container">
             <table class="table">
                 <tbody>
@@ -226,13 +281,24 @@
                     </tr>
                     <tr>
                         <td>MwSt. Gesamt</td>
-                        <td class="has-text-weight-bold	has-text-right">{soldItems.totalVat} €</td>
+                        <td class="has-text-right">
+                            <span class="has-text-weight-bold">{soldItems.totalVat} €</span>
+                            <br />
+                            <table class="small-table">
+                                {#each soldItems.vatDetails as vat}
+                                    <tr class="is-size-7">
+                                        <td>{Math.floor(vat.vat * 100)}%</td>
+                                        <td>{vat.amount}€</td>
+                                    </tr>
+                                {/each}
+                            </table>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td>Brutto</td>
-                        <td class="has-text-weight-bold	has-text-right">{soldItems.grossAmount} €</td>
+                        <td class="has-text-right has-text-weight-bold">{soldItems.grossAmount} €</td>
                     </tr>
                 </tfoot>
             </table>
@@ -242,7 +308,6 @@
     {/if}
 
     <ErrorModal error={requestError} />
-
     <hr />
 
     <div class="has-text-centered">
@@ -256,7 +321,7 @@
         <Button
             text="Zurück zu den Reports"
             href="/reports"
-            class="button is-primary"
+            class="button is-link"
             size="full-width"
             icon={mdiArrowLeft}
         />

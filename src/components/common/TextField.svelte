@@ -1,4 +1,6 @@
 <script>
+    import { submit } from '../../scripts/common/Helper';
+
     /**
      * Used in order to set the default placeholder of an input field
      */
@@ -82,7 +84,10 @@
         min={minimum === 0 ? undefined : minimum}
         on:change
         on:input
+        on:keypress
         on:keydown
+        use:submit
+        on:enter
         disabled={disabled}
         value={value}
         maxlength={charLimit === 0 ? undefined : charLimit}
