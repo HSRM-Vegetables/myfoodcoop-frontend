@@ -5,8 +5,7 @@
     /**
      * A list of items disposed in a time window (disposed-item-list response)
      */
-    export let disposedItems;
-
+    export let disposedItems = [];
     const selectEvent = createEventDispatcher();
 </script>
 
@@ -18,7 +17,7 @@
         <div class="column has-text-weight-bold has-text-centered is-hidden-touch">Steuern</div>
         <div class="column has-text-weight-bold has-text-right">Brutto</div>
     </div>
-    {#each disposedItems.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)) as item}
+    {#each disposedItems as item}
         <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.id })}>
             <div class="column break-all has-text-left">{item.name}</div>
             <div class="column has-text-centered">

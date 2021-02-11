@@ -158,7 +158,7 @@
         if (text === 'start') localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
         if (text === 'end') localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
 
-        if (!localFrom || (localFrom !== '' && !localTo) || localTo !== '') return;
+        if (!localFrom || !localTo) return;
         try {
             isLoading = true;
 
@@ -166,7 +166,6 @@
                 localFrom.toFormat('yyyy-MM-dd'),
                 localTo.toFormat('yyyy-MM-dd')
             );
-
             // reset the error to default value to display the results
             requestError = undefined;
         } catch (error) {

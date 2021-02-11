@@ -1,5 +1,5 @@
 <script>
-    import { mdiAccountCash, mdiArchive, mdiTrashCan } from '@mdi/js';
+    import { mdiAccountCash, mdiArchive, mdiDeleteVariant } from '@mdi/js';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -26,7 +26,7 @@
             class="is-link"
             text="Was wurde entsorgt?"
             size="full-width"
-            icon={mdiTrashCan}
+            icon={mdiDeleteVariant}
         />
         <br /><br />
         <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
