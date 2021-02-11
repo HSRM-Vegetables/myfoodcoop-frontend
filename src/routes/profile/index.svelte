@@ -123,15 +123,17 @@
         />
         <br />
         <Button text="Passwort ändern" class="is-link mb-3" href="/profile/edit/password" size="full-width" />
-        <br />
-        <Button
-            text="Impressum"
-            class="is-link mb-3"
-            href={LEGAL_NOTICE_LINK}
-            target="_blank"
-            size="full-width"
-            icon={mdiOpenInNew}
-        />
+        {#if LEGAL_NOTICE_LINK && LEGAL_NOTICE_LINK !== ''}
+            <br />
+            <Button
+                text="Impressum"
+                class="is-link mb-3"
+                href={LEGAL_NOTICE_LINK}
+                target="_blank"
+                size="full-width"
+                icon={mdiOpenInNew}
+            />
+        {/if}
         <br />
         <Button goHome={true} size="full-width" />
     </div>
