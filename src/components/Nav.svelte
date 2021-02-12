@@ -1,5 +1,5 @@
 <script>
-    import logo from 'images/myFoodCoop.png';
+    import logo from 'images/logo_white.png';
     import { mdiShopping, mdiLogout } from '@mdi/js';
     import Icon from './common/Icon.svelte';
     import ShowBalance from './balance/ShowBalance.svelte';
