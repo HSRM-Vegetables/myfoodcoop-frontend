@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler } from '../../scripts/common/Helper';
     import { UnitType } from '../../scripts/stock/UnitType';
 
     /**

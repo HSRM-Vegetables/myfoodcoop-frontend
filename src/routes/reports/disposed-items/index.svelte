@@ -116,7 +116,7 @@
         const empty = {
             id: '',
             name: '',
-            quantityDisposed: '',
+            amountDisposed: '',
             unitType: '',
             vat: '',
             totalVat: '',
@@ -167,6 +167,7 @@
                 localFrom.toFormat('yyyy-MM-dd'),
                 localTo.toFormat('yyyy-MM-dd')
             );
+
             // reset the error to default value to display the results
             requestError = undefined;
         } catch (error) {
