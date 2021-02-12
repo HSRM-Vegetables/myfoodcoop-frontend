@@ -1,6 +1,6 @@
 {
-  "name": "stadtgemuese",
-  "description": "Frontend für Stadtgemuese e.V.",
+  "name": "myfoodcoop",
+  "description": "Frontend for MyFoodCoop",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
