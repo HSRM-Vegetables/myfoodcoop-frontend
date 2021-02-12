@@ -114,13 +114,16 @@
 
         const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
         const empty = {
-            id: '',
+            stockId: '',
+            userId: '',
             name: '',
-            amountDisposed: '',
+            createdOn: '',
+            amount: '',
+            pricePerUnit: '',
             unitType: '',
-            vat: '',
             totalVat: '',
-            grossAmount: '',
+            vat: '',
+            grossAmount: ''
         };
         newData.push(
             {

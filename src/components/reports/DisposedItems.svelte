@@ -19,7 +19,7 @@
         <div class="column has-text-weight-bold has-text-right">Brutto</div>
     </div>
     {#each disposedItems as item}
-        <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.id })}>
+        <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.stockId })}>
             <div class="column break-all has-text-left">{item.name}</div>
             <div class="column has-text-centered">
                 {item.amount}
