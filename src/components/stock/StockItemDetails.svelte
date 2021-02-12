@@ -160,13 +160,17 @@
         <div class="columns is-mobile">
             <div class="column">Lieferdatum:</div>
             <div class="column">
-                {item.orderDate ? DateTime.fromJSDate(new Date(item.orderDate)).toFormat('dd.MM.yyyy') : 'Nicht gesetzt'}
+                {item.orderDate
+                    ? DateTime.fromJSDate(new Date(item.orderDate)).toFormat('dd.MM.yyyy')
+                    : 'Nicht gesetzt'}
             </div>
         </div>
         <div class="columns is-mobile">
             <div class="column">Bestelldatum:</div>
             <div class="column">
-                {item.deliveryDate ? DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy') : 'Nicht gesetzt'}
+                {item.deliveryDate
+                    ? DateTime.fromJSDate(new Date(item.deliveryDate)).toFormat('dd.MM.yyyy')
+                    : 'Nicht gesetzt'}
             </div>
         </div>
     </div>

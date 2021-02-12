@@ -1,32 +1,32 @@
-import Bioland from 'images/certificate/bioland.png';
-import Biosiegel from 'images/certificate/biosiegel.png';
-import Demeter from 'images/certificate/demeter.png';
-import Naturland from 'images/certificate/naturland.png';
+import BL from 'images/certificate/bl.jpg';
+import BS from 'images/certificate/bs.jpg';
+import DM from 'images/certificate/dm.jpg';
+import NL from 'images/certificate/nl.jpg';
 
-import BiolandMini from 'images/certificate/bioland_mini.png';
-import BiosiegelMini from 'images/certificate/biosiegel_mini.png';
-import DemeterMini from 'images/certificate/demeter_mini.png';
-import NaturlandMini from 'images/certificate/naturland_mini.png';
+import BLMini from 'images/certificate/bl_mini.jpg';
+import BSMini from 'images/certificate/bs_mini.jpg';
+import DMMini from 'images/certificate/dm_mini.jpg';
+import NLMini from 'images/certificate/nl_mini.jpg';
 
 export const CertificateLogos = [
     {
-        name: 'Bioland',
-        image: Bioland,
-        imageMini: BiolandMini,
+        name: 'BL',
+        image: BL,
+        imageMini: BLMini,
     },
     {
-        name: 'Biosiegel',
-        image: Biosiegel,
-        imageMini: BiosiegelMini,
+        name: 'BS',
+        image: BS,
+        imageMini: BSMini,
     },
     {
-        name: 'Demeter',
-        image: Demeter,
-        imageMini: DemeterMini,
+        name: 'DM',
+        image: DM,
+        imageMini: DMMini,
     },
     {
-        name: 'Naturland',
-        image: Naturland,
-        imageMini: NaturlandMini,
+        name: 'NL',
+        image: NL,
+        imageMini: NLMini,
     }
 ];
