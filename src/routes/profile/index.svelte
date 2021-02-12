@@ -123,7 +123,7 @@
         />
         <br />
         <Button text="Passwort ändern" class="is-link mb-3" href="/profile/edit/password" size="full-width" />
-        {#if LEGAL_NOTICE_LINK && LEGAL_NOTICE_LINK !== ''}
+        {#if LEGAL_NOTICE_LINK}
             <br />
             <Button
                 text="Impressum"

@@ -123,6 +123,6 @@
     />
 </div>
 
-{#if LEGAL_NOTICE_LINK && LEGAL_NOTICE_LINK !== ''}
+{#if LEGAL_NOTICE_LINK}
     <div class="has-text-centered mt-6"><a href={LEGAL_NOTICE_LINK} target="_blank">Impressum</a></div>
 {/if}
