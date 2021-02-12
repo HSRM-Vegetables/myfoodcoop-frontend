@@ -26,6 +26,7 @@
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.1.2",
     "luxon": "^1.25.0",
+    "sass": "^1.32.7",
     "sirv": "^1.0.0",
     "svelte-portal": "^2.1.1"
   },
