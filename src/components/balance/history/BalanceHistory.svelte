@@ -25,7 +25,7 @@
     let isLoading = false;
 
     const periods = calcPeriods();
-    let currentPeriod = periods.yesterday;
+    let currentPeriod = periods.today;
 
     let fromDate = currentPeriod.fromDate;
     let toDate = currentPeriod.toDate;
@@ -42,18 +42,23 @@
         const lastMonthLastDay = lastMonthFirstDay.plus({ month: 1, days: -1 });
 
         return {
+            today: {
+                text: 'Heute',
+                fromDate: today,
+                toDate: today,
+            },
             yesterday: {
-                text: 'gestern',
+                text: 'Gestern',
                 fromDate: yesterday,
                 toDate: yesterday,
             },
             lastWeek: {
-                text: 'letzte Woche',
+                text: 'Letzte Woche',
                 fromDate: lastWeekMonday,
                 toDate: lastWeekSunday,
             },
             lastMonth: {
-                text: 'letzten Monat',
+                text: 'Letzten Monat',
                 fromDate: lastMonthFirstDay,
                 toDate: lastMonthLastDay,
             },
@@ -164,25 +169,14 @@
 
     <ErrorModal error={requestError} />
 
-    <!-- 'Yesterday', 'Last Week', 'Last Month' buttons -->
-
-    <Button
-        class="my-2 is-rounded {currentPeriod === periods.yesterday ? 'is-dark' : ''}"
-        text="Gestern"
-        on:click={() => setPeriod(periods.yesterday)}
-    />
-
-    <Button
-        class="my-2 ml-2 is-rounded {currentPeriod === periods.lastWeek ? 'is-dark' : ''}"
-        text="Letzte Woche"
-        on:click={() => setPeriod(periods.lastWeek)}
-    />
-
-    <Button
-        class="my-2 ml-2 is-rounded {currentPeriod === periods.lastMonth ? 'is-dark' : ''}"
-        text="Letzten Monat"
-        on:click={() => setPeriod(periods.lastMonth)}
-    />
+    <!-- Period buttons -->
+    {#each Object.values(periods) as period}
+        <Button
+            class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
+            text={period.text}
+            on:click={() => setPeriod(period)}
+        />
+    {/each}
 
     <!-- Date pickers -->
     <div class="columns py-4">
@@ -227,9 +221,5 @@
         {/each}
     </CenteredLoader>
 
-    <Pagination
-        currentPageIndex={currentPageIndex}
-        pageCount={pageCount}
-        on:update={updatePaginationDetails}
-    />
+    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
 </AuthorizeByRoles>
