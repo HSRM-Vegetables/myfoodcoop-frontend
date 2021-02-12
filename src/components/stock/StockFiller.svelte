@@ -441,11 +441,9 @@
             <div class="pt-4">
                 <div class="has-text-left pb-2">Beschreibung</div>
                 <div class="form-row is-relative">
-                    <textarea
-                        class="textarea"
-                        placeholder="Beschreibung"
-                        bind:this={descriptionElement}
-                    >{item ? item.description : ''}</textarea>
+                    <textarea class="textarea" placeholder="Beschreibung" bind:this={descriptionElement}>
+                        {item ? item.description : ''}
+                    </textarea>
                 </div>
             </div>
         </div>
