@@ -43,6 +43,15 @@
     // eslint-disable-next-line no-undef-init
     export let href = undefined;
 
+    /**
+     * If href is set, the target attribute specifies where to open the link.
+     * For example, the value "_blank" opens the link in a new tab
+     * If not specified, no target attribute will be set to the anchor element
+     */
+    // Necessary because a not assigned variable is an expected value in svelte. But this value is optional.
+    // eslint-disable-next-line no-undef-init
+    export let target = undefined;
+
     export let goHome = false;
 
     /**
@@ -82,6 +91,7 @@
         class:is-loading={isLoading}
         class:medium={size === 'medium'}
         class:full-width={size === 'full-width'}
+        target={target}
         on:click
     >
         {#if icon}
