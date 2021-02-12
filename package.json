@@ -28,7 +28,7 @@
     "luxon": "^1.25.0",
     "sirv": "^1.0.0",
     "svelte-portal": "^2.1.1",
-    "uuid": "^3.4.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
