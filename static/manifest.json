@@ -1,8 +1,8 @@
 {
 	"background_color": "#ffffff",
 	"theme_color": "#375a7f",
-    "name": "Stadtgem\u00fcse e.V.",
-    "short_name": "Stadtgem\u00fcse e.V.",
+    "name": "MyFoodCoop",
+    "short_name": "MyFoodCoop",
 	"display": "standalone",
 	"start_url": "/",
     "icons": [
