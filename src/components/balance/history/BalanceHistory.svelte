@@ -83,7 +83,10 @@
     function setPeriod(newPeriod) {
         currentPeriod = newPeriod;
 
-        updateBalanceHistoryItems(currentPeriod.fromDate, currentPeriod.toDate);
+        fromDate = currentPeriod.fromDate;
+        toDate = currentPeriod.toDate;
+
+        updateBalanceHistoryItems(fromDate, toDate);
     }
 
     /**
@@ -140,6 +143,9 @@
     async function onFromDateChanged(event) {
         fromDate = DateTime.fromJSDate(new Date(event.target.value));
 
+        // Unset period badge when chosing arbitrary date range
+        currentPeriod = null;
+
         // toDate missing-> Do nothing
         if (!toDate) {
             return;
@@ -154,6 +160,9 @@
      */
     async function onToDateChanged(event) {
         toDate = DateTime.fromJSDate(new Date(event.target.value));
+
+        // Unset period badge when chosing arbitrary date range
+        currentPeriod = null;
 
         // fromDate missing -> Do nothing
         if (!fromDate) {
