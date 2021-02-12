@@ -2,27 +2,27 @@
     import { createEventDispatcher } from 'svelte';
 
     /**
-     * Number of currently shown page
-     */
-    export let pageNumber = 0;
-
-    /**
      * The total number of pages for pagination
      */
-    export let totalPages;
+    export let pageCount;
+
+    /**
+     * Number of currently shown page
+     */
+    export let currentPageIndex = 0;
 
     const eventDispatcher = createEventDispatcher();
 
     let pages = [];
 
     // eslint-disable-next-line no-unused-expressions, no-sequences
-    $: totalPages, updatePages();
+    $: pageCount, updatePages();
 
-    function updateData(newPageNumber) {
-        pageNumber = newPageNumber;
+    function updateData(newPageIndex) {
+        currentPageIndex = newPageIndex;
 
         updatePages();
-        eventDispatcher('update', { pageNumber });
+        eventDispatcher('update', { newPageIndex: newPageIndex });
     }
 
     function updatePages() {
@@ -30,9 +30,9 @@
         const newPages = [];
 
         // create a page object for each page
-        for (let i = 0; i < totalPages; i += 1) {
+        for (let i = 0; i < pageCount; i += 1) {
             newPages.push({
-                pageNumber: i,
+                pageIndex: i,
                 isEllipsis: false,
             });
         }
@@ -42,7 +42,7 @@
         if (newPages.length > 7) {
             const ellipsis = { isEllipsis: true };
 
-            if (pageNumber <= 1 || pageNumber >= newPages.length - 2) {
+            if (currentPageIndex <= 1 || currentPageIndex >= newPages.length - 2) {
                 displayedPages = [
                     newPages[0],
                     newPages[1],
@@ -56,9 +56,9 @@
                 displayedPages = [
                     newPages[0],
                     ellipsis,
-                    newPages[pageNumber - 1],
-                    newPages[pageNumber],
-                    newPages[pageNumber + 1],
+                    newPages[currentPageIndex - 1],
+                    newPages[currentPageIndex],
+                    newPages[currentPageIndex + 1],
                     ellipsis,
                     newPages[newPages.length - 1],
                 ];
@@ -78,8 +78,8 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <a
             class="pagination-previous has-text-weight-bold"
-            disabled={pageNumber === 0 ? true : undefined}
-            on:click={updateData(pageNumber - 1)}
+            disabled={currentPageIndex === 0 ? true : undefined}
+            on:click={updateData(currentPageIndex - 1)}
         >
             &lt;
         </a>
@@ -87,8 +87,8 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <a
             class="pagination-next has-text-weight-bold"
-            disabled={pageNumber === totalPages - 1 ? true : undefined}
-            on:click={updateData(pageNumber + 1)}
+            disabled={currentPageIndex === pageCount - 1 ? true : undefined}
+            on:click={updateData(currentPageIndex + 1)}
         >
             &gt;
         </a>
@@ -104,10 +104,10 @@
                         <!-- svelte-ignore a11y-missing-attribute -->
                         <a
                             class="pagination-link is-button"
-                            class:is-current={page.pageNumber === pageNumber}
-                            on:click={() => updateData(page.pageNumber)}
+                            class:is-current={page.pageIndex === currentPageIndex}
+                            on:click={() => updateData(page.pageIndex)}
                         >
-                            {page.pageNumber + 1}
+                            {page.pageIndex + 1}
                         </a>
                     {/if}
                 </li>

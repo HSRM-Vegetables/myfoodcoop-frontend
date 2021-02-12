@@ -6,7 +6,6 @@
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
-    import NoData from '../../common/NoData.svelte';
 
     /**
      * Unique of id of the user
@@ -15,18 +14,18 @@
 
     let requestError;
 
-    let pageNumber = 0;
+    let currentPageIndex = 0;
     const pageSize = 10;
-    let totalPages = 0;
+    let pageCount;
 
-    let history = [];
+    let balanceHistoryItems = [];
     let isLoading = false;
 
     let fromDate;
     let toDate;
 
     // the selected start and end of the datepicker. Datepicker needs them as an array.
-    // select the transactions from the last 3 months as the default
+    // select the balance history items from the last 3 months as the default
     const selectedDatePickerDates = [DateTime.local().minus({ months: 3 }), DateTime.local()];
 
     /**
@@ -43,10 +42,10 @@
 
     /**
      * Update the pagination details provided by the pagination component
-     * @param event the event
+     * @param e the event
      */
-    function updatePaginationDetails(event) {
-        pageNumber = event.detail.pageNumber;
+    function updatePaginationDetails(e) {
+        offset = e.detail.newPageIndex * pageSize;
 
         updateHistory();
     }
@@ -58,10 +57,17 @@
         try {
             isLoading = true;
 
-            const response = await Balance.getHistory(userId, fromDate, toDate, pageNumber, pageSize);
-            totalPages = response.pagination.totalPages;
+            const offset = currentPageIndex * pageSize;
+            const limit = pageSize;
 
-            history = response.balanceHistoryItems;
+            const response = await Balance.getHistory(userId, fromDate, toDate, offset, limit);
+
+            balanceHistoryItems = response.balanceHistoryItems;
+            const totalItems = response.pagination.total;
+
+            pageCount = totalItems / pageSize;
+            currentPageIndex = Math.min(currentPageIndex, pageCount);
+
         } catch (error) {
             requestError = error;
         } finally {
@@ -83,18 +89,61 @@
 
         return '-';
     }
+
+async function datePicker(dateInfo, text) {
+    if (text === 'start') {
+        localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
+    }
+
+    if (text === 'end') {
+        localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
+    }
+
+    if (!localFrom || !localTo) {
+        return;
+    }
+
+    try {
+        isLoading = true;
+
+        soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
+
+        // reset the error to default value to display the results
+        requestError = undefined;
+
+    } catch (error) {
+        requestError = error;
+    } finally {
+        isLoading = false;
+    }
+}
 </script>
 
 <ErrorModal error={requestError} />
 
 <div class="columns">
-    <div class="column has-text-left"><span class="is-size-5 has-text-weight-bold">Guthaben-Historie:</span></div>
-    <div class="column has-text-right">
+    <div class="column has-text-center">
+
+        <div class="pt-4 pb-4 columns">
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                />
+            </div>
+            <div class="column">
+                <input
+                    type="date"
+                    class="input"
+                />
+            </div>
+        </div>
+        
     </div>
 </div>
 
-<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={history.length > 0}>
-    {#each history as balanceHistoryItem}
+<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
+    {#each balanceHistoryItems as balanceHistoryItem}
         <ListItem size="small">
             <div class="columns is-mobile">
                 <div class="column has-text-left">
@@ -110,12 +159,7 @@
                 </div>
             </div>
         </ListItem>
-    {:else}
-        <!-- displayed if the list is empty -->
-        {#if !isLoading}
-            <NoData />
-        {/if}
     {/each}
 </CenteredLoader>
 
-<Pagination pageNumber={pageNumber} totalPages={totalPages} isLoading={isLoading} on:update={updatePaginationDetails} />
+<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} isLoading={isLoading} on:update={updatePaginationDetails} />
