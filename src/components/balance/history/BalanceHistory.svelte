@@ -170,13 +170,15 @@
     <ErrorModal error={requestError} />
 
     <!-- Period buttons -->
-    {#each Object.values(periods) as period}
-        <Button
-            class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
-            text={period.text}
-            on:click={() => setPeriod(period)}
-        />
-    {/each}
+    <div class="is-flex is-justify-content-center">
+        {#each Object.values(periods) as period}
+            <Button
+                class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
+                text={period.text}
+                on:click={() => setPeriod(period)}
+            />
+        {/each}
+    </div>
 
     <!-- Date pickers -->
     <div class="columns py-4">
