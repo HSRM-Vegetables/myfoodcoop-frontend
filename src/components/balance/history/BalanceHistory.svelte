@@ -15,7 +15,7 @@
      */
     export let userId;
 
-    let requestError;
+    let error;
 
     let currentPageIndex = 0;
     const pageSize = 10;
@@ -29,6 +29,8 @@
 
     let fromDate = currentPeriod.fromDate;
     let toDate = currentPeriod.toDate;
+
+    updateBalanceHistoryItems(fromDate, toDate);
 
     function calcPeriods() {
         const today = DateTime.local();
@@ -100,7 +102,7 @@
             const response = await Balance.getHistory(userId, fromDate, toDate, offset, limit);
 
             // No error thrown -> Hide error message
-            requestError = null;
+            error = null;
 
             // Save balance history items
             balanceHistoryItems = response.balanceHistoryItems;
@@ -111,9 +113,9 @@
 
             // Keep currently selected page, except when new data result in less pages, then switch to last page
             currentPageIndex = Math.min(currentPageIndex, pageCount);
-        } catch (error) {
+        } catch (err) {
             // Show error message
-            requestError = error;
+            error = err;
         } finally {
             // Stop loading indicator
             isLoading = false;
@@ -163,11 +165,13 @@
     }
 </script>
 
+{#if error}
+    <ErrorModal error={error} />
+{/if}
+
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <!-- Reload Button in the upper right -->
     <MobileReloadButton on:click={() => setPeriod(currentPeriod)} />
-
-    <ErrorModal error={requestError} />
 
     <!-- Period buttons -->
     <div class="is-flex is-justify-content-center">
