@@ -6,6 +6,9 @@
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
+    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
+    import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
+    import Button from '../../../components/common/Button.svelte';
 
     /**
      * Unique of id of the user
@@ -21,23 +24,40 @@
     let balanceHistoryItems = [];
     let isLoading = false;
 
-    let fromDate;
-    let toDate;
+    const periods = calcPeriods();
+    let currentPeriod = periods.yesterday;
 
-    // the selected start and end of the datepicker. Datepicker needs them as an array.
-    // select the balance history items from the last 3 months as the default
-    const selectedDatePickerDates = [DateTime.local().minus({ months: 3 }), DateTime.local()];
+    let fromDate = currentPeriod.fromDate;
+    let toDate = currentPeriod.toDate;
 
-    /**
-     * Convert dates from Datepicker to dates from the api
-     * @param from date the selection should start from
-     * @param to date the selection should end
-     */
-    function convertDates(from, to) {
-        fromDate = DateTime.fromJSDate(new Date(from)).toFormat('yyyy-MM-dd');
-        toDate = DateTime.fromJSDate(new Date(to)).toFormat('yyyy-MM-dd');
+    function calcPeriods() {
+        const today = DateTime.local();
 
-        updateHistory();
+        const yesterday = today.minus({ days: 1 });
+
+        const lastWeekSunday = today.minus({ days: today.weekday });
+        const lastWeekMonday = lastWeekSunday.minus({ days: 6 });
+
+        const lastMonthFirstDay = DateTime.local(today.year, today.month, 1).minus({ month: 1 });
+        const lastMonthLastDay = lastMonthFirstDay.plus({ month: 1, days: -1 });
+
+        return {
+            yesterday: {
+                text: 'gestern',
+                fromDate: yesterday,
+                toDate: yesterday,
+            },
+            lastWeek: {
+                text: 'letzte Woche',
+                fromDate: lastWeekMonday,
+                toDate: lastWeekSunday,
+            },
+            lastMonth: {
+                text: 'letzten Monat',
+                fromDate: lastMonthFirstDay,
+                toDate: lastMonthLastDay,
+            },
+        };
     }
 
     /**
@@ -45,38 +65,55 @@
      * @param e the event
      */
     function updatePaginationDetails(e) {
-        offset = e.detail.newPageIndex * pageSize;
+        currentPageIndex = e.detail.newPageIndex;
 
-        updateHistory();
+        updateBalanceHistoryItems();
     }
 
     /**
-     * Updates the history items, given the userId, offset, limit, from and to date
+     * Set a new period and load the respective items
      */
-    async function updateHistory() {
+    function setPeriod(newPeriod) {
+        currentPeriod = newPeriod;
+
+        updateBalanceHistoryItems(currentPeriod.fromDate, currentPeriod.toDate);
+    }
+
+    /**
+     * Show the balance history items for an arbitrary day range [fromDate, toDate]
+     */
+    async function updateBalanceHistoryItems(fromDate, toDate) {
         try {
+            // Start loading indicator
             isLoading = true;
 
+            // Calc offset and limit pagination params from current page index and page size
             const offset = currentPageIndex * pageSize;
             const limit = pageSize;
 
+            // Query backend for balance history items within currently selected date range
             const response = await Balance.getHistory(userId, fromDate, toDate, offset, limit);
 
+            // No error thrown -> Hide error message
+            requestError = null;
+
+            // Save balance history items
             balanceHistoryItems = response.balanceHistoryItems;
+
+            // Calc and save total page count
             const totalItems = response.pagination.total;
-
             pageCount = totalItems / pageSize;
-            currentPageIndex = Math.min(currentPageIndex, pageCount);
 
+            // Keep currently selected page, except when new data result in less pages, then switch to last page
+            currentPageIndex = Math.min(currentPageIndex, pageCount);
         } catch (error) {
+            // Show error message
             requestError = error;
         } finally {
+            // Stop loading indicator
             isLoading = false;
         }
     }
-
-    // load the dates and convert them for api calls
-    convertDates(selectedDatePickerDates[0], selectedDatePickerDates[1]);
 
     function sign(balanceChangeType) {
         if (balanceChangeType === 'TOPUP') {
@@ -90,76 +127,109 @@
         return '-';
     }
 
-async function datePicker(dateInfo, text) {
-    if (text === 'start') {
-        localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
+    /**
+     * Handle fromDate input change -> Save fromDate and load data if toDate is also set
+     */
+    async function onFromDateChanged(event) {
+        fromDate = DateTime.fromJSDate(new Date(event.target.value));
+
+        // toDate missing-> Do nothing
+        if (!toDate) {
+            return;
+        }
+
+        // Both dates set -> Load data
+        updateBalanceHistoryItems(fromDate, toDate);
     }
 
-    if (text === 'end') {
-        localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
+    /**
+     * Handle toDate input change -> Save toDate and load data if fromDate is also set
+     */
+    async function onToDateChanged(event) {
+        toDate = DateTime.fromJSDate(new Date(event.target.value));
+
+        // fromDate missing -> Do nothing
+        if (!fromDate) {
+            return;
+        }
+
+        // Both dates set -> Load data
+        updateBalanceHistoryItems(fromDate, toDate);
     }
-
-    if (!localFrom || !localTo) {
-        return;
-    }
-
-    try {
-        isLoading = true;
-
-        soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
-
-        // reset the error to default value to display the results
-        requestError = undefined;
-
-    } catch (error) {
-        requestError = error;
-    } finally {
-        isLoading = false;
-    }
-}
 </script>
 
-<ErrorModal error={requestError} />
+<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
+    <!-- Reload Button in the upper right -->
+    <MobileReloadButton on:click={() => setPeriod(currentPeriod)} />
 
-<div class="columns">
-    <div class="column has-text-center">
+    <ErrorModal error={requestError} />
 
-        <div class="pt-4 pb-4 columns">
-            <div class="column">
-                <input
-                    type="date"
-                    class="input"
-                />
-            </div>
-            <div class="column">
-                <input
-                    type="date"
-                    class="input"
-                />
-            </div>
+    <!-- 'Yesterday', 'Last Week', 'Last Month' buttons -->
+
+    <Button
+        class="my-2 is-rounded {currentPeriod === periods.yesterday ? 'is-dark' : ''}"
+        text="Gestern"
+        on:click={() => setPeriod(periods.yesterday)}
+    />
+
+    <Button
+        class="my-2 ml-2 is-rounded {currentPeriod === periods.lastWeek ? 'is-dark' : ''}"
+        text="Letzte Woche"
+        on:click={() => setPeriod(periods.lastWeek)}
+    />
+
+    <Button
+        class="my-2 ml-2 is-rounded {currentPeriod === periods.lastMonth ? 'is-dark' : ''}"
+        text="Letzten Monat"
+        on:click={() => setPeriod(periods.lastMonth)}
+    />
+
+    <!-- Date pickers -->
+    <div class="columns py-4">
+        <div class="column">
+            <input
+                type="date"
+                class="input"
+                value={fromDate.toFormat('yyyy-MM-dd')}
+                max={DateTime.local().toFormat('yyyy-MM-dd')}
+                on:change={(event) => onFromDateChanged(event)}
+            />
         </div>
-        
+        <div class="column">
+            <input
+                type="date"
+                class="input"
+                value={toDate.toFormat('yyyy-MM-dd')}
+                min={fromDate.toFormat('yyyy-MM-dd')}
+                max={DateTime.local().toFormat('yyyy-MM-dd')}
+                on:change={(event) => onToDateChanged(event)}
+            />
+        </div>
     </div>
-</div>
 
-<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
-    {#each balanceHistoryItems as balanceHistoryItem}
-        <ListItem size="small">
-            <div class="columns is-mobile">
-                <div class="column has-text-left">
-                    <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
+    <CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
+        {#each balanceHistoryItems as balanceHistoryItem}
+            <ListItem size="small">
+                <div class="columns is-mobile">
+                    <div class="column has-text-left">
+                        <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
+                    </div>
+                    <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
+                    <div class="column has-text-right">
+                        <span>
+                            {sign(balanceHistoryItem.balanceChangeType)}
+                            {moneyStyler(balanceHistoryItem.amount)}
+                            €
+                        </span>
+                    </div>
                 </div>
-                <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
-                <div class="column has-text-right">
-                    <span>
-                        {sign(balanceHistoryItem.balanceChangeType)}
-                        {moneyStyler(balanceHistoryItem.amount)}
-                        €
-                    </span>
-                </div>
-            </div>
-        </ListItem>
-    {/each}
-</CenteredLoader>
+            </ListItem>
+        {/each}
+    </CenteredLoader>
 
-<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} isLoading={isLoading} on:update={updatePaginationDetails} />
+    <Pagination
+        currentPageIndex={currentPageIndex}
+        pageCount={pageCount}
+        on:update={updatePaginationDetails}
+    />
+</AuthorizeByRoles>

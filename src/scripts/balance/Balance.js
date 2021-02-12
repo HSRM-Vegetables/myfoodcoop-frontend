@@ -66,15 +66,19 @@ export default class Balance {
 
     /**
      * Gets the balance history of the user
-     * @param {string} userId unique id of the user
-     * @param {string} fromDate start date in the format yyyy-MM-dd
-     * @param {string} toDate end date in the format yyyy-MM-dd
-     * @param {number} pageNumber page number for pagination
-     * @param {number} pageSize number of elements per page
+     * @param {string} userId unique user ID
+     * @param {string} fromDate start date
+     * @param {string} toDate end date
+     * @param {number} offset offset for pagination
+     * @param {number} limit number of items per page for pagination
     */
-    static async getHistory(userId, fromDate, toDate, pageNumber, pageSize) {
+    static async getHistory(userId, fromDate, toDate, offset, limit) {
         const url = `balance/${userId}/history`;
-        const params = `fromDate=${fromDate}&toDate=${toDate}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+
+        const fromDateStr = fromDate.toFormat('yyyy-MM-dd');
+        const toDateStr = toDate.toFormat('yyyy-MM-dd');
+
+        const params = `fromDate=${fromDateStr}&toDate=${toDateStr}&offset=${offset}&limit=${limit}`
 
         return Fetch.get(`${url}?${params}`, getAuthorizationHeader());
     }
