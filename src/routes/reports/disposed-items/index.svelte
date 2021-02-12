@@ -123,7 +123,7 @@
             unitType: '',
             totalVat: '',
             vat: '',
-            grossAmount: ''
+            grossAmount: '',
         };
         newData.push(
             {
