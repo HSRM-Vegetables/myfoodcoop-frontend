@@ -23,7 +23,7 @@
 * Als Icon Library benutzen wir [MaterialDesignIcons](https://materialdesignicons.com/). Dort kannst du auch nach neuen Icons suchen.
 
 ## Deployment
-* Die Umgebungsvariable `BACKEND_API_URL` muss auf die URL des Backends gesetzt werden.
+* The environment variable `BACKEND_API_URL` should be set to the value of the backend url. Be sure that the value of this enviroment variable does **not** contain a trailing `/`
 
 ## Customization
 There are several ways to customize the look and feel of this webapp.
