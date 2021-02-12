@@ -137,6 +137,11 @@
             width: 100%;
         }
     }
+    @media (min-width: 921px) and (max-width: 1023px) {
+        .icon-box {
+            margin-bottom: 70px;
+        }
+    }
 </style>
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]} displayPermissionNotAllowed={false}>

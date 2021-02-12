@@ -155,7 +155,7 @@
         if (text === 'start') localFrom = DateTime.fromJSDate(new Date(dateInfo.target.value));
         if (text === 'end') localTo = DateTime.fromJSDate(new Date(dateInfo.target.value));
 
-        if (!localFrom || (localFrom !== '' && !localTo) || localTo !== '') return;
+        if (!localFrom || !localTo) return;
         try {
             isLoading = true;
 

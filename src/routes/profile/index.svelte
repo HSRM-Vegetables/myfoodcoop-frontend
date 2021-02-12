@@ -1,6 +1,6 @@
 <script>
     import { goto } from '@sapper/app';
-    import { mdiLogout, mdiRefresh, mdiPencil } from '@mdi/js';
+    import { mdiLogout, mdiRefresh, mdiPencil, mdiOpenInNew } from '@mdi/js';
     import { title, navBalance, isPointOfSales } from '../../stores/page';
     import Button from '../../components/common/Button.svelte';
     import { userName, refreshToken } from '../../stores/user';
@@ -15,6 +15,7 @@
     import {
         POINT_OF_SALES_INACTIVITY_TIMEOUT_IN_MINUTES,
         POINT_OF_SALES_MAX_LOGIN_TIME_IN_MINUTES,
+        LEGAL_NOTICE_LINK,
     } from '../../scripts/Config';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
@@ -122,6 +123,17 @@
         />
         <br />
         <Button text="Passwort ändern" class="is-link mb-3" href="/profile/edit/password" size="full-width" />
+        {#if LEGAL_NOTICE_LINK}
+            <br />
+            <Button
+                text="Impressum"
+                class="is-link mb-3"
+                href={LEGAL_NOTICE_LINK}
+                target="_blank"
+                size="full-width"
+                icon={mdiOpenInNew}
+            />
+        {/if}
         <br />
         <Button goHome={true} size="full-width" />
     </div>
