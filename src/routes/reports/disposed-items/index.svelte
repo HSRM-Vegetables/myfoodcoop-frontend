@@ -13,6 +13,7 @@
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
+    import { moneyStyler } from '../../../scripts/common/Helper';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Was wurde entsorgt';
@@ -280,20 +281,20 @@
                     <tr>
                         <td>Netto</td>
                         <td class="has-text-weight-bold	has-text-right">
-                            {disposedItems.grossAmount - disposedItems.totalVat}
+                            {moneyStyler(disposedItems.grossAmount - disposedItems.totalVat)}
                             €
                         </td>
                     </tr>
                     <tr>
                         <td>MwSt. Gesamt</td>
                         <td class="has-text-right">
-                            <span class="has-text-weight-bold">{disposedItems.totalVat} €</span>
+                            <span class="has-text-weight-bold">{moneyStyler(disposedItems.totalVat)} €</span>
                             <br />
                             <table class="small-table">
                                 {#each disposedItems.vatDetails as vat}
                                     <tr class="is-size-7">
                                         <td>{Math.floor(vat.vat * 100)}%</td>
-                                        <td>{vat.amount}€</td>
+                                        <td>{moneyStyler(vat.amount)} €</td>
                                     </tr>
                                 {/each}
                             </table>
@@ -303,8 +304,8 @@
                 <tfoot>
                     <tr>
                         <td>Brutto</td>
-                        <td class="has-text-right has-text-weight-bold">{disposedItems.grossAmount} €</td>
-                    </tr>task
+                        <td class="has-text-right has-text-weight-bold">{moneyStyler(disposedItems.grossAmount)} €</td>
+                    </tr>
                 </tfoot>
             </table>
         </div>
