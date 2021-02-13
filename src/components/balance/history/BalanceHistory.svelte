@@ -1,5 +1,6 @@
 <script>
     import { DateTime } from 'luxon';
+    import { goto } from '@sapper/app'
     import Balance from '../../../scripts/balance/Balance';
     import ErrorModal from '../../common/ErrorModal.svelte';
     import Pagination from '../../pagination/Pagination.svelte';
@@ -170,6 +171,14 @@
         // Both dates set -> Load data
         updateBalanceHistoryItems(fromDate, toDate);
     }
+
+    async function handleListItemClick(balanceHistoryItem) {
+        if (balanceHistoryItem.balanceChangeType !== 'PURCHASE') {
+            return;
+        }
+
+        await goto(`history/${balanceHistoryItem.purchase.id}`)
+    }
 </script>
 
 {#if error}
@@ -216,7 +225,7 @@
 
     <CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
         {#each balanceHistoryItems as balanceHistoryItem}
-            <ListItem size="small">
+            <ListItem size="small" isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'} on:click={() => handleListItemClick(balanceHistoryItem)}>
                 <div class="columns is-mobile">
                     <div class="column has-text-left">
                         <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>

@@ -134,8 +134,6 @@
                 </div>
             </AuthorizeByRoles>
 
-            <hr />
-
             <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
                 <hr />
                 <BalanceHistory userId={user.id} />
