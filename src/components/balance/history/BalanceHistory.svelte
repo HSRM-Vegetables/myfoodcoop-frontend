@@ -1,13 +1,12 @@
 <script>
     import { DateTime } from 'luxon';
-    import { goto } from '@sapper/app'
+    import { goto } from '@sapper/app';
     import Balance from '../../../scripts/balance/Balance';
     import ErrorModal from '../../common/ErrorModal.svelte';
     import Pagination from '../../pagination/Pagination.svelte';
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
-    import AuthorizeByRoles, { Roles } from '../../common/AuthorizeByRoles.svelte';
     import MobileReloadButton from '../../common/MobileReloadButton.svelte';
     import Button from '../../common/Button.svelte';
 
@@ -177,7 +176,7 @@
             return;
         }
 
-        await goto(`history/${balanceHistoryItem.purchase.id}`)
+        await goto(`history/${balanceHistoryItem.purchase.id}`);
     }
 </script>
 
@@ -185,63 +184,65 @@
     <ErrorModal error={error} />
 {/if}
 
-<AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
-    <!-- Reload Button in the upper right -->
-    <MobileReloadButton on:click={() => updateBalanceHistoryItems(fromDate, toDate)} />
+<!-- Reload Button in the upper right -->
+<MobileReloadButton on:click={() => updateBalanceHistoryItems(fromDate, toDate)} />
 
-    <!-- Period buttons -->
-    <div class="is-flex is-justify-content-center">
-        {#each Object.values(periods) as period}
-            <Button
-                class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
-                text={period.text}
-                on:click={() => setPeriod(period)}
-            />
-        {/each}
+<!-- Period buttons -->
+<div class="is-flex is-justify-content-center">
+    {#each Object.values(periods) as period}
+        <Button
+            class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
+            text={period.text}
+            on:click={() => setPeriod(period)}
+        />
+    {/each}
+</div>
+
+<!-- Date pickers -->
+<div class="columns py-4">
+    <div class="column">
+        <input
+            type="date"
+            class="input"
+            value={fromDate.toFormat('yyyy-MM-dd')}
+            max={DateTime.local().toFormat('yyyy-MM-dd')}
+            on:change={(event) => onFromDateChanged(event)}
+        />
     </div>
-
-    <!-- Date pickers -->
-    <div class="columns py-4">
-        <div class="column">
-            <input
-                type="date"
-                class="input"
-                value={fromDate.toFormat('yyyy-MM-dd')}
-                max={DateTime.local().toFormat('yyyy-MM-dd')}
-                on:change={(event) => onFromDateChanged(event)}
-            />
-        </div>
-        <div class="column">
-            <input
-                type="date"
-                class="input"
-                value={toDate.toFormat('yyyy-MM-dd')}
-                min={fromDate.toFormat('yyyy-MM-dd')}
-                max={DateTime.local().toFormat('yyyy-MM-dd')}
-                on:change={(event) => onToDateChanged(event)}
-            />
-        </div>
+    <div class="column">
+        <input
+            type="date"
+            class="input"
+            value={toDate.toFormat('yyyy-MM-dd')}
+            min={fromDate.toFormat('yyyy-MM-dd')}
+            max={DateTime.local().toFormat('yyyy-MM-dd')}
+            on:change={(event) => onToDateChanged(event)}
+        />
     </div>
+</div>
 
-    <CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
-        {#each balanceHistoryItems as balanceHistoryItem}
-            <ListItem size="small" isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'} on:click={() => handleListItemClick(balanceHistoryItem)}>
-                <div class="columns is-mobile">
-                    <div class="column has-text-left">
-                        <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
-                    </div>
-                    <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
-                    <div class="column has-text-right">
-                        <span>
-                            {sign(balanceHistoryItem.balanceChangeType)}
-                            {moneyStyler(balanceHistoryItem.amount)}
-                            €
-                        </span>
-                    </div>
+<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
+    {#each balanceHistoryItems as balanceHistoryItem}
+        <ListItem
+            size="small"
+            isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'}
+            on:click={() => handleListItemClick(balanceHistoryItem)}
+        >
+            <div class="columns is-mobile">
+                <div class="column has-text-left">
+                    <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
                 </div>
-            </ListItem>
-        {/each}
-    </CenteredLoader>
+                <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
+                <div class="column has-text-right">
+                    <span>
+                        {sign(balanceHistoryItem.balanceChangeType)}
+                        {moneyStyler(balanceHistoryItem.amount)}
+                        €
+                    </span>
+                </div>
+            </div>
+        </ListItem>
+    {/each}
+</CenteredLoader>
 
-    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
-</AuthorizeByRoles>
+<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
