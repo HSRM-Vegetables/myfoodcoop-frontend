@@ -7,6 +7,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import TextField from '../common/TextField.svelte';
     import { toastText } from '../../stores/toast';
+    import { stockItems } from '../../stores/stock';
 
     /**
      * The item to be disposed of
@@ -28,6 +29,8 @@
         if (!disposeQuantityError) {
             try {
                 await Stock.disposeItem(item.id, disposeQuantity);
+
+                stockItems.forceUpdate();
 
                 // eslint-disable-next-line no-unused-vars
                 $toastText = 'Artikel erfolgreich entsorgt';
