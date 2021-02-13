@@ -27,7 +27,7 @@
     const periods = calcPeriods();
     let currentPeriod = periods.today;
 
-    let {fromDate, toDate} = {...currentPeriod};
+    let { fromDate, toDate } = { ...currentPeriod };
 
     updateBalanceHistoryItems(fromDate, toDate);
 
