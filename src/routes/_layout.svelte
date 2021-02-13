@@ -94,6 +94,12 @@
             padding-bottom: 125px;
         }
     }
+
+    @media (min-width: 921px) and (max-width: 1023px) {
+        main {
+            padding-bottom: 100px;
+        }
+    }
 </style>
 
 <!-- attach a few events to the body to check if the user is still active -->
