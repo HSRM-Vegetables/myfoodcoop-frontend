@@ -3,6 +3,7 @@
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
     import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
+    import { moneyStyler } from '../../../scripts/common/Helper';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
@@ -275,20 +276,20 @@
                     <tr>
                         <td>Netto</td>
                         <td class="has-text-weight-bold	has-text-right">
-                            {soldItems.grossAmount - soldItems.totalVat}
+                            {moneyStyler(soldItems.grossAmount - soldItems.totalVat)}
                             €
                         </td>
                     </tr>
                     <tr>
                         <td>MwSt. Gesamt</td>
                         <td class="has-text-right">
-                            <span class="has-text-weight-bold">{soldItems.totalVat} €</span>
+                            <span class="has-text-weight-bold">{moneyStyler(soldItems.totalVat)} €</span>
                             <br />
                             <table class="small-table">
                                 {#each soldItems.vatDetails as vat}
                                     <tr class="is-size-7">
                                         <td>{Math.floor(vat.vat * 100)}%</td>
-                                        <td>{vat.amount}€</td>
+                                        <td>{moneyStyler(vat.amount)}€</td>
                                     </tr>
                                 {/each}
                             </table>
@@ -298,7 +299,7 @@
                 <tfoot>
                     <tr>
                         <td>Brutto</td>
-                        <td class="has-text-right has-text-weight-bold">{soldItems.grossAmount} €</td>
+                        <td class="has-text-right has-text-weight-bold">{moneyStyler(soldItems.grossAmount)} €</td>
                     </tr>
                 </tfoot>
             </table>
