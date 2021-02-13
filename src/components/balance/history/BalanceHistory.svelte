@@ -6,9 +6,9 @@
     import ListItem from '../../common/ListItem.svelte';
     import { moneyStyler } from '../../../scripts/common/Helper';
     import CenteredLoader from '../../common/CenteredLoader.svelte';
-    import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
-    import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
-    import Button from '../../../components/common/Button.svelte';
+    import AuthorizeByRoles, { Roles } from '../../common/AuthorizeByRoles.svelte';
+    import MobileReloadButton from '../../common/MobileReloadButton.svelte';
+    import Button from '../../common/Button.svelte';
 
     /**
      * Unique of id of the user
@@ -27,8 +27,7 @@
     const periods = calcPeriods();
     let currentPeriod = periods.today;
 
-    let fromDate = currentPeriod.fromDate;
-    let toDate = currentPeriod.toDate;
+    let {fromDate, toDate} = {...currentPeriod};
 
     updateBalanceHistoryItems(fromDate, toDate);
 
@@ -91,7 +90,7 @@
     /**
      * Show the balance history items for an arbitrary day range [fromDate, toDate]
      */
-    async function updateBalanceHistoryItems(fromDate, toDate) {
+    async function updateBalanceHistoryItems(newFromDate, newToDate) {
         try {
             // Start loading indicator
             isLoading = true;
@@ -101,7 +100,7 @@
             const limit = pageSize;
 
             // Query backend for balance history items within currently selected date range
-            const response = await Balance.getHistory(userId, fromDate, toDate, offset, limit);
+            const response = await Balance.getHistory(userId, newFromDate, newToDate, offset, limit);
 
             // No error thrown -> Hide error message
             error = null;

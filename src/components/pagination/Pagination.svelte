@@ -22,7 +22,7 @@
         currentPageIndex = newPageIndex;
 
         updatePages();
-        eventDispatcher('update', { newPageIndex: newPageIndex });
+        eventDispatcher('update', { newPageIndex });
     }
 
     function updatePages() {
