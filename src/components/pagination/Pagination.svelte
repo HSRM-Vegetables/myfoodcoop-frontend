@@ -76,22 +76,18 @@
 {#if pages.length > 1}
     <nav class="pagination is-centered mt-3" role="navigation">
         <!-- svelte-ignore a11y-missing-attribute -->
-        <a
-            class="pagination-previous has-text-weight-bold"
-            disabled={currentPageIndex === 0 ? true : undefined}
-            on:click={updateData(currentPageIndex - 1)}
-        >
-            &lt;
-        </a>
+        {#if currentPageIndex === 0}
+            <a class="pagination-previous has-text-weight-bold" disabled>&lt;</a>
+        {:else}
+            <a class="pagination-previous has-text-weight-bold" on:click={updateData(currentPageIndex - 1)}>&lt;</a>
+        {/if}
 
         <!-- svelte-ignore a11y-missing-attribute -->
-        <a
-            class="pagination-next has-text-weight-bold"
-            disabled={currentPageIndex === pageCount - 1 ? true : undefined}
-            on:click={updateData(currentPageIndex + 1)}
-        >
-            &gt;
-        </a>
+        {#if currentPageIndex === pageCount - 1}
+            <a class="pagination-next has-text-weight-bold" disabled>&gt;</a>
+        {:else}
+            <a class="pagination-next has-text-weight-bold" on:click={updateData(currentPageIndex + 1)}>&gt;</a>
+        {/if}
 
         <ul class="pagination-list is-hidden-mobile">
             {#each pages as page}

@@ -69,12 +69,11 @@
 
     /**
      * Update the pagination details provided by the pagination component
-     * @param e the event
      */
-    function updatePaginationDetails(e) {
-        currentPageIndex = e.detail.newPageIndex;
+    function updatePaginationDetails(event) {
+        currentPageIndex = event.detail.newPageIndex;
 
-        updateBalanceHistoryItems();
+        updateBalanceHistoryItems(fromDate, toDate);
     }
 
     /**
@@ -112,7 +111,7 @@
 
             // Calc and save total page count
             const totalItems = response.pagination.total;
-            pageCount = totalItems / pageSize;
+            pageCount = Math.ceil(totalItems / pageSize);
 
             // Keep currently selected page, except when new data result in less pages, then switch to last page
             currentPageIndex = Math.min(currentPageIndex, pageCount);
@@ -180,7 +179,7 @@
 
 <AuthorizeByRoles allowedRoles={[Roles.MEMBER]}>
     <!-- Reload Button in the upper right -->
-    <MobileReloadButton on:click={() => setPeriod(currentPeriod)} />
+    <MobileReloadButton on:click={() => updateBalanceHistoryItems(fromDate, toDate)} />
 
     <!-- Period buttons -->
     <div class="is-flex is-justify-content-center">
