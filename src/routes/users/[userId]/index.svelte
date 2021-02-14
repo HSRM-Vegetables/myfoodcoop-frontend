@@ -124,11 +124,16 @@
                         />
                     {/if}
 
+                    {#if user.id === $loggedInUserId}
+                        <span class="has-text-danger">Du darfst dich nicht selber löschen</span>
+                        <br />
+                    {/if}
                     <Button
                         text="Mitglied löschen"
                         class="is-danger"
                         size="full-width"
                         on:click={confirmDeleteMember}
+                        disabled={user.id === $loggedInUserId}
                     />
                 </div>
             </AuthorizeByRoles>
