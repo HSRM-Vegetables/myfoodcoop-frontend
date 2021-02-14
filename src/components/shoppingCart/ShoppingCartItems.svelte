@@ -7,6 +7,7 @@
     import { UnitType } from '../../scripts/stock/UnitType';
     import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
     import ListItem from '../common/ListItem.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -42,9 +43,27 @@
             goto(`/shopping/stock/${shoppingCartItem.stockItem.id}`);
         }
     }
+
+    let currentPageIndex = 0;
+    const pageSize = 5;
+    let pageCount = Math.ceil(cartItems.length / pageSize);
+
+    let offset = currentPageIndex * pageSize;
+    let limit = pageSize;
+
+    /**
+     * Update the pagination details provided by the pagination component
+     */
+    function updatePaginationDetails(event) {
+        currentPageIndex = event.detail.newPageIndex;
+
+        // Calc offset and limit pagination params from current page index and page size
+        offset = currentPageIndex * pageSize;
+        limit = pageSize;
+    }
 </script>
 
-{#each cartItems as item}
+{#each cartItems.slice(offset, offset + limit) as item}
     <ListItem isClickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
@@ -83,3 +102,5 @@
         </div>
     </ListItem>
 {/each}
+
+<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
