@@ -12,6 +12,7 @@
     import User from '../../../scripts/user/User';
     import { title, navBalance } from '../../../stores/page';
     import { userId as loggedInUserId, refreshToken } from '../../../stores/user';
+    import BalanceHistory from '../../../components/balance/history/BalanceHistory.svelte';
     import Modal from '../../../components/common/Modal.svelte';
     import { toastText } from '../../../stores/toast';
 
@@ -138,8 +139,12 @@
                 </div>
             </AuthorizeByRoles>
 
-            <hr />
+            <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
+                <hr />
+                <BalanceHistory userId={user.id} />
+            </AuthorizeByRoles>
 
+            <hr />
             <UserEdit user={user} otherData={true} password={true} on:update={updateUser} />
             <hr />
         {/if}
