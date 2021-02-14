@@ -8,6 +8,7 @@
     import ListItem from '../common/ListItem.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     /**
      * An Array of StockItems to be displayed
@@ -51,6 +52,24 @@
             id: itemdID,
         });
     }
+
+    let currentPageIndex = 0;
+    const pageSize = 5;
+    let pageCount = Math.ceil(stockItems.length / pageSize);
+
+    let offset = currentPageIndex * pageSize;
+    let limit = pageSize;
+
+    /**
+     * Update the pagination details provided by the pagination component
+     */
+    function updatePaginationDetails(event) {
+        currentPageIndex = event.detail.newPageIndex;
+
+        // Calc offset and limit pagination params from current page index and page size
+        offset = currentPageIndex * pageSize;
+        limit = pageSize;
+    }
 </script>
 
 <style>
@@ -72,7 +91,7 @@
 {#if isLoading}
     <Loader bind:isLoading />
 {:else if stockItems && stockItems.length > 0}
-    {#each stockItems as item}
+    {#each stockItems.slice(offset, offset + limit) as item}
         <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns m-0 is-mobile">
@@ -119,6 +138,9 @@
             </div>
         </ListItem>
     {/each}
+
+    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+    
 {:else}
     <NoData text="Der Bestand ist leer" />
 {/if}
