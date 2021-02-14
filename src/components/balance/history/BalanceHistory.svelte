@@ -185,7 +185,7 @@
 <MobileReloadButton on:click={() => updateBalanceHistoryItems(fromDate, toDate)} />
 
 <!-- Period buttons -->
-<div class="is-flex is-justify-content-center">
+<div class="is-flex is-flex-wrap-wrap is-justify-content-center">
     {#each Object.values(periods) as period}
         <Button
             class="my-2 mx-2 is-rounded {period === currentPeriod ? 'is-dark' : ''}"
