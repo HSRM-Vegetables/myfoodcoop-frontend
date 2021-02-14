@@ -9,7 +9,7 @@
     import CenteredLoader from '../../common/CenteredLoader.svelte';
     import MobileReloadButton from '../../common/MobileReloadButton.svelte';
     import Button from '../../common/Button.svelte';
-    import NoData from '../../common/NoData.svelte'
+    import NoData from '../../common/NoData.svelte';
 
     /**
      * Unique of id of the user
