@@ -123,7 +123,11 @@
         }
     }
 
-    function sign(balanceChangeType) {
+    /**
+     * Get a balance change type's sign for display in the UI.
+     * For example, '-' for a withdraw from the user's balance.
+     */
+    function getSign(balanceChangeType) {
         if (balanceChangeType === 'TOPUP') {
             return '+';
         }
@@ -136,38 +140,27 @@
     }
 
     /**
-     * Handle fromDate input change -> Save fromDate and load data if toDate is also set
+     * Handle date input change -> Save date and load data if both dates (fromDate and toDate) are set
+     * 
+     * @param changedDate Which date was changed, either 'fromDate' or 'toDate'
      */
-    async function onFromDateChanged(event) {
-        fromDate = DateTime.fromJSDate(new Date(event.target.value));
+    async function onDateChanged(changedDate, event) {
+        const date = DateTime.fromJSDate(new Date(event.target.value));
+
+        if (changedDate === 'fromDate') {
+            fromDate = date;
+        } else {
+            toDate = date;
+        }
 
         // Unset period badge when chosing arbitrary date range
         currentPeriod = null;
 
-        // toDate missing-> Do nothing
-        if (!toDate) {
+        // Not both dates set -> Do nothing
+        if (!fromDate || !toDate) {
             return;
         }
 
-        // Both dates set -> Load data
-        updateBalanceHistoryItems(fromDate, toDate);
-    }
-
-    /**
-     * Handle toDate input change -> Save toDate and load data if fromDate is also set
-     */
-    async function onToDateChanged(event) {
-        toDate = DateTime.fromJSDate(new Date(event.target.value));
-
-        // Unset period badge when chosing arbitrary date range
-        currentPeriod = null;
-
-        // fromDate missing -> Do nothing
-        if (!fromDate) {
-            return;
-        }
-
-        // Both dates set -> Load data
         updateBalanceHistoryItems(fromDate, toDate);
     }
 
@@ -206,7 +199,7 @@
             class="input"
             value={fromDate.toFormat('yyyy-MM-dd')}
             max={DateTime.local().toFormat('yyyy-MM-dd')}
-            on:change={(event) => onFromDateChanged(event)}
+            on:change={(event) => onDateChanged('fromDate', event)}
         />
     </div>
     <div class="column">
@@ -216,7 +209,7 @@
             value={toDate.toFormat('yyyy-MM-dd')}
             min={fromDate.toFormat('yyyy-MM-dd')}
             max={DateTime.local().toFormat('yyyy-MM-dd')}
-            on:change={(event) => onToDateChanged(event)}
+            on:change={(event) => onDateChanged('toDate', event)}
         />
     </div>
 </div>
@@ -235,7 +228,7 @@
                 <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
                 <div class="column has-text-right">
                     <span>
-                        {sign(balanceHistoryItem.balanceChangeType)}
+                        {getSign(balanceHistoryItem.balanceChangeType)}
                         {moneyStyler(balanceHistoryItem.amount)}
                         €
                     </span>
