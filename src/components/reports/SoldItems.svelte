@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { UnitType } from '../../scripts/stock/UnitType';
+    import { moneyStyler } from '../../scripts/common/Helper';
 
     /**
      * A list of items sold in a time window (quantity-sold-list response)
@@ -25,9 +26,9 @@
                 {item.quantitySold}
                 {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}
             </div>
-            <div class="column has-text-centered is-hidden-touch">{item.vat}%</div>
-            <div class="column has-text-centered is-hidden-touch">{item.totalVat}€</div>
-            <div class="column has-text-right">{item.grossAmount}€</div>
+            <div class="column has-text-centered is-hidden-touch">{Math.floor(item.vat * 100)} %</div>
+            <div class="column has-text-centered is-hidden-touch">{moneyStyler(item.totalVat)} €</div>
+            <div class="column has-text-right">{moneyStyler(item.grossAmount)} €</div>
         </div>
     {/each}
 {/if}

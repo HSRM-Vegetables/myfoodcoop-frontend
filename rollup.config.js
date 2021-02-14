@@ -30,9 +30,10 @@ export default {
 			}),
 			svelte({
 				preprocess: sveltePreprocess(),
-				dev,
-				hydratable: true,
-				emitCss: true
+				compilerOptions:  {
+					dev,
+					hydratable: true,
+				}
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
@@ -79,9 +80,12 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
 			svelte({
-				generate: 'ssr',
-				hydratable: true,
-				dev
+				compilerOptions: {
+					generate: 'ssr',
+					hydratable: true,
+					dev,
+				},
+				emitCss: false
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
