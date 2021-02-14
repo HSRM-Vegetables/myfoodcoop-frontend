@@ -226,11 +226,14 @@
                 isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'}
                 on:click={() => handleListItemClick(balanceHistoryItem)}
             >
-                <div class="columns is-mobile">
+                <div
+                    class="columns is-mobile"
+                    class:has-text-success={balanceHistoryItem.balanceChangeType === 'TOPUP'}
+                    class:has-text-danger={balanceHistoryItem.balanceChangeType === 'PURCHASE'}
+                >
                     <div class="column has-text-left">
                         <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
                     </div>
-                    <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
                     <div class="column has-text-right">
                         <span>
                             {getSign(balanceHistoryItem.balanceChangeType)}
