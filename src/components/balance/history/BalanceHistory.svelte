@@ -9,6 +9,7 @@
     import CenteredLoader from '../../common/CenteredLoader.svelte';
     import MobileReloadButton from '../../common/MobileReloadButton.svelte';
     import Button from '../../common/Button.svelte';
+    import NoData from '../../common/NoData.svelte'
 
     /**
      * Unique of id of the user
@@ -217,28 +218,32 @@
     </div>
 </div>
 
-<CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
-    {#each balanceHistoryItems as balanceHistoryItem}
-        <ListItem
-            size="small"
-            isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'}
-            on:click={() => handleListItemClick(balanceHistoryItem)}
-        >
-            <div class="columns is-mobile">
-                <div class="column has-text-left">
-                    <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
+{#if balanceHistoryItems && balanceHistoryItems.length > 0}
+    <CenteredLoader isLoading={isLoading} displayBackgroundWhileLoading={balanceHistoryItems.length > 0}>
+        {#each balanceHistoryItems as balanceHistoryItem}
+            <ListItem
+                size="small"
+                isClickable={balanceHistoryItem.balanceChangeType === 'PURCHASE'}
+                on:click={() => handleListItemClick(balanceHistoryItem)}
+            >
+                <div class="columns is-mobile">
+                    <div class="column has-text-left">
+                        <span>{DateTime.fromISO(balanceHistoryItem.createdOn).toFormat('dd.MM.yyyy HH:mm')}</span>
+                    </div>
+                    <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
+                    <div class="column has-text-right">
+                        <span>
+                            {getSign(balanceHistoryItem.balanceChangeType)}
+                            {moneyStyler(balanceHistoryItem.amount)}
+                            €
+                        </span>
+                    </div>
                 </div>
-                <div class="column has-text-centered"><span>{balanceHistoryItem.balanceChangeType}</span></div>
-                <div class="column has-text-right">
-                    <span>
-                        {getSign(balanceHistoryItem.balanceChangeType)}
-                        {moneyStyler(balanceHistoryItem.amount)}
-                        €
-                    </span>
-                </div>
-            </div>
-        </ListItem>
-    {/each}
-</CenteredLoader>
+            </ListItem>
+        {/each}
+    </CenteredLoader>
 
-<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+{:else}
+    <NoData />
+{/if}
