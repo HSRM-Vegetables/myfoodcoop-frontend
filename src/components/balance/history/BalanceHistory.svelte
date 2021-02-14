@@ -99,8 +99,11 @@
             const offset = currentPageIndex * pageSize;
             const limit = pageSize;
 
+            const fromDateStr = newFromDate.toFormat('yyyy-MM-dd');
+            const toDateStr = newToDate.toFormat('yyyy-MM-dd');
+
             // Query backend for balance history items within currently selected date range
-            const response = await Balance.getHistory(userId, newFromDate, newToDate, offset, limit);
+            const response = await Balance.getHistory(userId, fromDateStr, toDateStr, offset, limit);
 
             // No error thrown -> Hide error message
             error = null;
@@ -141,7 +144,7 @@
 
     /**
      * Handle date input change -> Save date and load data if both dates (fromDate and toDate) are set
-     * 
+     *
      * @param changedDate Which date was changed, either 'fromDate' or 'toDate'
      */
     async function onDateChanged(changedDate, event) {

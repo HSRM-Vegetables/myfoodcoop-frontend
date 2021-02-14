@@ -74,11 +74,7 @@ export default class Balance {
     */
     static async getHistory(userId, fromDate, toDate, offset, limit) {
         const url = `balance/${userId}/history`;
-
-        const fromDateStr = fromDate.toFormat('yyyy-MM-dd');
-        const toDateStr = toDate.toFormat('yyyy-MM-dd');
-
-        const params = `fromDate=${fromDateStr}&toDate=${toDateStr}&offset=${offset}&limit=${limit}`
+        const params = `fromDate=${fromDate}&toDate=${toDate}&offset=${offset}&limit=${limit}`
 
         return Fetch.get(`${url}?${params}`, getAuthorizationHeader());
     }
