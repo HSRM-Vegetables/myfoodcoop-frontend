@@ -7,6 +7,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     let requestError;
     let isLoading = true;
@@ -15,12 +16,26 @@
     onMount(async () => {
         try {
             purchaseList = await Purchase.getPurchaseList();
+            pageCount = Math.ceil(purchaseList.purchases.length / pageSize);
         } catch (error) {
             requestError = error;
         } finally {
             isLoading = false;
         }
     });
+
+    let currentPage = 0;
+    const pageSize = 10;
+    let pageCount;
+    let offset = currentPage * pageSize;
+
+    /**
+     * Called when user selected new page in pagination bar
+     */
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
+    }
 </script>
 
 <style>
@@ -54,7 +69,7 @@
         <div class="column">Preis</div>
         <div class="column">Details</div>
     </div>
-    {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
+    {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)).slice(offset, offset + pageSize) as purchase}
         <div class="columns is-mobile">
             <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
             <div class="column has-text-centered">{purchase.items.length}</div>
@@ -69,6 +84,8 @@
             </div>
         </div>
     {/each}
+
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 {:else}
     <NoData text="Es wurden noch keine Einkäufe getätigt." />
 {/if}

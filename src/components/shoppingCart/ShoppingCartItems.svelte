@@ -44,26 +44,30 @@
         }
     }
 
-    let currentPageIndex = 0;
+    let currentPage = 0;
     const pageSize = 5;
-    let pageCount = Math.ceil(cartItems.length / pageSize);
+    let pageCount;
+    let offset;
 
-    let offset = currentPageIndex * pageSize;
-    let limit = pageSize;
+    // Update page count when item list changes
+    // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
+    $: {
+        cartItems;
+        pageCount = Math.ceil(cartItems.length / pageSize);
+        currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
+        offset = currentPage * pageSize;
+    }
 
     /**
-     * Update the pagination details provided by the pagination component
+     * Called when user selected new page in pagination bar
      */
-    function updatePaginationDetails(event) {
-        currentPageIndex = event.detail.newPageIndex;
-
-        // Calc offset and limit pagination params from current page index and page size
-        offset = currentPageIndex * pageSize;
-        limit = pageSize;
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
     }
 </script>
 
-{#each cartItems.slice(offset, offset + limit) as item}
+{#each cartItems.slice(offset, offset + pageSize) as item}
     <ListItem isClickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
@@ -103,4 +107,4 @@
     </ListItem>
 {/each}
 
-<Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+<Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />

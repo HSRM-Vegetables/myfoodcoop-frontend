@@ -53,22 +53,26 @@
         });
     }
 
-    let currentPageIndex = 0;
+    let currentPage = 0;
     const pageSize = 5;
-    let pageCount = Math.ceil(stockItems.length / pageSize);
+    let pageCount;
+    let offset;
 
-    let offset = currentPageIndex * pageSize;
-    let limit = pageSize;
+    // Update page count when item list changes
+    // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
+    $: {
+        stockItems;
+        pageCount = Math.ceil(stockItems.length / pageSize);
+        currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
+        offset = currentPage * pageSize;
+    }
 
     /**
-     * Update the pagination details provided by the pagination component
+     * Called when user selected new page in pagination bar
      */
-    function updatePaginationDetails(event) {
-        currentPageIndex = event.detail.newPageIndex;
-
-        // Calc offset and limit pagination params from current page index and page size
-        offset = currentPageIndex * pageSize;
-        limit = pageSize;
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
     }
 </script>
 
@@ -91,7 +95,7 @@
 {#if isLoading}
     <Loader bind:isLoading />
 {:else if stockItems && stockItems.length > 0}
-    {#each stockItems.slice(offset, offset + limit) as item}
+    {#each stockItems.slice(offset, offset + pageSize) as item}
         <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns m-0 is-mobile">
@@ -139,7 +143,7 @@
         </ListItem>
     {/each}
 
-    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
     
 {:else}
     <NoData text="Der Bestand ist leer" />
