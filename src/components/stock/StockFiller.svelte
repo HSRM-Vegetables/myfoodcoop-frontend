@@ -15,6 +15,7 @@
     import { stockItems } from '../../stores/stock';
     import ListItem from '../common/ListItem.svelte';
     import { toastText } from '../../stores/toast';
+    import { onMount } from 'svelte';
 
     /**
      * Optional: The item whose values the form is pre-filled with
@@ -64,6 +65,7 @@
     let itemDetailsError = false;
     let deliveryDetailsError = false;
     let errorHint;
+    let areMandatoryFieldsFilled = false;
 
     let requestError;
     let saveText;
@@ -83,6 +85,12 @@
 
     // call the method as soon as the value of item changes
     $: itemChanged(item);
+
+    onMount(() => {
+        if (item || edit) {
+            areInputsValid();
+        }
+    });
 
     /**
      * Update the unit type which should be displayed
@@ -153,8 +161,10 @@
         deliveryDetailsError = producerTextFieldError || supplierTextFieldError;
 
         if (itemDetailsError || deliveryDetailsError) {
+            areMandatoryFieldsFilled = false;
             return false;
         }
+        areMandatoryFieldsFilled = true;
         return true;
     }
 
@@ -313,11 +323,18 @@
     .tab {
         display: inline;
         cursor: pointer;
-        padding: 15px 0;
+        padding: 10px 10px;
+        width: 100%;
+        text-align: center;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom: 2px solid whitesmoke;
     }
     .tab.is-active {
         color: #1d72aa;
         font-weight: bold;
+        border: 2px solid whitesmoke;
+        border-bottom: 0;
     }
     .logo-images {
         max-width: 90px;
@@ -372,7 +389,6 @@
         <span>Zertifikate</span>
     </div>
 </div>
-<hr style="margin-top: 0;" />
 <div>
     <div class="form">
         <div class="item-block" class:is-active={currentTabName === 'article'}>
@@ -393,6 +409,7 @@
                     isInErrorState={articleTextFieldError}
                     charLimit="250"
                     value={item ? item.name : ''}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="form-row pt-4">
@@ -412,6 +429,7 @@
                     minimum="0"
                     isInErrorState={pricePerUnitTextFieldError}
                     value={item ? item.pricePerUnit : ''}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="pt-4">
@@ -424,6 +442,7 @@
                     minimum="0"
                     isInErrorState={vatTextFieldError}
                     value={item ? Math.floor(item.vat * 100) : 7}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="pt-4">
@@ -436,12 +455,18 @@
                     minimum="0"
                     isInErrorState={quantityTextFieldError}
                     value={item ? item.quantity : ''}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="pt-4">
                 <div class="has-text-left pb-2">Beschreibung</div>
                 <div class="form-row is-relative">
-                    <textarea class="textarea" placeholder="Beschreibung" bind:this={descriptionElement}>
+                    <textarea
+                        class="textarea"
+                        placeholder="Beschreibung"
+                        bind:this={descriptionElement}
+                        on:change={areInputsValid}
+                    >
                         {item ? item.description : ''}
                     </textarea>
                 </div>
@@ -465,6 +490,7 @@
                     isInErrorState={producerTextFieldError}
                     charLimit="250"
                     value={item ? item.producer : ''}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="pt-4">
@@ -476,6 +502,7 @@
                     isInErrorState={supplierTextFieldError}
                     charLimit="250"
                     value={item ? item.supplier : ''}
+                    on:change={areInputsValid}
                 />
             </div>
             <div class="pt-5 pb-2">
@@ -551,12 +578,16 @@
         </div>
         <hr />
         <div class="container has-text-centered">
+            {#if !areMandatoryFieldsFilled}
+                <div class="has-text-danger mb-4">Bitte überprüfe deine Eingabedaten</div>
+            {/if}
             <Button
                 text={saveText}
                 on:click={() => addOrUpadteItem(false)}
                 class="button is-primary mb-4"
                 icon={item ? mdiPencil : mdiPlusBox}
                 size="full-width"
+                disabled={!areMandatoryFieldsFilled}
             />
             <br />
             {#if !item}
@@ -567,7 +598,8 @@
                     icon={mdiPlusBoxMultiple}
                     size="full-width"
                     supplierTextField
-                />
+                    disabled={!areMandatoryFieldsFilled}
+                    />
                 <br />
             {/if}
 
