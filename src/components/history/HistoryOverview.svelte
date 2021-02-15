@@ -69,7 +69,9 @@
         <div class="column">Preis</div>
         <div class="column">Details</div>
     </div>
-    {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)).slice(offset, offset + pageSize) as purchase}
+    {#each purchaseList.purchases
+        .sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn))
+        .slice(offset, offset + pageSize) as purchase}
         <div class="columns is-mobile">
             <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
             <div class="column has-text-centered">{purchase.items.length}</div>

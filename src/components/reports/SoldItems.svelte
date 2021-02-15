@@ -19,7 +19,7 @@
     // Update page count when item list changes
     // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
     $: {
-        soldItems;
+        soldItems = soldItems;
         pageCount = Math.ceil(soldItems.length / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
         offset = currentPage * pageSize;
@@ -42,7 +42,9 @@
         <div class="column has-text-weight-bold has-text-centered is-hidden-touch">Steuern</div>
         <div class="column has-text-weight-bold has-text-right">Brutto</div>
     </div>
-    {#each soldItems.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)).slice(offset, offset + pageSize) as item}
+    {#each soldItems
+        .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1))
+        .slice(offset, offset + pageSize) as item}
         <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.id })}>
             <div class="column break-all has-text-left">{item.name}</div>
             <div class="column has-text-centered">

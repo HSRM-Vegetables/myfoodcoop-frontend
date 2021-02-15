@@ -19,7 +19,7 @@
     // Update page count when item list changes
     // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
     $: {
-        userBalanceList;
+        userBalanceList = userBalanceList;
         pageCount = Math.ceil(userBalanceList.length / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
         offset = currentPage * pageSize;

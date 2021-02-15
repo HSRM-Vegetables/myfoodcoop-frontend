@@ -52,7 +52,7 @@
     // Update page count when item list changes
     // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
     $: {
-        cartItems;
+        cartItems = cartItems;
         pageCount = Math.ceil(cartItems.length / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
         offset = currentPage * pageSize;

@@ -61,7 +61,7 @@
     // Update page count when item list changes
     // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
     $: {
-        stockItems;
+        stockItems = stockItems;
         pageCount = Math.ceil(stockItems.length / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
         offset = currentPage * pageSize;
@@ -144,7 +144,6 @@
     {/each}
 
     <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
-    
 {:else}
     <NoData text="Der Bestand ist leer" />
 {/if}
