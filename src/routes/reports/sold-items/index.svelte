@@ -3,6 +3,7 @@
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
     import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
+    import { moneyStyler } from '../../../scripts/common/Helper';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
@@ -13,7 +14,6 @@
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
-    import { moneyStyler } from '../../../scripts/common/Helper';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
     $title = 'Was wurde gekauft';
