@@ -41,7 +41,7 @@
             <div class="has-text-centered">
                 <Button
                     text="Bestand hinzufügen"
-                    class="button is-primary mb-3"
+                    class="button is-primary mb-3 mt-3"
                     href="/stock/item/new"
                     size="full-width"
                     icon={mdiPlusBox}
