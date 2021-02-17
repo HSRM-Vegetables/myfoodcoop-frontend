@@ -37,6 +37,19 @@
     {#if $areStockItemsUpdating}
         <Loader />
     {:else}
+        <AuthorizeByRoles allowedRoles={[Roles.ORDERER]} displayPermissionNotAllowed={false}>
+            <div class="has-text-centered">
+                <Button
+                    text="Bestand hinzufügen"
+                    class="button is-primary mb-3 mt-3"
+                    href="/stock/item/new"
+                    size="full-width"
+                    icon={mdiPlusBox}
+                />
+            </div>
+            <hr />
+        </AuthorizeByRoles>
+
         {#if $spoilsSoonItems && $spoilsSoonItems.length > 0}
             <!-- Items spoiling soon -->
             <div>{getLocalizedStockStatus(StockStatus.SPOILSSOON)}</div>
@@ -89,21 +102,10 @@
                     on:select={onSelectItem}
                     isClickable={true}
                 />
+                <hr />
             {/if}
-
-            <div class="has-text-centered">
-                <Button
-                    text="Bestand hinzufügen"
-                    class="button is-primary mt-6"
-                    href="/stock/item/new"
-                    size="full-width"
-                    icon={mdiPlusBox}
-                />
-            </div>
         </AuthorizeByRoles>
     {/if}
-
-    <hr />
 
     <div class="has-text-centered">
         <Button goHome={true} size="full-width" />
