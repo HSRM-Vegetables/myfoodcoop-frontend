@@ -54,10 +54,7 @@
     }
 
     async function fetchItems() {
-        disposedItems = await DisposedItems.getItems(
-            localFrom.toFormat('yyyy-MM-dd'),
-            localTo.toFormat('yyyy-MM-dd')
-        );
+        disposedItems = await DisposedItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
     }
 
     async function loadItems(period, name, forceUpdate = false) {
