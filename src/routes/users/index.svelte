@@ -48,6 +48,13 @@
         searchTerm = searchTermElement.getValue();
     }
 
+    // Pagination
+    //
+    // Performing client-side pagination (instead of server-side) because filtering items
+    // requires more items than contained within a single page delivered by the backend.
+    // Otherwise, pages would contain few or no items at all after filtering. Also,
+    // calculating the total number of pages after filting requires knowledge about all items.
+
     let notActivatedUsersCurrentPage = 0;
     const notActivatedUsersPageSize = 10;
     let notActivatedUsersPageCount;
