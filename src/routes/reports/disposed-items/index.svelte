@@ -53,6 +53,13 @@
         };
     }
 
+    async function fetchItems() {
+        disposedItems = await DisposedItems.getItems(
+            localFrom.toFormat('yyyy-MM-dd'),
+            localTo.toFormat('yyyy-MM-dd')
+        );
+    }
+
     async function loadItems(period, name, forceUpdate = false) {
         localFrom = periods[period].fromDate;
         localTo = undefined;
@@ -73,10 +80,7 @@
 
         try {
             isLoading = true;
-            disposedItems = await DisposedItems.getItems(
-                localFrom.toFormat('yyyy-MM-dd'),
-                localTo.toFormat('yyyy-MM-dd')
-            );
+            await fetchItems();
             cache[period] = disposedItems;
 
             // reset the error to default value to display the results
@@ -166,10 +170,7 @@
         try {
             isLoading = true;
 
-            disposedItems = await DisposedItems.getItems(
-                localFrom.toFormat('yyyy-MM-dd'),
-                localTo.toFormat('yyyy-MM-dd')
-            );
+            await fetchItems();
 
             // reset the error to default value to display the results
             requestError = undefined;
