@@ -7,9 +7,11 @@
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
     import Pagination from '../pagination/Pagination.svelte';
+    import CenteredLoader from '../common/CenteredLoader.svelte';
 
     let requestError;
     let isLoading = true;
+    let arePurchasesUpdating = true;
 
     let purchaseList;
 
@@ -34,7 +36,7 @@
     async function updatePurchases() {
         try {
             // Start loading indicator
-            isLoading = true;
+            arePurchasesUpdating = true;
 
             // Calc offset and limit pagination params from current page index and page size
             const offset = currentPage * pageSize;
@@ -57,6 +59,7 @@
             requestError = err;
         } finally {
             // Stop loading indicator
+            arePurchasesUpdating = false;
             isLoading = false;
         }
     }
@@ -93,21 +96,24 @@
         <div class="column">Preis</div>
         <div class="column">Details</div>
     </div>
-    {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
-        <div class="columns is-mobile">
-            <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
-            <div class="column has-text-centered">{purchase.items.length}</div>
-            <div class="column">{moneyStyler(purchase.totalPrice)} €</div>
-            <div class="column">
-                <a href="/history/{purchase.id}" class="button is-small is-primary">
-                    <span class="icon">
-                        <Icon icon={mdiMagnify} />
-                    </span>
-                    <span>Details</span>
-                </a>
+
+    <CenteredLoader isLoading={arePurchasesUpdating} displayBackgroundWhileLoading={true}>
+        {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
+            <div class="columns is-mobile">
+                <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
+                <div class="column has-text-centered">{purchase.items.length}</div>
+                <div class="column">{moneyStyler(purchase.totalPrice)} €</div>
+                <div class="column">
+                    <a href="/history/{purchase.id}" class="button is-small is-primary">
+                        <span class="icon">
+                            <Icon icon={mdiMagnify} />
+                        </span>
+                        <span>Details</span>
+                    </a>
+                </div>
             </div>
-        </div>
-    {/each}
+        {/each}
+    </CenteredLoader>
 
     <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 {:else}
