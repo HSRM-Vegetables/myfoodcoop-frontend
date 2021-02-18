@@ -1,26 +1,25 @@
 # Frontend
 
 ## Installation
-* Installiere dir NodeJS (Ohne die C / C++ Tools falls du in der Installation danach gefragt wirst)
-* Gib Testweise mal nacheinander `node` und `npm` in eine Kommandozeile ein. Bei beiden sollte ein Rückmeldung kommen, die dir zeigt, dass die beiden Tools installiert sind!
-* Clone das Repository hier.
-* Gehe in den entsprechend Ordner, vermutlich `cd myfoodcoop-frontend`
-* Installiere alle Abhängigkeiten mit `npm install`
-* Starte die Dev-Umgebung: `npm run dev`
-* Öffne deine Browser und rufe: `http://localhost:3000` auf
+* Install NodeJS (without the C / C++ tools if you are asked for them)
+* Check if node and npm are installed by running `node -v` and `npm -v` in the command line
+* Clone this repository: `git clone https://github.com/HSRM-Vegetables/myfoodcoop-frontend.git`
+* Change to the new directory: `cd myfoodcoop-frontend`
+* Install dependencies: `npm install`
+* Launch the dev environment: `npm run dev`
+* Open your browser and go to: `http://localhost:3000`
 
-## Hinweise
-* Du kannst zB. mal die Datei `src/routes/index.svelte` abändern und die Datei speichern. Anschließend solltest du sehen wie sich dein Browser gleich refresht.
-* Ich habe in verschieden Ordnern `Readme.md`'s verteilt. Lest die euch bei Gelegenheit mal durch.
+## Note
+* When you edit a file (e.g. `src/routes/index.svelte`) and save it, you should see your browser reload directly.
 
 ## Code linting
-* Eslint: `npm run lint`. Linted alle Javascript-Dateien sowie den Javascript Part in den Svelte Dateien
-* Prettier: `npm run format`. Formatiert die Svelte-Dateien, vorallem das HTML darin.
+* Eslint: `npm run lint`. Linted all javascript files as well as the javascript part in the svelte files
+* Prettier: `npm run format`. Formats the svelte files, especially the HTML in them.
 
 ## Stack
-* Wir verwenden [Sapper](https://sapper.svelte.dev), welches auf [Svelte](https://svelte.dev) basiert.
-* Als CSS Framwork setzen wir momentan auf [Bulma](https://bulma.io/) (Wichtig: Bulma wird ohne JavaScript ausgeliefert)
-* Als Icon Library benutzen wir [MaterialDesignIcons](https://materialdesignicons.com/). Dort kannst du auch nach neuen Icons suchen.
+* We use [Sapper](https://sapper.svelte.dev), which is based on [Svelte](https://svelte.dev).
+* As CSS framework we use [Bulma](https://bulma.io/), which works without JavaScript.
+* As icon library we use [MaterialDesignIcons](https://materialdesignicons.com/).
 
 ## Deployment
 * The environment variable `BACKEND_API_URL` should be set to the value of the backend url. Be sure that the value of this enviroment variable does **not** contain a trailing `/`
