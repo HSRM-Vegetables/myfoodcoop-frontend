@@ -69,7 +69,7 @@ export default class Balance {
      * @param {string} userId unique user ID
      * @param {string} fromDate start date
      * @param {string} toDate end date
-     * @param {number} offset offset for pagination
+     * @param {number} offset offset for pagination if pagination required
      * @param {number} limit number of items per page for pagination
     */
     static async getHistory(userId, fromDate, toDate, offset, limit) {
