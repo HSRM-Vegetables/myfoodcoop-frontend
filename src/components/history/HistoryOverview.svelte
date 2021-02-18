@@ -13,28 +13,54 @@
     let isLoading = true;
 
     let purchaseList;
-    onMount(async () => {
-        try {
-            purchaseList = await Purchase.getPurchaseList();
-            pageCount = Math.ceil(purchaseList.purchases.length / pageSize);
-        } catch (error) {
-            requestError = error;
-        } finally {
-            isLoading = false;
-        }
-    });
 
     let currentPage = 0;
     const pageSize = 10;
     let pageCount;
     let offset = currentPage * pageSize;
 
+    updatePurchases();
+
     /**
      * Called when user selected new page in pagination bar
      */
     function onPageChanged(event) {
         currentPage = event.detail.newPageIndex;
-        offset = currentPage * pageSize;
+        
+        updatePurchases();
+    }
+
+    /**
+     * Update the shown page of purchases
+     */
+    async function updatePurchases() {
+        try {
+            // Start loading indicator
+            isLoading = true;
+
+            // Calc offset and limit pagination params from current page index and page size
+            const offset = currentPage * pageSize;
+            const limit = pageSize;
+
+            // Query backend for purchases
+            purchaseList = await Purchase.getPurchaseList(offset, limit);
+
+            // No error thrown -> Hide error message
+            requestError = undefined;
+
+            // Calc and save total page count
+            const totalItems = purchaseList.pagination.total;
+            pageCount = Math.ceil(totalItems / pageSize);
+
+            // Keep currently selected page, except when new data result in less pages, then switch to last page
+            currentPage = Math.min(currentPage, pageCount);
+        } catch (err) {
+            // Show error message
+            requestError = err;
+        } finally {
+            // Stop loading indicator
+            isLoading = false;
+        }
     }
 </script>
 

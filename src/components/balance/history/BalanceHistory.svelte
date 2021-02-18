@@ -18,7 +18,7 @@
 
     let error;
 
-    let currentPageIndex = 0;
+    let currentPage = 0;
     const pageSize = 10;
     let pageCount;
 
@@ -70,8 +70,8 @@
     /**
      * Update the pagination details provided by the pagination component
      */
-    function updatePaginationDetails(event) {
-        currentPageIndex = event.detail.newPageIndex;
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
 
         updateBalanceHistoryItems(fromDate, toDate);
     }
@@ -96,12 +96,12 @@
             // Start loading indicator
             isLoading = true;
 
-            // Calc offset and limit pagination params from current page index and page size
-            const offset = currentPageIndex * pageSize;
-            const limit = pageSize;
-
             const fromDateStr = newFromDate.toFormat('yyyy-MM-dd');
             const toDateStr = newToDate.toFormat('yyyy-MM-dd');
+
+            // Calc offset and limit pagination params from current page index and page size
+            const offset = currentPage * pageSize;
+            const limit = pageSize;
 
             // Query backend for balance history items within currently selected date range
             const response = await Balance.getHistory(userId, fromDateStr, toDateStr, offset, limit);
@@ -109,7 +109,6 @@
             // No error thrown -> Hide error message
             error = null;
 
-            // Save balance history items
             balanceHistoryItems = response.balanceHistoryItems;
 
             // Calc and save total page count
@@ -117,7 +116,7 @@
             pageCount = Math.ceil(totalItems / pageSize);
 
             // Keep currently selected page, except when new data result in less pages, then switch to last page
-            currentPageIndex = Math.min(currentPageIndex, pageCount);
+            currentPage = Math.min(currentPage, pageCount);
         } catch (err) {
             // Show error message
             error = err;
@@ -246,7 +245,7 @@
         {/each}
     </CenteredLoader>
 
-    <Pagination currentPageIndex={currentPageIndex} pageCount={pageCount} on:update={updatePaginationDetails} />
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 {:else}
     <NoData />
 {/if}
