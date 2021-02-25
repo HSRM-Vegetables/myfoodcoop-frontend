@@ -46,7 +46,7 @@ export default class Stock {
         return Fetch.post(`stock/`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
-            'pricePerUnit': moneyStyler(pricePerUnit),
+            'pricePerUnit': pricePerUnit,
             'quantity': moneyStyler(quantity),
             'description': description,
             'sustainablyProduced': sustainablyProduced,
@@ -106,7 +106,7 @@ export default class Stock {
         return Fetch.patch(`stock/${id}`, {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
-            'pricePerUnit': moneyStyler(pricePerUnit),
+            'pricePerUnit': pricePerUnit,
             'quantity': moneyStyler(quantity),
             'description': description,
             'sustainablyProduced': sustainablyProduced,

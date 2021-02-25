@@ -51,7 +51,7 @@ export default class ShoppingCart {
     totalPrice() {
         let totalPrice = 0.0;
         this.cartItems.forEach((item) => {
-            totalPrice += (item.stockItem.pricePerUnit * item.quantity);
+            totalPrice += item.stockItem.pricePerUnit ? (item.stockItem.pricePerUnit * item.quantity) : 0;
         });
 
         return totalPrice.toFixed(2);

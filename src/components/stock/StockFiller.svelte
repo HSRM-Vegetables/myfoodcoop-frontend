@@ -57,13 +57,10 @@
     let selectedStatus = StockStatus.ORDERED;
 
     let articleTextFieldError = false;
-    let pricePerUnitTextFieldError = false;
     let vatTextFieldError = false;
     let quantityTextFieldError = false;
-    let producerTextFieldError = false;
     let supplierTextFieldError = false;
     let itemDetailsError = false;
-    let deliveryDetailsError = false;
     let errorHint;
     let tabsContainer;
 
@@ -107,20 +104,13 @@
     function areInputsValid() {
         errorHint = undefined;
         articleTextFieldError = false;
-        pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
-        producerTextFieldError = false;
         supplierTextFieldError = false;
         vatTextFieldError = false;
 
         // No name set
         if (!articleTextField || !articleTextField.getValue()) {
             articleTextFieldError = true;
-        }
-
-        // No price or price is negative
-        if (!pricePerUnitTextField || !pricePerUnitTextField.getValue() || pricePerUnitTextField.getValue() < 0) {
-            pricePerUnitTextFieldError = true;
         }
 
         // no quantity or quantity is negative
@@ -131,11 +121,6 @@
         // Quantity is not a number
         if (Number.isNaN(quantityTextField.getValue())) {
             quantityTextFieldError = true;
-        }
-
-        // Price is not a number
-        if (Number.isNaN(pricePerUnitTextField.getValue())) {
-            pricePerUnitTextFieldError = true;
         }
 
         // Vat is not a number, and in valid range
@@ -149,23 +134,17 @@
             errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
         }
 
-        if (!producerTextField || !producerTextField.getValue() || producerTextField.getValue() < 0) {
-            producerTextFieldError = true;
-        }
-
         if (!supplierTextField || !supplierTextField.getValue()) {
             supplierTextFieldError = true;
         }
-        itemDetailsError =
-            articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError || vatTextFieldError;
-        deliveryDetailsError = producerTextFieldError || supplierTextFieldError;
+        itemDetailsError = articleTextFieldError || quantityTextFieldError || vatTextFieldError;
 
-        if (itemDetailsError || deliveryDetailsError) {
+        if (itemDetailsError || supplierTextFieldError) {
             tabsContainer.scrollIntoView();
 
             if (itemDetailsError) {
                 currentTabName = 'article';
-            } else if (deliveryDetailsError) {
+            } else if (supplierTextFieldError) {
                 currentTabName = 'deliveryDetails';
             }
 
@@ -203,7 +182,6 @@
         if (!areInputsValid()) {
             return;
         }
-
         try {
             if (item && edit) {
                 await Stock.updateItem(
@@ -389,7 +367,7 @@
         class:is-active={currentTabName === 'deliveryDetails'}
         on:click={() => tabClick('deliveryDetails')}
     >
-        <span class:is-error={deliveryDetailsError}>Lieferdetails</span>
+        <span class:is-error={supplierTextFieldError}>Lieferdetails</span>
     </div>
     <div class="tab" class:is-active={currentTabName === 'certificate'} on:click={() => tabClick('certificate')}>
         <span>Zertifikate</span>
@@ -429,10 +407,9 @@
                     bind:this={pricePerUnitTextField}
                     type="number"
                     placeholder="Warenpreis"
-                    label="Warenpreis *"
+                    label="Warenpreis"
                     decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                     minimum="0"
-                    isInErrorState={pricePerUnitTextFieldError}
                     value={item ? item.pricePerUnit : ''}
                 />
             </div>
@@ -483,8 +460,7 @@
                     bind:this={producerTextField}
                     type="text"
                     placeholder="Erzeuger"
-                    label="Erzeuger *"
-                    isInErrorState={producerTextFieldError}
+                    label="Erzeuger"
                     charLimit="250"
                     value={item ? item.producer : ''}
                 />
