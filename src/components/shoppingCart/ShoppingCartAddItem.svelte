@@ -42,7 +42,7 @@
         const quantity = quantityElement ? quantityElement.getValue() : $currentShoppingItemQuantity;
 
         if (!Number.isNaN(stockItem.pricePerUnit) && !Number.isNaN(quantity)) {
-            currentTotal = (stockItem.pricePerUnit * quantity).toFixed(2);
+            currentTotal = stockItem.pricePerUnit ? (stockItem.pricePerUnit * quantity).toFixed(2) : 0;
             currentTaxTotal = getTaxPriceFromItem(stockItem) * quantity;
         }
     }
@@ -121,7 +121,7 @@
 
     <div class="total-container">
         <h2>Gesamtpreis</h2>
-        <div class="total">{currentTotal} €</div>
+        <div class="total">{moneyStyler(currentTotal)} €</div>
         <div>davon Umsatzsteuersatz ({moneyStyler(stockItem.vat * 100)} %): {moneyStyler(currentTaxTotal)} €</div>
     </div>
 
