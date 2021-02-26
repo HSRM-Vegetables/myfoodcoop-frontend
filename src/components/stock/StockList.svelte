@@ -8,6 +8,7 @@
     import ListItem from '../common/ListItem.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     /**
      * An Array of StockItems to be displayed
@@ -51,6 +52,35 @@
             id: itemdID,
         });
     }
+
+    // Pagination
+    //
+    // Performing client-side pagination (instead of server-side) because filtering items
+    // requires more items than contained within a single page delivered by the backend.
+    // Otherwise, pages would contain few or no items at all after filtering. Also,
+    // calculating the total number of pages after filting requires knowledge about all items.
+
+    let currentPage = 0;
+    const pageSize = 5;
+    let pageCount;
+    let offset;
+
+    // Update page count when item list changes
+    // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
+    $: {
+        stockItems = stockItems;
+        pageCount = Math.ceil(stockItems.length / pageSize);
+        currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
+        offset = currentPage * pageSize;
+    }
+
+    /**
+     * Called when user selected new page in pagination bar
+     */
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
+    }
 </script>
 
 <style>
@@ -72,7 +102,7 @@
 {#if isLoading}
     <Loader bind:isLoading />
 {:else if stockItems && stockItems.length > 0}
-    {#each stockItems as item}
+    {#each stockItems.slice(offset, offset + pageSize) as item}
         <ListItem isClickable={isClickable} highlight={highlight} on:click={(event) => selectItem(event, item.id)}>
             <!--First column with item name, buttons, stock quantity and price -->
             <div class="columns m-0 is-mobile">
@@ -119,6 +149,8 @@
             </div>
         </ListItem>
     {/each}
+
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 {:else}
     <NoData text="Der Bestand ist leer" />
 {/if}

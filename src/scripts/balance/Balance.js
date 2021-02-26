@@ -2,6 +2,7 @@ import Fetch, { getAuthorizationHeader } from '../api/Fetch';
 import CustomError, { ErrorCodes } from '../api/CustomError';
 
 export default class Balance {
+
     /**
      * Requests the current balance for another user from the API
      * @param {string} userId the ID of the desired user
@@ -61,5 +62,20 @@ export default class Balance {
         }, getAuthorizationHeader());
 
         return response.balance;
+    }
+
+    /**
+     * Gets the balance history of the user
+     * @param {string} userId unique user ID
+     * @param {string} fromDate start date
+     * @param {string} toDate end date
+     * @param {number} offset offset for pagination if pagination required
+     * @param {number} limit number of items per page for pagination
+    */
+    static async getHistory(userId, fromDate, toDate, offset, limit) {
+        const url = `balance/${userId}/history`;
+        const params = `fromDate=${fromDate}&toDate=${toDate}&offset=${offset}&limit=${limit}`
+
+        return Fetch.get(`${url}?${params}`, getAuthorizationHeader());
     }
 }

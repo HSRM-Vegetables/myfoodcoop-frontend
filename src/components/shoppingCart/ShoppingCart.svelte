@@ -108,16 +108,20 @@
     <div slot="body">
         <p class="is-size-4">Gesamtpreis: {cart.totalPrice()} €</p>
 
-        <span class="pl-3">davon Umsatzsteuer:
+        <span class="pl-3">
+            davon Umsatzsteuer:
             {moneyStyler(vatDetails.reduce((sum, detail) => sum + detail.amount, 0))}
-            €</span>
+            €
+        </span>
         <br />
         {#each vatDetails as details}
-            <span class="is-size-7 pl-3">davon
+            <span class="is-size-7 pl-3">
+                davon
                 {moneyStyler(details.vat * 100)}
                 %:
                 {moneyStyler(details.amount)}
-                €</span>
+                €
+            </span>
             <br />
         {/each}
 

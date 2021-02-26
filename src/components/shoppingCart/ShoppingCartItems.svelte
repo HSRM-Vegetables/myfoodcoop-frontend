@@ -7,6 +7,7 @@
     import { UnitType } from '../../scripts/stock/UnitType';
     import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
     import ListItem from '../common/ListItem.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     /**
      * An Array of ShoppingCartItems to be displayed
@@ -42,9 +43,31 @@
             goto(`/shopping/stock/${shoppingCartItem.stockItem.id}`);
         }
     }
+
+    let currentPage = 0;
+    const pageSize = 5;
+    let pageCount;
+    let offset;
+
+    // Update page count when item list changes
+    // Also, currentPage might be forced to last page (but at least page 0) if item list shrinks
+    $: {
+        cartItems = cartItems;
+        pageCount = Math.ceil(cartItems.length / pageSize);
+        currentPage = Math.min(currentPage, Math.max(pageCount - 1, 0));
+        offset = currentPage * pageSize;
+    }
+
+    /**
+     * Called when user selected new page in pagination bar
+     */
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
+    }
 </script>
 
-{#each cartItems as item}
+{#each cartItems.slice(offset, offset + pageSize) as item}
     <ListItem isClickable={allowVisitPriceCalculator} on:click={() => goToPriceCalculator(item)}>
         <div class="columns is-mobile">
             <div class="column has-text-left has-text-weight-bold">
@@ -83,3 +106,5 @@
         </div>
     </ListItem>
 {/each}
+
+<Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />

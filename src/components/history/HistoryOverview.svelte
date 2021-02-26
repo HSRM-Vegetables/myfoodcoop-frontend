@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte';
     import { mdiMagnify } from '@mdi/js';
     import Purchase from '../../scripts/purchase/Purchase';
     import Icon from '../common/Icon.svelte';
@@ -7,20 +6,63 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Loader from '../common/Loader.svelte';
     import NoData from '../common/NoData.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
+    import CenteredLoader from '../common/CenteredLoader.svelte';
 
     let requestError;
     let isLoading = true;
+    let arePurchasesUpdating = true;
 
     let purchaseList;
-    onMount(async () => {
+
+    let currentPage = 0;
+    const pageSize = 10;
+    let pageCount;
+
+    updatePurchases();
+
+    /**
+     * Called when user selected new page in pagination bar
+     */
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+
+        updatePurchases();
+    }
+
+    /**
+     * Update the shown page of purchases
+     */
+    async function updatePurchases() {
         try {
-            purchaseList = await Purchase.getPurchaseList();
-        } catch (error) {
-            requestError = error;
+            // Start loading indicator
+            arePurchasesUpdating = true;
+
+            // Calc offset and limit pagination params from current page index and page size
+            const offset = currentPage * pageSize;
+            const limit = pageSize;
+
+            // Query backend for purchases
+            purchaseList = await Purchase.getPurchaseList(offset, limit);
+
+            // No error thrown -> Hide error message
+            requestError = undefined;
+
+            // Calc and save total page count
+            const totalItems = purchaseList.pagination.total;
+            pageCount = Math.ceil(totalItems / pageSize);
+
+            // Keep currently selected page, except when new data result in less pages, then switch to last page
+            currentPage = Math.min(currentPage, pageCount);
+        } catch (err) {
+            // Show error message
+            requestError = err;
         } finally {
+            // Stop loading indicator
+            arePurchasesUpdating = false;
             isLoading = false;
         }
-    });
+    }
 </script>
 
 <style>
@@ -54,21 +96,26 @@
         <div class="column">Preis</div>
         <div class="column">Details</div>
     </div>
-    {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
-        <div class="columns is-mobile">
-            <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
-            <div class="column has-text-centered">{purchase.items.length}</div>
-            <div class="column">{moneyStyler(purchase.totalPrice)} €</div>
-            <div class="column">
-                <a href="/history/{purchase.id}" class="button is-small is-primary">
-                    <span class="icon">
-                        <Icon icon={mdiMagnify} />
-                    </span>
-                    <span>Details</span>
-                </a>
+
+    <CenteredLoader isLoading={arePurchasesUpdating} displayBackgroundWhileLoading={true}>
+        {#each purchaseList.purchases.sort((a, b) => Date.parse(b.createdOn) - Date.parse(a.createdOn)) as purchase}
+            <div class="columns is-mobile">
+                <div class="column">{new Date(purchase.createdOn).toLocaleString()}</div>
+                <div class="column has-text-centered">{purchase.items.length}</div>
+                <div class="column">{moneyStyler(purchase.totalPrice)} €</div>
+                <div class="column">
+                    <a href="/history/{purchase.id}" class="button is-small is-primary">
+                        <span class="icon">
+                            <Icon icon={mdiMagnify} />
+                        </span>
+                        <span>Details</span>
+                    </a>
+                </div>
             </div>
-        </div>
-    {/each}
+        {/each}
+    </CenteredLoader>
+
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 {:else}
     <NoData text="Es wurden noch keine Einkäufe getätigt." />
 {/if}

@@ -3,27 +3,27 @@
     import { goto } from '@sapper/app';
     import { ExportToCsv } from 'export-to-csv';
     import { mdiFileDownload, mdiArrowLeft } from '@mdi/js';
-    import { moneyStyler } from '../../../scripts/common/Helper';
     import ErrorModal from '../../../components/common/ErrorModal.svelte';
     import Loader from '../../../components/common/Loader.svelte';
     import NoData from '../../../components/common/NoData.svelte';
     import Button from '../../../components/common/Button.svelte';
     import Icon from '../../../components/common/Icon.svelte';
-    import SoldItemsComp from '../../../components/reports/SoldItems.svelte';
-    import SoldItems from '../../../scripts/reports/SoldItems';
+    import DisposedItemsComp from '../../../components/reports/DisposedItems.svelte';
+    import DisposedItems from '../../../scripts/reports/DisposedItems';
     import { title, navBalance } from '../../../stores/page';
     import AuthorizeByRoles, { Roles } from '../../../components/common/AuthorizeByRoles.svelte';
     import MobileReloadButton from '../../../components/common/MobileReloadButton.svelte';
+    import { moneyStyler } from '../../../scripts/common/Helper';
 
     // eslint-disable-next-line prefer-const, no-unused-vars
-    $title = 'Was wurde gekauft';
+    $title = 'Was wurde entsorgt';
     // eslint-disable-next-line prefer-const, no-unused-vars
     $navBalance = 'hidden';
 
     let requestError;
     let titleText = 'gestern';
     let isLoading = true;
-    let soldItems;
+    let disposedItems;
     let selectedPeriod = 'yesterday';
     const cache = [];
     const periods = calcPeriods();
@@ -53,6 +53,10 @@
         };
     }
 
+    async function fetchItems() {
+        disposedItems = await DisposedItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
+    }
+
     async function loadItems(period, name, forceUpdate = false) {
         localFrom = periods[period].fromDate;
         localTo = undefined;
@@ -66,15 +70,15 @@
         }
 
         if (!forceUpdate && cache[period] !== undefined) {
-            soldItems = cache[period];
+            disposedItems = cache[period];
             isLoading = false;
             return;
         }
 
         try {
             isLoading = true;
-            soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
-            cache[period] = soldItems;
+            await fetchItems();
+            cache[period] = disposedItems;
 
             // reset the error to default value to display the results
             requestError = undefined;
@@ -111,12 +115,15 @@
 
         const newData = data.items.map(({ fromDate, toDate, ...item }) => item);
         const empty = {
-            id: '',
+            stockId: '',
+            userId: '',
             name: '',
-            quantitySold: '',
+            createdOn: '',
+            amount: '',
+            pricePerUnit: '',
             unitType: '',
-            vat: '',
             totalVat: '',
+            vat: '',
             grossAmount: '',
         };
         newData.push(
@@ -126,16 +133,16 @@
             {
                 ...empty,
                 totalVat: 'Netto',
-                grossAmount: `${soldItems.grossAmount - soldItems.totalVat} €`,
+                grossAmount: `${disposedItems.grossAmount - disposedItems.totalVat} €`,
             },
             {
                 ...empty,
                 totalVat: 'MwSt. Gesamt',
-                grossAmount: `${soldItems.totalVat} €`,
+                grossAmount: `${disposedItems.totalVat} €`,
             }
         );
 
-        soldItems.vatDetails.forEach((vat) => {
+        disposedItems.vatDetails.forEach((vat) => {
             newData.push({
                 ...empty,
                 vat: `${Math.floor(vat.vat * 100)}%`,
@@ -145,7 +152,7 @@
         newData.push({
             ...empty,
             totalVat: 'Brutto',
-            grossAmount: `${soldItems.grossAmount} €`,
+            grossAmount: `${disposedItems.grossAmount} €`,
         });
         const csvExporter = new ExportToCsv(options);
         csvExporter.generateCsv(newData);
@@ -160,7 +167,7 @@
         try {
             isLoading = true;
 
-            soldItems = await SoldItems.getItems(localFrom.toFormat('yyyy-MM-dd'), localTo.toFormat('yyyy-MM-dd'));
+            await fetchItems();
 
             // reset the error to default value to display the results
             requestError = undefined;
@@ -238,14 +245,14 @@
         </div>
     </div>
 
-    <h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} verkauft?</h2>
+    <h2 class="pt-4 is-size-5 has-text-weight-bold">Was wurde {titleText} entsorgt?</h2>
     {#if isLoading}
         <Loader bind:isLoading />
     {:else if requestError !== undefined}
         <article class="message is-danger">
             <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
         </article>
-    {:else if soldItems.items !== undefined && soldItems.items.length > 0}
+    {:else if disposedItems.items !== undefined && disposedItems.items.length > 0}
         <div class="columns">
             <div class="column">
                 {#if selectedPeriod === 'yesterday'}
@@ -259,7 +266,7 @@
             <button
                 text="CSV Export"
                 class="is-primary is-pulled-right has-text-black background-none is-hidden-touch is-clickable"
-                on:click={() => csvExport(soldItems)}
+                on:click={() => csvExport(disposedItems)}
             >
                 <Icon icon={mdiFileDownload} appbar={true} />
             </button>
@@ -267,7 +274,7 @@
 
         <hr />
 
-        <SoldItemsComp soldItems={soldItems.items} on:select={itemSelected} />
+        <DisposedItemsComp disposedItems={disposedItems.items} on:select={itemSelected} />
 
         <hr />
         <div class="vat-container">
@@ -276,20 +283,20 @@
                     <tr>
                         <td>Netto</td>
                         <td class="has-text-weight-bold	has-text-right">
-                            {moneyStyler(soldItems.grossAmount - soldItems.totalVat)}
+                            {moneyStyler(disposedItems.grossAmount - disposedItems.totalVat)}
                             €
                         </td>
                     </tr>
                     <tr>
                         <td>MwSt. Gesamt</td>
                         <td class="has-text-right">
-                            <span class="has-text-weight-bold">{moneyStyler(soldItems.totalVat)} €</span>
+                            <span class="has-text-weight-bold">{moneyStyler(disposedItems.totalVat)} €</span>
                             <br />
                             <table class="small-table">
-                                {#each soldItems.vatDetails as vat}
+                                {#each disposedItems.vatDetails as vat}
                                     <tr class="is-size-7">
                                         <td>{Math.floor(vat.vat * 100)}%</td>
-                                        <td>{moneyStyler(vat.amount)}€</td>
+                                        <td>{moneyStyler(vat.amount)} €</td>
                                     </tr>
                                 {/each}
                             </table>
@@ -299,13 +306,13 @@
                 <tfoot>
                     <tr>
                         <td>Brutto</td>
-                        <td class="has-text-right has-text-weight-bold">{moneyStyler(soldItems.grossAmount)} €</td>
+                        <td class="has-text-right has-text-weight-bold">{moneyStyler(disposedItems.grossAmount)} €</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     {:else}
-        <NoData text="Es wurden in dem gewählten Zeitraum keine Einkäufe getätigt." />
+        <NoData text="Es wurden in dem gewählten Zeitraum keine Artikel entsorgt." />
     {/if}
 
     <ErrorModal error={requestError} />
@@ -317,7 +324,7 @@
             class="button is-primary is-hidden-desktop mb-3"
             size="full-width"
             icon={mdiFileDownload}
-            on:click={() => csvExport(soldItems)}
+            on:click={() => csvExport(disposedItems)}
         />
         <Button
             text="Zurück zu den Reports"

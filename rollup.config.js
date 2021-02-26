@@ -27,12 +27,14 @@ export default {
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
+				preventAssignment: true,
 			}),
 			svelte({
 				preprocess: sveltePreprocess(),
-				dev,
-				hydratable: true,
-				emitCss: true
+				compilerOptions:  {
+					dev,
+					hydratable: true,
+				}
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
@@ -77,11 +79,15 @@ export default {
 			replace({
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode),
+				preventAssignment: true,
 			}),
 			svelte({
-				generate: 'ssr',
-				hydratable: true,
-				dev
+				compilerOptions: {
+					generate: 'ssr',
+					hydratable: true,
+					dev,
+				},
+				emitCss: false
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
@@ -106,7 +112,8 @@ export default {
 			resolve(),
 			replace({
 				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode)
+				'process.env.NODE_ENV': JSON.stringify(mode),
+				preventAssignment: true,
 			}),
 			commonjs(),
 			!dev && terser()

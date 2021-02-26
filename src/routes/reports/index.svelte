@@ -1,5 +1,5 @@
 <script>
-    import { mdiAccountCash, mdiArchive } from '@mdi/js';
+    import { mdiAccountCash, mdiArchive, mdiDeleteVariant } from '@mdi/js';
     import AuthorizeByRoles, { Roles } from '../../components/common/AuthorizeByRoles.svelte';
     import Button from '../../components/common/Button.svelte';
     import { title, navBalance } from '../../stores/page';
@@ -20,11 +20,19 @@
             size="full-width"
             icon={mdiArchive}
         />
-
+        <br /><br />
+        <Button
+            href="/reports/disposed-items"
+            class="is-link"
+            text="Was wurde entsorgt?"
+            size="full-width"
+            icon={mdiDeleteVariant}
+        />
+        <br /><br />
         <AuthorizeByRoles allowedRoles={[Roles.TREASURER]} displayPermissionNotAllowed={false}>
             <Button
                 href="/reports/balance-overview"
-                class="is-link mt-3"
+                class="is-link"
                 text="Guthaben-Übersicht"
                 size="full-width"
                 icon={mdiAccountCash}

@@ -1,5 +1,16 @@
 <script>
+    /**
+     * Defines if the loading spinner should be displayed.
+     * Default: false
+     */
     export let isLoading = false;
+
+    /**
+     * The size the Loader should have.
+     * One of medium, big.
+     * Default: medium
+     */
+    export let size = 'medium';
 </script>
 
 <style>
@@ -8,6 +19,11 @@
         margin: 0 auto;
         width: 64px;
         height: 64px;
+    }
+
+    .big {
+        width: 100px;
+        height: 100px;
     }
 
     .loader-spinner::before {
@@ -60,7 +76,7 @@
 </style>
 
 {#if isLoading}
-    <div class="loader-spinner">
+    <div class="loader-spinner" class:big={size === 'big'}>
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
         </svg>

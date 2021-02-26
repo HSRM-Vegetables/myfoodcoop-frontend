@@ -7,9 +7,12 @@ export default class Purchase {
      * @returns {object} purchase-list-response: an array with purchase-history-items with id (uuid of the purchase),
      *                   createdOn (Date and time the purchase was created at), totalPrice
      *                   and items (array of purchase-item)
+     * 
+     * @param {number} offset offset for pagination if pagination required
+     * @param {number} limit number of items per page for pagination
      */
-    static async getPurchaseList() {
-        return Fetch.get('purchase', getAuthorizationHeader());
+    static async getPurchaseList(offset, limit) {
+        return Fetch.get(`purchase?offset=${offset}&limit=${limit}`, getAuthorizationHeader());
     }
 
     /**

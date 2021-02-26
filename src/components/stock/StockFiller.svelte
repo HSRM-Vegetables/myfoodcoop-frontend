@@ -1,6 +1,7 @@
 <script>
     import { goto } from '@sapper/app';
     import { mdiPlusBox, mdiDelete, mdiArrowLeft, mdiPencil, mdiPlusBoxMultiple } from '@mdi/js';
+    import { onMount } from 'svelte';
     import { slide } from 'svelte/transition';
     import { elasticInOut } from 'svelte/easing';
     import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
@@ -56,14 +57,12 @@
     let selectedStatus = StockStatus.ORDERED;
 
     let articleTextFieldError = false;
-    let pricePerUnitTextFieldError = false;
     let vatTextFieldError = false;
     let quantityTextFieldError = false;
-    let producerTextFieldError = false;
     let supplierTextFieldError = false;
     let itemDetailsError = false;
-    let deliveryDetailsError = false;
     let errorHint;
+    let tabsContainer;
 
     let requestError;
     let saveText;
@@ -84,6 +83,12 @@
     // call the method as soon as the value of item changes
     $: itemChanged(item);
 
+    onMount(() => {
+        if (item || edit) {
+            areInputsValid();
+        }
+    });
+
     /**
      * Update the unit type which should be displayed
      * @param {boolean} value current state of unit type
@@ -99,20 +104,13 @@
     function areInputsValid() {
         errorHint = undefined;
         articleTextFieldError = false;
-        pricePerUnitTextFieldError = false;
         quantityTextFieldError = false;
-        producerTextFieldError = false;
         supplierTextFieldError = false;
         vatTextFieldError = false;
 
         // No name set
         if (!articleTextField || !articleTextField.getValue()) {
             articleTextFieldError = true;
-        }
-
-        // No price or price is negative
-        if (!pricePerUnitTextField || !pricePerUnitTextField.getValue() || pricePerUnitTextField.getValue() < 0) {
-            pricePerUnitTextFieldError = true;
         }
 
         // no quantity or quantity is negative
@@ -123,11 +121,6 @@
         // Quantity is not a number
         if (Number.isNaN(quantityTextField.getValue())) {
             quantityTextFieldError = true;
-        }
-
-        // Price is not a number
-        if (Number.isNaN(pricePerUnitTextField.getValue())) {
-            pricePerUnitTextFieldError = true;
         }
 
         // Vat is not a number, and in valid range
@@ -141,18 +134,20 @@
             errorHint = 'Die Bestandsmenge muss eine ganze Zahle sein, wenn Stückpreis ausgewählt ist';
         }
 
-        if (!producerTextField || !producerTextField.getValue() || producerTextField.getValue() < 0) {
-            producerTextFieldError = true;
-        }
-
         if (!supplierTextField || !supplierTextField.getValue()) {
             supplierTextFieldError = true;
         }
-        itemDetailsError =
-            articleTextFieldError || pricePerUnitTextFieldError || quantityTextFieldError || vatTextFieldError;
-        deliveryDetailsError = producerTextFieldError || supplierTextFieldError;
+        itemDetailsError = articleTextFieldError || quantityTextFieldError || vatTextFieldError;
 
-        if (itemDetailsError || deliveryDetailsError) {
+        if (itemDetailsError || supplierTextFieldError) {
+            tabsContainer.scrollIntoView();
+
+            if (itemDetailsError) {
+                currentTabName = 'article';
+            } else if (supplierTextFieldError) {
+                currentTabName = 'deliveryDetails';
+            }
+
             return false;
         }
         return true;
@@ -187,7 +182,6 @@
         if (!areInputsValid()) {
             return;
         }
-
         try {
             if (item && edit) {
                 await Stock.updateItem(
@@ -313,11 +307,18 @@
     .tab {
         display: inline;
         cursor: pointer;
-        padding: 15px 0;
+        padding: 10px 10px;
+        width: 100%;
+        text-align: center;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom: 2px solid whitesmoke;
     }
     .tab.is-active {
         color: #1d72aa;
         font-weight: bold;
+        border: 2px solid whitesmoke;
+        border-bottom: 0;
     }
     .logo-images {
         max-width: 90px;
@@ -357,7 +358,7 @@
         <div class="message-body">{errorHint}</div>
     </article>
 {/if}
-<div class="tabs m-0">
+<div bind:this={tabsContainer} class="tabs m-0">
     <div class="tab" class:is-active={currentTabName === 'article'} on:click={() => tabClick('article')}>
         <span class:is-error={itemDetailsError}>Artikeldetails</span>
     </div>
@@ -366,13 +367,12 @@
         class:is-active={currentTabName === 'deliveryDetails'}
         on:click={() => tabClick('deliveryDetails')}
     >
-        <span class:is-error={deliveryDetailsError}>Lieferdetails</span>
+        <span class:is-error={supplierTextFieldError}>Lieferdetails</span>
     </div>
     <div class="tab" class:is-active={currentTabName === 'certificate'} on:click={() => tabClick('certificate')}>
         <span>Zertifikate</span>
     </div>
 </div>
-<hr style="margin-top: 0;" />
 <div>
     <div class="form">
         <div class="item-block" class:is-active={currentTabName === 'article'}>
@@ -407,10 +407,9 @@
                     bind:this={pricePerUnitTextField}
                     type="number"
                     placeholder="Warenpreis"
-                    label="Warenpreis *"
+                    label="Warenpreis"
                     decoration={unitType === UnitType.KILO ? '€ / kg' : '€ / Stück'}
                     minimum="0"
-                    isInErrorState={pricePerUnitTextFieldError}
                     value={item ? item.pricePerUnit : ''}
                 />
             </div>
@@ -441,11 +440,9 @@
             <div class="pt-4">
                 <div class="has-text-left pb-2">Beschreibung</div>
                 <div class="form-row is-relative">
-                    <textarea
-                        class="textarea"
-                        placeholder="Beschreibung"
-                        bind:this={descriptionElement}
-                    >{item ? item.description : ''}</textarea>
+                    <textarea class="textarea" placeholder="Beschreibung" bind:this={descriptionElement}>
+                        {item ? item.description : ''}
+                    </textarea>
                 </div>
             </div>
         </div>
@@ -463,8 +460,7 @@
                     bind:this={producerTextField}
                     type="text"
                     placeholder="Erzeuger"
-                    label="Erzeuger *"
-                    isInErrorState={producerTextFieldError}
+                    label="Erzeuger"
                     charLimit="250"
                     value={item ? item.producer : ''}
                 />

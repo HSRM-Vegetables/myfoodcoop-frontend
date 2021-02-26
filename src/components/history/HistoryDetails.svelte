@@ -6,6 +6,7 @@
     import ErrorModal from '../common/ErrorModal.svelte';
     import Purchase from '../../scripts/purchase/Purchase';
     import ListItem from '../common/ListItem.svelte';
+    import Pagination from '../pagination/Pagination.svelte';
 
     /**
      * the purchase ID to be displayed
@@ -19,12 +20,26 @@
     onMount(async () => {
         try {
             purchase = await Purchase.getPurchase(purchaseID);
+            pageCount = Math.ceil(purchase.items.length / pageSize);
         } catch (error) {
             requestError = error;
         } finally {
             isLoading = false;
         }
     });
+
+    let currentPage = 0;
+    const pageSize = 5;
+    let pageCount;
+    let offset = currentPage * pageSize;
+
+    /**
+     * Called when user selected new page in pagination bar
+     */
+    function onPageChanged(event) {
+        currentPage = event.detail.newPageIndex;
+        offset = currentPage * pageSize;
+    }
 </script>
 
 {#if isLoading}
@@ -34,7 +49,7 @@
         <div class="message-body">Leider ist beim Abrufen der Daten etwas schief gelaufen.</div>
     </article>
 {:else}
-    {#each purchase.items as item}
+    {#each purchase.items.slice(offset, offset + pageSize) as item}
         <ListItem>
             <div class="columns is-mobile">
                 <div class="column has-text-left has-text-weight-bold"><span class="break-all">{item.name}</span></div>
@@ -56,6 +71,8 @@
             </div>
         </ListItem>
     {/each}
+
+    <Pagination currentPageIndex={currentPage} pageCount={pageCount} on:update={onPageChanged} />
 
     <hr />
 
