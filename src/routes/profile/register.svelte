@@ -139,7 +139,7 @@
         try {
             // register the user
             await User.register(
-                userNameInput.getValue(),
+                userNameInput.getValue().trim(),
                 memberIdInput.getValue(),
                 passwordInput.getValue(),
                 emailInput.getValue()
