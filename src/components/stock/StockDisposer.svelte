@@ -8,6 +8,7 @@
     import TextField from '../common/TextField.svelte';
     import { toastText } from '../../stores/toast';
     import { stockItems } from '../../stores/stock';
+    import { quantityStyler } from '../../scripts/common/Helper';
 
     /**
      * The item to be disposed of
@@ -76,7 +77,7 @@
         {#if item.unitType === UnitType.PIECE}
             <div class="column has-text-right">{item.quantity} Stück</div>
         {:else}
-            <div class="column has-text-right">{item.quantity.toFixed(3)} kg</div>
+            <div class="column has-text-right">{quantityStyler(item.quantity)} kg</div>
         {/if}
     </div>
     {#if errorHint}

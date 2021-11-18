@@ -1,3 +1,5 @@
+const intlNF = new Intl.NumberFormat("de-DE", {  minimumFractionDigits: 1, maximumFractionDigits: 3 });
+
 /**
  * Prints an error message to the console
  * Does not print anything if NODE_ENV is not set to development
@@ -51,6 +53,8 @@ export function moneyStyler(money) {
 
     return result.toFixed(2);
 }
+
+export const quantityStyler = quantity => intlNF.format(quantity);
 
 /**
  * Stop the propagation of the event, so that the on:click action of the parent element is not executed.

@@ -8,7 +8,7 @@
     import TextField from '../common/TextField.svelte';
     import StockItemDetails from '../stock/StockItemDetails.svelte';
     import Button from '../common/Button.svelte';
-    import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler, quantityStyler } from '../../scripts/common/Helper';
     import { getTaxPriceFromItem } from '../../scripts/stock/StockItem';
 
     // if undefined we asume, we are creating a new cart item
@@ -111,7 +111,7 @@
             isInErrorState={quantityError}
         />
         {#if stockItem.unitType === UnitType.KILO}
-            <span class="is-size-7">Menge im Bestand: {stockItem.quantity.toFixed(3)} kg</span>
+            <span class="is-size-7">Menge im Bestand: {quantityStyler(stockItem.quantity)} kg</span>
         {:else}
             <span class="is-size-7">Menge im Bestand: {stockItem.quantity} Stück</span>
         {/if}

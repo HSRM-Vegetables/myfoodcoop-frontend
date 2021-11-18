@@ -5,7 +5,7 @@
     import Icon from '../common/Icon.svelte';
     import { currentShoppingItemQuantity } from '../../stores/priceCalculator';
     import { UnitType } from '../../scripts/stock/UnitType';
-    import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
+    import { moneyStyler, quantityStyler, stopPropagation } from '../../scripts/common/Helper';
     import ListItem from '../common/ListItem.svelte';
     import Pagination from '../pagination/Pagination.svelte';
 
@@ -99,7 +99,7 @@
             <div class="column has-text-right">
                 {#if item.stockItem.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
-                {:else}<span>{item.quantity.toFixed(3)} kg</span>{/if}
+                {:else}<span>{quantityStyler(item.quantity)} kg</span>{/if}
             </div>
 
             <div class="column has-text-right pr-5">{moneyStyler(item.stockItem.pricePerUnit * item.quantity)} €</div>
