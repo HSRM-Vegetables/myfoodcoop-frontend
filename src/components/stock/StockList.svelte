@@ -1,7 +1,7 @@
 <script>
     import { mdiEye, mdiLeaf } from '@mdi/js';
     import { createEventDispatcher } from 'svelte';
-    import { moneyStyler, stopPropagation } from '../../scripts/common/Helper';
+    import { moneyStyler, quantityStyler, stopPropagation } from '../../scripts/common/Helper';
     import { UnitType } from '../../scripts/stock/UnitType';
     import Icon from '../common/Icon.svelte';
     import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
@@ -124,7 +124,7 @@
                 <div class="column is-one-quarter has-text-right">
                     {#if item.unitType === UnitType.PIECE}
                         <span>{item.quantity} Stück vorhanden</span>
-                    {:else}<span>{item.quantity} kg vorhanden</span>{/if}
+                    {:else}<span>{quantityStyler(item.quantity)} kg vorhanden</span>{/if}
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}

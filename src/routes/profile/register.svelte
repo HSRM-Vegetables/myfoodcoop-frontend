@@ -47,42 +47,26 @@
     // check if a given input field has the specified length
     function hasMinimumLength(input, minimumLength) {
         const value = input.getValue();
-        if (!value || value.length >= minimumLength) {
-            return true;
-        }
-
-        return false;
+        return !value || value.length >= minimumLength;
     }
 
     // check if the username is valid
     function checkUserName() {
-        if (hasMinimumLength(userNameInput, userNameMinimumLength)) {
-            userNameError = false;
-        } else {
-            userNameError = true;
-        }
+        userNameError = !hasMinimumLength(userNameInput, userNameMinimumLength);
 
         checkAllowRegistration();
     }
 
     // check if the memberid is valid
     function checkMemberId() {
-        if (hasMinimumLength(memberIdInput, memberIdMinimumLength)) {
-            memberIdError = false;
-        } else {
-            memberIdError = true;
-        }
+        memberIdError = !hasMinimumLength(memberIdInput, memberIdMinimumLength);
 
         checkAllowRegistration();
     }
 
     // check if the password is valid
     function checkPassword() {
-        if (hasMinimumLength(passwordInput, passwordMinimumLength)) {
-            passwordError = false;
-        } else {
-            passwordError = true;
-        }
+        passwordError = !hasMinimumLength(passwordInput, passwordMinimumLength);
 
         if (repeatPasswordInput.getValue()) {
             // only check if the passwords are equal if the second password already has an value
@@ -93,11 +77,7 @@
 
     // check if both passwords are equal
     function checkRepeatPassword() {
-        if (passwordInput.getValue() === repeatPasswordInput.getValue()) {
-            repeatPasswordError = false;
-        } else {
-            repeatPasswordError = true;
-        }
+        repeatPasswordError = passwordInput.getValue() !== repeatPasswordInput.getValue();
 
         checkAllowRegistration();
     }

@@ -10,7 +10,7 @@
     import Icon from '../common/Icon.svelte';
     import { stockItems } from '../../stores/stock';
     import { getLocalizedOriginCategory } from '../../scripts/OriginCategory';
-    import { moneyStyler } from '../../scripts/common/Helper';
+    import { moneyStyler, quantityStyler } from '../../scripts/common/Helper';
     import { CertificateLogos } from '../../scripts/stock/CertificateLogos';
     import Button from '../common/Button.svelte';
     import { getLocalizedStockStatus } from '../../scripts/stock/StockStatus';
@@ -134,7 +134,11 @@
     </div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
-        <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
+        {#if item.unitType === UnitType.PIECE}
+            <div class="column has-text-right">{item.quantity} Stück</div>
+        {:else}
+            <div class="column has-text-right">{quantityStyler(item.quantity)} kg</div>
+        {/if}
     </div>
     <hr />
     <span>Information:</span>
