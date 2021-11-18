@@ -40,11 +40,7 @@
     // check if a given input field has the specified length
     function hasMinimumLength(input, minimumLength) {
         const value = input.getValue();
-        if (!value || value.length >= minimumLength) {
-            return true;
-        }
-
-        return false;
+        return !value || value.length >= minimumLength;
     }
 
     // check if the memberid is valid
@@ -60,11 +56,7 @@
 
     // check if the password is valid
     function checkPassword() {
-        if (hasMinimumLength(passwordInput, passwordMinimumLength)) {
-            passwordError = false;
-        } else {
-            passwordError = true;
-        }
+        passwordError = !hasMinimumLength(passwordInput, passwordMinimumLength);
 
         if (repeatPasswordInput.getValue()) {
             // only check if the passwords are equal if the second password already has an value

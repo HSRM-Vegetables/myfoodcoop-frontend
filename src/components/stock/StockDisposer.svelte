@@ -8,6 +8,7 @@
     import TextField from '../common/TextField.svelte';
     import { toastText } from '../../stores/toast';
     import { stockItems } from '../../stores/stock';
+    import { quantityStyler } from '../../scripts/common/Helper';
 
     /**
      * The item to be disposed of
@@ -73,7 +74,11 @@
     <div class="is-size-3 has-text-weight-bold mb-3">{item.name}</div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
-        <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
+        {#if item.unitType === UnitType.PIECE}
+            <div class="column has-text-right">{item.quantity} Stück</div>
+        {:else}
+            <div class="column has-text-right">{quantityStyler(item.quantity)} kg</div>
+        {/if}
     </div>
     {#if errorHint}
         <article class="message is-danger">

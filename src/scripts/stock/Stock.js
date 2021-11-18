@@ -1,4 +1,3 @@
-import { moneyStyler } from '../common/Helper';
 import Fetch, { getAuthorizationHeader } from "../api/Fetch";
 
 export default class Stock {
@@ -47,7 +46,7 @@ export default class Stock {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': pricePerUnit,
-            'quantity': moneyStyler(quantity),
+            'quantity': quantity,
             'description': description,
             'sustainablyProduced': sustainablyProduced,
             'certificates': certificates,
@@ -107,7 +106,7 @@ export default class Stock {
             'name': name,
             'unitType': Stock.convertUnitType(unitType),
             'pricePerUnit': pricePerUnit,
-            'quantity': moneyStyler(quantity),
+            'quantity': quantity,
             'description': description,
             'sustainablyProduced': sustainablyProduced,
             'certificates': certificates,
