@@ -124,7 +124,7 @@
                 <div class="column is-one-quarter has-text-right">
                     {#if item.unitType === UnitType.PIECE}
                         <span>{item.quantity} Stück vorhanden</span>
-                    {:else}<span>{item.quantity} kg vorhanden</span>{/if}
+                    {:else}<span>{item.quantity.toFixed(3)} kg vorhanden</span>{/if}
                 </div>
                 <div class="column has-text-right is-hidden-touch">
                     {#if item.unitType === UnitType.PIECE}

@@ -22,10 +22,11 @@
     {#each soldItems.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)) as item}
         <div class="columns is-mobile is-clickable" on:click={selectEvent('select', { id: item.id })}>
             <div class="column break-all has-text-left">{item.name}</div>
-            <div class="column has-text-centered">
-                {item.quantitySold}
-                {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}
-            </div>
+            {#if item.unitType === UnitType.PIECE}
+                <div class="column has-text-centered">{item.quantitySold} Stück</div>
+            {:else}
+                <div class="column has-text-centered">{item.quantitySold.toFixed(3)} kg</div>
+            {/if}
             <div class="column has-text-centered is-hidden-touch">{Math.floor(item.vat * 100)} %</div>
             <div class="column has-text-centered is-hidden-touch">{moneyStyler(item.totalVat)} €</div>
             <div class="column has-text-right">{moneyStyler(item.grossAmount)} €</div>

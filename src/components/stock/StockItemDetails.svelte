@@ -134,7 +134,11 @@
     </div>
     <div class="columns is-mobile">
         <div class="column">Menge im Bestand</div>
-        <div class="column has-text-right">{item.quantity} {item.unitType === UnitType.PIECE ? 'Stück' : 'kg'}</div>
+        {#if item.unitType === UnitType.PIECE}
+            <div class="column has-text-right">{item.quantity} Stück</div>
+        {:else}
+            <div class="column has-text-right">{item.quantity.toFixed(3)} kg</div>
+        {/if}
     </div>
     <hr />
     <span>Information:</span>

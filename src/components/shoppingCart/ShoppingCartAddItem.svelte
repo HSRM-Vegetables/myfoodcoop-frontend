@@ -110,11 +110,11 @@
             minimum="0"
             isInErrorState={quantityError}
         />
-        <span class="is-size-7">
-            Menge im Bestand:
-            {stockItem.quantity}
-            {stockItem.unitType === UnitType.KILO ? 'kg' : 'Stück'}
-        </span>
+        {#if stockItem.unitType === UnitType.KILO}
+            <span class="is-size-7">Menge im Bestand: {stockItem.quantity.toFixed(3)} kg</span>
+        {:else}
+            <span class="is-size-7">Menge im Bestand: {stockItem.quantity} Stück</span>
+        {/if}
     </div>
 
     <hr />

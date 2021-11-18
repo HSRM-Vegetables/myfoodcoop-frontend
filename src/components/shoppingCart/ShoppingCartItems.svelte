@@ -99,7 +99,7 @@
             <div class="column has-text-right">
                 {#if item.stockItem.unitType === UnitType.PIECE}
                     <span>{item.quantity} Stück</span>
-                {:else}<span>{item.quantity} kg</span>{/if}
+                {:else}<span>{item.quantity.toFixed(3)} kg</span>{/if}
             </div>
 
             <div class="column has-text-right pr-5">{moneyStyler(item.stockItem.pricePerUnit * item.quantity)} €</div>
