@@ -12,6 +12,7 @@
     import User from '../../scripts/user/User';
     import Fetch from '../../scripts/api/Fetch';
     import LocalStorageKeys from '../../scripts/common/LocalStorageKeys';
+    import { appVersion } from '../../scripts/api/ApiConfig';
     import {
         POINT_OF_SALES_INACTIVITY_TIMEOUT_IN_MINUTES,
         POINT_OF_SALES_MAX_LOGIN_TIME_IN_MINUTES,
@@ -79,7 +80,7 @@
 </div>
 
 {#if $userDetails}
-    <UserDetails user={$userDetails} showRoles={true} />
+    <UserDetails user={$userDetails} showRoles={true} version={appVersion} />
 
     <AuthorizeByRoles allowedRoles={[Roles.ADMIN]} displayPermissionNotAllowed={false}>
         <hr />
