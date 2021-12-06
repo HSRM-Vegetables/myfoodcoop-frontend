@@ -2,6 +2,8 @@
     export let user;
 
     export let showRoles = false;
+
+    export let version;
 </script>
 
 {#if user}
@@ -28,4 +30,20 @@
             <div class="column has-text-right">{user.roles.join(', ')}</div>
         </div>
     {/if}
+    <div class="columns is-mobile">
+        <div class="column is-size-5 has-text-weight-bold">App Version:</div>
+        <div class="column has-text-right">{version}</div>
+    </div>
+    <div class="columns is-mobile">
+        <div class="column is-size-5 has-text-weight-bold">Support-Mail:</div>
+        <div class="column has-text-right">
+            <a href="mailto:technik@stadtgemuese-wiesbaden.de">technik@stadtgemuese-wiesbaden.de</a>
+        </div>
+    </div>
+    <div class="columns is-mobile">
+        <div class="column is-size-5 has-text-weight-bold">WECHANGE:</div>
+        <div class="column has-text-right">
+            <a href="https://wechange.de/group/stadtgemuese-wiesbaden/" target="_blank">Stadtgemüse Wiesbaden</a>
+        </div>
+    </div>
 {/if}
