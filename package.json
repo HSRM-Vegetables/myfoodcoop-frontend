@@ -48,7 +48,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-svelte3": "^3.1.1",
     "node-sass": "^5.0.0",
-    "postcss": "^8.2.6",
+    "postcss": "^8.4.20",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.6",
